@@ -25,7 +25,7 @@ namespace IBFramework.Caching
 
         #region Public Methods
 
-        public MemoryCache GetCacheInstance() => _cacheInstance;
+        public MemoryCache CacheInstance => _cacheInstance;
 
         #endregion
     }
