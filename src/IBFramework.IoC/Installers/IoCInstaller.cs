@@ -9,7 +9,7 @@ namespace IB.Framework.IoC.Installers
         {
             container.Register<Container>().As<IContainer>().WithLifestyle(RegistrationLifestyleType.Transient); ;
             container.Register<ContainerGenerator>().As<IContainerGenerator>().WithLifestyle(RegistrationLifestyleType.Transient); ;
-            container.Register<RegistrationResult>().As<IRegistrationResult>().WithLifestyle(RegistrationLifestyleType.Transient);
+            container.Register(typeof(RegistrationResult<,>)).As<IRegistrationResult>().WithLifestyle(RegistrationLifestyleType.Transient);
 
             container.Register<ServiceLocator>().As<IServiceLocator>().WithLifestyle(RegistrationLifestyleType.Singleton);
         }

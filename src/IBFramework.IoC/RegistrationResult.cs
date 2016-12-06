@@ -5,16 +5,16 @@ using IB.Framework.Core.IoC;
 
 namespace IB.Framework.IoC
 {
-    public class RegistrationResult : IRegistrationResult
+    public class RegistrationResult<TActivatorData, TRegistrationStyle> : IRegistrationResult
     {
         private IRegistrationBuilder<object,
-                                 ConcreteReflectionActivatorData,
-                                 SingleRegistrationStyle> _result;
+                                 TActivatorData,
+                                 TRegistrationStyle> _result;
 
         public RegistrationResult(
             IRegistrationBuilder<object,
-                                 ConcreteReflectionActivatorData,
-                                 SingleRegistrationStyle>
+                                 TActivatorData,
+                                 TRegistrationStyle>
             regBuilder)
         {
             _result = regBuilder;
