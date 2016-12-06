@@ -1,4 +1,4 @@
-﻿namespace IB.Framework.Core.Data
+﻿namespace IBFramework.Core.Data
 {
     public interface IEntityWithTypedId<TKey>
     {

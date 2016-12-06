@@ -1,8 +1,8 @@
-﻿using IB.Framework.Core.IoC;
-using IB.Framework.TestHelper;
+﻿using IBFramework.Core.IoC;
+using IBFramework.TestHelper;
 using Xunit;
 
-namespace IB.Framework.IoC.Tests
+namespace IBFramework.IoC.Tests
 {
     public class RegistrationTests
     {

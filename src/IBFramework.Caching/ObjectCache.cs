@@ -1,8 +1,8 @@
 ﻿using System;
-using IB.Framework.Core.Caching;
-using IB.Framework.Core.Data;
+using IBFramework.Core.Caching;
+using IBFramework.Core.Data;
 
-namespace IB.Framework.Caching
+namespace IBFramework.Caching
 {
     public class ObjectCache<T> : IObjectCache<T>
     {

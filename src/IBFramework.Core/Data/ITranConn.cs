@@ -1,6 +1,6 @@
 ﻿using System.Data.Common;
 
-namespace IB.Framework.Core.Data
+namespace IBFramework.Core.Data
 {
     public interface ITranConn
     {

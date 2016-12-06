@@ -1,7 +1,7 @@
-﻿using IB.Framework.Core.Enum;
-using IB.Framework.Core.IoC;
-using IB.Framework.IoC;
-using IB.Framework.TestHelper;
+﻿using IBFramework.Core.Enum;
+using IBFramework.Core.IoC;
+using IBFramework.IoC;
+using IBFramework.TestHelper;
 using Xunit;
 
 namespace IBFramework.IoC.Test

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace IB.Framework.Core.IoC
+namespace IBFramework.Core.IoC
 {
     public interface IContainerGenerator
     {

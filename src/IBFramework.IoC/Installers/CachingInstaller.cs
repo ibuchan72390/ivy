@@ -1,9 +1,9 @@
-﻿using IB.Framework.Core.Caching;
-using IB.Framework.Core.Enum;
-using IB.Framework.Core.IoC;
-using IB.Framework.Caching;
+﻿using IBFramework.Core.Caching;
+using IBFramework.Core.Enum;
+using IBFramework.Core.IoC;
+using IBFramework.Caching;
 
-namespace IB.Framework.IoC.Installers
+namespace IBFramework.IoC.Installers
 {
     public class CachingInstaller : IContainerInstaller
     {

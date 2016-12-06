@@ -1,7 +1,7 @@
 ﻿using System;
-using IB.Framework.Core.Enum;
+using IBFramework.Core.Enum;
 
-namespace IB.Framework.Core.IoC
+namespace IBFramework.Core.IoC
 {
     public interface IRegistrationResult
     {

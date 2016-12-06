@@ -1,9 +1,9 @@
-﻿using IB.Framework.Core.IoC;
+﻿using IBFramework.Core.IoC;
 using Autofac;
 using Autofac.Builder;
 using System;
 
-namespace IB.Framework.IoC
+namespace IBFramework.IoC
 {
     public class ContainerGenerator : IContainerGenerator
     {

@@ -1,4 +1,4 @@
-﻿namespace IB.Framework.TestHelper
+﻿namespace IBFramework.TestHelper
 {
     public interface ITestInterface
     {

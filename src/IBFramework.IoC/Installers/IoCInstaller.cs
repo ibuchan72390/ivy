@@ -1,7 +1,7 @@
-﻿using IB.Framework.Core.IoC;
-using IB.Framework.Core.Enum;
+﻿using IBFramework.Core.IoC;
+using IBFramework.Core.Enum;
 
-namespace IB.Framework.IoC.Installers
+namespace IBFramework.IoC.Installers
 {
     public class IoCInstaller : IContainerInstaller
     {

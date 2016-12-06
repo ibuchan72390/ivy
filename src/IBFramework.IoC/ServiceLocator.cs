@@ -1,7 +1,7 @@
 ﻿using System;
-using IB.Framework.Core.IoC;
+using IBFramework.Core.IoC;
 
-namespace IB.Framework.IoC
+namespace IBFramework.IoC
 {
     public class ServiceLocator : IServiceProvider, IServiceLocator
     {

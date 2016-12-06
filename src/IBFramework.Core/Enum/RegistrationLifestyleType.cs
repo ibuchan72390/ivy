@@ -1,4 +1,4 @@
-﻿namespace IB.Framework.Core.Enum
+﻿namespace IBFramework.Core.Enum
 {
     public enum RegistrationLifestyleType
     {

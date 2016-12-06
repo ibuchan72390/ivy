@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace IB.Framework.Core.Data
+namespace IBFramework.Core.Data
 {
     public interface IRepository<T, TKey>
         where T : IEntityWithTypedId<TKey>

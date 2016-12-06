@@ -1,9 +1,9 @@
 ﻿using System;
 using Autofac.Builder;
-using IB.Framework.Core.Enum;
-using IB.Framework.Core.IoC;
+using IBFramework.Core.Enum;
+using IBFramework.Core.IoC;
 
-namespace IB.Framework.IoC
+namespace IBFramework.IoC
 {
     public class RegistrationResult<TActivatorData, TRegistrationStyle> : IRegistrationResult
     {

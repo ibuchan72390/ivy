@@ -1,4 +1,4 @@
-﻿namespace IB.Framework.Core.Caching
+﻿namespace IBFramework.Core.Caching
 {
     public interface ITriggerFileGenerator
     {

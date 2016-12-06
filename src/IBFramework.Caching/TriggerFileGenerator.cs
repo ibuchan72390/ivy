@@ -1,8 +1,8 @@
-﻿using IB.Framework.Core.Caching;
+﻿using IBFramework.Core.Caching;
 using System;
 using System.IO;
 
-namespace IB.Framework.Caching
+namespace IBFramework.Caching
 {
     public class TriggerFileGenerator : ITriggerFileGenerator
     {
