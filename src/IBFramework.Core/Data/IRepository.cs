@@ -3,16 +3,21 @@ using System.Collections.Generic;
 
 namespace IBFramework.Core.Data
 {
-    public interface IRepository<T, TKey>
-        where T : IEntityWithTypedId<TKey>
+    public interface IRepository<TObject>
     {
-        T GetById(TKey id);
+        IList<TObject> GetAll();
 
-        IList<T> GetAll();
+        void DeleteAll(ITranConn tc = null);
+    }
 
-        T SaveOrUpdate(T entity, ITranConn tc = null);
+    public interface IRepository<TEntity, TKey> : IRepository<TEntity>
+        where TEntity : IEntityWithTypedId<TKey>
+    {
+        TEntity GetById(TKey id);
 
-        void Delete(T entity, ITranConn tc = null);
+        TEntity SaveOrUpdate(TEntity entity, ITranConn tc = null);
+
+        void Delete(TEntity entity, ITranConn tc = null);
 
         void DeleteById(TKey id, ITranConn tc = null);
     }
