@@ -1,9 +1,9 @@
-﻿{
+{
   "version": "1.0.0-*",
 
   "dependencies": {
     "IBFramework.Core": "1.0.0-*",
-    "Autofac": "4.0.0-alpha2",
+    "Autofac": "4.2.1",
     "NETStandard.Library": "1.6.0",
     "IBFramework.Caching": "1.0.0-*"
   },
