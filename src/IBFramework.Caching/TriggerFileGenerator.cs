@@ -6,6 +6,8 @@ namespace IBFramework.Caching
 {
     public class TriggerFileGenerator : ITriggerFileGenerator
     {
+        #region Variables & Constants
+
         const string defaultRootPath = "AppCache";
 
         private string _triggerFileFolder = null;
@@ -15,7 +17,9 @@ namespace IBFramework.Caching
 
         public string TriggerFileFolder => _triggerFileFolder;
 
+        #endregion
 
+        #region Constructor
 
         public TriggerFileGenerator()
         {
@@ -23,7 +27,9 @@ namespace IBFramework.Caching
             _defaultTriggerFileFolder = Path.Combine(appRoot, defaultRootPath);
         }
 
+        #endregion
 
+        #region Public Methods
 
         public string GenerateTriggerFile<T>(string nameKey = null, string fileLocation = null)
         {
@@ -51,5 +57,7 @@ namespace IBFramework.Caching
 
             _triggerFileFolder = folderLocation;
         }
+
+        #endregion
     }
 }
