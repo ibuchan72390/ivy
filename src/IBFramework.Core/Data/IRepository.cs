@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using IBFramework.Core.Domain;
+using System.Collections.Generic;
 
 namespace IBFramework.Core.Data
 {

@@ -1,4 +1,4 @@
-﻿namespace IBFramework.Core.Data
+﻿namespace IBFramework.Core.Domain
 {
     public interface IEnumEntity<TKey> : IEntityWithTypedId<TKey>
     {
