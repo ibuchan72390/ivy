@@ -3,7 +3,7 @@ using IBFramework.Core.IoC;
 
 namespace IBFramework.IoC
 {
-    public class ServiceLocator : IServiceProvider, IServiceLocator
+    public class ServiceLocator : IServiceLocator
     {
         private IContainer _container;
 
@@ -11,7 +11,7 @@ namespace IBFramework.IoC
 
         public object GetService(Type serviceType)
         {
-            return GetService(serviceType);
+            return _container.Resolve(serviceType);
         }
 
         public void Init(IContainer container)

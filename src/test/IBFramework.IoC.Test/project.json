@@ -12,6 +12,7 @@
 
   "testRunner": "xunit",
 
+  // Not 100% sure I understand this section and its requirements
   "runtimes": {
     "win10-x86": {},
     "win10-x64": {}

@@ -1,6 +1,8 @@
-﻿namespace IBFramework.Core.IoC
+﻿using System;
+
+namespace IBFramework.Core.IoC
 {
-    public interface IServiceLocator
+    public interface IServiceLocator : IServiceProvider
     {
         IContainer Container { get; }
 
