@@ -1,4 +1,4 @@
-﻿using IBFramework.Core.Domain;
+﻿using IBFramework.Core.Data.Domain;
 
 namespace IBFramework.Domain
 {

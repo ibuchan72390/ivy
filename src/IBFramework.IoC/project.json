@@ -5,7 +5,9 @@
     "IBFramework.Core": "1.0.0-*",
     "Autofac": "4.2.1",
     "NETStandard.Library": "1.6.1",
-    "IBFramework.Caching": "1.0.0-*"
+    "IBFramework.Caching": "1.0.0-*",
+    "IBFramework.Data.Common": "1.0.0-*",
+    "IBFramework.Utility": "1.0.0-*"
   },
 
   "frameworks": {

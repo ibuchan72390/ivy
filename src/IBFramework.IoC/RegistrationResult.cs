@@ -5,7 +5,7 @@ using IBFramework.Core.IoC;
 
 namespace IBFramework.IoC
 {
-    public class RegistrationResult<TActivatorData, TRegistrationStyle> : IRegistrationResult
+    public class RegistrationResult<TActivatorData, TRegistrationStyle> : IRegistrationResult<TActivatorData, TRegistrationStyle>
     {
         private IRegistrationBuilder<object,
                                  TActivatorData,

@@ -12,4 +12,9 @@ namespace IBFramework.Core.IoC
 
         IRegistrationResult As(Type type);
     }
+
+    public interface IRegistrationResult<TActivatorData, TRegistrationStyle> : IRegistrationResult
+    {
+
+    }
 }

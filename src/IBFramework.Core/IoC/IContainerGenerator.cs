@@ -10,7 +10,7 @@ namespace IBFramework.Core.IoC
 
         IRegistrationResult Register(Type type);
 
-        void RegisterInstace<T>(T instance) where T : class, new();
+        void RegisterInstance<T>(T instance) where T : class, new();
 
 
         // Desired points of expansion

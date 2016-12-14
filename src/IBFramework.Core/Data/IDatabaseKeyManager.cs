@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace IBFramework.Core.Data
 {
     public interface IDatabaseKeyManager
     {
         string GetConnectionString(string databaseKey);
-
-        void Init(Func<Dictionary<string, string>> keyLoadingFunc);
 
         void Init(Dictionary<string, string> databaseKeyDict);
     }

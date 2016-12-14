@@ -46,7 +46,7 @@ namespace IBFramework.IoC.Test
         {
             var containerGen = new ContainerGenerator();
 
-            containerGen.RegisterInstace(new TestClass());
+            containerGen.RegisterInstance(new TestClass());
 
             var container = containerGen.GenerateContainer();
 

@@ -27,10 +27,5 @@ namespace IBFramework.Data.Common
         {
             _databaseKeyDict = databaseKeyDict;
         }
-
-        public void Init(Func<Dictionary<string, string>> keyLoadingFunc)
-        {
-            _databaseKeyDict = keyLoadingFunc();
-        }
     }
 }

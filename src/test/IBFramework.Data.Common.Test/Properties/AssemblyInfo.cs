@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("IBFramework.Domain")]
+[assembly: AssemblyProduct("IBFramework.Data.Common.Test")]
 [assembly: AssemblyTrademark("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
@@ -16,4 +16,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("649d3aab-e91f-4b4c-87e9-9b34c32df87d")]
+[assembly: Guid("84e8c805-19a2-4972-a9aa-911ca5bf8056")]

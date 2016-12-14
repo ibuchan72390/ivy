@@ -21,12 +21,30 @@ namespace IBFramework.Data.MSSQL
 
     public class SqlGenerator<TEntity> : ISqlGenerator<TEntity>
     {
+        private readonly Type _entityType;
+
+        public SqlGenerator()
+        {
+            _entityType = typeof(TEntity);
+        }
+
         public string GenerateDeleteAllQuery()
         {
-            throw new NotImplementedException();
+            return $"DELETE FROM {_entityType.Name};";
         }
 
         public string GenerateGetAllQuery()
+        {
+            /*
+             * need a way to get the enumerated values here
+             */
+
+            var attributeNames = GetObjectAttributeNames();
+
+            return $"GET {attributeNames} FROM {_entityType.Name}";
+        }
+
+        protected string GetObjectAttributeNames()
         {
             throw new NotImplementedException();
         }

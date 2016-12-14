@@ -66,7 +66,7 @@ namespace IBFramework.IoC.Tests
         {
             var myClass = new TestClass();
 
-            _sut.RegisterInstace(myClass);
+            _sut.RegisterInstance(myClass);
 
             var container = _sut.GenerateContainer();
 

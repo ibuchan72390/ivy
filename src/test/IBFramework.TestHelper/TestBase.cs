@@ -1,4 +1,5 @@
-﻿using IBFramework.Core.IoC;
+﻿using IBFramework.Core.Enum;
+using IBFramework.Core.IoC;
 using IBFramework.IoC;
 using IBFramework.IoC.Installers;
 
@@ -6,8 +7,6 @@ namespace IBFramework.TestHelper
 {
     public class TestBase
     {
-        protected readonly IServiceLocator ServiceLocator;
-
         public TestBase()
         { 
             var containerGen = new ContainerGenerator();
@@ -15,6 +14,10 @@ namespace IBFramework.TestHelper
             // Installations
             containerGen.InstallIoC();
             containerGen.InstallCaching();
+            containerGen.InstallUtility();
+
+            // Attempt to override
+            containerGen.Register<TestServiceLocator>().As<IServiceLocator>().WithLifestyle(RegistrationLifestyleType.Singleton);
 
             // Generate Container
             var container = containerGen.GenerateContainer();
@@ -22,8 +25,6 @@ namespace IBFramework.TestHelper
             // Resolve and initialize singleton ServiceLocator instance
             var svcLocator = container.Resolve<IServiceLocator>();
             svcLocator.Init(container);
-
-            ServiceLocator = svcLocator;
         }
     }
 }

@@ -23,5 +23,11 @@ namespace IBFramework.IoC
         {
             return (T)Resolve(typeof(T));
         }
+
+        public T Resolve<T>(Type interfaceType)
+        {
+            var result = _container.GetService(interfaceType);
+            return (T)result;
+        }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using IBFramework.Core.Data;
 using System.Data.Common;
 
-namespace IBFramework.Data.MSSQL
+namespace IBFramework.Data.Common
 {
     public class TranConn : ITranConn
     {

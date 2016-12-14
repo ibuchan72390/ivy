@@ -1,8 +1,6 @@
 ﻿using System;
 using IBFramework.Core.Caching;
-using IBFramework.Core.Data;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Options;
 
 namespace IBFramework.Caching
 {
@@ -10,18 +8,20 @@ namespace IBFramework.Caching
     {
         #region Variables & Constants
 
-        private readonly MemoryCache _cache;
-        private readonly ITriggerFileGenerator _triggerFileGenerator;
+        protected readonly MemoryCache _cache;
+        protected readonly ITriggerFileManager _TriggerFileManager;
+
+        protected Func<T> _getCacheFn;
 
         #endregion
 
         #region Constructor
 
         public ObjectCache(ICacheAccessor cacheAccessor,
-            ITriggerFileGenerator triggerFileGenerator)
+            ITriggerFileManager TriggerFileManager)
         {
             _cache = cacheAccessor.CacheInstance;
-            _triggerFileGenerator = triggerFileGenerator;
+            _TriggerFileManager = TriggerFileManager;
         }
 
         #endregion
@@ -30,12 +30,71 @@ namespace IBFramework.Caching
 
         public T GetCache()
         {
-            throw new NotImplementedException();
+            if (_getCacheFn != null)
+            {
+                RefreshIfNecessary();
+            }
+            return _cache.Get<T>(GetCacheKey());
         }
 
-        public T Init(Func<T> cacheLoadingFn, ITranConn tc = null)
+        public void Init(Func<T> getCache)
         {
-            throw new NotImplementedException();
+            var cacheKey = GetCacheKey();
+
+            if (_TriggerFileManager.ShouldRefreshCache<T>(cacheKey))
+            {
+                _TriggerFileManager.GenerateTriggerFile<T>(cacheKey);
+
+                if (_getCacheFn == null)
+                {
+                    _getCacheFn = getCache;
+                }
+
+                var itemsToCache = _getCacheFn();
+
+                _cache.Set(cacheKey, itemsToCache);
+            }
+        }
+
+        public void RefreshCache()
+        {
+            _TriggerFileManager.TriggerCache<T>(GetCacheKey());
+        }
+
+        #endregion
+
+        #region Helper Methods
+
+        protected void RefreshIfNecessary()
+        {
+            var cacheKey = GetCacheKey();
+
+            if (_TriggerFileManager.ShouldRefreshCache<T>(cacheKey))
+            {
+                _cache.Remove(cacheKey);
+
+                var itemsToCache = _getCacheFn();
+
+                _cache.Set(cacheKey, itemsToCache);
+            }
+        }
+
+        /*
+         * Override this method in order to create multiple custom object caches
+         * that leverage the same type.  This will get passed to the TriggerFileManager
+         * in order to provide an extra key to the type cache management.
+         */
+        protected virtual string GetCacheKey()
+        {
+            return "default";
+        }
+
+        protected void ExceptionIfNotInitialized()
+        {
+            if (_getCacheFn == null)
+            {
+                throw new Exception("Cache has not been initialized!");
+            }
         }
 
         #endregion

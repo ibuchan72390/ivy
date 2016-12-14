@@ -49,8 +49,7 @@ namespace IBFramework.IoC
             return new RegistrationResult<ConcreteReflectionActivatorData, SingleRegistrationStyle>(result);
         }
 
-        public void RegisterInstace<T>(T instance)
-            where T : class, new()
+        public void RegisterInstance<T>(T instance) where T : class, new()
         {
             _builder.RegisterInstance(instance);
         }

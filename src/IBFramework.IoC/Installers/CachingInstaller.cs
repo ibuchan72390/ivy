@@ -9,7 +9,8 @@ namespace IBFramework.IoC.Installers
     {
         public void Install(IContainerGenerator containerGenerator)
         {
-            containerGenerator.Register<TriggerFileGenerator>().As<ITriggerFileGenerator>().WithLifestyle(RegistrationLifestyleType.Singleton);
+            containerGenerator.Register<TriggerFileManager>().As<ITriggerFileManager>().WithLifestyle(RegistrationLifestyleType.Singleton);
+            containerGenerator.Register<CacheAccessor>().As<ICacheAccessor>().WithLifestyle(RegistrationLifestyleType.Singleton);
 
             containerGenerator.Register(typeof(ObjectCache<>)).As(typeof(IObjectCache<>)).WithLifestyle(RegistrationLifestyleType.Transient);
         }
