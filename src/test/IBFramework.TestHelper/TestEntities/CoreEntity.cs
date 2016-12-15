@@ -1,4 +1,4 @@
-﻿using IBFramework.Domain;
+﻿using IBFramework.TestHelper.TestEntities.Base;
 using System.Collections.Generic;
 
 namespace IBFramework.TestHelper.TestEntities

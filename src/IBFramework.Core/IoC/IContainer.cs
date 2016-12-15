@@ -2,7 +2,7 @@
 
 namespace IBFramework.Core.IoC
 {
-    public interface IContainer
+    public interface IContainer : IDisposable
     {
         T Resolve<T>() where T : class;
 

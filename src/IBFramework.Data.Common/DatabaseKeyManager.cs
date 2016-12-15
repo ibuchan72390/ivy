@@ -25,6 +25,11 @@ namespace IBFramework.Data.Common
 
         public void Init(Dictionary<string, string> databaseKeyDict)
         {
+            if (_databaseKeyDict != null)
+            {
+                throw new Exception("DatabaseKeyManager already initialized!");
+            }
+
             _databaseKeyDict = databaseKeyDict;
         }
     }

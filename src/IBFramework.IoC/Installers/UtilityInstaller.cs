@@ -1,5 +1,6 @@
 ﻿using IBFramework.Core.IoC;
 using IBFramework.Core.Utility;
+using IBFramework.Utility;
 
 namespace IBFramework.IoC.Installers
 {

@@ -3,16 +3,16 @@ using IBFramework.TestHelper;
 using IBFramework.Core.Caching;
 using System.IO;
 using System;
+using IBFramework.Core.IoC;
+using IBFramework.IoC.Installers;
 
 namespace IBFramework.Caching.Test
 {
-    public class TriggerFileManagerTests : IDisposable
+    public class TriggerFileManagerTests : TestBase, IDisposable
     {
         #region Variables & Constants
 
         private ITriggerFileManager _sut;
-
-        private const string folder1 = "C:/Temp";
 
         #endregion
 
@@ -20,39 +20,25 @@ namespace IBFramework.Caching.Test
 
         public TriggerFileManagerTests()
         {
-            // Using instance instead of resolution because
-            // standard registration is a singleton instance
-            _sut = new TriggerFileManager();
+            _sut = TestServiceLocator.StaticContainer.Resolve<ITriggerFileManager>();
         }
 
         public void Dispose()
         {
-            DeleteExpectedDirectory(folder1);
-            DeleteExpectedDirectory(Directory.GetCurrentDirectory());
-        }
+            if (_sut.TriggerFileFolder == null || !Directory.Exists(_sut.TriggerFileFolder))
+                return;
 
-        private void DeleteExpectedDirectory(string folder)
-        {
-            const string expectedDir = "AppCache";
 
-            var expectedFolder = Path.Combine(folder, expectedDir);
+            foreach (var file in Directory.GetFiles(_sut.TriggerFileFolder))
+                File.Delete(file);
 
-            DeleteDirectoryIfExists(expectedFolder);
-        }
-
-        private void DeleteDirectoryIfExists(string path)
-        {
-            // This may be a bad idea at some point, but it was giving me
-            // "used by another process" complaints.  This did it, and the
-            // run time was about the same.
-            if (Directory.Exists(path))
+            try
             {
-                foreach (var file in Directory.GetFiles(path))
-                {
-                    File.Delete(file);
-                }
-
-                Directory.Delete(path, true);
+                Directory.Delete(_sut.TriggerFileFolder);
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Unable to delete {_sut.TriggerFileFolder}", e);
             }
         }
 
@@ -62,6 +48,12 @@ namespace IBFramework.Caching.Test
             {
                 File.Delete(path);
             }
+        }
+
+        private void DeleteCacheFile<T>()
+        {
+            var cacheFilePath = _sut.GetTriggerFilePath<T>();
+            DeleteFile(cacheFilePath);
         }
 
         #endregion
@@ -91,7 +83,7 @@ namespace IBFramework.Caching.Test
 
             Assert.Equal(resultFile1, resultFile2);
 
-            DeleteFile(resultFile1);
+            DeleteFile(resultFile2);
         }
 
         [Fact]
@@ -117,7 +109,10 @@ namespace IBFramework.Caching.Test
         [Fact]
         public void Trigger_File_Generator_Can_Change_TriggerFileFolder_If_No_File_Generated_Yet()
         {
-            var folder2 = "C:/Temp";
+            var currentDir = Directory.GetCurrentDirectory();
+
+            var folder1 = $"{currentDir}/TestFolder1";
+            var folder2 = $"{currentDir}/TestFolder2";
 
             _sut.SetTriggerFileFolder(folder1);
 
@@ -131,7 +126,10 @@ namespace IBFramework.Caching.Test
         [Fact]
         public void Trigger_File_Generator_Can_Not_Change_Folder_After_File_Generation()
         {
-            var folder2 = "C:/Temp";
+            var currentDir = Directory.GetCurrentDirectory();
+
+            var folder1 = $"{currentDir}/TestFolder3";
+            var folder2 = $"{currentDir}/TestFolder4";
 
             _sut.SetTriggerFileFolder(folder1);
 
@@ -143,6 +141,8 @@ namespace IBFramework.Caching.Test
 
             Assert.Equal("Unable to change folder after it has already been set!",
                 e.Message);
+
+            DeleteCacheFile<TestClass>();
         }
 
         #endregion
@@ -165,6 +165,8 @@ namespace IBFramework.Caching.Test
             _sut.GenerateTriggerFile<TestClass>();
 
             Assert.False(_sut.ShouldRefreshCache<TestClass>());
+
+            DeleteCacheFile<TestClass>();
         }
 
         [Fact]
@@ -180,7 +182,7 @@ namespace IBFramework.Caching.Test
 
             Assert.True(File.Exists(triggerFile));
 
-            File.Delete(_sut.GetTriggerFilePath<TestClass>());
+            DeleteCacheFile<TestClass>();
 
             Assert.False(File.Exists(triggerFile));
 
@@ -207,6 +209,8 @@ namespace IBFramework.Caching.Test
             Assert.True(newDate > origDate);
 
             Assert.True(_sut.ShouldRefreshCache<TestClass>());
+
+            DeleteCacheFile<TestClass>();
         }
 
         #endregion
@@ -223,6 +227,8 @@ namespace IBFramework.Caching.Test
             _sut.TriggerCache<TestClass>();
 
             Assert.True(_sut.ShouldRefreshCache<TestClass>());
+
+            DeleteCacheFile<TestClass>();
         }
 
         #endregion

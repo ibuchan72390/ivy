@@ -1,4 +1,5 @@
 ﻿using IBFramework.Domain;
+using IBFramework.TestHelper.TestEntities.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;

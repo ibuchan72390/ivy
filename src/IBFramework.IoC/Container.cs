@@ -12,6 +12,11 @@ namespace IBFramework.IoC
             _container = container;
         }
 
+        public void Dispose()
+        {
+            _container.Dispose();
+        }
+
         public object Resolve(Type interfaceType)
         {
             var result = _container.GetService(interfaceType);
