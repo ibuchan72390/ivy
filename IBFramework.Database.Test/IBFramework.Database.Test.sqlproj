@@ -66,4 +66,7 @@
     <Build Include="Tables\GuidIdEntity.sql" />
     <Build Include="Tables\ParentEntity.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="IBFramework.Database.Test.publish.xml" />
+  </ItemGroup>
 </Project>
