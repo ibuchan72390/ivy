@@ -1,9 +1,10 @@
 ﻿using IBFramework.Core.Data.Domain;
+using IBFramework.Core.Data.Init;
 using System.Collections.Generic;
 
 namespace IBFramework.Core.Data
 {
-    public interface IRepository<TObject>
+    public interface IRepository<TObject> : IInitialize
     {
         IList<TObject> GetAll();
 

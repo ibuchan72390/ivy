@@ -7,6 +7,39 @@ namespace IBFramework.Data.MSSQL
 {
     public class Repository<T> : IRepository<T>
     {
+        #region Variables & Constants
+
+        protected IDatabaseKeyManager _databaseKeyManager;
+
+        
+
+        #endregion
+
+        #region Constructor
+
+        public Repository(IDatabaseKeyManager databaseKeyManager)
+        {
+            _databaseKeyManager = databaseKeyManager;
+        }
+
+        #endregion
+
+        #region Initialization
+
+        public void InitializeByConnectionString(string connectionString)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void InitializeByDatabaseKey(string databaseKey)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region Public Methods
+
         public void DeleteAll(ITranConn tc = null)
         {
             throw new NotImplementedException();
@@ -16,6 +49,8 @@ namespace IBFramework.Data.MSSQL
         {
             throw new NotImplementedException();
         }
+
+        #endregion
     }
 
     public class Repository<T, TKey> : Repository<T>, IRepository<T, TKey>

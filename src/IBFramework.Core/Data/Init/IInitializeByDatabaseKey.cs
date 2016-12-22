@@ -1,6 +1,6 @@
 ﻿namespace IBFramework.Core.Data.Init
 {
-    interface IInitializeByDatabaseKey
+    public interface IInitializeByDatabaseKey
     {
         void InitializeByDatabaseKey(string databaseKey);
     }

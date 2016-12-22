@@ -1,6 +1,6 @@
 ﻿namespace IBFramework.Core.Data
 {
-    interface IInitializeByConnectionString
+    public interface IInitializeByConnectionString
     {
         void InitializeByConnectionString(string connectionString);
     }
