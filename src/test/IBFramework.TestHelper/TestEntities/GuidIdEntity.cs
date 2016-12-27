@@ -5,6 +5,11 @@ namespace IBFramework.TestHelper.TestEntities
 {
     public class GuidIdEntity : BaseTestEntity<Guid>
     {
-        CoreEntity CoreEntity { get; set; }
+        public GuidIdEntity()
+        {
+            Id = Guid.NewGuid();
+        }
+
+        public CoreEntity CoreEntity { get; set; }
     }
 }

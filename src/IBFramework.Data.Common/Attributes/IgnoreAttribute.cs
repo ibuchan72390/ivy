@@ -10,7 +10,7 @@ namespace IBFramework.Data.Common.Attributes
      * 
      * In any type of NOSQL Database, this field will be useless
      */
-    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
     public class IgnoreAttribute : Attribute
     {
     }

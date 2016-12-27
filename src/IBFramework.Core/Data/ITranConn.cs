@@ -1,11 +1,12 @@
-﻿using System.Data.Common;
+﻿using System;
+using System.Data;
 
 namespace IBFramework.Core.Data
 {
-    public interface ITranConn
+    public interface ITranConn : IDisposable
     {
-        DbConnection Connection { get; set; }
+        IDbConnection Connection { get; }
 
-        DbTransaction Transaction { get; set; }
+        IDbTransaction Transaction { get; }
     }
 }

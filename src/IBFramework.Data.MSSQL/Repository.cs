@@ -1,7 +1,9 @@
 ﻿using IBFramework.Core.Data;
 using IBFramework.Core.Data.Domain;
+using IBFramework.Data.Common;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 
 namespace IBFramework.Data.MSSQL
 {
@@ -9,9 +11,9 @@ namespace IBFramework.Data.MSSQL
     {
         #region Variables & Constants
 
-        protected IDatabaseKeyManager _databaseKeyManager;
+        protected readonly IDatabaseKeyManager _databaseKeyManager;
 
-        
+        public string ConnectionString { get; private set; }
 
         #endregion
 
@@ -28,12 +30,14 @@ namespace IBFramework.Data.MSSQL
 
         public void InitializeByConnectionString(string connectionString)
         {
+            ConnectionString = connectionString;
+
             throw new NotImplementedException();
         }
 
         public void InitializeByDatabaseKey(string databaseKey)
         {
-            throw new NotImplementedException();
+            InitializeByConnectionString(_databaseKeyManager.GetConnectionString(databaseKey));
         }
 
         #endregion
@@ -51,11 +55,26 @@ namespace IBFramework.Data.MSSQL
         }
 
         #endregion
+
+        #region Helper Methods
+
+
+
+        #endregion
     }
 
     public class Repository<T, TKey> : Repository<T>, IRepository<T, TKey>
         where T : IEntityWithTypedId<TKey>
     {
+        #region Constructor
+
+        public Repository(IDatabaseKeyManager databaseKeyManager) 
+            : base(databaseKeyManager)
+        {
+        }
+
+        #endregion
+
         public void Delete(T entity, ITranConn tc = null)
         {
             throw new NotImplementedException();

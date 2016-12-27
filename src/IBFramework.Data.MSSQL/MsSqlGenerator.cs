@@ -19,11 +19,11 @@ namespace IBFramework.Data.MSSQL
      * 1) Don't use SELECT * to ensure that we prevent the initial table scan for properties
      */
 
-    public class SqlGenerator<TEntity> : ISqlGenerator<TEntity>
+    public class MsSqlGenerator<TEntity> : ISqlGenerator<TEntity>
     {
         private readonly Type _entityType;
 
-        public SqlGenerator()
+        public MsSqlGenerator()
         {
             _entityType = typeof(TEntity);
         }

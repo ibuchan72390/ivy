@@ -36,6 +36,8 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "IBFramework.Database.Test",
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "IBFramework.Utility.Test", "src\test\IBFramework.Utility.Test\IBFramework.Utility.Test.xproj", "{2A3BFE1C-89F3-4954-9B63-6547AAA23815}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "IBFramework.Data.MSSQL.Test", "src\test\IBFramework.Data.MSSQL.Test\IBFramework.Data.MSSQL.Test.xproj", "{1CCC2DE1-A50B-43C0-B16D-B929816C131B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -92,6 +94,10 @@ Global
 		{2A3BFE1C-89F3-4954-9B63-6547AAA23815}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A3BFE1C-89F3-4954-9B63-6547AAA23815}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A3BFE1C-89F3-4954-9B63-6547AAA23815}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CCC2DE1-A50B-43C0-B16D-B929816C131B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CCC2DE1-A50B-43C0-B16D-B929816C131B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CCC2DE1-A50B-43C0-B16D-B929816C131B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CCC2DE1-A50B-43C0-B16D-B929816C131B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -110,5 +116,6 @@ Global
 		{84E8C805-19A2-4972-A9AA-911CA5BF8056} = {3D4322AD-E8B4-4B4B-9FE3-958CCCA4825D}
 		{90CCF192-9A63-46B8-BF2B-7E4DC2AAC88D} = {3D4322AD-E8B4-4B4B-9FE3-958CCCA4825D}
 		{2A3BFE1C-89F3-4954-9B63-6547AAA23815} = {3D4322AD-E8B4-4B4B-9FE3-958CCCA4825D}
+		{1CCC2DE1-A50B-43C0-B16D-B929816C131B} = {3D4322AD-E8B4-4B4B-9FE3-958CCCA4825D}
 	EndGlobalSection
 EndGlobal

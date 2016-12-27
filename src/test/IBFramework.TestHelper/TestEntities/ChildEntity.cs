@@ -4,6 +4,6 @@ namespace IBFramework.TestHelper.TestEntities
 {
     public class ChildEntity : BaseTestEntity<int>
     {
-        CoreEntity CoreEntity { get; set; }
+        public CoreEntity CoreEntity { get; set; }
     }
 }

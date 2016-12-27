@@ -1,14 +1,14 @@
-﻿using IBFramework.Domain;
-using IBFramework.TestHelper.TestEntities.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using IBFramework.TestHelper.TestEntities.Base;
 
 namespace IBFramework.TestHelper.TestEntities
 {
     public class StringIdEntity : BaseTestEntity<string>
     {
-        CoreEntity CoreEntity { get; set; }
+        public StringIdEntity()
+        {
+            Id = TestIncrementer.StringVal;
+        }
+
+        public CoreEntity CoreEntity { get; set; }
     }
 }
