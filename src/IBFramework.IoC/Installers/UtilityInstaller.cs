@@ -9,6 +9,8 @@ namespace IBFramework.IoC.Installers
         public void Install(IContainerGenerator container)
         {
             container.Register<Clock>().As<IClock>();
+            container.Register<RandomizationHelper>().As<IRandomizationHelper>();
+            container.Register(typeof(ReflectionHelper<>)).As(typeof(IReflectionHelper<>));
         }
     }
 
