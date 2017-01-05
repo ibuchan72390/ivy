@@ -5,6 +5,7 @@ using System.IO;
 using System;
 using IBFramework.Core.IoC;
 using IBFramework.IoC.Installers;
+using IBFramework.TestUtilities;
 
 namespace IBFramework.Caching.Test
 {

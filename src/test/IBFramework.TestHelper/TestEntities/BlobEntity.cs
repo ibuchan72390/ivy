@@ -1,10 +1,12 @@
 ﻿using IBFramework.TestHelper.TestEntities.Base;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace IBFramework.TestHelper.TestEntities
 {
-    public class ParentEntity : BaseTestEntity<int>
+    public class BlobEntity : BaseTestEntity
     {
-        IList<CoreEntity> CoreEntities { get; set; }
     }
 }

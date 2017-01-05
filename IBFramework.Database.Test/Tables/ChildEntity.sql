@@ -5,5 +5,6 @@
 	[Name] NVARCHAR(50) NULL,
 	[Integer] INT NULL,
 	[Decimal] DECIMAL NULL,
+	[Double] FLOAT NULL,
     CONSTRAINT [FK_ChildEntity_CoreEntity] FOREIGN KEY ([CoreEntityId]) REFERENCES [CoreEntity]([Id])
 )

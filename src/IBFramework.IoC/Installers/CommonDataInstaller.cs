@@ -16,9 +16,10 @@ namespace IBFramework.IoC.Installers
 
     public static class CommonDataInstallerExtension
     {
-        public static void InstallCommonData(this IContainerGenerator containerGenerator)
+        public static IContainerGenerator InstallCommonData(this IContainerGenerator containerGenerator)
         {
             new CommonDataInstaller().Install(containerGenerator);
+            return containerGenerator;
         }
     }
 }

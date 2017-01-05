@@ -1,5 +1,9 @@
 ﻿using IBFramework.Core.Data.SQL;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
 
 namespace IBFramework.Data.MSSQL
 {
@@ -11,7 +15,8 @@ namespace IBFramework.Data.MSSQL
      * 1) Tables are NOT pluralized, I've worked in an environment with pluralization and it's a stupid
      * waste of time and processing cycles.  Just name the Table what your object is named.
      * 
-     * 2) ...
+     * 2) Make all entity level collections into an IList<> for now.  In order for the child collections
+     * to be skipped through the Entity mapper, we'll need to make them follow this pattern.
      */
 
     /*
@@ -21,32 +26,183 @@ namespace IBFramework.Data.MSSQL
 
     public class MsSqlGenerator<TEntity> : ISqlGenerator<TEntity>
     {
-        private readonly Type _entityType;
+        #region Variables & Constants
 
-        public MsSqlGenerator()
+        private readonly Type _entityType;
+        private readonly ISqlPropertyGenerator _propertyGenerator;
+
+        private IList<string> _propertyNames = null;
+
+        #endregion
+
+        #region Constructor
+
+        public MsSqlGenerator(ISqlPropertyGenerator propertyGenerator)
         {
             _entityType = typeof(TEntity);
+            _propertyGenerator = propertyGenerator;
         }
 
-        public string GenerateDeleteAllQuery()
+        #endregion
+
+        #region Public Methods
+
+        public string GenerateDeleteQuery(string sqlWhere = null)
         {
-            return $"DELETE FROM {_entityType.Name};";
+            var sql = AppendWhereIfDefined($"DELETE FROM {_entityType.Name}", sqlWhere);
+            return $"{sql};";
         }
 
-        public string GenerateGetAllQuery()
+        public string GenerateGetQuery(string selectPrefix = null, string sqlWhere = null)
         {
-            /*
-             * need a way to get the enumerated values here
-             */
+            var attributeNames = GeneratePropertyNameString();
 
-            var attributeNames = GetObjectAttributeNames();
+            var sql = "SELECT ";
 
-            return $"GET {attributeNames} FROM {_entityType.Name}";
+            if (selectPrefix != null)
+            {
+                sql = $"{sql}{selectPrefix} ";
+            }
+
+            sql += $"{attributeNames} FROM {_entityType.Name}";
+
+            sql = AppendWhereIfDefined(sql, sqlWhere);
+
+            return $"{sql};";
         }
 
-        protected string GetObjectAttributeNames()
+        public string GenerateInsertQuery(string sqlValue, string insertClause)
+        {
+            sqlValue = WrapInParenthesesIfNotWrapped(sqlValue);
+            insertClause = WrapInParenthesesIfNotWrapped(insertClause);
+
+            return $"INSERT INTO {_entityType.Name} {sqlValue} VALUES {insertClause};";
+        }
+
+        public string GenerateUpdateQuery(string sqlSet, string sqlWhere = null)
+        {
+            var sql =  $"UPDATE {_entityType.Name} SET {sqlSet}";
+
+            sql = AppendWhereIfDefined(sql, sqlWhere);
+
+            return $"{sql};";
+        }
+
+        public string GenerateInsertQuery(TEntity entity, ref Dictionary<string, object> parms)
+        {
+            return GenerateInsertQuery(new List<TEntity> { entity }, ref parms);
+        }
+
+        public string GenerateInsertQuery(IEnumerable<TEntity> entities, ref Dictionary<string, object> parms)
+        {
+            SetupAttrsIfNotDefined();
+
+            var sb = new StringBuilder();
+
+            var entityList = entities.ToList();
+
+            for (var y = 0; y < entityList.Count; y++)
+            {
+                for (var x = 0; x < _propertyNames.Count; x++)
+                {
+                    // Setup the SQL Insert
+                    if (x == 0)
+                        sb.Append("(");
+
+                    var currentPropName = _propertyNames[x];
+                    var currentParamKey = $"{currentPropName}{y}";
+
+                    sb.Append($"@{currentParamKey}");
+
+                    if (x < _propertyNames.Count - 1)
+                        sb.Append(", ");
+                    else
+                        sb.Append(")");
+
+                    // Setup the parameters
+                    var targetProp = _entityType.GetProperty(currentPropName);
+
+                    if (parms.ContainsKey(currentParamKey))
+                    {
+                        throw new Exception($"Key already in property dictionary! Key: {currentParamKey}");
+                    }
+
+                    parms.Add(currentParamKey, targetProp.GetValue(entityList[y]));
+                }
+
+                if (y < entityList.Count - 1)
+                {
+                    sb.Append(", ");
+                }
+            }
+
+            var sqlValueString = $"({GeneratePropertyNameString()})";
+
+            return GenerateInsertQuery(sqlValueString, sb.ToString());
+        }
+
+        public string GenerateUpdateQuery(string sqlSet, string sqlWhere = null, object parms = null)
         {
             throw new NotImplementedException();
         }
+
+        #endregion
+
+        #region Helper Methods
+
+        private string GeneratePropertyNameString()
+        {
+            SetupAttrsIfNotDefined();
+
+            // use this as your property string to prevent the table scan
+
+            // Is this faster than using a stringbuilder?
+            return _propertyNames.Aggregate((x, y) => x + $", {y}");
+        }
+
+        private void SetupAttrsIfNotDefined()
+        {
+            if (_propertyNames == null)
+            {
+                _propertyNames = _propertyGenerator.GetSqlPropertyNames<TEntity>();
+            }
+        }
+
+        private string AppendWhereIfDefined(string currentSql, string sqlWhere)
+        {
+            if (string.IsNullOrEmpty(sqlWhere))
+            {
+                return currentSql;
+            }
+            else
+            {
+                return $"{currentSql} {sqlWhere}";
+            }
+        }
+
+        private string WrapInParenthesesIfNotWrapped(string sqlPiece)
+        {
+            if (sqlPiece[0] != '(')
+            {
+                sqlPiece = $"({sqlPiece}";
+            }
+
+            if (sqlPiece[sqlPiece.Length -1] != ')')
+            {
+                sqlPiece = $"{sqlPiece})";
+            }
+
+            return sqlPiece;
+        }
+
+        private Dictionary<string, object> GetParamsDict(object parms)
+        {
+            return parms.GetType().GetProperties()
+                .ToDictionary(x => x.Name, x=> x.GetValue(parms));
+        }
+
+        #endregion
     }
+
+    
 }

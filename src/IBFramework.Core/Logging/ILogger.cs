@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace IBFramework.Utility.Test
+namespace IBFramework.Core.Logging
 {
-    public class ReflectionHelperTests
+    interface ILogger
     {
     }
 }

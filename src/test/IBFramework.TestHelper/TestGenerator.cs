@@ -3,6 +3,7 @@ using IBFramework.Core.Data.Domain;
 using IBFramework.Core.Utility;
 using IBFramework.TestHelper.TestEntities;
 using IBFramework.TestHelper.TestEntities.Base;
+using IBFramework.TestUtilities;
 using System;
 
 namespace IBFramework.TestHelper
@@ -21,7 +22,7 @@ namespace IBFramework.TestHelper
         public static ChildEntity GenerateForTest(this ChildEntity entity, CoreEntity parent = null,
             string name = null, int? integer = null, decimal? deci = null)
         {
-            RandomizeTestBase<ChildEntity, int>(entity);
+            RandomizeTestBase<ChildEntity>(entity);
 
             if (entity.CoreEntity == null)
                 entity.CoreEntity = new CoreEntity().SaveForTest();
@@ -42,7 +43,7 @@ namespace IBFramework.TestHelper
 
         public static CoreEntity GenerateForTest(this CoreEntity entity)
         {
-            RandomizeTestBase<CoreEntity, int>(entity);
+            RandomizeTestBase<CoreEntity>(entity);
 
             if (entity.ParentEntity == null)
                 entity.ParentEntity = new ParentEntity().SaveForTest();
@@ -62,7 +63,7 @@ namespace IBFramework.TestHelper
 
         public static GuidIdEntity GenerateForTest(this GuidIdEntity entity)
         {
-            RandomizeTestBase<GuidIdEntity, Guid>(entity);
+            RandomizeTestBase<GuidIdEntity>(entity);
 
             if (entity.CoreEntity == null)
                 entity.CoreEntity = new CoreEntity().SaveForTest();
@@ -82,7 +83,7 @@ namespace IBFramework.TestHelper
 
         public static ParentEntity GenerateForTest(this ParentEntity entity)
         {
-            RandomizeTestBase<ParentEntity, int>(entity);
+            RandomizeTestBase<ParentEntity>(entity);
 
             return entity;
         }
@@ -99,7 +100,7 @@ namespace IBFramework.TestHelper
 
         public static StringIdEntity GenerateForTest(this StringIdEntity entity)
         {
-            RandomizeTestBase<StringIdEntity, string>(entity);
+            RandomizeTestBase<StringIdEntity>(entity);
 
             if (entity.CoreEntity == null)
                 entity.CoreEntity = new CoreEntity().SaveForTest();
@@ -115,6 +116,27 @@ namespace IBFramework.TestHelper
 
         #endregion
 
+        #region BlobEntity
+
+        public static BlobEntity GenerateForTest(this BlobEntity entity)
+        {
+            RandomizeTestBase(entity);
+            return entity;
+        }
+
+        public static BlobEntity SaveForTest(this BlobEntity entity)
+        {
+            var created = entity.GenerateForTest();
+
+            var repo = TestServiceLocator.StaticContainer.Resolve<IRepository<BlobEntity>>();
+
+            repo.Insert(entity);
+
+            return entity;
+        }
+
+        #endregion
+
         #region Helper Methods
 
         private static TEntity SaveEntity<TEntity, TKey>(TEntity entity)
@@ -125,8 +147,8 @@ namespace IBFramework.TestHelper
             return repo.SaveOrUpdate(entity);
         }
 
-        private static void RandomizeTestBase<T, TKey>(T entity)
-            where T : BaseTestEntity<TKey>, new()
+        private static void RandomizeTestBase<T>(T entity)
+            where T : BaseTestEntity
         {
             if (entity.Decimal == 0)
             {
@@ -141,6 +163,11 @@ namespace IBFramework.TestHelper
             if (entity.Integer == 0)
             {
                 entity.Integer = _rand.RandomInt();
+            }
+
+            if (entity.Double == 0)
+            {
+                entity.Double = _rand.RandomDouble();
             }
         }
 

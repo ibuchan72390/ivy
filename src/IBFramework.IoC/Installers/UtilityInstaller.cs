@@ -10,15 +10,15 @@ namespace IBFramework.IoC.Installers
         {
             container.Register<Clock>().As<IClock>();
             container.Register<RandomizationHelper>().As<IRandomizationHelper>();
-            container.Register(typeof(ReflectionHelper<>)).As(typeof(IReflectionHelper<>));
         }
     }
 
     public static class UtilityInstallerExtension
     {
-        public static void InstallUtility(this IContainerGenerator containerGenerator)
+        public static IContainerGenerator InstallUtility(this IContainerGenerator containerGenerator)
         {
             new UtilityInstaller().Install(containerGenerator);
+            return containerGenerator;
         }
     }
 }

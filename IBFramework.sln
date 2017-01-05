@@ -38,6 +38,10 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "IBFramework.Utility.Test", 
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "IBFramework.Data.MSSQL.Test", "src\test\IBFramework.Data.MSSQL.Test\IBFramework.Data.MSSQL.Test.xproj", "{1CCC2DE1-A50B-43C0-B16D-B929816C131B}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "IBFramework.Data.MSSQL.IntegrationTest", "src\test\IBFramework.Data.MSSQL.IntegrationTest\IBFramework.Data.MSSQL.IntegrationTest.xproj", "{AD5112C5-81AF-485E-B33B-86D84255DA39}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "IBFramework.TestUtilities", "src\test\IBFramework.TestUtilities\IBFramework.TestUtilities.xproj", "{512F7FF3-A6E6-4F50-9C99-D687687D90BF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -98,6 +102,14 @@ Global
 		{1CCC2DE1-A50B-43C0-B16D-B929816C131B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CCC2DE1-A50B-43C0-B16D-B929816C131B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1CCC2DE1-A50B-43C0-B16D-B929816C131B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD5112C5-81AF-485E-B33B-86D84255DA39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD5112C5-81AF-485E-B33B-86D84255DA39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD5112C5-81AF-485E-B33B-86D84255DA39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD5112C5-81AF-485E-B33B-86D84255DA39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{512F7FF3-A6E6-4F50-9C99-D687687D90BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{512F7FF3-A6E6-4F50-9C99-D687687D90BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{512F7FF3-A6E6-4F50-9C99-D687687D90BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{512F7FF3-A6E6-4F50-9C99-D687687D90BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -117,5 +129,7 @@ Global
 		{90CCF192-9A63-46B8-BF2B-7E4DC2AAC88D} = {3D4322AD-E8B4-4B4B-9FE3-958CCCA4825D}
 		{2A3BFE1C-89F3-4954-9B63-6547AAA23815} = {3D4322AD-E8B4-4B4B-9FE3-958CCCA4825D}
 		{1CCC2DE1-A50B-43C0-B16D-B929816C131B} = {3D4322AD-E8B4-4B4B-9FE3-958CCCA4825D}
+		{AD5112C5-81AF-485E-B33B-86D84255DA39} = {3D4322AD-E8B4-4B4B-9FE3-958CCCA4825D}
+		{512F7FF3-A6E6-4F50-9C99-D687687D90BF} = {3D4322AD-E8B4-4B4B-9FE3-958CCCA4825D}
 	EndGlobalSection
 EndGlobal

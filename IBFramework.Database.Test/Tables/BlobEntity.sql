@@ -1,6 +1,5 @@
-﻿CREATE TABLE [dbo].[ParentEntity]
+﻿CREATE TABLE [dbo].[BlobEntity]
 (
-	[Id] INT NOT NULL PRIMARY KEY,
 	[Name] NVARCHAR(50) NULL,
 	[Integer] INT NULL,
 	[Decimal] DECIMAL NULL,

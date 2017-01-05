@@ -18,9 +18,10 @@ namespace IBFramework.IoC.Installers
 
     public static class CachingInstallerExtension
     {
-        public static void InstallCaching(this IContainerGenerator containerGenerator)
+        public static IContainerGenerator InstallCaching(this IContainerGenerator containerGenerator)
         {
             new CachingInstaller().Install(containerGenerator);
+            return containerGenerator;
         }
     }
 }
