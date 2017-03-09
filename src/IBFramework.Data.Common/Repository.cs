@@ -1,11 +1,9 @@
-﻿using IBFramework.Core.Data;
-using IBFramework.Core.Data.Domain;
-using IBFramework.Data.Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using IBFramework.Core.Data;
+using IBFramework.Core.Data.Domain;
 
-namespace IBFramework.Data.MSSQL
+namespace IBFramework.Data.Common
 {
     public class Repository<T> : IRepository<T>
     {

@@ -38,6 +38,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "IBFramework.Utility.Test", 
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "IBFramework.Data.MSSQL.Test", "src\test\IBFramework.Data.MSSQL.Test\IBFramework.Data.MSSQL.Test.xproj", "{1CCC2DE1-A50B-43C0-B16D-B929816C131B}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "IBFramework.Data.MySQL", "src\IBFramework.Data.MySQL\IBFramework.Data.MySQL.xproj", "{35F1FAD2-8B64-4699-A542-121F942B165C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -98,6 +100,10 @@ Global
 		{1CCC2DE1-A50B-43C0-B16D-B929816C131B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CCC2DE1-A50B-43C0-B16D-B929816C131B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1CCC2DE1-A50B-43C0-B16D-B929816C131B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35F1FAD2-8B64-4699-A542-121F942B165C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35F1FAD2-8B64-4699-A542-121F942B165C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35F1FAD2-8B64-4699-A542-121F942B165C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35F1FAD2-8B64-4699-A542-121F942B165C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -117,5 +123,6 @@ Global
 		{90CCF192-9A63-46B8-BF2B-7E4DC2AAC88D} = {3D4322AD-E8B4-4B4B-9FE3-958CCCA4825D}
 		{2A3BFE1C-89F3-4954-9B63-6547AAA23815} = {3D4322AD-E8B4-4B4B-9FE3-958CCCA4825D}
 		{1CCC2DE1-A50B-43C0-B16D-B929816C131B} = {3D4322AD-E8B4-4B4B-9FE3-958CCCA4825D}
+		{35F1FAD2-8B64-4699-A542-121F942B165C} = {CB7D654B-192D-4F21-91C7-98E6D47A6142}
 	EndGlobalSection
 EndGlobal

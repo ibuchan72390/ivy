@@ -1,10 +1,11 @@
 {
   "version": "1.0.0-*",
 
-  "dependencies": {
-    "IBFramework.Core": "1.0.0-*",
-    "NETStandard.Library": "1.6.1"
-  },
+    "dependencies": {
+        "Dapper": "1.50.2",
+        "IBFramework.Core": "1.0.0-*",
+        "NETStandard.Library": "1.6.1"
+    },
 
   "frameworks": {
     "netstandard1.6": {
