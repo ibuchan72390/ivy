@@ -42,6 +42,7 @@ namespace IBFramework.Data.MSSQL
         public void InitializeByConnectionString(string connectionString)
         {
             ConnectionString = connectionString;
+            _tranHelper.InitializeByConnectionString(connectionString);
         }
 
         public void InitializeByDatabaseKey(string databaseKey)
@@ -77,25 +78,25 @@ namespace IBFramework.Data.MSSQL
         protected IEnumerable<TReturn> InternalExecuteQuery<TReturn>(string sql, ITranConn tc = null, object parms = null)
         {
             return _tranHelper.WrapInTransaction(
-                tran => tran.Connection.Query<TReturn>(sql, parms, tc.Transaction));
+                tran => tran.Connection.Query<TReturn>(sql, parms, tran.Transaction), tc);
         }
 
         protected void InternalExecuteNonQuery(string sql, ITranConn tc = null, object parms = null)
         {
             _tranHelper.WrapInTransaction(
-                tran => tran.Connection.Execute(sql, parms, tc.Transaction));
+                tran => tran.Connection.Execute(sql, parms, tran.Transaction), tc);
         }
 
         protected Task<IEnumerable<TReturn>> InternalExecuteQueryAsync<TReturn>(string sql, ITranConn tc = null, object parms = null)
         {
             return _tranHelper.WrapInTransaction(
-                async tran => await tran.Connection.QueryAsync<TReturn>(sql, parms, tc.Transaction));
+                async tran => await tran.Connection.QueryAsync<TReturn>(sql, parms, tran.Transaction), tc);
         }
 
         protected Task InternalExecuteNonQueryAsync(string sql, ITranConn tc = null, object parms = null)
         {
             return _tranHelper.WrapInTransaction(
-                async tran => await tran.Connection.ExecuteAsync(sql, parms, tc.Transaction));
+                async tran => await tran.Connection.ExecuteAsync(sql, parms, tran.Transaction), tc);
         }
 
         #endregion

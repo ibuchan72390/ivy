@@ -1,4 +1,5 @@
-﻿using IBFramework.Core.Data.SQL;
+﻿using IBFramework.Core.Data;
+using IBFramework.Core.Data.SQL;
 using IBFramework.Core.IoC;
 using IBFramework.Data.MSSQL;
 using System;
@@ -12,8 +13,11 @@ namespace IBFramework.IoC.Installers
     {
         public void Install(IContainerGenerator containerGenerator)
         {
+            containerGenerator.Register<MsSqlTransactionHelper>().As<ITransactionHelper>();
+            containerGenerator.Register<MsSqlTranConnGenerator>().As<ITranConnGenerator>();
             containerGenerator.Register<SqlPropertyGenerator>().As<ISqlPropertyGenerator>();
             containerGenerator.Register(typeof(MsSqlGenerator<>)).As(typeof(ISqlGenerator<>));
+            containerGenerator.Register(typeof(Repository<>)).As(typeof(IRepository<>));
         }
     }
 

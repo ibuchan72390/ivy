@@ -143,7 +143,9 @@ namespace IBFramework.Data.MSSQL
 
         public string GenerateUpdateQuery(string sqlSet, string sqlWhere = null, object parms = null)
         {
-            throw new NotImplementedException();
+            string sql = $"UPDATE {_entityType.Name} SET {sqlSet}";
+
+            return $"{AppendWhereIfDefined(sql, sqlWhere)};";
         }
 
         #endregion
@@ -157,14 +159,16 @@ namespace IBFramework.Data.MSSQL
             // use this as your property string to prevent the table scan
 
             // Is this faster than using a stringbuilder?
-            return _propertyNames.Aggregate((x, y) => x + $", {y}");
+            return _propertyNames.Select(x => $"[{x}]").Aggregate((x, y) => x + $", {y}");
         }
 
         private void SetupAttrsIfNotDefined()
         {
             if (_propertyNames == null)
             {
-                _propertyNames = _propertyGenerator.GetSqlPropertyNames<TEntity>();
+                _propertyNames = _propertyGenerator.
+                    GetSqlPropertyNames<TEntity>().
+                    ToList();
             }
         }
 
@@ -176,7 +180,7 @@ namespace IBFramework.Data.MSSQL
             }
             else
             {
-                return $"{currentSql} {sqlWhere}";
+                return $"{currentSql} WHERE {sqlWhere}";
             }
         }
 

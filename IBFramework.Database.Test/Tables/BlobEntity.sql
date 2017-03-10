@@ -2,6 +2,6 @@
 (
 	[Name] NVARCHAR(50) NULL,
 	[Integer] INT NULL,
-	[Decimal] DECIMAL NULL,
+	[Decimal] DECIMAL(18, 2) NULL,
 	[Double] FLOAT NULL,
 )

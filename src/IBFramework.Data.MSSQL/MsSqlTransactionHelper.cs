@@ -33,7 +33,7 @@ namespace IBFramework.Data.MSSQL
             {
                 tranConnFn(tc);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 if (myTran)
                 {
@@ -66,8 +66,13 @@ namespace IBFramework.Data.MSSQL
             try
             {
                 result = tranConnFn(tc);
+
+                if (myTran)
+                {
+                    tc.Transaction.Commit();
+                }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 if (myTran)
                 {

@@ -4,7 +4,7 @@
   "dependencies": {
     "IBFramework.Core": "1.0.0-*",
     "IBFramework.IoC": "1.0.0-*",
-    "NETStandard.Library": "1.6.0"
+    "NETStandard.Library": "1.6.1"
   },
 
   "frameworks": {

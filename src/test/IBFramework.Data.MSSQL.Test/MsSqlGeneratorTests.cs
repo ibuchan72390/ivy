@@ -37,7 +37,7 @@ namespace IBFramework.Data.MSSQL.Test
 
             var result = _sut.GenerateGetQuery();
 
-            var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>();
+            var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
 
             var expectedAttrString = attrs.Aggregate((x,y) => x + $", {y}");
 
@@ -51,9 +51,9 @@ namespace IBFramework.Data.MSSQL.Test
         {
             ISqlGenerator<ChildEntity> _sut = TestServiceLocator.StaticContainer.Resolve<ISqlGenerator<ChildEntity>>();
 
-            var result = _sut.GenerateGetQuery(null, "WHERE Id = @id");
+            var result = _sut.GenerateGetQuery(null, "Id = @id");
 
-            var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>();
+            var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
 
             var expectedAttrString = attrs.Aggregate((x, y) => x + $", {y}");
 
@@ -69,7 +69,7 @@ namespace IBFramework.Data.MSSQL.Test
 
             var result = _sut.GenerateGetQuery("TOP 100");
 
-            var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>();
+            var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
 
             var expectedAttrString = attrs.Aggregate((x, y) => x + $", {y}");
 
@@ -99,7 +99,7 @@ namespace IBFramework.Data.MSSQL.Test
         {
             ISqlGenerator<ChildEntity> _sut = TestServiceLocator.StaticContainer.Resolve<ISqlGenerator<ChildEntity>>();
 
-            var result = _sut.GenerateDeleteQuery("WHERE Id = @id");
+            var result = _sut.GenerateDeleteQuery("Id = @id");
 
             string expected = $"DELETE FROM ChildEntity WHERE Id = @id;";
 
@@ -172,7 +172,6 @@ namespace IBFramework.Data.MSSQL.Test
 
         #endregion
 
-
         #region GenerateInsertQuery (Generic)
 
         [Fact]
@@ -186,7 +185,7 @@ namespace IBFramework.Data.MSSQL.Test
 
             var result = _sut.GenerateInsertQuery(entity, ref parms);
 
-            string expected = $"INSERT INTO BlobEntity (Name, Integer, Decimal, Double) VALUES (@Name0, @Integer0, @Decimal0, @Double0);";
+            string expected = $"INSERT INTO BlobEntity ([Name], [Integer], [Decimal], [Double]) VALUES (@Name0, @Integer0, @Decimal0, @Double0);";
 
             Assert.Equal(expected, result);
         }
@@ -229,7 +228,7 @@ namespace IBFramework.Data.MSSQL.Test
 
             var result = _sut.GenerateInsertQuery(entities, ref parms);
 
-            string expected = $"INSERT INTO BlobEntity (Name, Integer, Decimal, Double) VALUES (@Name0, @Integer0, @Decimal0, @Double0), (@Name1, @Integer1, @Decimal1, @Double1), (@Name2, @Integer2, @Decimal2, @Double2);";
+            string expected = $"INSERT INTO BlobEntity ([Name], [Integer], [Decimal], [Double]) VALUES (@Name0, @Integer0, @Decimal0, @Double0), (@Name1, @Integer1, @Decimal1, @Double1), (@Name2, @Integer2, @Decimal2, @Double2);";
 
             Assert.Equal(expected, result);
         }
@@ -290,6 +289,12 @@ namespace IBFramework.Data.MSSQL.Test
         }
 
         #endregion
+
+        #endregion
+
+        #region Helper Methods
+
+        private string FormatSqlAttr(string item) => $"[{item}]";
 
         #endregion
     }

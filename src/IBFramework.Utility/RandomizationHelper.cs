@@ -31,9 +31,9 @@ namespace IBFramework.Utility
             return RandomInt((int)Math.Round(min, 0), (int)Math.Round(max - 1, 0)) + random.NextDouble();
         }
 
-        public decimal RandomDecimal(double min = 0, double max = 10000)
+        public decimal RandomDecimal()
         {
-            return (decimal)RandomDouble(min, max);
+            return (decimal)RandomDouble();
         }
     }
 }
