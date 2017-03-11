@@ -1,4 +1,5 @@
 ﻿using IBFramework.TestHelper.TestEntities.Base;
+using IBFramework.TestUtilities;
 
 namespace IBFramework.TestHelper.TestEntities
 {

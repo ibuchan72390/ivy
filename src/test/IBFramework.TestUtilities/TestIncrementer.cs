@@ -1,4 +1,4 @@
-﻿namespace IBFramework.TestHelper
+﻿namespace IBFramework.TestUtilities
 {
     /*
      * Simply returns a new int, string, double, or decimal

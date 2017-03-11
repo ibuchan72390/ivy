@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using IBFramework.Core.Data.Init;
+using System.Data;
 
 namespace IBFramework.Core.Data
 {

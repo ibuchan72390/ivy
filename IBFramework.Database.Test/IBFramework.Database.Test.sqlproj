@@ -65,6 +65,7 @@
     <Build Include="Tables\StringIdEntity.sql" />
     <Build Include="Tables\GuidIdEntity.sql" />
     <Build Include="Tables\ParentEntity.sql" />
+    <Build Include="Tables\BlobEntity.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="IBFramework.Database.Test.publish.xml" />

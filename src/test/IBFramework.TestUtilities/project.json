@@ -2,9 +2,8 @@
   "version": "1.0.0-*",
 
   "dependencies": {
-    "IBFramework.Data.Common": "1.0.0-*",
+    "IBFramework.Core": "1.0.0-*",
     "IBFramework.IoC": "1.0.0-*",
-    "IBFramework.TestUtilities": "1.0.0-*",
     "NETStandard.Library": "1.6.1"
   },
 

@@ -17,9 +17,10 @@ namespace IBFramework.IoC.Installers
 
     public static class IoCInstallerExtension
     {
-        public static void InstallIoC(this IContainerGenerator containerGenerator)
+        public static IContainerGenerator InstallIoC(this IContainerGenerator containerGenerator)
         {
             new IoCInstaller().Install(containerGenerator);
+            return containerGenerator;
         }
     }
 }
