@@ -2,7 +2,7 @@
 using System.Data;
 using System;
 
-namespace IBFramework.Data.Common
+namespace IBFramework.Data.Common.Transaction
 {
     public class TranConn : ITranConn
     {

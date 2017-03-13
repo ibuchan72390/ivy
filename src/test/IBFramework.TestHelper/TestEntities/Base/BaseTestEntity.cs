@@ -30,11 +30,11 @@ namespace IBFramework.TestHelper.TestEntities.Base
         }
     }
 
-    public class BaseTestEntity<TKey> : BaseTestEntity, IEntityWithTypedId<TKey>, IEquatable<IEntityWithTypedId<TKey>>
+    public class BaseTestEntity<TKey> : BaseTestEntity, IEntityWithTypedId<TKey>, IEquatable<BaseTestEntity<TKey>>
     {
         public TKey Id { get; set; }
 
-        public bool Equals(IEntityWithTypedId<TKey> other)
+        public bool Equals(BaseTestEntity<TKey> other)
         {
             return base.Equals(other) && Id.Equals(other.Id);
         }

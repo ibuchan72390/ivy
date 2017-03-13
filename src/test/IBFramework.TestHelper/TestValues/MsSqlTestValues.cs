@@ -1,6 +1,6 @@
-﻿namespace IBFramework.TestHelper
+﻿namespace IBFramework.TestHelper.TestValues
 {
-    public static class TestValues
+    public static class MsSqlTestValues
     {
         public const string TestDbConnectionString = "Data Source=MEOWKAT;Initial Catalog=IBFramework.Database.Test;Integrated Security=True";
     }

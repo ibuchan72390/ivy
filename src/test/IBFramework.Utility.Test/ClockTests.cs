@@ -1,4 +1,5 @@
 ﻿using IBFramework.Core.Utility;
+using IBFramework.IoC;
 using IBFramework.TestHelper;
 using IBFramework.TestUtilities;
 using System;
@@ -13,7 +14,7 @@ namespace IBFramework.Utility.Test
 
         public ClockTests()
         {
-            _sut = TestServiceLocator.StaticContainer.Resolve<IClock>();
+            _sut = ServiceLocator.Instance.Resolve<IClock>();
         }
 
         [Fact]

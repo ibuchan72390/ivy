@@ -1,11 +1,11 @@
 ﻿using IBFramework.Core.Data;
+using IBFramework.IoC;
 using IBFramework.TestHelper;
 using IBFramework.TestHelper.TestEntities;
-using IBFramework.TestUtilities;
+using IBFramework.TestHelper.TestValues;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace IBFramework.Data.MSSQL.IntegrationTest
@@ -22,9 +22,9 @@ namespace IBFramework.Data.MSSQL.IntegrationTest
 
         public BasicRepositoryTests()
         {
-            _sut = TestServiceLocator.StaticContainer.Resolve<IRepository<BlobEntity>>();
+            _sut = ServiceLocator.Instance.Resolve<IRepository<BlobEntity>>();
 
-            _sut.InitializeByConnectionString(TestValues.TestDbConnectionString);
+            _sut.InitializeByConnectionString(MsSqlTestValues.TestDbConnectionString);
 
             _sut.DeleteAll();
         }
@@ -56,8 +56,8 @@ namespace IBFramework.Data.MSSQL.IntegrationTest
         {
             var entity = new BlobEntity().GenerateForTest();
 
-            var tranGenerator = TestServiceLocator.StaticContainer.Resolve<ITransactionHelper>();
-            tranGenerator.InitializeByConnectionString(TestValues.TestDbConnectionString);
+            var tranGenerator = ServiceLocator.Instance.Resolve<ITransactionHelper>();
+            tranGenerator.InitializeByConnectionString(MsSqlTestValues.TestDbConnectionString);
 
             tranGenerator.WrapInTransaction(tran => 
             {
@@ -110,8 +110,8 @@ namespace IBFramework.Data.MSSQL.IntegrationTest
         {
             var entities = Enumerable.Range(0, 5).Select(x => new BlobEntity().GenerateForTest()).ToList();
 
-            var tranGenerator = TestServiceLocator.StaticContainer.Resolve<ITransactionHelper>();
-            tranGenerator.InitializeByConnectionString(TestValues.TestDbConnectionString);
+            var tranGenerator = ServiceLocator.Instance.Resolve<ITransactionHelper>();
+            tranGenerator.InitializeByConnectionString(MsSqlTestValues.TestDbConnectionString);
 
             tranGenerator.WrapInTransaction(tran =>
             {

@@ -6,6 +6,7 @@ using System;
 using IBFramework.Core.IoC;
 using IBFramework.IoC.Installers;
 using IBFramework.TestUtilities;
+using IBFramework.IoC;
 
 namespace IBFramework.Caching.Test
 {
@@ -21,7 +22,7 @@ namespace IBFramework.Caching.Test
 
         public TriggerFileManagerTests()
         {
-            _sut = TestServiceLocator.StaticContainer.Resolve<ITriggerFileManager>();
+            _sut = ServiceLocator.Instance.Resolve<ITriggerFileManager>();
         }
 
         public void Dispose()

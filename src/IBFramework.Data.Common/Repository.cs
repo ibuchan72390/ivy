@@ -2,9 +2,10 @@
 using IBFramework.Core.Data.SQL;
 using System.Collections.Generic;
 using Dapper;
-using System.Threading.Tasks;
+using IBFramework.Core.Data.Domain;
+using System.Linq;
 
-namespace IBFramework.Data.MSSQL
+namespace IBFramework.Data.Common
 {
     /*
      * NO SQL should EVER be written in your code unless it is in a class
@@ -12,6 +13,7 @@ namespace IBFramework.Data.MSSQL
      */
 
     public abstract class BaseRepository<T> : IBaseRepository<T>
+        where T : class
     {
         #region Variables & Constants
 
@@ -60,13 +62,19 @@ namespace IBFramework.Data.MSSQL
             var query = _sqlGenerator.GenerateDeleteQuery();
 
             InternalExecuteNonQuery(query, tc);
+
+            //_tranHelper.WrapInTransaction(
+            //    tran => tran.Connection.DeleteAll<T>(), tc);
         }
 
-        public IEnumerable<T> GetAll()
+        public IEnumerable<T> GetAll(ITranConn tc = null)
         {
             var query = _sqlGenerator.GenerateGetQuery();
 
             return InternalExecuteQuery<T>(query);
+
+            //return _tranHelper.WrapInTransaction(
+            //   tran => tran.Connection.GetAll<T>(), tc);
         }
 
         #endregion
@@ -80,30 +88,31 @@ namespace IBFramework.Data.MSSQL
             return _tranHelper.WrapInTransaction(
                 tran => tran.Connection.Query<TReturn>(sql, parms, tran.Transaction), tc);
         }
-
         protected void InternalExecuteNonQuery(string sql, ITranConn tc = null, object parms = null)
         {
             _tranHelper.WrapInTransaction(
                 tran => tran.Connection.Execute(sql, parms, tran.Transaction), tc);
         }
 
-        protected Task<IEnumerable<TReturn>> InternalExecuteQueryAsync<TReturn>(string sql, ITranConn tc = null, object parms = null)
-        {
-            return _tranHelper.WrapInTransaction(
-                async tran => await tran.Connection.QueryAsync<TReturn>(sql, parms, tran.Transaction), tc);
-        }
+        // Async functionality for future expansion
+        //protected Task<IEnumerable<TReturn>> InternalExecuteQueryAsync<TReturn>(string sql, ITranConn tc = null, object parms = null)
+        //{
+        //    return _tranHelper.WrapInTransaction(
+        //        async tran => await tran.Connection.QueryAsync<TReturn>(sql, parms, tran.Transaction), tc);
+        //}
 
-        protected Task InternalExecuteNonQueryAsync(string sql, ITranConn tc = null, object parms = null)
-        {
-            return _tranHelper.WrapInTransaction(
-                async tran => await tran.Connection.ExecuteAsync(sql, parms, tran.Transaction), tc);
-        }
+        //protected Task InternalExecuteNonQueryAsync(string sql, ITranConn tc = null, object parms = null)
+        //{
+        //    return _tranHelper.WrapInTransaction(
+        //        async tran => await tran.Connection.ExecuteAsync(sql, parms, tran.Transaction), tc);
+        //}
 
         #endregion
     }
 
 
     public class Repository<T> : BaseRepository<T>, IRepository<T>
+        where T: class
     {
         #region Constructor
 
@@ -140,36 +149,88 @@ namespace IBFramework.Data.MSSQL
         #endregion
     }
 
-    //public class Repository<T, TKey> : Repository<T>, IRepository<T, TKey>
-    //    where T : IEntityWithTypedId<TKey>
-    //{
-    //    #region Constructor
+    public class Repository<T, TKey> : Repository<T>, IRepository<T, TKey>
+        where T : class, IEntityWithTypedId<TKey>
+    {
 
-    //    public Repository(IDatabaseKeyManager databaseKeyManager)
-    //        : base(databaseKeyManager)
-    //    {
-    //    }
+        #region Variables & Constants
 
-    //    #endregion
+        // We populate it in the base with the correct one
+        // This should work via inheritance patterns
+        private ISqlGenerator<T, TKey> localSqlGenerator => (ISqlGenerator<T, TKey>)_sqlGenerator;
 
-    //    public void Delete(T entity, ITranConn tc = null)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
+        #endregion
 
-    //    public void DeleteById(TKey id, ITranConn tc = null)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
+        #region Constructor
 
-    //    public T GetById(TKey id)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
+        public Repository(
+            IDatabaseKeyManager databaseKeyManager,
+            ITransactionHelper tranHelper,
+            ISqlGenerator<T, TKey> sqlGenerator)
+            :base(databaseKeyManager, tranHelper, sqlGenerator)
+        {
 
-    //    public T SaveOrUpdate(T entity, ITranConn tc = null)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
-    //}
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        public void Delete(T entity, ITranConn tc = null)
+        {
+            Dictionary<string, object> parms = new Dictionary<string, object>();
+
+            var query = localSqlGenerator.GenerateDeleteQuery(entity.Id, ref parms);
+
+            InternalExecuteNonQuery(query, tc, parms);
+        }
+
+        public void DeleteById(TKey id, ITranConn tc = null)
+        {
+            Dictionary<string, object> parms = new Dictionary<string, object>();
+
+            var query = localSqlGenerator.GenerateDeleteQuery(id, ref parms);
+
+            InternalExecuteNonQuery(query, tc, parms);
+        }
+
+        public T GetById(TKey id, ITranConn tc = null)
+        {
+            Dictionary<string, object> parms = new Dictionary<string, object>();
+
+            var query = localSqlGenerator.GenerateGetQuery(id, ref parms);
+
+            return InternalExecuteQuery<T>(query, tc, parms).SingleOrDefault();
+        }
+
+        public IEnumerable<T> GetByIdList(IEnumerable<TKey> ids, ITranConn tc = null)
+        {
+            Dictionary<string, object> parms = new Dictionary<string, object>();
+
+            var idInList = string.Join(",", ids);
+
+            var query = _sqlGenerator.GenerateGetQuery(null, $"Id IN ({idInList})");
+
+            return InternalExecuteQuery<T>(query, tc, parms);
+        }
+
+        public T SaveOrUpdate(T entity, ITranConn tc = null)
+        {
+            Dictionary<string, object> parms = new Dictionary<string, object>();
+
+            var query = localSqlGenerator.GenerateSaveOrUpdateQuery(entity, ref parms);
+
+            // results should contain our new Id value if this is an insert
+            var results = InternalExecuteQuery<TKey>(query, tc, parms);
+
+            if (results.Any())
+            {
+                entity.Id = results.First();
+            }
+
+            return entity;
+        }
+
+        #endregion
+    }
 }

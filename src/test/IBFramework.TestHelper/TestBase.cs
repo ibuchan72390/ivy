@@ -1,8 +1,6 @@
-﻿using IBFramework.Core.Enum;
-using IBFramework.Core.IoC;
+﻿using IBFramework.Core.IoC;
 using IBFramework.IoC;
 using IBFramework.IoC.Installers;
-using IBFramework.TestUtilities;
 using System;
 
 namespace IBFramework.TestHelper
@@ -29,9 +27,6 @@ namespace IBFramework.TestHelper
             containerGen.InstallUtility();
 
             additionalContainerFns?.Invoke(containerGen);
-
-            // Attempt to override
-            containerGen.Register<TestServiceLocator>().As<IServiceLocator>().WithLifestyle(RegistrationLifestyleType.Singleton);
 
             // Generate Container
             var container = containerGen.GenerateContainer();

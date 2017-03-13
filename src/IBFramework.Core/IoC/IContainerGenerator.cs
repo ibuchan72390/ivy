@@ -9,7 +9,6 @@ namespace IBFramework.Core.IoC
         IRegistrationResult Register<T>() where T : class;
 
         IRegistrationResult Register(Type type);
-
         void RegisterInstance<T>(T instance) where T : class, new();
 
 

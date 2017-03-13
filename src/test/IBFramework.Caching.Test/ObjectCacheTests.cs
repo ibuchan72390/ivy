@@ -1,6 +1,6 @@
 ﻿using IBFramework.Core.Caching;
+using IBFramework.IoC;
 using IBFramework.TestHelper;
-using IBFramework.TestUtilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +19,7 @@ namespace IBFramework.Caching.Test
             Func<TestClass> init1 = () => init1Class;
             Func<TestClass> init2 = () => init2Class;
 
-            var myCache = TestServiceLocator.StaticContainer.Resolve<IObjectCache<TestClass>>();
+            var myCache = ServiceLocator.Instance.Resolve<IObjectCache<TestClass>>();
             myCache.Init(init1);
 
             Assert.Same(init1Class, myCache.GetCache());
@@ -39,7 +39,7 @@ namespace IBFramework.Caching.Test
             Func<TestClass> init1 = () => init1Class;
             Func<TestClass> init2 = () => init2Class;
 
-            var myCache = TestServiceLocator.StaticContainer.Resolve<IObjectCache<TestClass>>();
+            var myCache = ServiceLocator.Instance.Resolve<IObjectCache<TestClass>>();
             myCache.Init(init1);
 
             Assert.Same(init1Class, myCache.GetCache());
@@ -58,7 +58,7 @@ namespace IBFramework.Caching.Test
             var myClasses = Enumerable.Range(1, 5).Select(x => new TestClass { Integer = x }).ToList();
 
             //var myCache = TestServiceLocator.StaticContainer.Resolve<IObjectCache<IList<TestClass>>>(typeof(IObjectCache<IList<TestClass>>));
-            var myCache = TestServiceLocator.StaticContainer.Resolve<IObjectCache<IList<TestClass>>>();
+            var myCache = ServiceLocator.Instance.Resolve<IObjectCache<IList<TestClass>>>();
 
             myCache.Init(() => myClasses);
 
@@ -76,11 +76,11 @@ namespace IBFramework.Caching.Test
         {
             var myClasses = Enumerable.Range(1, 5).Select(x => new TestClass { Integer = x }).ToList();
 
-            var myCache = TestServiceLocator.StaticContainer.Resolve<IObjectCache<IList<TestClass>>>();
+            var myCache = ServiceLocator.Instance.Resolve<IObjectCache<IList<TestClass>>>();
 
             myCache.Init(() => myClasses);
 
-            var myResolvedCache = TestServiceLocator.StaticContainer.Resolve<IObjectCache<IList<TestClass>>>();
+            var myResolvedCache = ServiceLocator.Instance.Resolve<IObjectCache<IList<TestClass>>>();
 
             var obtainedCache = myResolvedCache.GetCache();
 
@@ -94,7 +94,7 @@ namespace IBFramework.Caching.Test
         [Fact]
         public void ObjectCache_Can_Properly_Refresh_Itself()
         {
-            var objectCache = TestServiceLocator.StaticContainer.Resolve<IObjectCache<TestClass>>();
+            var objectCache = ServiceLocator.Instance.Resolve<IObjectCache<TestClass>>();
 
             objectCache.Init(() => new TestClass());
 

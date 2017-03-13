@@ -1,4 +1,5 @@
-﻿using IBFramework.Core.IoC;
+﻿using IBFramework.Core.Enum;
+using IBFramework.Core.IoC;
 using IBFramework.Core.Utility;
 using IBFramework.Utility;
 
@@ -8,8 +9,9 @@ namespace IBFramework.IoC.Installers
     {
         public void Install(IContainerGenerator container)
         {
-            container.Register<Clock>().As<IClock>();
-            container.Register<RandomizationHelper>().As<IRandomizationHelper>();
+            container.Register<Clock>().As<IClock>().WithLifestyle(RegistrationLifestyleType.Singleton);
+            container.Register<RandomizationHelper>().As<IRandomizationHelper>().WithLifestyle(RegistrationLifestyleType.Singleton);
+            container.Register<ValidationHelper>().As<IValidationHelper>().WithLifestyle(RegistrationLifestyleType.Singleton);
         }
     }
 

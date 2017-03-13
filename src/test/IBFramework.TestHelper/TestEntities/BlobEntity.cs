@@ -1,11 +1,9 @@
-﻿using IBFramework.TestHelper.TestEntities.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Dapper.Contrib.Extensions;
+using IBFramework.TestHelper.TestEntities.Base;
 
 namespace IBFramework.TestHelper.TestEntities
 {
+    [Table("blobentity")]
     public class BlobEntity : BaseTestEntity
     {
     }

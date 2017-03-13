@@ -5,9 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
-namespace IBFramework.Data.MSSQL
+namespace IBFramework.Data.Common.Sql
 {
     public class SqlPropertyGenerator : ISqlPropertyGenerator
     {

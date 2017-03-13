@@ -1,9 +1,9 @@
 ﻿using IBFramework.Core.Data;
 using IBFramework.Core.Data.Domain;
 using IBFramework.Core.Utility;
+using IBFramework.IoC;
 using IBFramework.TestHelper.TestEntities;
 using IBFramework.TestHelper.TestEntities.Base;
-using IBFramework.TestUtilities;
 using System;
 
 namespace IBFramework.TestHelper
@@ -12,8 +12,17 @@ namespace IBFramework.TestHelper
     {
         #region Variables & Constants
 
-        private static readonly IRandomizationHelper _rand = 
-            TestServiceLocator.StaticContainer.Resolve<IRandomizationHelper>();
+        //private static readonly IRandomizationHelper _rand =
+        //    ServiceLocator.Instance.Resolve<IRandomizationHelper>();
+
+        private static IRandomizationHelper _rand =>
+            ServiceLocator.Instance.Resolve<IRandomizationHelper>();
+
+        private static string connString = null;
+        public static void Init(string connectionString)
+        {
+            connString = connectionString;
+        }
 
         #endregion
 
@@ -128,9 +137,7 @@ namespace IBFramework.TestHelper
         {
             var created = entity.GenerateForTest();
 
-            var repo = TestServiceLocator.StaticContainer.Resolve<IRepository<BlobEntity>>();
-
-            repo.Insert(entity);
+            SaveEntity<BlobEntity>(entity);
 
             return entity;
         }
@@ -140,11 +147,33 @@ namespace IBFramework.TestHelper
         #region Helper Methods
 
         private static TEntity SaveEntity<TEntity, TKey>(TEntity entity)
-            where TEntity : IEntityWithTypedId<TKey>
+            where TEntity : class, IEntityWithTypedId<TKey>
         {
-            var repo = TestServiceLocator.StaticContainer.Resolve<IRepository<TEntity, TKey>>();
-            repo.InitializeByConnectionString(TestValues.TestDbConnectionString);
+            ValidateConnectionString();
+
+            var repo = ServiceLocator.Instance.Resolve<IRepository<TEntity, TKey>>();
+            repo.InitializeByConnectionString(connString);
             return repo.SaveOrUpdate(entity);
+        }
+
+        private static TEntity SaveEntity<TEntity>(TEntity entity)
+            where TEntity : class
+        {
+            ValidateConnectionString();
+
+            var repo = ServiceLocator.Instance.Resolve<IRepository<TEntity>>();
+            repo.InitializeByConnectionString(connString);
+            repo.Insert(entity);
+
+            return entity;
+        }
+
+        private static void ValidateConnectionString()
+        {
+            if (connString == null)
+            {
+                throw new Exception("Connection string hasn't been initialized for the TestGenerator!");
+            }
         }
 
         private static void RandomizeTestBase<T>(T entity)

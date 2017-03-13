@@ -1,6 +1,6 @@
 ﻿using System.Data;
-using IBFramework.Data.Common;
 using MySql.Data.MySqlClient;
+using IBFramework.Data.Common.Transaction;
 
 namespace IBFramework.Data.MySQL
 {

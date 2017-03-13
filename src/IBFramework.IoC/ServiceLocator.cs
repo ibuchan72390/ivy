@@ -5,9 +5,20 @@ namespace IBFramework.IoC
 {
     public class ServiceLocator : IServiceLocator
     {
-        protected IContainer _container;
+        private static IContainer _container;
 
         public virtual IContainer Container => _container;
+
+        public static IContainer Instance
+        {
+            get
+            {
+                if (_container == null)
+                    throw new Exception("ServiceLocator not Initialized!");
+
+                return _container;
+            }
+        }   
 
         public object GetService(Type serviceType)
         {

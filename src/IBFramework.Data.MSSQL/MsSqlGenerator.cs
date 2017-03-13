@@ -1,4 +1,5 @@
 ﻿using IBFramework.Core.Data.SQL;
+using IBFramework.Data.Common.Sql;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,23 +25,13 @@ namespace IBFramework.Data.MSSQL
      * 1) Don't use SELECT * to ensure that we prevent the initial table scan for properties
      */
 
-    public class MsSqlGenerator<TEntity> : ISqlGenerator<TEntity>
+    public class MsSqlGenerator<TEntity> : BaseSqlGenerator<TEntity>, ISqlGenerator<TEntity>
     {
-        #region Variables & Constants
-
-        private readonly Type _entityType;
-        private readonly ISqlPropertyGenerator _propertyGenerator;
-
-        private IList<string> _propertyNames = null;
-
-        #endregion
-
         #region Constructor
 
         public MsSqlGenerator(ISqlPropertyGenerator propertyGenerator)
+            :base(propertyGenerator)
         {
-            _entityType = typeof(TEntity);
-            _propertyGenerator = propertyGenerator;
         }
 
         #endregion
@@ -150,63 +141,18 @@ namespace IBFramework.Data.MSSQL
 
         #endregion
 
-        #region Helper Methods
+        #region Abstract Methods
 
-        private string GeneratePropertyNameString()
+        protected override string FormatPropertyName(string propertyName)
         {
-            SetupAttrsIfNotDefined();
-
-            // use this as your property string to prevent the table scan
-
-            // Is this faster than using a stringbuilder?
-            return _propertyNames.Select(x => $"[{x}]").Aggregate((x, y) => x + $", {y}");
+            return $"[{propertyName}]";
         }
 
-        private void SetupAttrsIfNotDefined()
+        public string GenerateUpdateQuery(TEntity entity, ref Dictionary<string, object> parms, string sqlWhere = null)
         {
-            if (_propertyNames == null)
-            {
-                _propertyNames = _propertyGenerator.
-                    GetSqlPropertyNames<TEntity>().
-                    ToList();
-            }
-        }
-
-        private string AppendWhereIfDefined(string currentSql, string sqlWhere)
-        {
-            if (string.IsNullOrEmpty(sqlWhere))
-            {
-                return currentSql;
-            }
-            else
-            {
-                return $"{currentSql} WHERE {sqlWhere}";
-            }
-        }
-
-        private string WrapInParenthesesIfNotWrapped(string sqlPiece)
-        {
-            if (sqlPiece[0] != '(')
-            {
-                sqlPiece = $"({sqlPiece}";
-            }
-
-            if (sqlPiece[sqlPiece.Length -1] != ')')
-            {
-                sqlPiece = $"{sqlPiece})";
-            }
-
-            return sqlPiece;
-        }
-
-        private Dictionary<string, object> GetParamsDict(object parms)
-        {
-            return parms.GetType().GetProperties()
-                .ToDictionary(x => x.Name, x=> x.GetValue(parms));
+            throw new NotImplementedException();
         }
 
         #endregion
     }
-
-    
 }

@@ -1,20 +1,19 @@
 ﻿using IBFramework.Core.Data.SQL;
-using IBFramework.TestHelper;
+using IBFramework.IoC;
 using IBFramework.TestHelper.TestEntities;
-using IBFramework.TestUtilities;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
-namespace IBFramework.Data.MSSQL.Test
+namespace IBFramework.Data.Common.Test
 {
-    public class SqlPropertyGeneratorTests : MsSqlTestBase
+    public class SqlPropertyGeneratorTests : CommonDataTestBase
     {
         #region Constructor
 
         public SqlPropertyGeneratorTests()
         {
-            _sut = TestServiceLocator.StaticContainer.Resolve<ISqlPropertyGenerator>();
+            _sut = ServiceLocator.Instance.Resolve<ISqlPropertyGenerator>();
         }
         
         #endregion
@@ -52,7 +51,7 @@ namespace IBFramework.Data.MSSQL.Test
         [Fact]
         public void GetSqlPropertyNames_Properly_Handles_Ignored_Fk_Ids_And_Doesnt_Log_Collections_On_Complex_Objects()
         {
-            var sut = TestServiceLocator.StaticContainer.Resolve<ISqlGenerator<CoreEntity>>();
+            var sut = ServiceLocator.Instance.Resolve<ISqlGenerator<CoreEntity>>();
 
             var localExpected = baseExpectedAttrs.Concat(new List<string> { "ParentEntityId" });
 

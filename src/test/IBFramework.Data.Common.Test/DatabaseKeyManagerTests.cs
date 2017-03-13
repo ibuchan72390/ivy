@@ -1,5 +1,6 @@
 ﻿using IBFramework.Core.Data;
 using IBFramework.Core.IoC;
+using IBFramework.IoC;
 using IBFramework.IoC.Installers;
 using IBFramework.TestHelper;
 using IBFramework.TestUtilities;
@@ -20,7 +21,7 @@ namespace IBFramework.Data.Common.Test
         {
             // Create a new test container each time so we can resolve a fresh singleton instance for each
 
-            var localContainerGen = TestServiceLocator.StaticContainer.Resolve<IContainerGenerator>();
+            var localContainerGen = ServiceLocator.Instance.Resolve<IContainerGenerator>();
             localContainerGen.InstallCommonData();
             _testContainer = localContainerGen.GenerateContainer();
 

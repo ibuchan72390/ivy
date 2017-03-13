@@ -1,6 +1,6 @@
 ﻿using IBFramework.Core.Utility;
+using IBFramework.IoC;
 using IBFramework.TestHelper;
-using IBFramework.TestUtilities;
 using System;
 using Xunit;
 
@@ -18,7 +18,7 @@ namespace IBFramework.Utility.Test
 
         public RandomizationHelperTests()
         {
-            _sut = TestServiceLocator.StaticContainer.Resolve<IRandomizationHelper>();
+            _sut = ServiceLocator.Instance.Resolve<IRandomizationHelper>();
         }
 
         #endregion

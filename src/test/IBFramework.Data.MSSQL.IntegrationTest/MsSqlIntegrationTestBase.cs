@@ -1,7 +1,8 @@
 ﻿using IBFramework.Core.Data;
+using IBFramework.IoC;
 using IBFramework.IoC.Installers;
 using IBFramework.TestHelper;
-using IBFramework.TestUtilities;
+using IBFramework.TestHelper.TestValues;
 
 namespace IBFramework.Data.MSSQL.IntegrationTest
 {
@@ -12,12 +13,14 @@ namespace IBFramework.Data.MSSQL.IntegrationTest
             Init(container => {
                 container.InstallCommonData();
                 container.InstallMsSql();
+
+                TestExtensions.Init(MsSqlTestValues.TestDbConnectionString);
             });
         }
 
         public ITranConn TestTranConn =>
-            TestServiceLocator.StaticContainer.Resolve<ITranConnGenerator>()
-                .GenerateTranConn(TestValues.TestDbConnectionString);
+            ServiceLocator.Instance.Resolve<ITranConnGenerator>()
+                .GenerateTranConn(MsSqlTestValues.TestDbConnectionString);
 
     }
 }

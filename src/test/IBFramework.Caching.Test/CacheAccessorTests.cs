@@ -1,5 +1,6 @@
 ﻿using IBFramework.Core.Caching;
 using IBFramework.Core.IoC;
+using IBFramework.IoC;
 using IBFramework.IoC.Installers;
 using IBFramework.TestHelper;
 using IBFramework.TestUtilities;
@@ -13,7 +14,7 @@ namespace IBFramework.Caching.Test
 
         public CacheAccessorTests()
         {
-            var containerGen = TestServiceLocator.StaticContainer.Resolve<IContainerGenerator>();
+            var containerGen = ServiceLocator.Instance.Resolve<IContainerGenerator>();
 
             containerGen.InstallCaching();
 

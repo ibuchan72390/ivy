@@ -1,6 +1,4 @@
-﻿using IBFramework.Core.Data;
-using IBFramework.Data.Common;
-using System;
+﻿using IBFramework.Data.Common.Transaction;
 using System.Data;
 using System.Data.SqlClient;
 

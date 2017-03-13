@@ -1,14 +1,14 @@
 ﻿using System;
 using IBFramework.Core.Data;
 
-namespace IBFramework.Data.MSSQL
+namespace IBFramework.Data.Common.Transaction
 {
-    public class MsSqlTransactionHelper : ITransactionHelper
+    public class TransactionHelper : ITransactionHelper
     {
         public string ConnectionString { get; private set; }
         private readonly ITranConnGenerator _tcGenerator;
 
-        public MsSqlTransactionHelper(
+        public TransactionHelper(
             ITranConnGenerator tcGenerator)
         {
             _tcGenerator = tcGenerator;

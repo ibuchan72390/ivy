@@ -34,7 +34,9 @@ namespace IBFramework.Core.Data.SQL
         /*
          * UPDATE TEntity {sqlSet} WHERE {sqlWhere}
          */
-        string GenerateUpdateQuery(string sqlSet, string sqlWhere = null, object parms = null);
+        string GenerateUpdateQuery(string sqlSet, string sqlWhere = null);
+
+        string GenerateUpdateQuery(TEntity entity, ref Dictionary<string, object> parms, string sqlWhere = null);
     }
 
     public interface ISqlGenerator<TEntity, TKey> : ISqlGenerator<TEntity>
@@ -42,10 +44,10 @@ namespace IBFramework.Core.Data.SQL
     {
         // These will probably need to take params by reference somehow
 
-        string GenerateDeleteQuery(TKey idToDelete);
+        string GenerateDeleteQuery(TKey idToDelete, ref Dictionary<string, object> parms);
 
-        string GenerateGetQuery(TKey idToGet);
+        string GenerateGetQuery(TKey idToGet, ref Dictionary<string, object> parms);
 
-        string GenerateSaveOrUpdateQuery(TEntity entity);
+        string GenerateSaveOrUpdateQuery(TEntity entity, ref Dictionary<string, object> parms);
     }
 }

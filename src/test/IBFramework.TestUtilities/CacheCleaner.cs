@@ -1,4 +1,5 @@
 ﻿using IBFramework.Core.Caching;
+using IBFramework.IoC;
 using System.IO;
 
 namespace IBFramework.TestUtilities
@@ -7,13 +8,13 @@ namespace IBFramework.TestUtilities
     {
         public static void ResetCache<T>()
         {
-            var fileManager = TestServiceLocator.StaticContainer.Resolve<ITriggerFileManager>();
+            var fileManager = ServiceLocator.Instance.Resolve<ITriggerFileManager>();
             fileManager.TriggerCache<T>();
         }
 
         public static void ResetAllCache()
         {
-            var fileManager = TestServiceLocator.StaticContainer.Resolve<ITriggerFileManager>();
+            var fileManager = ServiceLocator.Instance.Resolve<ITriggerFileManager>();
             
             foreach (var file in Directory.GetFiles(fileManager.TriggerFileFolder))
             {

@@ -5,13 +5,15 @@ using System.Collections.Generic;
 namespace IBFramework.Core.Data
 {
     public interface IBaseRepository<TObject> : IInitialize
+        where TObject : class
     {
-        IEnumerable<TObject> GetAll();
+        IEnumerable<TObject> GetAll(ITranConn tc = null);
 
         void DeleteAll(ITranConn tc = null);
     }
 
     public interface IRepository<TEntity> : IBaseRepository<TEntity>
+        where TEntity : class
     {
         void Insert(TEntity entity, ITranConn tc = null);
 
@@ -19,15 +21,15 @@ namespace IBFramework.Core.Data
     }
 
     public interface IRepository<TEntity, TKey> : IBaseRepository<TEntity>
-        where TEntity : IEntityWithTypedId<TKey>
+        where TEntity : class, IEntityWithTypedId<TKey>
     {
-        TEntity GetById(TKey id);
+        TEntity GetById(TKey id, ITranConn tc = null);
 
-        IEnumerable<TEntity> GetByIdList(IEnumerable<TKey> ids);
+        IEnumerable<TEntity> GetByIdList(IEnumerable<TKey> ids, ITranConn tc = null);
 
         TEntity SaveOrUpdate(TEntity entity, ITranConn tc = null);
 
-        IEnumerable<TEntity> BulkSaveOrUpdate(IEnumerable<TEntity> entities, ITranConn tc = null);
+        //IEnumerable<TEntity> BulkSaveOrUpdate(IEnumerable<TEntity> entities, ITranConn tc = null);
 
         void Delete(TEntity entity, ITranConn tc = null);
 

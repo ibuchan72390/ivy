@@ -1,8 +1,7 @@
 ﻿using IBFramework.Core.Data;
 using System.Data;
-using System;
 
-namespace IBFramework.Data.Common
+namespace IBFramework.Data.Common.Transaction
 {
     public abstract class BaseTranConnGenerator : ITranConnGenerator
     {

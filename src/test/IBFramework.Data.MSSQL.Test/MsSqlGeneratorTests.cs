@@ -1,4 +1,5 @@
 ﻿using IBFramework.Core.Data.SQL;
+using IBFramework.IoC;
 using IBFramework.TestHelper;
 using IBFramework.TestHelper.TestEntities;
 using IBFramework.TestUtilities;
@@ -21,7 +22,7 @@ namespace IBFramework.Data.MSSQL.Test
 
         public MsSqlGeneratorTests()
         {
-            _propertyGenerator = TestServiceLocator.StaticContainer.Resolve<ISqlPropertyGenerator>();
+            _propertyGenerator = ServiceLocator.Instance.Resolve<ISqlPropertyGenerator>();
         }
 
         #endregion
@@ -33,7 +34,7 @@ namespace IBFramework.Data.MSSQL.Test
         [Fact]
         public void GenerateGetQuery_Works_As_Expected()
         {
-            ISqlGenerator<ChildEntity> _sut = TestServiceLocator.StaticContainer.Resolve<ISqlGenerator<ChildEntity>>();
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
 
             var result = _sut.GenerateGetQuery();
 
@@ -49,7 +50,7 @@ namespace IBFramework.Data.MSSQL.Test
         [Fact]
         public void GenerateGetQuery_Works_As_Expected_With_Where_Clause()
         {
-            ISqlGenerator<ChildEntity> _sut = TestServiceLocator.StaticContainer.Resolve<ISqlGenerator<ChildEntity>>();
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
 
             var result = _sut.GenerateGetQuery(null, "Id = @id");
 
@@ -65,7 +66,7 @@ namespace IBFramework.Data.MSSQL.Test
         [Fact]
         public void GenerateGetQuery_Works_As_Expected_With_Select_Prefix()
         {
-            ISqlGenerator<ChildEntity> _sut = TestServiceLocator.StaticContainer.Resolve<ISqlGenerator<ChildEntity>>();
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
 
             var result = _sut.GenerateGetQuery("TOP 100");
 
@@ -85,7 +86,7 @@ namespace IBFramework.Data.MSSQL.Test
         [Fact]
         public void GenerateDeleteAllQuery_Works_As_Expected()
         {
-            ISqlGenerator<ChildEntity> _sut = TestServiceLocator.StaticContainer.Resolve<ISqlGenerator<ChildEntity>>();
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
 
             var result = _sut.GenerateDeleteQuery();
 
@@ -97,7 +98,7 @@ namespace IBFramework.Data.MSSQL.Test
         [Fact]
         public void GenerateDeleteAllQuery_Works_As_Expected_With_Where_Clause()
         {
-            ISqlGenerator<ChildEntity> _sut = TestServiceLocator.StaticContainer.Resolve<ISqlGenerator<ChildEntity>>();
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
 
             var result = _sut.GenerateDeleteQuery("Id = @id");
 
@@ -113,7 +114,7 @@ namespace IBFramework.Data.MSSQL.Test
         [Fact]
         public void GenerateInsertQuery_Generates_Query_As_Expected()
         {
-            ISqlGenerator<ChildEntity> _sut = TestServiceLocator.StaticContainer.Resolve<ISqlGenerator<ChildEntity>>();
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
 
             var result = _sut.GenerateInsertQuery("(Name)", "('test')");
 
@@ -125,7 +126,7 @@ namespace IBFramework.Data.MSSQL.Test
         [Fact]
         public void GenerateInsertQuery_Prepends_Parenthesis_Sql_Value_If_Necessary()
         {
-            ISqlGenerator<ChildEntity> _sut = TestServiceLocator.StaticContainer.Resolve<ISqlGenerator<ChildEntity>>();
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
 
             var result = _sut.GenerateInsertQuery("Name)", "('test')");
 
@@ -137,7 +138,7 @@ namespace IBFramework.Data.MSSQL.Test
         [Fact]
         public void GenerateInsertQuery_Appends_Parenthesis_To_Sql_Value_If_Necessary()
         {
-            ISqlGenerator<ChildEntity> _sut = TestServiceLocator.StaticContainer.Resolve<ISqlGenerator<ChildEntity>>();
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
 
             var result = _sut.GenerateInsertQuery("(Name", "('test')");
 
@@ -149,7 +150,7 @@ namespace IBFramework.Data.MSSQL.Test
         [Fact]
         public void GenerateInsertQuery_Prepends_Parenthesis_To_InsertClause_As_Necessary()
         {
-            ISqlGenerator<ChildEntity> _sut = TestServiceLocator.StaticContainer.Resolve<ISqlGenerator<ChildEntity>>();
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
 
             var result = _sut.GenerateInsertQuery("(Name)", "'test')");
 
@@ -161,7 +162,7 @@ namespace IBFramework.Data.MSSQL.Test
         [Fact]
         public void GenerateInsertQuery_Apppends_Parenthesis_To_InsertClause_As_Necessary()
         {
-            ISqlGenerator<ChildEntity> _sut = TestServiceLocator.StaticContainer.Resolve<ISqlGenerator<ChildEntity>>();
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
 
             var result = _sut.GenerateInsertQuery("(Name)", "('test'");
 
@@ -177,7 +178,7 @@ namespace IBFramework.Data.MSSQL.Test
         [Fact]
         public void GenerateInsertQuery_Generates_Query_As_Expected_For_Entity()
         {
-            ISqlGenerator<BlobEntity> _sut = TestServiceLocator.StaticContainer.Resolve<ISqlGenerator<BlobEntity>>();
+            ISqlGenerator<BlobEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<BlobEntity>>();
 
             var entity = new BlobEntity().GenerateForTest();
 
@@ -193,7 +194,7 @@ namespace IBFramework.Data.MSSQL.Test
         [Fact]
         public void GenerateInsertQuery_Configures_Params_Appropriately()
         {
-            ISqlGenerator<BlobEntity> _sut = TestServiceLocator.StaticContainer.Resolve<ISqlGenerator<BlobEntity>>();
+            ISqlGenerator<BlobEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<BlobEntity>>();
 
             var entity = new BlobEntity().GenerateForTest();
 
@@ -219,7 +220,7 @@ namespace IBFramework.Data.MSSQL.Test
         [Fact]
         public void GenerateInsertQuery_With_Generic_Enumerable_Generates_Query_As_Expected_For_Entity()
         {
-            ISqlGenerator<BlobEntity> _sut = TestServiceLocator.StaticContainer.Resolve<ISqlGenerator<BlobEntity>>();
+            ISqlGenerator<BlobEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<BlobEntity>>();
 
             var entities = Enumerable.Range(0, 3)
                 .Select(x => new BlobEntity().GenerateForTest());
@@ -236,7 +237,7 @@ namespace IBFramework.Data.MSSQL.Test
         [Fact]
         public void GenerateInsertQuery_With_Generic_Enumerable_Configures_Params_Appropriately()
         {
-            ISqlGenerator<BlobEntity> _sut = TestServiceLocator.StaticContainer.Resolve<ISqlGenerator<BlobEntity>>();
+            ISqlGenerator<BlobEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<BlobEntity>>();
 
             var entities = Enumerable.Range(0, 3)
                 .Select(x => new BlobEntity().GenerateForTest())
@@ -267,7 +268,7 @@ namespace IBFramework.Data.MSSQL.Test
         [Fact]
         public void GenerateUpdateQuery_Formats_Query_As_Expected()
         {
-            ISqlGenerator<ChildEntity> _sut = TestServiceLocator.StaticContainer.Resolve<ISqlGenerator<ChildEntity>>();
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
 
             var result = _sut.GenerateUpdateQuery("Name = 'test'");
 
@@ -279,7 +280,7 @@ namespace IBFramework.Data.MSSQL.Test
         [Fact]
         public void GenerateUpdateQuery_Appends_Where_If_Provided()
         {
-            ISqlGenerator<ChildEntity> _sut = TestServiceLocator.StaticContainer.Resolve<ISqlGenerator<ChildEntity>>();
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
 
             var result = _sut.GenerateUpdateQuery("Name = 'test'", "Id = @id");
 
