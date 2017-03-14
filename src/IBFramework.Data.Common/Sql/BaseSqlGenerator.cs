@@ -33,11 +33,12 @@ namespace IBFramework.Data.Common.Sql
         {
             SetupAttrsIfNotDefined();
 
-            // use this as your property string to prevent the table scan
+            var filteredPropNames = _propertyNames.Where(x => x != "Id");
 
+            // use this as your property string to prevent the table scan
             // Is this faster than using a stringbuilder?
             //return _propertyNames.Select(x => $"[{x}]").Aggregate((x, y) => x + $", {y}");
-            return _propertyNames.Select(FormatPropertyName).Aggregate((x, y) => x + $", {y}");
+            return filteredPropNames.Select(FormatPropertyName).Aggregate((x, y) => x + $", {y}");
         }
 
         protected void SetupAttrsIfNotDefined()

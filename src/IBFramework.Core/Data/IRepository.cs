@@ -12,7 +12,7 @@ namespace IBFramework.Core.Data
         void DeleteAll(ITranConn tc = null);
     }
 
-    public interface IRepository<TEntity> : IBaseRepository<TEntity>
+    public interface IBlobRepository<TEntity> : IBaseRepository<TEntity>
         where TEntity : class
     {
         void Insert(TEntity entity, ITranConn tc = null);
@@ -34,5 +34,10 @@ namespace IBFramework.Core.Data
         void Delete(TEntity entity, ITranConn tc = null);
 
         void DeleteById(TKey id, ITranConn tc = null);
+    }
+
+    public interface IRepository<TEntity> : IRepository<TEntity, int>
+        where TEntity : class, IEntity
+    {
     }
 }

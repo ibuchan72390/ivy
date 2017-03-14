@@ -5,7 +5,6 @@ using System.Collections.Generic;
 
 namespace IBFramework.TestHelper.TestEntities
 {
-    [Table("coreentity")]
     public class CoreEntity : BaseTestEntity<int>
     {
         public ParentEntity ParentEntity { get; set; }

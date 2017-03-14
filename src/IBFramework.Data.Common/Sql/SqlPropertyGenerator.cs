@@ -28,7 +28,6 @@ namespace IBFramework.Data.Common.Sql
             var idMembers = viableMemberNames.Where(IsEntity);
             results = results.Concat(idMembers.Select(x => $"{x.Name}Id")).ToList();
 
-
             return results;
         }
 

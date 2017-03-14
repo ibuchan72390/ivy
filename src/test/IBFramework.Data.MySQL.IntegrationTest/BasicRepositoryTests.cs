@@ -14,7 +14,7 @@ namespace IBFramework.Data.MySQL.IntegrationTest
     {
         #region Variables & Constants
 
-        private IRepository<BlobEntity> _sut;
+        private IBlobRepository<BlobEntity> _sut;
 
         #endregion
 
@@ -22,7 +22,7 @@ namespace IBFramework.Data.MySQL.IntegrationTest
 
         public BasicRepositoryTests()
         {
-            _sut = ServiceLocator.Instance.Resolve<IRepository<BlobEntity>>();
+            _sut = ServiceLocator.Instance.Resolve<IBlobRepository<BlobEntity>>();
 
             _sut.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
 

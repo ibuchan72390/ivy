@@ -9,19 +9,25 @@ using Xunit;
 
 namespace IBFramework.Data.MySQL.IntegrationTest
 {
-    public class EntityRepositoryTests : MySqlIntegrationTestBase
+    /*
+    * This functionality does NOT work at the current moment!!!
+    * 
+    * Id values are not properly working with the string Id concept
+    */
+
+    public class StringEntityRepositoryTests : MySqlIntegrationTestBase
     {
         #region Variables & Constants
 
-        private IRepository<ParentEntity, int> _sut;
+        private IRepository<StringIdEntity, string> _sut;
 
         #endregion
 
         #region Constructor
 
-        public EntityRepositoryTests()
+        public StringEntityRepositoryTests()
         {
-            _sut = ServiceLocator.Instance.Resolve<IRepository<ParentEntity, int>>();
+            _sut = ServiceLocator.Instance.Resolve<IRepository<StringIdEntity, string>>();
             _sut.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
 
             _sut.DeleteAll();
@@ -34,7 +40,7 @@ namespace IBFramework.Data.MySQL.IntegrationTest
         [Fact]
         public void GetById_Works_As_Expected()
         {
-            var entity = new ParentEntity().SaveForTest();
+            var entity = new StringIdEntity().SaveForTest();
 
             var result = _sut.GetById(entity.Id);
 
@@ -44,7 +50,7 @@ namespace IBFramework.Data.MySQL.IntegrationTest
         [Fact]
         public void GetById_Returns_Null_If_Doesnt_Exist()
         {
-            var result = _sut.GetById(int.MaxValue);
+            var result = _sut.GetById("TEST");
 
             Assert.Null(result);
         }
@@ -56,9 +62,9 @@ namespace IBFramework.Data.MySQL.IntegrationTest
 
             var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
-            _sut.GetById(0, tc);
+            _sut.GetById("TEST", tc);
         }
-        
+
         #endregion
 
         #region GetByIdList
@@ -68,7 +74,7 @@ namespace IBFramework.Data.MySQL.IntegrationTest
         {
             const int entitiesToMake = 4;
 
-            var entities = Enumerable.Range(0, entitiesToMake).Select(x => new ParentEntity().SaveForTest()).ToList();
+            var entities = Enumerable.Range(0, entitiesToMake).Select(x => new StringIdEntity().SaveForTest()).ToList();
 
             var entityIds = entities.Select(x => x.Id);
 
@@ -87,7 +93,7 @@ namespace IBFramework.Data.MySQL.IntegrationTest
         {
             const int idsToMake = 4;
 
-            var ids = Enumerable.Range(-idsToMake, idsToMake);
+            var ids = Enumerable.Range(0, idsToMake).Select(x => x.ToString());
 
             var results = _sut.GetByIdList(ids);
 
@@ -101,7 +107,7 @@ namespace IBFramework.Data.MySQL.IntegrationTest
 
             var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
-            _sut.GetByIdList(new List<int> { 0 }, tc);
+            _sut.GetByIdList(new List<string> { 0.ToString() }, tc);
         }
 
         #endregion
@@ -111,11 +117,11 @@ namespace IBFramework.Data.MySQL.IntegrationTest
         [Fact]
         public void SaveOrUpdate_Identifies_New_Save_Correctly()
         {
-            var testEntity = new ParentEntity().GenerateForTest();
+            var testEntity = new StringIdEntity().GenerateForTest();
 
             var result = _sut.SaveOrUpdate(testEntity);
 
-            Assert.True(result.Id > 0);
+            Assert.True(result.Id != null);
 
             var secondaryResult = _sut.GetById(result.Id);
 
@@ -125,9 +131,9 @@ namespace IBFramework.Data.MySQL.IntegrationTest
         [Fact]
         public void SaveOrUpdate_Identifies_Existing_Update_Correctly()
         {
-            var testEntity = new ParentEntity().SaveForTest();
+            var testEntity = new StringIdEntity().SaveForTest();
 
-            Assert.True(testEntity.Id > 0);
+            Assert.True(testEntity.Id != null);
 
             testEntity.Integer = testEntity.Integer++;
 
@@ -145,7 +151,7 @@ namespace IBFramework.Data.MySQL.IntegrationTest
 
             var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
-            var testEntity = new ParentEntity().GenerateForTest();
+            var testEntity = new StringIdEntity().GenerateForTest();
 
             _sut.SaveOrUpdate(testEntity, tc);
         }
@@ -157,7 +163,7 @@ namespace IBFramework.Data.MySQL.IntegrationTest
         [Fact]
         public void Delete_Removes_Record_As_Expected()
         {
-            var testEntity = new ParentEntity().SaveForTest();
+            var testEntity = new StringIdEntity().SaveForTest();
 
             _sut.Delete(testEntity);
 
@@ -173,7 +179,7 @@ namespace IBFramework.Data.MySQL.IntegrationTest
 
             var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
-            var testEntity = new ParentEntity().SaveForTest();
+            var testEntity = new StringIdEntity().SaveForTest();
 
             _sut.Delete(testEntity, tc);
         }
@@ -185,7 +191,7 @@ namespace IBFramework.Data.MySQL.IntegrationTest
         [Fact]
         public void DeleteById_Removes_Records_As_Expected()
         {
-            var testEntity = new ParentEntity().SaveForTest();
+            var testEntity = new StringIdEntity().SaveForTest();
 
             _sut.DeleteById(testEntity.Id);
 
@@ -201,7 +207,7 @@ namespace IBFramework.Data.MySQL.IntegrationTest
 
             var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
-            var testEntity = new ParentEntity().SaveForTest();
+            var testEntity = new StringIdEntity().SaveForTest();
 
             _sut.DeleteById(testEntity.Id, tc);
         }

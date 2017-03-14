@@ -77,7 +77,8 @@ namespace IBFramework.Data.MySQL
                 var currentPropName = _propertyNames[x];
 
                 // Don't want to try to update the Id values, leads to failure
-                if (currentPropName == "Id") continue;
+                // Eventually, we should use these values to update FK references
+                if (currentPropName.Substring(currentPropName.Length - 2) == "Id") continue;
 
                 sb.Append($"`{currentPropName}` = @{currentPropName}");
 
@@ -119,12 +120,16 @@ namespace IBFramework.Data.MySQL
             {
                 for (var x = 0; x < _propertyNames.Count; x++)
                 {
+                    var currentPropName = _propertyNames[x];
+                    var currentParamKey = $"{currentPropName}{y}";
+
+                    // Don't want to try to update the Id values, leads to failure
+                    // Eventually, we should use these values to update FK references
+                    if (currentPropName == "Id") continue;
+
                     // Setup the SQL Insert
                     if (x == 0)
                         sb.Append("(");
-
-                    var currentPropName = _propertyNames[x];
-                    var currentParamKey = $"{currentPropName}{y}";
 
                     sb.Append($"@{currentParamKey}");
 
@@ -134,14 +139,36 @@ namespace IBFramework.Data.MySQL
                         sb.Append(")");
 
                     // Setup the parameters
-                    var targetProp = _entityType.GetProperty(currentPropName);
+                    object targetPropValue;
+
+                    if (currentPropName.Substring(currentPropName.Length - 2) == "Id")
+                    {
+                        var targetPropertyName = currentPropName.Substring(0, currentPropName.Length - 2);
+                        var targetProp = _entityType.GetProperty(targetPropertyName);
+                        object targetPropEntity = targetProp.GetValue(entityList[y]);
+                        var targetPropCast = (IEntityWithTypedId<int>)targetPropEntity;
+
+                        if (targetPropCast.Id == 0)
+                        {
+                            targetPropValue = null;
+                        }
+                        else
+                        {
+                            targetPropValue = targetPropCast.Id;
+                        }
+                    }
+                    else
+                    {
+                        var targetProp = _entityType.GetProperty(currentPropName);
+                        targetPropValue = targetProp.GetValue(entityList[y]);
+                    }
 
                     if (parms.ContainsKey(currentParamKey))
                     {
                         throw new Exception($"Key already in property dictionary! Key: {currentParamKey}");
                     }
 
-                    parms.Add(currentParamKey, targetProp.GetValue(entityList[y]));
+                    parms.Add(currentParamKey, targetPropValue);
                 }
 
                 if (y < entityList.Count - 1)
@@ -195,9 +222,9 @@ namespace IBFramework.Data.MySQL
             if (idToDelete == null) throw new Exception("Unable to delete a key that is null!");
 
             parms = new Dictionary<string, object>();
-            parms.Add("@DeleteId", idToDelete);
+            parms.Add("@entityId", idToDelete);
 
-            return base.GenerateDeleteQuery("`Id` = @DeleteId");
+            return base.GenerateDeleteQuery("`Id` = @entityId");
         }
 
         public string GenerateGetQuery(TKey idToGet, ref Dictionary<string, object> parms)
@@ -205,9 +232,9 @@ namespace IBFramework.Data.MySQL
             if (idToGet == null) throw new Exception("Unable to get a key that is null!");
 
             parms = new Dictionary<string, object>();
-            parms.Add("@DeleteId", idToGet);
+            parms.Add("@entityId", idToGet);
 
-            return base.GenerateGetQuery(null, "`Id` = @DeleteId");
+            return base.GenerateGetQuery(null, "`Id` = @entityId");
         }
 
         public string GenerateSaveOrUpdateQuery(TEntity entity, ref Dictionary<string, object> parms)

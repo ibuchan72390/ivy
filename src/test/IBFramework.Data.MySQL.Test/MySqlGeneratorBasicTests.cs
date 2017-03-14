@@ -9,7 +9,7 @@ using Xunit;
 
 namespace IBFramework.Data.MySQL.Test
 {
-    public class MySqlGeneratorTests : MySqlTestBase
+    public class MySqlGeneratorBasicTests : MySqlTestBase
     {
         #region Variables & Constants
 
@@ -19,7 +19,7 @@ namespace IBFramework.Data.MySQL.Test
 
         #region Constructor
 
-        public MySqlGeneratorTests()
+        public MySqlGeneratorBasicTests()
         {
             _propertyGenerator = ServiceLocator.Instance.Resolve<ISqlPropertyGenerator>();
         }

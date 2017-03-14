@@ -34,7 +34,7 @@ namespace IBFramework.TestHelper
             RandomizeTestBase<ChildEntity>(entity);
 
             if (entity.CoreEntity == null)
-                entity.CoreEntity = new CoreEntity().SaveForTest();
+                entity.CoreEntity = new CoreEntity().GenerateForTest();
 
             return entity;
         }
@@ -55,7 +55,7 @@ namespace IBFramework.TestHelper
             RandomizeTestBase<CoreEntity>(entity);
 
             if (entity.ParentEntity == null)
-                entity.ParentEntity = new ParentEntity().SaveForTest();
+                entity.ParentEntity = new ParentEntity().GenerateForTest();
 
             return entity;
         }
@@ -75,7 +75,7 @@ namespace IBFramework.TestHelper
             RandomizeTestBase<GuidIdEntity>(entity);
 
             if (entity.CoreEntity == null)
-                entity.CoreEntity = new CoreEntity().SaveForTest();
+                entity.CoreEntity = new CoreEntity().GenerateForTest();
 
             return entity;
         }
@@ -112,7 +112,7 @@ namespace IBFramework.TestHelper
             RandomizeTestBase<StringIdEntity>(entity);
 
             if (entity.CoreEntity == null)
-                entity.CoreEntity = new CoreEntity().SaveForTest();
+                entity.CoreEntity = new CoreEntity().GenerateForTest();
 
             return entity;
         }
@@ -161,7 +161,7 @@ namespace IBFramework.TestHelper
         {
             ValidateConnectionString();
 
-            var repo = ServiceLocator.Instance.Resolve<IRepository<TEntity>>();
+            var repo = ServiceLocator.Instance.Resolve<IBlobRepository<TEntity>>();
             repo.InitializeByConnectionString(connString);
             repo.Insert(entity);
 

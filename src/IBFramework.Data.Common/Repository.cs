@@ -111,7 +111,7 @@ namespace IBFramework.Data.Common
     }
 
 
-    public class Repository<T> : BaseRepository<T>, IRepository<T>
+    public class Repository<T> : BaseRepository<T>, IBlobRepository<T>
         where T: class
     {
         #region Constructor
