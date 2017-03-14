@@ -48,7 +48,7 @@ namespace IBFramework.Data.Common.Base
 
     public class BaseEntityService<TEntity, TRepo> : IInitialize
         where TEntity : class, IEntity
-        where TRepo : IRepository<TEntity>
+        where TRepo : IEntityRepository<TEntity>
     {
         #region Attributes
 

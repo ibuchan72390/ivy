@@ -62,9 +62,6 @@ namespace IBFramework.Data.Common
             var query = _sqlGenerator.GenerateDeleteQuery();
 
             InternalExecuteNonQuery(query, tc);
-
-            //_tranHelper.WrapInTransaction(
-            //    tran => tran.Connection.DeleteAll<T>(), tc);
         }
 
         public IEnumerable<T> GetAll(ITranConn tc = null)
@@ -72,9 +69,6 @@ namespace IBFramework.Data.Common
             var query = _sqlGenerator.GenerateGetQuery();
 
             return InternalExecuteQuery<T>(query);
-
-            //return _tranHelper.WrapInTransaction(
-            //   tran => tran.Connection.GetAll<T>(), tc);
         }
 
         #endregion
@@ -149,7 +143,7 @@ namespace IBFramework.Data.Common
         #endregion
     }
 
-    public class Repository<T, TKey> : BaseRepository<T>, IRepository<T, TKey>
+    public class EntityRepository<T, TKey> : BaseRepository<T>, IEntityRepository<T, TKey>
         where T : class, IEntityWithTypedId<TKey>
     {
 
@@ -163,7 +157,7 @@ namespace IBFramework.Data.Common
 
         #region Constructor
 
-        public Repository(
+        public EntityRepository(
             IDatabaseKeyManager databaseKeyManager,
             ITransactionHelper tranHelper,
             ISqlGenerator<T, TKey> sqlGenerator)
@@ -234,10 +228,10 @@ namespace IBFramework.Data.Common
         #endregion
     }
 
-    public class Repository<T> : Repository<T, int>, IRepository<T, int>
+    public class EntityRepository<T> : EntityRepository<T, int>, IEntityRepository<T>
         where T : class, IEntity
     {
-        public Repository(
+        public EntityRepository(
             IDatabaseKeyManager databaseKeyManager, 
             ITransactionHelper tranHelper, 
             ISqlGenerator<T, int> sqlGenerator) 

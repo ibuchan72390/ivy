@@ -151,7 +151,7 @@ namespace IBFramework.TestHelper
         {
             ValidateConnectionString();
 
-            var repo = ServiceLocator.Instance.Resolve<IRepository<TEntity, TKey>>();
+            var repo = ServiceLocator.Instance.Resolve<IEntityRepository<TEntity, TKey>>();
             repo.InitializeByConnectionString(connString);
             return repo.SaveOrUpdate(entity);
         }

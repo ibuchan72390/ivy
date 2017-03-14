@@ -20,8 +20,9 @@ namespace IBFramework.Data.Common.IoC
             containerGenerator.Register<SqlPropertyGenerator>().As<ISqlPropertyGenerator>().WithLifestyle(RegistrationLifestyleType.Transient);
 
             containerGenerator.Register(typeof(BlobRepository<>)).As(typeof(IBlobRepository<>)).WithLifestyle(RegistrationLifestyleType.Transient);
-            containerGenerator.Register(typeof(Repository<,>)).As(typeof(IRepository<,>)).WithLifestyle(RegistrationLifestyleType.Transient);
-            containerGenerator.Register(typeof(Repository<>)).As(typeof(IRepository<>)).WithLifestyle(RegistrationLifestyleType.Transient);
+            containerGenerator.Register(typeof(EntityRepository<,>)).As(typeof(IEntityRepository<,>)).WithLifestyle(RegistrationLifestyleType.Transient);
+
+            containerGenerator.Register(typeof(EntityRepository<>)).As(typeof(IEntityRepository<>)).WithLifestyle(RegistrationLifestyleType.Transient);
         }
     }
 

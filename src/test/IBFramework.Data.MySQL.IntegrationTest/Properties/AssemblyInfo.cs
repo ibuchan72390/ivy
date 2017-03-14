@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using Xunit;
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
@@ -17,3 +17,6 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("eac4df5b-cc82-4cc4-bdc4-fd9747eb7b80")]
+
+// XUnit, prevent run parallelization
+[assembly: CollectionBehavior(DisableTestParallelization = true)]

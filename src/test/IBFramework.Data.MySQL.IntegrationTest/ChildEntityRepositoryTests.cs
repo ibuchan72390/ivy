@@ -16,7 +16,7 @@ namespace IBFramework.Data.MySQL.IntegrationTest
     {
         #region Variables & Constants
 
-        private IRepository<ChildEntity, int> _sut;
+        private IEntityRepository<ChildEntity, int> _sut;
 
         #endregion
 
@@ -24,7 +24,7 @@ namespace IBFramework.Data.MySQL.IntegrationTest
 
         public ChildEntityRepositoryTests()
         {
-            _sut = ServiceLocator.Instance.Resolve<IRepository<ChildEntity, int>>();
+            _sut = ServiceLocator.Instance.Resolve<IEntityRepository<ChildEntity, int>>();
 
             _sut.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
         }
@@ -57,6 +57,8 @@ namespace IBFramework.Data.MySQL.IntegrationTest
                 var resultId = results.GetValue(0);
                 Assert.Equal(coreEntity.Id, resultId);
             }
+
+            results.Close();
         }
 
         #endregion

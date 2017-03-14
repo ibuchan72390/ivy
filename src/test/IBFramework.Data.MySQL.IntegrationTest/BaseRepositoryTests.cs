@@ -3,12 +3,13 @@ using IBFramework.IoC;
 using IBFramework.TestHelper;
 using IBFramework.TestHelper.TestEntities;
 using IBFramework.TestHelper.TestValues;
+using System;
 using System.Linq;
 using Xunit;
 
 namespace IBFramework.Data.MySQL.IntegrationTest
 {
-    public class BaseRepositoryTests : MySqlIntegrationTestBase
+    public class BaseRepositoryTests : MySqlIntegrationTestBase, IDisposable
     {
         #region Variables & Constants
 
@@ -22,7 +23,10 @@ namespace IBFramework.Data.MySQL.IntegrationTest
         {
             _sut = ServiceLocator.Instance.Resolve<IBlobRepository<BlobEntity>>();
             _sut.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
+        }
 
+        public void Dispose()
+        {
             _sut.DeleteAll();
         }
 

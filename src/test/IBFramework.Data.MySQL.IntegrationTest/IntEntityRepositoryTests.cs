@@ -13,7 +13,7 @@ namespace IBFramework.Data.MySQL.IntegrationTest
     {
         #region Variables & Constants
 
-        private IRepository<ParentEntity, int> _sut;
+        private IEntityRepository<ParentEntity, int> _sut;
 
         #endregion
 
@@ -21,7 +21,7 @@ namespace IBFramework.Data.MySQL.IntegrationTest
 
         public IntEntityRepositoryTests()
         {
-            _sut = ServiceLocator.Instance.Resolve<IRepository<ParentEntity, int>>();
+            _sut = ServiceLocator.Instance.Resolve<IEntityRepository<ParentEntity, int>>();
             _sut.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
 
             _sut.DeleteAll();
@@ -57,6 +57,8 @@ namespace IBFramework.Data.MySQL.IntegrationTest
             var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
             _sut.GetById(0, tc);
+
+            tc.Dispose();
         }
         
         #endregion
@@ -102,6 +104,8 @@ namespace IBFramework.Data.MySQL.IntegrationTest
             var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
             _sut.GetByIdList(new List<int> { 0 }, tc);
+
+            tc.Dispose();
         }
 
         #endregion
@@ -148,6 +152,8 @@ namespace IBFramework.Data.MySQL.IntegrationTest
             var testEntity = new ParentEntity().GenerateForTest();
 
             _sut.SaveOrUpdate(testEntity, tc);
+
+            tc.Dispose();
         }
 
         #endregion
@@ -176,6 +182,8 @@ namespace IBFramework.Data.MySQL.IntegrationTest
             var testEntity = new ParentEntity().SaveForTest();
 
             _sut.Delete(testEntity, tc);
+
+            tc.Dispose();
         }
 
         #endregion
@@ -204,6 +212,8 @@ namespace IBFramework.Data.MySQL.IntegrationTest
             var testEntity = new ParentEntity().SaveForTest();
 
             _sut.DeleteById(testEntity.Id, tc);
+
+            tc.Dispose();
         }
 
         #endregion

@@ -22,7 +22,7 @@ namespace IBFramework.Core.Data
         void BulkInsert(IEnumerable<TEntity> entities, ITranConn tc = null);
     }
 
-    public interface IRepository<TEntity, TKey> : IBaseRepository<TEntity>
+    public interface IEntityRepository<TEntity, TKey> : IBaseRepository<TEntity>
         where TEntity : class, IEntityWithTypedId<TKey>
     {
         TEntity GetById(TKey id, ITranConn tc = null);
@@ -38,7 +38,7 @@ namespace IBFramework.Core.Data
         void DeleteById(TKey id, ITranConn tc = null);
     }
 
-    public interface IRepository<TEntity> : IRepository<TEntity, int>
+    public interface IEntityRepository<TEntity> : IEntityRepository<TEntity, int>
         where TEntity : class, IEntity
     {
     }
