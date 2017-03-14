@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>IBFramework.IoC</id>
+    <version>1.0.0.0</version>
+    <title>IBFramework.IoC</title>
+    <authors>Ian Buchan</authors>
+    <owners>Ian Buchan</owners>
+    <projectUrl>https://github.com/ibuchan72390/ib-framework</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>IoC project to create some reusable Interfaces and facilities for reuse.</description>
+    <releaseNotes>Initial Release.</releaseNotes>
+    <copyright>Copyright 2017</copyright>
+  </metadata>
+</package>

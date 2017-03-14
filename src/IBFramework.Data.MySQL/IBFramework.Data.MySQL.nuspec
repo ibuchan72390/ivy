@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>IBFramework.Data.MySQL</id>
+    <version>1.0.0.0</version>
+    <title>IBFramework.Data.MySQL</title>
+    <authors>Ian Buchan</authors>
+    <owners>Ian Buchan</owners>
+    <projectUrl>https://github.com/ibuchan72390/ib-framework</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>MySQL data project used to augment the data project with MySQL specific functionality.</description>
+    <releaseNotes>Initial Release.</releaseNotes>
+    <copyright>Copyright 2017</copyright>
+  </metadata>
+</package>

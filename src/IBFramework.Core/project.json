@@ -4,8 +4,7 @@
   "dependencies": {
     "NETStandard.Library": "1.6.1",
     "System.Data.Common": "4.3.0",
-    "Microsoft.Extensions.Caching.Memory": "1.1.0",
-    "GitVersionTask": "4.0.0-beta0011"
+    "Microsoft.Extensions.Caching.Memory": "1.1.0"
   },
 
   "frameworks": {

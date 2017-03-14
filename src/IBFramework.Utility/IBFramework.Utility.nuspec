@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>IBFramework.Utility</id>
+    <version>1.0.0.0</version>
+    <title>IBFramework.Utility</title>
+    <authors>Ian Buchan</authors>
+    <owners>Ian Buchan</owners>
+    <projectUrl>https://github.com/ibuchan72390/ib-framework</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Utility project to create some reusable helpers for other applications.</description>
+    <releaseNotes>Initial Release.</releaseNotes>
+    <copyright>Copyright 2017</copyright>
+  </metadata>
+</package>

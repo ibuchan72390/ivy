@@ -9,8 +9,7 @@
     "IBFramework.Utility": "1.0.0-*",
     "IBFramework.Data.MSSQL": "1.0.0-*",
     "Autofac": "4.3.0",
-    "IBFramework.Data.MySQL": "1.0.0-*",
-    "GitVersionTask": "4.0.0-beta0011"
+    "IBFramework.Data.MySQL": "1.0.0-*"
   },
 
   "frameworks": {

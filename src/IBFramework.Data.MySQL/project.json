@@ -2,7 +2,6 @@
   "version": "1.0.0-*",
 
   "dependencies": {
-    "GitVersionTask": "4.0.0-beta0011",
     "IBFramework.Core": "1.0.0-*",
     "IBFramework.Data.Common": "1.0.0-*",
     "MySql.Data": "7.0.6-IR31",
