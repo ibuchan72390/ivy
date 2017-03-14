@@ -1,9 +1,8 @@
 ﻿using IBFramework.Core.Enum;
 using IBFramework.Core.IoC;
 using IBFramework.Core.Utility;
-using IBFramework.Utility;
 
-namespace IBFramework.IoC.Installers
+namespace IBFramework.Utility.IoC
 {
     public class UtilityInstaller : IContainerInstaller
     {

@@ -1,4 +1,4 @@
-﻿using IBFramework.IoC.Installers;
+﻿using IBFramework.Data.Common.IoC;
 using IBFramework.TestHelper;
 
 namespace IBFramework.Data.Common.Test

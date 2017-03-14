@@ -1,4 +1,4 @@
-﻿using IBFramework.IoC.Installers;
+﻿using IBFramework.Data.MSSQL.IoC;
 using IBFramework.TestHelper;
 using IBFramework.TestHelper.TestValues;
 

@@ -1,6 +1,7 @@
 ﻿using IBFramework.Core.Data;
+using IBFramework.Data.Common.IoC;
+using IBFramework.Data.MSSQL.IoC;
 using IBFramework.IoC;
-using IBFramework.IoC.Installers;
 using IBFramework.TestHelper;
 using IBFramework.TestHelper.TestValues;
 

@@ -1,9 +1,8 @@
 ﻿using IBFramework.Core.Data;
 using IBFramework.Core.Data.SQL;
 using IBFramework.Core.IoC;
-using IBFramework.Data.MSSQL;
 
-namespace IBFramework.IoC.Installers
+namespace IBFramework.Data.MSSQL.IoC
 {
     public class MsSqlInstaller : IContainerInstaller
     {

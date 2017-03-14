@@ -2,7 +2,7 @@
 {
     public interface IInitializeByConnectionString
     {
-        string ConnectionString { get; }
+        //string ConnectionString { get; }
 
         void InitializeByConnectionString(string connectionString);
     }

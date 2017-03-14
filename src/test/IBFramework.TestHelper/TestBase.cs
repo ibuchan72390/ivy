@@ -1,6 +1,8 @@
-﻿using IBFramework.Core.IoC;
+﻿using IBFramework.Caching.IoC;
+using IBFramework.Core.IoC;
 using IBFramework.IoC;
 using IBFramework.IoC.Installers;
+using IBFramework.Utility.IoC;
 using System;
 
 namespace IBFramework.TestHelper

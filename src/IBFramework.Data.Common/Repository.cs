@@ -111,12 +111,12 @@ namespace IBFramework.Data.Common
     }
 
 
-    public class Repository<T> : BaseRepository<T>, IBlobRepository<T>
+    public class BlobRepository<T> : BaseRepository<T>, IBlobRepository<T>
         where T: class
     {
         #region Constructor
 
-        public Repository(
+        public BlobRepository(
             IDatabaseKeyManager databaseKeyManager, 
             ITransactionHelper tranHelper, 
             ISqlGenerator<T> sqlGenerator) 
@@ -149,7 +149,7 @@ namespace IBFramework.Data.Common
         #endregion
     }
 
-    public class Repository<T, TKey> : Repository<T>, IRepository<T, TKey>
+    public class Repository<T, TKey> : BaseRepository<T>, IRepository<T, TKey>
         where T : class, IEntityWithTypedId<TKey>
     {
 
@@ -233,4 +233,17 @@ namespace IBFramework.Data.Common
 
         #endregion
     }
+
+    public class Repository<T> : Repository<T, int>, IRepository<T, int>
+        where T : class, IEntity
+    {
+        public Repository(
+            IDatabaseKeyManager databaseKeyManager, 
+            ITransactionHelper tranHelper, 
+            ISqlGenerator<T, int> sqlGenerator) 
+            : base(databaseKeyManager, tranHelper, sqlGenerator)
+        {
+        }
+    }
+
 }

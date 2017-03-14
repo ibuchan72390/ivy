@@ -6,7 +6,7 @@ using IBFramework.Data.Common;
 using IBFramework.Data.Common.Sql;
 using IBFramework.Data.Common.Transaction;
 
-namespace IBFramework.IoC.Installers
+namespace IBFramework.Data.Common.IoC
 {
     public class CommonDataInstaller : IContainerInstaller
     {
@@ -19,8 +19,9 @@ namespace IBFramework.IoC.Installers
 
             containerGenerator.Register<SqlPropertyGenerator>().As<ISqlPropertyGenerator>().WithLifestyle(RegistrationLifestyleType.Transient);
 
-            containerGenerator.Register(typeof(Repository<>)).As(typeof(IRepository<>)).WithLifestyle(RegistrationLifestyleType.Transient);
+            containerGenerator.Register(typeof(BlobRepository<>)).As(typeof(IBlobRepository<>)).WithLifestyle(RegistrationLifestyleType.Transient);
             containerGenerator.Register(typeof(Repository<,>)).As(typeof(IRepository<,>)).WithLifestyle(RegistrationLifestyleType.Transient);
+            containerGenerator.Register(typeof(Repository<>)).As(typeof(IRepository<>)).WithLifestyle(RegistrationLifestyleType.Transient);
         }
     }
 

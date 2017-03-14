@@ -1,4 +1,5 @@
-﻿using IBFramework.IoC.Installers;
+﻿using IBFramework.Caching.IoC;
+using IBFramework.IoC.Installers;
 using Xunit;
 
 namespace IBFramework.IoC.Test

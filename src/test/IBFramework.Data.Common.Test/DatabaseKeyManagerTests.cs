@@ -1,9 +1,8 @@
 ﻿using IBFramework.Core.Data;
 using IBFramework.Core.IoC;
+using IBFramework.Data.Common.IoC;
 using IBFramework.IoC;
-using IBFramework.IoC.Installers;
 using IBFramework.TestHelper;
-using IBFramework.TestUtilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

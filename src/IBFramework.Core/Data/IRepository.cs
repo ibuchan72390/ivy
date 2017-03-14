@@ -7,6 +7,8 @@ namespace IBFramework.Core.Data
     public interface IBaseRepository<TObject> : IInitialize
         where TObject : class
     {
+        string ConnectionString { get; }
+
         IEnumerable<TObject> GetAll(ITranConn tc = null);
 
         void DeleteAll(ITranConn tc = null);

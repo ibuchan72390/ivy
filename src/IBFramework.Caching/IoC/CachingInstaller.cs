@@ -3,7 +3,7 @@ using IBFramework.Core.Enum;
 using IBFramework.Core.IoC;
 using IBFramework.Caching;
 
-namespace IBFramework.IoC.Installers
+namespace IBFramework.Caching.IoC
 {
     public class CachingInstaller : IContainerInstaller
     {

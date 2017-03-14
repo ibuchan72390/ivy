@@ -3,7 +3,7 @@ using IBFramework.Core.Data.SQL;
 using IBFramework.Core.IoC;
 using IBFramework.Data.MySQL;
 
-namespace IBFramework.IoC.Installers
+namespace IBFramework.MySQL.IoC
 {
     public class MySqlInstaller : IContainerInstaller
     {

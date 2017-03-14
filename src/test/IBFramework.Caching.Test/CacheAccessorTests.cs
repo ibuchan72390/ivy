@@ -1,9 +1,8 @@
-﻿using IBFramework.Core.Caching;
+﻿using IBFramework.Caching.IoC;
+using IBFramework.Core.Caching;
 using IBFramework.Core.IoC;
 using IBFramework.IoC;
-using IBFramework.IoC.Installers;
 using IBFramework.TestHelper;
-using IBFramework.TestUtilities;
 using Xunit;
 
 namespace IBFramework.Caching.Test
