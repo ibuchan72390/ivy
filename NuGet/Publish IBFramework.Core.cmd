@@ -1,4 +1,4 @@
-::ECHO OFF
+ECHO OFF
 
 SET PackageName=IBFramework.Core
 

@@ -36,10 +36,11 @@ EXIT
 	
 	:: Pack and relocate the nupkg file
 	CD %ProjectName%
-	nuget pack %ProjectName%.nuspec
+	dotnet pack
+	CD Bin\Debug
 	MOVE /y *.nupkg %PackageDir%
 	
 	:: Return to the original directory
-	CD ../
+	CD ../../../
 
 EXIT /b

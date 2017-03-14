@@ -2,14 +2,14 @@
 <package >
   <metadata>
     <id>IBFramework.Core</id>
-    <version>1.0.0.1</version>
+    <version>1.0.0.0</version>
     <title>IBFramework.Core</title>
     <authors>Ian Buchan</authors>
     <owners>Ian Buchan</owners>
     <projectUrl>https://github.com/ibuchan72390/ib-framework</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Core project to create some reusable application facilities.</description>
-    <releaseNotes>Additional base classes for entity structures.</releaseNotes>
+    <releaseNotes>Initial Release.</releaseNotes>
     <copyright>Copyright 2017</copyright>
   </metadata>
 </package>
