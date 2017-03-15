@@ -31,7 +31,7 @@ namespace IBFramework.Data.MySQL
 
         public string GenerateGetQuery(string selectPrefix = null, string sqlWhere = null)
         {
-            var attributeNames = GeneratePropertyNameString();
+            var attributeNames = GeneratePropertyNameString(true);
 
             var sql = "SELECT ";
 
@@ -64,48 +64,39 @@ namespace IBFramework.Data.MySQL
             return $"{sql};";
         }
 
+        public string GenerateInsertQuery(TEntity entity, ref Dictionary<string, object> parms)
+        {
+            return GenerateInsertQuery(new List<TEntity> { entity }, ref parms);
+        }
+
         public string GenerateUpdateQuery(TEntity entity, ref Dictionary<string, object> parms, string sqlWhere = null)
         {
             SetupAttrsIfNotDefined();
 
             var sb = new StringBuilder();
 
-            sb.Append($"UPDATE {_entityType.Name} SET ");
+            //sb.Append($"UPDATE {_entityType.Name} SET ");
 
             for (var x = 0; x < _propertyNames.Count; x++)
             {
                 var currentPropName = _propertyNames[x];
+                var currentParamKey = $"@{currentPropName}";
 
                 // Don't want to try to update the Id values, leads to failure
                 // Eventually, we should use these values to update FK references
-                if (currentPropName.Substring(currentPropName.Length - 2) == "Id") continue;
+                if (currentPropName == "Id") continue;
 
-                sb.Append($"`{currentPropName}` = @{currentPropName}");
-
-                // Setup the parameters
-                var targetProp = _entityType.GetProperty(currentPropName);
-
-                if (parms.ContainsKey(currentPropName))
-                {
-                    throw new Exception($"Key already in property dictionary! Key: {currentPropName}");
-                }
-
-                parms.Add(currentPropName, targetProp.GetValue(entity));
+                sb.Append($"`{currentPropName}` = {currentParamKey}");
 
                 if (x != _propertyNames.Count - 1)
                 {
                     sb.Append(", ");
                 }
+
+                GenerateEntityAttributeParams(entity, currentPropName, currentParamKey, ref parms);
             }
 
-            var sqlValueString = $"({GeneratePropertyNameString()})";
-
-            return sb.ToString();
-        }
-
-        public string GenerateInsertQuery(TEntity entity, ref Dictionary<string, object> parms)
-        {
-            return GenerateInsertQuery(new List<TEntity> { entity }, ref parms);
+            return GenerateUpdateQuery(sb.ToString(), sqlWhere);
         }
 
         public string GenerateInsertQuery(IEnumerable<TEntity> entities, ref Dictionary<string, object> parms)
@@ -138,37 +129,7 @@ namespace IBFramework.Data.MySQL
                     else
                         sb.Append(")");
 
-                    // Setup the parameters
-                    object targetPropValue;
-
-                    if (currentPropName.Substring(currentPropName.Length - 2) == "Id")
-                    {
-                        var targetPropertyName = currentPropName.Substring(0, currentPropName.Length - 2);
-                        var targetProp = _entityType.GetProperty(targetPropertyName);
-                        object targetPropEntity = targetProp.GetValue(entityList[y]);
-                        var targetPropCast = (IEntityWithTypedId<int>)targetPropEntity;
-
-                        if (targetPropCast.Id == 0)
-                        {
-                            targetPropValue = null;
-                        }
-                        else
-                        {
-                            targetPropValue = targetPropCast.Id;
-                        }
-                    }
-                    else
-                    {
-                        var targetProp = _entityType.GetProperty(currentPropName);
-                        targetPropValue = targetProp.GetValue(entityList[y]);
-                    }
-
-                    if (parms.ContainsKey(currentParamKey))
-                    {
-                        throw new Exception($"Key already in property dictionary! Key: {currentParamKey}");
-                    }
-
-                    parms.Add(currentParamKey, targetPropValue);
+                    GenerateEntityAttributeParams(entities.ElementAt(y), currentPropName, currentParamKey, ref parms);
                 }
 
                 if (y < entityList.Count - 1)
@@ -177,18 +138,11 @@ namespace IBFramework.Data.MySQL
                 }
             }
 
-            var sqlValueString = $"({GeneratePropertyNameString()})";
+            var sqlValueString = $"({GeneratePropertyNameString(false)})";
 
             return GenerateInsertQuery(sqlValueString, sb.ToString());
         }
-
-        public string GenerateUpdateQuery(string sqlSet, string sqlWhere = null, object parms = null)
-        {
-            string sql = $"UPDATE {_entityType.Name} SET {sqlSet}";
-
-            return $"{AppendWhereIfDefined(sql, sqlWhere)};";
-        }
-
+        
         #endregion
 
         #region Abstract Methods
@@ -196,6 +150,41 @@ namespace IBFramework.Data.MySQL
         protected override string FormatPropertyName(string propertyName)
         {
             return $"`{propertyName}`";
+        }
+
+        protected void GenerateEntityAttributeParams(TEntity entity, string currentPropName, string currentParamKey, ref Dictionary<string, object> parms)
+        {
+            // Setup the parameters
+            object targetPropValue;
+
+            if (currentPropName.Substring(currentPropName.Length - 2) == "Id")
+            {
+                var targetPropertyName = currentPropName.Substring(0, currentPropName.Length - 2);
+                var targetProp = _entityType.GetProperty(targetPropertyName);
+                object targetPropEntity = targetProp.GetValue(entity);
+                var targetPropCast = (IEntityWithTypedId<int>)targetPropEntity;
+
+                if (targetPropCast.Id == 0)
+                {
+                    targetPropValue = null;
+                }
+                else
+                {
+                    targetPropValue = targetPropCast.Id;
+                }
+            }
+            else
+            {
+                var targetProp = _entityType.GetProperty(currentPropName);
+                targetPropValue = targetProp.GetValue(entity);
+            }
+
+            if (parms.ContainsKey(currentParamKey))
+            {
+                throw new Exception($"Key already in property dictionary! Key: {currentParamKey}");
+            }
+
+            parms.Add(currentParamKey, targetPropValue);
         }
 
         #endregion
@@ -257,7 +246,7 @@ namespace IBFramework.Data.MySQL
             {
                 // Update specific query logic
                 parms.Add("@entityId", entity.Id);
-                return GenerateUpdateQuery(entity, ref parms, " WHERE Id = @entityId ");
+                return GenerateUpdateQuery(entity, ref parms, "`Id` = @entityId");
             }
             else
             {

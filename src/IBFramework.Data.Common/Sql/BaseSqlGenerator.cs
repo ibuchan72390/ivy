@@ -29,16 +29,27 @@ namespace IBFramework.Data.Common.Sql
 
         #region Helper Methods
 
-        protected string GeneratePropertyNameString()
+        protected string GeneratePropertyNameString(bool includeId)
         {
             SetupAttrsIfNotDefined();
 
-            var filteredPropNames = _propertyNames.Where(x => x != "Id");
+            if (!includeId)
+            {
+                var filteredPropNames = _propertyNames.Where(x => x != "Id");
+                return FormatPropertyNameCollection(filteredPropNames);
+            }
+            else
+            {
+                // use this as your property string to prevent the table scan
+                // Is this faster than using a stringbuilder?
+                //return _propertyNames.Select(x => $"[{x}]").Aggregate((x, y) => x + $", {y}");
+                return FormatPropertyNameCollection(_propertyNames);
+            }
+        }
 
-            // use this as your property string to prevent the table scan
-            // Is this faster than using a stringbuilder?
-            //return _propertyNames.Select(x => $"[{x}]").Aggregate((x, y) => x + $", {y}");
-            return filteredPropNames.Select(FormatPropertyName).Aggregate((x, y) => x + $", {y}");
+        private string FormatPropertyNameCollection(IEnumerable<string> propNames)
+        {
+            return propNames.Select(FormatPropertyName).Aggregate((x, y) => x + $", {y}");
         }
 
         protected void SetupAttrsIfNotDefined()

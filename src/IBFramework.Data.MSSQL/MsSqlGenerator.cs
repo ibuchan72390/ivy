@@ -46,7 +46,7 @@ namespace IBFramework.Data.MSSQL
 
         public string GenerateGetQuery(string selectPrefix = null, string sqlWhere = null)
         {
-            var attributeNames = GeneratePropertyNameString();
+            var attributeNames = GeneratePropertyNameString(true);
 
             var sql = "SELECT ";
 
@@ -127,7 +127,7 @@ namespace IBFramework.Data.MSSQL
                 }
             }
 
-            var sqlValueString = $"({GeneratePropertyNameString()})";
+            var sqlValueString = $"({GeneratePropertyNameString(false)})";
 
             return GenerateInsertQuery(sqlValueString, sb.ToString());
         }

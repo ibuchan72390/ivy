@@ -87,20 +87,38 @@ namespace IBFramework.Data.MySQL.Test
             var parms = new Dictionary<string, object>();
             var result = _sut.GenerateSaveOrUpdateQuery(childEntity, ref parms);
 
-            var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
+            var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>().Where(x => x != "Id");
 
-            var expectedAttrString = attrs.Aggregate((x, y) => x + $", {y}");
+            var expectedAttrString = attrs.Select(FormatSqlAttr).Aggregate((x, y) => x + $", {y}");
+            var expectedParamString = attrs.Aggregate("", (x, y) => $"{x}@{y}0, ");
+            expectedParamString = expectedParamString.Substring(0, expectedParamString.Length - 2);
 
-            string expected = $"SELECT {expectedAttrString} FROM ChildEntity WHERE `Id` = @entityId;";
+            var expected = $"INSERT INTO ChildEntity ({expectedAttrString}) VALUES ({expectedParamString});SELECT LAST_INSERT_ID();";
 
             Assert.Equal(expected, result);
-            Assert.True(parms.Count == 4); // param for each attr, not just id
+            Assert.True(parms.Count == attrs.Count()); // param for each attr, not just id
         }
 
         [Fact]
         public void GenerateSaveOrUpdateQuery_Generates_As_Expected_For_Update()
         {
+            ISqlGenerator<ChildEntity, int> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity, int>>();
 
+            var childEntity = new ChildEntity().SaveForTest();
+
+            var parms = new Dictionary<string, object>();
+            var result = _sut.GenerateSaveOrUpdateQuery(childEntity, ref parms);
+
+            var allAttrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>();
+            var attrs = allAttrs.Where(x => x != "Id");
+
+            var expectedParamString = attrs.Aggregate("", (x, y) => $"{x}`{y}` = @{y}, ");
+            expectedParamString = expectedParamString.Substring(0, expectedParamString.Length - 2);
+
+            var expected = $"UPDATE ChildEntity SET {expectedParamString} WHERE `Id` = @entityId;";
+
+            Assert.Equal(expected, result);
+            Assert.True(parms.Count == allAttrs.Count()); // param for each attr, not just id
         }
 
         #endregion

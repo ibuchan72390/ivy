@@ -203,7 +203,7 @@ namespace IBFramework.Data.Common
 
             var idInList = string.Join(",", ids);
 
-            var query = _sqlGenerator.GenerateGetQuery(null, $"Id IN ({idInList})");
+            var query = _sqlGenerator.GenerateGetQuery(null, $"`Id` IN ({idInList})");
 
             return InternalExecuteQuery<T>(query, tc, parms);
         }
