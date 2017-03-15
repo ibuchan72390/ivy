@@ -1,57 +1,86 @@
 ﻿using IBFramework.Core.IoC;
-using Autofac;
-using Autofac.Builder;
 using System;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace IBFramework.IoC
 {
     public class ContainerGenerator : IContainerGenerator
     {
-        private ContainerBuilder _builder;
+        #region Variables & Constants
+
+        //private ContainerBuilder _builder;
+
+        private IServiceCollection _builder;
+
+        #endregion
+
+        #region Constructor
 
         public ContainerGenerator()
         {
-            _builder = new ContainerBuilder();
+            //_builder = new ContainerBuilder();
+        
+            _builder = new ServiceCollection();
         }
 
-        public Core.IoC.IContainer GenerateContainer()
+        #endregion
+
+        #region Public Methods
+
+        #region Registration Casting
+
+        public IContainer GenerateContainer()
         {
-            Autofac.Core.Container container = (Autofac.Core.Container)_builder.Build();
-
-            Container returnContainer = new Container(container);
-
-            return returnContainer;
+            return new Container(_builder.BuildServiceProvider());
         }
 
-        public IRegistrationResult Register(Type type)
+        public IServiceCollection GetServiceCollection()
         {
-            try
-            {
-                // Can't seem to test this without throwing an error on failure
-                var x = type.GetGenericTypeDefinition();
-            }
-            catch
-            {
-                var result = _builder.RegisterType(type);
-                return new RegistrationResult<ConcreteReflectionActivatorData, SingleRegistrationStyle>(result);
-            }
-
-            // Only way we can register generics is directly through type
-            // Let's make sure they're registered properly
-            var genericResult = _builder.RegisterGeneric(type);
-            return new RegistrationResult<ReflectionActivatorData, DynamicRegistrationStyle>(genericResult);
+            return _builder;
         }
 
-        public IRegistrationResult Register<T>()
-            where T: class
-        {
-            var result = _builder.RegisterType(typeof(T));
-            return new RegistrationResult<ConcreteReflectionActivatorData, SingleRegistrationStyle>(result);
-        }
+        #endregion
+
+        #region Registration
 
         public void RegisterInstance<T>(T instance) where T : class, new()
         {
-            _builder.RegisterInstance(instance);
+            _builder.Add(new ServiceDescriptor(typeof(T), instance));
         }
+
+        public void RegisterSingleton(Type registrationType, Type implementationType)
+        {
+            _builder.Add(new ServiceDescriptor(registrationType, implementationType, ServiceLifetime.Singleton));
+        }
+
+        public void RegisterSingleton<TInterface, TImplementation>()
+        {
+            _builder.Add(new ServiceDescriptor(typeof(TInterface), typeof(TImplementation), ServiceLifetime.Singleton));
+        }
+
+        public void RegisterTransient(Type registrationType, Type implementationType)
+        {
+            _builder.Add(new ServiceDescriptor(registrationType, implementationType, ServiceLifetime.Transient));
+        }
+
+        public void RegisterTransient<TInterface, TImplementation>()
+        {
+            _builder.Add(new ServiceDescriptor(typeof(TInterface), typeof(TImplementation), ServiceLifetime.Transient));
+        }
+
+        public void RegisterScoped(Type registrationType, Type implementationType)
+        {
+            _builder.Add(new ServiceDescriptor(registrationType, implementationType, ServiceLifetime.Scoped));
+        }
+
+        public void RegisterScoped<TInterface, TImplementation>()
+        {
+            _builder.Add(new ServiceDescriptor(typeof(TInterface), typeof(TImplementation), ServiceLifetime.Scoped));
+        }
+
+        #endregion
+
+        #endregion
+
     }
 }

@@ -12,17 +12,31 @@ namespace IBFramework.Data.Common.IoC
     {
         public void Install(IContainerGenerator containerGenerator)
         {
-            containerGenerator.Register<DatabaseKeyManager>().As<IDatabaseKeyManager>().WithLifestyle(RegistrationLifestyleType.Singleton);
+            //containerGenerator.Register<DatabaseKeyManager>().As<IDatabaseKeyManager>().WithLifestyle(RegistrationLifestyleType.Singleton);
 
-            containerGenerator.Register<TranConn>().As<ITranConn>().WithLifestyle(RegistrationLifestyleType.Transient);
-            containerGenerator.Register<TransactionHelper>().As<ITransactionHelper>().WithLifestyle(RegistrationLifestyleType.Transient);
+            //containerGenerator.Register<TranConn>().As<ITranConn>().WithLifestyle(RegistrationLifestyleType.Transient);
+            //containerGenerator.Register<TransactionHelper>().As<ITransactionHelper>().WithLifestyle(RegistrationLifestyleType.Transient);
 
-            containerGenerator.Register<SqlPropertyGenerator>().As<ISqlPropertyGenerator>().WithLifestyle(RegistrationLifestyleType.Transient);
+            //containerGenerator.Register<SqlPropertyGenerator>().As<ISqlPropertyGenerator>().WithLifestyle(RegistrationLifestyleType.Transient);
 
-            containerGenerator.Register(typeof(BlobRepository<>)).As(typeof(IBlobRepository<>)).WithLifestyle(RegistrationLifestyleType.Transient);
-            containerGenerator.Register(typeof(EntityRepository<,>)).As(typeof(IEntityRepository<,>)).WithLifestyle(RegistrationLifestyleType.Transient);
+            //containerGenerator.Register(typeof(BlobRepository<>)).As(typeof(IBlobRepository<>)).WithLifestyle(RegistrationLifestyleType.Transient);
+            //containerGenerator.Register(typeof(EntityRepository<,>)).As(typeof(IEntityRepository<,>)).WithLifestyle(RegistrationLifestyleType.Transient);
 
-            containerGenerator.Register(typeof(EntityRepository<>)).As(typeof(IEntityRepository<>)).WithLifestyle(RegistrationLifestyleType.Transient);
+            //containerGenerator.Register(typeof(EntityRepository<>)).As(typeof(IEntityRepository<>)).WithLifestyle(RegistrationLifestyleType.Transient);
+
+
+
+            containerGenerator.RegisterSingleton<IDatabaseKeyManager, DatabaseKeyManager>();
+
+            containerGenerator.RegisterTransient<ITranConn, TranConn>();
+            containerGenerator.RegisterTransient<ITransactionHelper, TransactionHelper>();
+
+            containerGenerator.RegisterTransient<ISqlPropertyGenerator, SqlPropertyGenerator>();
+
+            containerGenerator.RegisterTransient(typeof(IBlobRepository<>), typeof(BlobRepository<>));
+            containerGenerator.RegisterTransient(typeof(IEntityRepository<>), typeof(EntityRepository<>));
+            containerGenerator.RegisterTransient(typeof(IEntityRepository<,>), typeof(EntityRepository<,>));
+
         }
     }
 

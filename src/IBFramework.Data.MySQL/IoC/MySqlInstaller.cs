@@ -9,11 +9,14 @@ namespace IBFramework.MySQL.IoC
     {
         public void Install(IContainerGenerator containerGenerator)
         {
-            containerGenerator.Register<MySqlTranConnGenerator>().As<ITranConnGenerator>().WithLifestyle(Core.Enum.RegistrationLifestyleType.Transient);
+            //containerGenerator.Register<MySqlTranConnGenerator>().As<ITranConnGenerator>().WithLifestyle(Core.Enum.RegistrationLifestyleType.Transient);
 
-            containerGenerator.Register(typeof(MySqlGenerator<>)).As(typeof(ISqlGenerator<>)).WithLifestyle(Core.Enum.RegistrationLifestyleType.Transient);
-            containerGenerator.Register(typeof(MySqlGenerator<,>)).As(typeof(ISqlGenerator<,>)).WithLifestyle(Core.Enum.RegistrationLifestyleType.Transient);
+            //containerGenerator.Register(typeof(MySqlGenerator<>)).As(typeof(ISqlGenerator<>)).WithLifestyle(Core.Enum.RegistrationLifestyleType.Transient);
+            //containerGenerator.Register(typeof(MySqlGenerator<,>)).As(typeof(ISqlGenerator<,>)).WithLifestyle(Core.Enum.RegistrationLifestyleType.Transient);
 
+            containerGenerator.RegisterTransient<ITranConnGenerator, MySqlTranConnGenerator>();
+            containerGenerator.RegisterTransient(typeof(ISqlGenerator<>), typeof(MySqlGenerator<>));
+            containerGenerator.RegisterTransient(typeof(ISqlGenerator<,>), typeof(MySqlGenerator<,>));
         }
     }
 

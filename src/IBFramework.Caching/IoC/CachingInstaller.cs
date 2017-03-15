@@ -1,7 +1,5 @@
 ﻿using IBFramework.Core.Caching;
-using IBFramework.Core.Enum;
 using IBFramework.Core.IoC;
-using IBFramework.Caching;
 
 namespace IBFramework.Caching.IoC
 {
@@ -9,10 +7,13 @@ namespace IBFramework.Caching.IoC
     {
         public void Install(IContainerGenerator containerGenerator)
         {
-            containerGenerator.Register<TriggerFileManager>().As<ITriggerFileManager>().WithLifestyle(RegistrationLifestyleType.Singleton);
-            containerGenerator.Register<CacheAccessor>().As<ICacheAccessor>().WithLifestyle(RegistrationLifestyleType.Singleton);
+            //containerGenerator.Register<TriggerFileManager>().As<ITriggerFileManager>().WithLifestyle(RegistrationLifestyleType.Singleton);
+            //containerGenerator.Register<CacheAccessor>().As<ICacheAccessor>().WithLifestyle(RegistrationLifestyleType.Singleton);
+            //containerGenerator.Register(typeof(ObjectCache<>)).As(typeof(IObjectCache<>)).WithLifestyle(RegistrationLifestyleType.Transient);
 
-            containerGenerator.Register(typeof(ObjectCache<>)).As(typeof(IObjectCache<>)).WithLifestyle(RegistrationLifestyleType.Transient);
+            containerGenerator.RegisterSingleton<ITriggerFileManager, TriggerFileManager>();
+            containerGenerator.RegisterSingleton<ICacheAccessor, CacheAccessor>();
+            containerGenerator.RegisterTransient(typeof(IObjectCache<>), typeof(ObjectCache<>));
         }
     }
 

@@ -18,7 +18,8 @@ namespace IBFramework.IoC.Test
         [Fact]
         public void Singleton_Registration_Creates_One_And_Only_One_Instance()
         {
-            _sut.Register<TestClass>().As<ITestInterface>().WithLifestyle(RegistrationLifestyleType.Singleton);
+            //_sut.Register<TestClass>().As<ITestInterface>().WithLifestyle(RegistrationLifestyleType.Singleton);
+            _sut.RegisterSingleton<ITestInterface, TestClass>();
 
             var container = _sut.GenerateContainer();
 
@@ -34,7 +35,8 @@ namespace IBFramework.IoC.Test
         [Fact]
         public void Transient_Instance_Creates_New_Instance_Each_Time()
         {
-            _sut.Register<TestClass>().As<ITestInterface>().WithLifestyle(RegistrationLifestyleType.Transient);
+            //_sut.Register<TestClass>().As<ITestInterface>().WithLifestyle(RegistrationLifestyleType.Transient);
+            _sut.RegisterTransient<ITestInterface, TestClass>();
 
             var container = _sut.GenerateContainer();
 

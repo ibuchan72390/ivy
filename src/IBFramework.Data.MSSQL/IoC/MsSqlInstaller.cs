@@ -8,10 +8,11 @@ namespace IBFramework.Data.MSSQL.IoC
     {
         public void Install(IContainerGenerator containerGenerator)
         {
-            containerGenerator.Register<MsSqlTranConnGenerator>().As<ITranConnGenerator>().WithLifestyle(Core.Enum.RegistrationLifestyleType.Transient);
+            //containerGenerator.Register<MsSqlTranConnGenerator>().As<ITranConnGenerator>().WithLifestyle(Core.Enum.RegistrationLifestyleType.Transient);
+            //containerGenerator.Register(typeof(MsSqlGenerator<>)).As(typeof(ISqlGenerator<>)).WithLifestyle(Core.Enum.RegistrationLifestyleType.Transient);
 
-            containerGenerator.Register(typeof(MsSqlGenerator<>)).As(typeof(ISqlGenerator<>)).WithLifestyle(Core.Enum.RegistrationLifestyleType.Transient);
-            //containerGenerator.Register(typeof(MsSqlGenerator<,>)).As(typeof(ISqlGenerator<,>)).WithLifestyle(Core.Enum.RegistrationLifestyleType.Transient);
+            containerGenerator.RegisterTransient<ITranConnGenerator, MsSqlTranConnGenerator>();
+            containerGenerator.RegisterTransient(typeof(ISqlGenerator<>), typeof(MsSqlGenerator<>));
         }
     }
 
