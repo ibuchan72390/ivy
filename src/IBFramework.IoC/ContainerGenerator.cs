@@ -8,8 +8,6 @@ namespace IBFramework.IoC
     {
         #region Variables & Constants
 
-        //private ContainerBuilder _builder;
-
         private IServiceCollection _builder;
 
         #endregion
@@ -18,9 +16,12 @@ namespace IBFramework.IoC
 
         public ContainerGenerator()
         {
-            //_builder = new ContainerBuilder();
-        
             _builder = new ServiceCollection();
+        }
+
+        public ContainerGenerator(IServiceCollection serviceCollection)
+        {
+            _builder = serviceCollection;
         }
 
         #endregion

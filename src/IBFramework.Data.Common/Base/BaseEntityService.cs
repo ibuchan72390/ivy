@@ -1,6 +1,6 @@
 ﻿using IBFramework.Core.Data;
+using IBFramework.Core.Data.Base;
 using IBFramework.Core.Data.Domain;
-using IBFramework.Core.Data.Init;
 
 namespace IBFramework.Data.Common.Base
 {
@@ -9,44 +9,7 @@ namespace IBFramework.Data.Common.Base
      * It will be useful down the line when you finally want to use these entities.
      */
 
-    public class BaseBlobService<TEntity, TRepo> : IInitialize
-        where TEntity : class
-        where TRepo : IBlobRepository<TEntity>
-    {
-        #region Attributes
-
-        protected TRepo Repo;
-
-        #endregion
-
-        #region Constructor
-
-        public BaseBlobService(TRepo repo)
-        {
-            Repo = repo;
-        }
-
-        #endregion
-
-        #region Public Methods
-
-        public string ConnectionString { get; private set; }
-
-        public void InitializeByConnectionString(string connectionString)
-        {
-            Repo.InitializeByConnectionString(ConnectionString);
-        }
-
-        public void InitializeByDatabaseKey(string databaseKey)
-        {
-            Repo.InitializeByDatabaseKey(databaseKey);
-        }
-
-        #endregion
-    }
-
-
-    public class BaseEntityService<TEntity, TRepo> : IInitialize
+    public class BaseEntityService<TEntity, TRepo> : IEntityService<TEntity, TRepo>
         where TEntity : class, IEntity
         where TRepo : IEntityRepository<TEntity>
     {
@@ -71,7 +34,7 @@ namespace IBFramework.Data.Common.Base
 
         public void InitializeByConnectionString(string connectionString)
         {
-            Repo.InitializeByConnectionString(ConnectionString);
+            Repo.InitializeByConnectionString(connectionString);
         }
 
         public void InitializeByDatabaseKey(string databaseKey)

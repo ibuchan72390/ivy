@@ -1,218 +1,231 @@
-﻿//using IBFramework.Core.Data;
-//using IBFramework.IoC;
-//using IBFramework.TestHelper;
-//using IBFramework.TestHelper.TestEntities;
-//using IBFramework.TestHelper.TestValues;
-//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using Xunit;
+﻿using IBFramework.Core.Data;
+using IBFramework.IoC;
+using IBFramework.TestHelper;
+using IBFramework.TestHelper.TestEntities;
+using IBFramework.TestHelper.TestValues;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Xunit;
 
-//namespace IBFramework.Data.MySQL.IntegrationTest
-//{
-//    /*
-//     * This functionality does NOT work at the current moment!!!
-//     * 
-//     * Id values are not properly working with the GUID Id concept
-//     */
+namespace IBFramework.Data.MySQL.IntegrationTest
+{
+    /*
+     * This functionality does NOT work at the current moment!!!
+     * 
+     * Id values are not properly working with the GUID Id concept
+     */
 
-//    public class GuidEntityRepositoryTests : MySqlIntegrationTestBase
-//    {
-//        #region Variables & Constants
+    public class GuidEntityRepositoryTests : MySqlIntegrationTestBase, IDisposable
+    {
+        #region Variables & Constants
 
-//        private IEntityRepository<GuidIdEntity, Guid> _sut;
+        private IEntityRepository<GuidIdEntity, Guid> _sut;
 
-//        #endregion
+        #endregion
 
-//        #region Constructor
+        #region Constructor
 
-//        public GuidEntityRepositoryTests()
-//        {
-//            _sut = ServiceLocator.Instance.Resolve<IEntityRepository<GuidIdEntity, Guid>>();
-//            _sut.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
+        public GuidEntityRepositoryTests()
+        {
+            _sut = ServiceLocator.Instance.Resolve<IEntityRepository<GuidIdEntity, Guid>>();
+            _sut.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
+        }
 
-//            _sut.DeleteAll();
-//        }
+        public void Dispose()
+        {
+            _sut.DeleteAll();
+        }
 
-//        #endregion
+        #endregion
 
-//        #region GetById
+        #region GetById
 
-//        [Fact]
-//        public void GetById_Works_As_Expected()
-//        {
-//            var entity = new GuidIdEntity().SaveForTest();
+        [Fact]
+        public void GetById_Works_As_Expected()
+        {
+            var entity = new GuidIdEntity().SaveForTest();
 
-//            var result = _sut.GetById(entity.Id);
+            var result = _sut.GetById(entity.Id);
 
-//            Assert.True(entity.Equals(result));
-//        }
+            Assert.True(entity.Equals(result));
+        }
 
-//        [Fact]
-//        public void GetById_Returns_Null_If_Doesnt_Exist()
-//        {
-//            var result = _sut.GetById(Guid.NewGuid());
+        [Fact]
+        public void GetById_Returns_Null_If_Doesnt_Exist()
+        {
+            var result = _sut.GetById(Guid.NewGuid());
 
-//            Assert.Null(result);
-//        }
+            Assert.Null(result);
+        }
 
-//        [Fact]
-//        public void GetById_Can_Take_TranConn()
-//        {
-//            var tranGen = ServiceLocator.Instance.Resolve<ITranConnGenerator>();
+        [Fact]
+        public void GetById_Can_Take_TranConn()
+        {
+            var tranGen = ServiceLocator.Instance.Resolve<ITranConnGenerator>();
 
-//            var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
+            var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
-//            _sut.GetById(Guid.NewGuid(), tc);
-//        }
+            _sut.GetById(Guid.NewGuid(), tc);
 
-//        #endregion
+            tc.Dispose();
+        }
 
-//        #region GetByIdList
+        #endregion
 
-//        [Fact]
-//        public void GetByIdList_Returns_As_Expected()
-//        {
-//            const int entitiesToMake = 4;
+        #region GetByIdList
 
-//            var entities = Enumerable.Range(0, entitiesToMake).Select(x => new GuidIdEntity().SaveForTest()).ToList();
+        [Fact]
+        public void GetByIdList_Returns_As_Expected()
+        {
+            const int entitiesToMake = 4;
 
-//            var entityIds = entities.Select(x => x.Id);
+            var entities = Enumerable.Range(0, entitiesToMake).Select(x => new GuidIdEntity().SaveForTest()).ToList();
 
-//            var results = _sut.GetByIdList(entityIds);
+            var entityIds = entities.Select(x => x.Id);
 
-//            foreach (var entity in entities)
-//            {
-//                var result = results.FirstOrDefault(x => x.Id == entity.Id);
+            var results = _sut.GetByIdList(entityIds);
 
-//                Assert.NotNull(result);
-//            }
-//        }
+            foreach (var entity in entities)
+            {
+                var result = results.FirstOrDefault(x => x.Id == entity.Id);
 
-//        [Fact]
-//        public void GetByIdList_Returns_Null_If_None_Exist()
-//        {
-//            const int idsToMake = 4;
+                Assert.NotNull(result);
+            }
+        }
 
-//            var ids = Enumerable.Range(0, idsToMake).Select(x => Guid.NewGuid());
+        [Fact]
+        public void GetByIdList_Returns_Null_If_None_Exist()
+        {
+            const int idsToMake = 4;
 
-//            var results = _sut.GetByIdList(ids);
+            var ids = Enumerable.Range(0, idsToMake).Select(x => Guid.NewGuid());
 
-//            Assert.Empty(results);
-//        }
+            var results = _sut.GetByIdList(ids);
 
-//        [Fact]
-//        public void GetByIdList_Can_Take_TranConn()
-//        {
-//            var tranGen = ServiceLocator.Instance.Resolve<ITranConnGenerator>();
+            Assert.Empty(results);
+        }
 
-//            var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
+        [Fact]
+        public void GetByIdList_Can_Take_TranConn()
+        {
+            var tranGen = ServiceLocator.Instance.Resolve<ITranConnGenerator>();
 
-//            _sut.GetByIdList(new List<Guid> { Guid.NewGuid() }, tc);
-//        }
+            var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
-//        #endregion
+            _sut.GetByIdList(new List<Guid> { Guid.NewGuid() }, tc);
 
-//        #region SaveOrUpdate
+            tc.Dispose();
+        }
 
-//        [Fact]
-//        public void SaveOrUpdate_Identifies_New_Save_Correctly()
-//        {
-//            var testEntity = new GuidIdEntity().GenerateForTest();
+        #endregion
 
-//            var result = _sut.SaveOrUpdate(testEntity);
+        #region SaveOrUpdate
 
-//            Assert.True(result.Id != null);
+        [Fact]
+        public void SaveOrUpdate_Identifies_New_Save_Correctly()
+        {
+            var testEntity = new GuidIdEntity().GenerateForTest();
 
-//            var secondaryResult = _sut.GetById(result.Id);
+            var result = _sut.SaveOrUpdate(testEntity);
 
-//            Assert.True(result.Equals(secondaryResult));
-//        }
+            Assert.True(result.Id != null);
 
-//        [Fact]
-//        public void SaveOrUpdate_Identifies_Existing_Update_Correctly()
-//        {
-//            var testEntity = new GuidIdEntity().SaveForTest();
+            var secondaryResult = _sut.GetById(result.Id);
 
-//            Assert.True(testEntity.Id != null);
+            Assert.True(result.Equals(secondaryResult));
+        }
 
-//            testEntity.Integer = testEntity.Integer++;
+        [Fact]
+        public void SaveOrUpdate_Identifies_Existing_Update_Correctly()
+        {
+            var testEntity = new GuidIdEntity().SaveForTest();
 
-//            var result = _sut.SaveOrUpdate(testEntity);
+            Assert.True(testEntity.Id != null);
 
-//            Assert.True(result.Id == testEntity.Id);
-//            Assert.Equal(result.Integer, testEntity.Integer);
-//            Assert.True(result.Equals(testEntity));
-//        }
+            testEntity.Integer = testEntity.Integer++;
 
-//        [Fact]
-//        public void SaveOrUpdate_Can_Take_TranConn()
-//        {
-//            var tranGen = ServiceLocator.Instance.Resolve<ITranConnGenerator>();
+            var result = _sut.SaveOrUpdate(testEntity);
 
-//            var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
+            Assert.True(result.Id == testEntity.Id);
+            Assert.Equal(result.Integer, testEntity.Integer);
+            Assert.True(result.Equals(testEntity));
+        }
 
-//            var testEntity = new GuidIdEntity().GenerateForTest();
+        [Fact]
+        public void SaveOrUpdate_Can_Take_TranConn()
+        {
+            var tranGen = ServiceLocator.Instance.Resolve<ITranConnGenerator>();
 
-//            _sut.SaveOrUpdate(testEntity, tc);
-//        }
+            var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
-//        #endregion
+            var testEntity = new GuidIdEntity().GenerateForTest();
 
-//        #region Delete
+            _sut.SaveOrUpdate(testEntity, tc);
 
-//        [Fact]
-//        public void Delete_Removes_Record_As_Expected()
-//        {
-//            var testEntity = new GuidIdEntity().SaveForTest();
+            tc.Dispose();
+        }
 
-//            _sut.Delete(testEntity);
+        #endregion
 
-//            var result = _sut.GetById(testEntity.Id);
+        #region Delete
 
-//            Assert.Null(result);
-//        }
+        [Fact]
+        public void Delete_Removes_Record_As_Expected()
+        {
+            var testEntity = new GuidIdEntity().SaveForTest();
 
-//        [Fact]
-//        public void Delete_Can_Take_TranConn()
-//        {
-//            var tranGen = ServiceLocator.Instance.Resolve<ITranConnGenerator>();
+            _sut.Delete(testEntity);
 
-//            var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
+            var result = _sut.GetById(testEntity.Id);
 
-//            var testEntity = new GuidIdEntity().SaveForTest();
+            Assert.Null(result);
+        }
 
-//            _sut.Delete(testEntity, tc);
-//        }
+        [Fact]
+        public void Delete_Can_Take_TranConn()
+        {
+            var tranGen = ServiceLocator.Instance.Resolve<ITranConnGenerator>();
 
-//        #endregion
+            var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
-//        #region DeleteById
+            var testEntity = new GuidIdEntity().SaveForTest();
 
-//        [Fact]
-//        public void DeleteById_Removes_Records_As_Expected()
-//        {
-//            var testEntity = new GuidIdEntity().SaveForTest();
+            _sut.Delete(testEntity, tc);
 
-//            _sut.DeleteById(testEntity.Id);
+            tc.Dispose();
+        }
 
-//            var result = _sut.GetById(testEntity.Id);
+        #endregion
 
-//            Assert.Null(result);
-//        }
+        #region DeleteById
 
-//        [Fact]
-//        public void DeleteById_Can_Take_TranConn()
-//        {
-//            var tranGen = ServiceLocator.Instance.Resolve<ITranConnGenerator>();
+        [Fact]
+        public void DeleteById_Removes_Records_As_Expected()
+        {
+            var testEntity = new GuidIdEntity().SaveForTest();
 
-//            var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
+            _sut.DeleteById(testEntity.Id);
 
-//            var testEntity = new GuidIdEntity().SaveForTest();
+            var result = _sut.GetById(testEntity.Id);
 
-//            _sut.DeleteById(testEntity.Id, tc);
-//        }
+            Assert.Null(result);
+        }
 
-//        #endregion
-//    }
-//}
+        [Fact]
+        public void DeleteById_Can_Take_TranConn()
+        {
+            var tranGen = ServiceLocator.Instance.Resolve<ITranConnGenerator>();
+
+            var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
+
+            var testEntity = new GuidIdEntity().SaveForTest();
+
+            _sut.DeleteById(testEntity.Id, tc);
+
+            tc.Dispose();
+        }
+
+        #endregion
+    }
+}

@@ -5,7 +5,6 @@
     "IBFramework.Core": "1.0.0-*",
     "NETStandard.Library": "1.6.1",
     "IBFramework.Data.Common": "1.0.0-*",
-    "Autofac": "4.3.0",
     "Microsoft.Extensions.DependencyInjection": "1.0.0"
   },
 

@@ -8,6 +8,8 @@ namespace IBFramework.Core.IoC
 
         void Init(IContainer container);
 
+        void Init(IServiceProvider serviceProvider);
+
         void Reset();
     }
 }

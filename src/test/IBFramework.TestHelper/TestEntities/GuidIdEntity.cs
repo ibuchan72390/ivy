@@ -7,7 +7,7 @@ namespace IBFramework.TestHelper.TestEntities
     {
         public GuidIdEntity()
         {
-            //Id = Guid.NewGuid();
+            Id = Guid.NewGuid();
         }
 
         public CoreEntity CoreEntity { get; set; }

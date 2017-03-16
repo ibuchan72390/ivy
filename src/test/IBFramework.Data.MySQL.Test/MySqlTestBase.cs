@@ -18,5 +18,12 @@ namespace IBFramework.Data.MySQL.Test
                 TestExtensions.Init(connectionString);
             });
         }
+
+
+        #region Helper Methods
+
+        protected string FormatSqlAttr(string item) => $"`{item}`";
+
+        #endregion
     }
 }

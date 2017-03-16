@@ -101,46 +101,48 @@ namespace IBFramework.Data.MySQL
 
         public string GenerateInsertQuery(IEnumerable<TEntity> entities, ref Dictionary<string, object> parms)
         {
-            SetupAttrsIfNotDefined();
+            return BaseGenerateInsertReplaceQuery(entities, ref parms, true);
 
-            var sb = new StringBuilder();
+            //SetupAttrsIfNotDefined();
 
-            var entityList = entities.ToList();
+            //var sb = new StringBuilder();
 
-            for (var y = 0; y < entityList.Count; y++)
-            {
-                for (var x = 0; x < _propertyNames.Count; x++)
-                {
-                    var currentPropName = _propertyNames[x];
-                    var currentParamKey = $"{currentPropName}{y}";
+            //var entityList = entities.ToList();
 
-                    // Don't want to try to update the Id values, leads to failure
-                    // Eventually, we should use these values to update FK references
-                    if (currentPropName == "Id") continue;
+            //for (var y = 0; y < entityList.Count; y++)
+            //{
+            //    for (var x = 0; x < _propertyNames.Count; x++)
+            //    {
+            //        var currentPropName = _propertyNames[x];
+            //        var currentParamKey = $"{currentPropName}{y}";
 
-                    // Setup the SQL Insert
-                    if (x == 0)
-                        sb.Append("(");
+            //        // Don't want to try to update the Id values, leads to failure
+            //        // Eventually, we should use these values to update FK references
+            //        if (currentPropName == "Id") continue;
 
-                    sb.Append($"@{currentParamKey}");
+            //        // Setup the SQL Insert
+            //        if (x == 0)
+            //            sb.Append("(");
 
-                    if (x < _propertyNames.Count - 1)
-                        sb.Append(", ");
-                    else
-                        sb.Append(")");
+            //        sb.Append($"@{currentParamKey}");
 
-                    GenerateEntityAttributeParams(entities.ElementAt(y), currentPropName, currentParamKey, ref parms);
-                }
+            //        if (x < _propertyNames.Count - 1)
+            //            sb.Append(", ");
+            //        else
+            //            sb.Append(")");
 
-                if (y < entityList.Count - 1)
-                {
-                    sb.Append(", ");
-                }
-            }
+            //        GenerateEntityAttributeParams(entities.ElementAt(y), currentPropName, currentParamKey, ref parms);
+            //    }
 
-            var sqlValueString = $"({GeneratePropertyNameString(false)})";
+            //    if (y < entityList.Count - 1)
+            //    {
+            //        sb.Append(", ");
+            //    }
+            //}
 
-            return GenerateInsertQuery(sqlValueString, sb.ToString());
+            //var sqlValueString = $"({GeneratePropertyNameString(false)})";
+
+            //return GenerateInsertQuery(sqlValueString, sb.ToString());
         }
         
         #endregion
@@ -157,7 +159,7 @@ namespace IBFramework.Data.MySQL
             // Setup the parameters
             object targetPropValue;
 
-            if (currentPropName.Substring(currentPropName.Length - 2) == "Id")
+            if (currentPropName.Substring(currentPropName.Length - 2) == "Id" && currentPropName != "Id")
             {
                 var targetPropertyName = currentPropName.Substring(0, currentPropName.Length - 2);
                 var targetProp = _entityType.GetProperty(targetPropertyName);
@@ -187,6 +189,55 @@ namespace IBFramework.Data.MySQL
             parms.Add(currentParamKey, targetPropValue);
         }
 
+        protected string BaseGenerateInsertReplaceQuery(IEnumerable<TEntity> entities, ref Dictionary<string, object> parms, bool isInsert)
+        {
+            SetupAttrsIfNotDefined();
+
+            var sb = new StringBuilder();
+
+            var entityList = entities.ToList();
+
+            for (var y = 0; y < entityList.Count; y++)
+            {
+                for (var x = 0; x < _propertyNames.Count; x++)
+                {
+                    var currentPropName = _propertyNames[x];
+                    var currentParamKey = $"{currentPropName}{y}";
+
+                    // Don't want to try to update the Id values, leads to failure
+                    // Eventually, we should use these values to update FK references
+                    if (currentPropName == "Id" && isInsert) continue;
+
+                    // Setup the SQL Insert
+                    if (x == 0)
+                        sb.Append("(");
+
+                    sb.Append($"@{currentParamKey}");
+
+                    if (x < _propertyNames.Count - 1)
+                        sb.Append(", ");
+                    else
+                        sb.Append(")");
+
+                    GenerateEntityAttributeParams(entities.ElementAt(y), currentPropName, currentParamKey, ref parms);
+                }
+
+                if (y < entityList.Count - 1)
+                {
+                    sb.Append(", ");
+                }
+            }
+
+            var sqlValueString = $"({GeneratePropertyNameString(!isInsert)})";
+
+            var query = GenerateInsertQuery(sqlValueString, sb.ToString());
+
+            if (isInsert)
+                return query;
+            else
+                return query.Replace("INSERT", "REPLACE");
+        }
+
         #endregion
     }
 
@@ -194,6 +245,13 @@ namespace IBFramework.Data.MySQL
     public class MySqlGenerator<TEntity, TKey> : MySqlGenerator<TEntity>, ISqlGenerator<TEntity, TKey>
         where TEntity : IEntityWithTypedId<TKey>
     {
+        #region Variables & Constants
+
+        private const string idParamKey = "@entityId";
+        private readonly string whereIdEqualsParam = $"`Id` = " + idParamKey;
+
+        #endregion
+
         #region Constructor
 
         public MySqlGenerator(ISqlPropertyGenerator sqlPropertyGenerator)
@@ -210,20 +268,22 @@ namespace IBFramework.Data.MySQL
         {
             if (idToDelete == null) throw new Exception("Unable to delete a key that is null!");
 
-            parms = new Dictionary<string, object>();
-            parms.Add("@entityId", idToDelete);
+            //parms = new Dictionary<string, object>();
+            //parms.Add("@entityId", idToDelete.ToString());
+            AddIdToParmsDict(idToDelete, ref parms);
 
-            return base.GenerateDeleteQuery("`Id` = @entityId");
+            return base.GenerateDeleteQuery(whereIdEqualsParam);
         }
 
         public string GenerateGetQuery(TKey idToGet, ref Dictionary<string, object> parms)
         {
             if (idToGet == null) throw new Exception("Unable to get a key that is null!");
 
-            parms = new Dictionary<string, object>();
-            parms.Add("@entityId", idToGet);
+            //parms = new Dictionary<string, object>();
+            //parms.Add("@entityId", idToGet.ToString());
+            AddIdToParmsDict(idToGet, ref parms);
 
-            return base.GenerateGetQuery(null, "`Id` = @entityId");
+            return base.GenerateGetQuery(null, whereIdEqualsParam);
         }
 
         public string GenerateSaveOrUpdateQuery(TEntity entity, ref Dictionary<string, object> parms)
@@ -236,32 +296,50 @@ namespace IBFramework.Data.MySQL
                 var idInt = entity.Id as int?;
 
                 isUpdate = idInt.HasValue && idInt.Value > 0;
+
+                if (isUpdate)
+                {
+                    // Update specific query logic
+                    parms.Add("@entityId", entity.Id);
+                    return GenerateUpdateQuery(entity, ref parms, whereIdEqualsParam);
+                }
+                else
+                {
+                    /*
+                     * May need a way to generate some specific Id values here if the PK Identity functionality doesn't work as expected
+                     * for any non-standard Id values. Integer I assume will be generated appropriately, but anything dealing with strings
+                     * or guids may not be as effective when leveraging the PK Identity functionality.
+                     */
+
+                    // Insert specific query logic
+                    return GenerateInsertQuery(entity, ref parms) + "SELECT LAST_INSERT_ID();";
+                }
             }
             else
             {
-                isUpdate = entity.Id != null;
+                return BaseGenerateInsertReplaceQuery(new List<TEntity> { entity }, ref parms, false);
             }
 
-            if (isUpdate)
-            {
-                // Update specific query logic
-                parms.Add("@entityId", entity.Id);
-                return GenerateUpdateQuery(entity, ref parms, "`Id` = @entityId");
-            }
-            else
-            {
-                /*
-                 * May need a way to generate some specific Id values here if the PK Identity functionality doesn't work as expected
-                 * for any non-standard Id values. Integer I assume will be generated appropriately, but anything dealing with strings
-                 * or guids may not be as effective when leveraging the PK Identity functionality.
-                 */
-
-                // Insert specific query logic
-                return GenerateInsertQuery(entity, ref parms) + "SELECT LAST_INSERT_ID();";
-            }
         }
 
         #endregion
 
+        #region Helper Methods
+
+        private void AddIdToParmsDict(TKey keyVal, ref Dictionary<string, object> parms)
+        {
+            var keyType = typeof(TKey);
+
+            if (keyType == typeof(int) || keyType == typeof(string))
+            {
+                parms.Add(idParamKey, keyVal);
+            }
+            else
+            {
+                parms.Add(idParamKey, keyVal.ToString());
+            }
+        }
+
+        #endregion
     }
 }
