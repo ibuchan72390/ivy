@@ -34,7 +34,8 @@ namespace IBFramework.Data.MySQL.IntegrationTest
 
         public void Dispose()
         {
-            _sut.DeleteAll();
+            //_sut.DeleteAll();
+            TestCleaner.CleanDatabase();
         }
 
         #endregion
@@ -189,7 +190,7 @@ namespace IBFramework.Data.MySQL.IntegrationTest
 
             var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
-            var testEntity = new StringIdEntity().SaveForTest();
+            var testEntity = new StringIdEntity().SaveForTest(tc);
 
             _sut.Delete(testEntity, tc);
 
@@ -219,7 +220,7 @@ namespace IBFramework.Data.MySQL.IntegrationTest
 
             var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
-            var testEntity = new StringIdEntity().SaveForTest();
+            var testEntity = new StringIdEntity().SaveForTest(tc);
 
             _sut.DeleteById(testEntity.Id, tc);
 

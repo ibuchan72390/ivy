@@ -3,13 +3,14 @@ using IBFramework.IoC;
 using IBFramework.TestHelper;
 using IBFramework.TestHelper.TestEntities;
 using IBFramework.TestHelper.TestValues;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
 namespace IBFramework.Data.MySQL.IntegrationTest
 {
-    public class IntEntityRepositoryTests : MySqlIntegrationTestBase
+    public class IntEntityRepositoryTests : MySqlIntegrationTestBase, IDisposable
     {
         #region Variables & Constants
 
@@ -23,8 +24,11 @@ namespace IBFramework.Data.MySQL.IntegrationTest
         {
             _sut = ServiceLocator.Instance.Resolve<IEntityRepository<ParentEntity, int>>();
             _sut.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
+        }
 
-            _sut.DeleteAll();
+        public void Dispose()
+        {
+            TestCleaner.CleanDatabase();
         }
 
         #endregion
@@ -179,7 +183,7 @@ namespace IBFramework.Data.MySQL.IntegrationTest
 
             var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
-            var testEntity = new ParentEntity().SaveForTest();
+            var testEntity = new ParentEntity().SaveForTest(tc);
 
             _sut.Delete(testEntity, tc);
 
@@ -209,7 +213,7 @@ namespace IBFramework.Data.MySQL.IntegrationTest
 
             var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
-            var testEntity = new ParentEntity().SaveForTest();
+            var testEntity = new ParentEntity().SaveForTest(tc);
 
             _sut.DeleteById(testEntity.Id, tc);
 

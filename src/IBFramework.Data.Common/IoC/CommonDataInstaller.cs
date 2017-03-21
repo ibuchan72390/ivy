@@ -1,8 +1,6 @@
 ﻿using IBFramework.Core.Data;
 using IBFramework.Core.Data.SQL;
-using IBFramework.Core.Enum;
 using IBFramework.Core.IoC;
-using IBFramework.Data.Common;
 using IBFramework.Data.Common.Sql;
 using IBFramework.Data.Common.Transaction;
 

@@ -40,13 +40,13 @@ namespace IBFramework.Data.MSSQL
 
         public string GenerateDeleteQuery(string sqlWhere = null)
         {
-            var sql = AppendWhereIfDefined($"DELETE FROM {_entityType.Name}", sqlWhere);
+            var sql = AppendIfDefined($"DELETE FROM {_entityType.Name}", sqlWhere);
             return $"{sql};";
         }
 
-        public string GenerateGetQuery(string selectPrefix = null, string sqlWhere = null)
+        public string GenerateGetQuery(string selectPrefix = null, string sqlWhere = null, int? limit = null, int? offset = null)
         {
-            var attributeNames = GeneratePropertyNameString(true);
+            var attributeNames = GeneratePropertyNameString(true, true);
 
             var sql = "SELECT ";
 
@@ -57,7 +57,7 @@ namespace IBFramework.Data.MSSQL
 
             sql += $"{attributeNames} FROM {_entityType.Name}";
 
-            sql = AppendWhereIfDefined(sql, sqlWhere);
+            sql = AppendIfDefined(sql, sqlWhere);
 
             return $"{sql};";
         }
@@ -74,7 +74,7 @@ namespace IBFramework.Data.MSSQL
         {
             var sql =  $"UPDATE {_entityType.Name} SET {sqlSet}";
 
-            sql = AppendWhereIfDefined(sql, sqlWhere);
+            sql = AppendIfDefined(sql, sqlWhere);
 
             return $"{sql};";
         }
@@ -127,7 +127,7 @@ namespace IBFramework.Data.MSSQL
                 }
             }
 
-            var sqlValueString = $"({GeneratePropertyNameString(false)})";
+            var sqlValueString = $"({GeneratePropertyNameString(false, false)})";
 
             return GenerateInsertQuery(sqlValueString, sb.ToString());
         }
@@ -136,7 +136,7 @@ namespace IBFramework.Data.MSSQL
         {
             string sql = $"UPDATE {_entityType.Name} SET {sqlSet}";
 
-            return $"{AppendWhereIfDefined(sql, sqlWhere)};";
+            return $"{AppendIfDefined(sql, sqlWhere)};";
         }
 
         #endregion
@@ -149,6 +149,11 @@ namespace IBFramework.Data.MSSQL
         }
 
         public string GenerateUpdateQuery(TEntity entity, ref Dictionary<string, object> parms, string sqlWhere = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GenerateGetQuery(string selectPrefix = null, string sqlWhere = null, string sqlJoin = null)
         {
             throw new NotImplementedException();
         }

@@ -25,24 +25,34 @@ namespace IBFramework.Data.MySQL
 
         public string GenerateDeleteQuery(string sqlWhere = null)
         {
-            var sql = AppendWhereIfDefined($"DELETE FROM {_entityType.Name}", sqlWhere);
+            var sql = AppendIfDefined($"DELETE FROM {_entityType.Name}", sqlWhere);
             return $"{sql};";
         }
 
-        public string GenerateGetQuery(string selectPrefix = null, string sqlWhere = null)
+        public string GenerateGetQuery(string sqlWhere = null, string sqlJoin = null, int? limit = default(int?), int? offset = default(int?))
         {
-            var attributeNames = GeneratePropertyNameString(true);
+            if (offset.HasValue && !limit.HasValue) throw new Exception("Unable to use a limit without an offset");
+
+            var attributeNames = GeneratePropertyNameString(true, true);
 
             var sql = "SELECT ";
 
-            if (selectPrefix != null)
+            // We need to use the THIS as an alias in order to 
+            sql += $"{attributeNames} FROM {_entityType.Name} {SelectAlias}";
+
+            sql = AppendIfDefined(sql, sqlJoin);
+
+            sql = AppendIfDefined(sql, sqlWhere);
+
+            if (limit.HasValue)
             {
-                sql = $"{sql}{selectPrefix} ";
+                sql = AppendIfDefined(sql, $"LIMIT {limit}");
             }
 
-            sql += $"{attributeNames} FROM {_entityType.Name}";
-
-            sql = AppendWhereIfDefined(sql, sqlWhere);
+            if (limit.HasValue && offset.HasValue)
+            {
+                sql = AppendIfDefined(sql, $"OFFSET {offset}");
+            }
 
             return $"{sql};";
         }
@@ -59,7 +69,7 @@ namespace IBFramework.Data.MySQL
         {
             var sql = $"UPDATE {_entityType.Name} SET {sqlSet}";
 
-            sql = AppendWhereIfDefined(sql, sqlWhere);
+            sql = AppendIfDefined(sql, sqlWhere);
 
             return $"{sql};";
         }
@@ -101,7 +111,7 @@ namespace IBFramework.Data.MySQL
 
         public string GenerateInsertQuery(IEnumerable<TEntity> entities, ref Dictionary<string, object> parms)
         {
-            return BaseGenerateInsertReplaceQuery(entities, ref parms, true);
+            return BaseGenerateInsertReplaceQuery(entities, ref parms, true, false);
 
             //SetupAttrsIfNotDefined();
 
@@ -189,19 +199,25 @@ namespace IBFramework.Data.MySQL
             parms.Add(currentParamKey, targetPropValue);
         }
 
-        protected string BaseGenerateInsertReplaceQuery(IEnumerable<TEntity> entities, ref Dictionary<string, object> parms, bool isInsert)
+        protected string BaseGenerateInsertReplaceQuery(IEnumerable<TEntity> entities, ref Dictionary<string, object> parms, bool isInsert, bool includeSelectAlias)
         {
             SetupAttrsIfNotDefined();
 
             var sb = new StringBuilder();
 
+            //int commaLimit = isInsert ? 2 : 1;
+
+            IList<string> propertyIterationList = isInsert ?
+                _propertyNames.Where(x => x != "Id").ToList() :
+                _propertyNames;
+
             var entityList = entities.ToList();
 
             for (var y = 0; y < entityList.Count; y++)
             {
-                for (var x = 0; x < _propertyNames.Count; x++)
+                for (var x = 0; x < propertyIterationList.Count; x++)
                 {
-                    var currentPropName = _propertyNames[x];
+                    var currentPropName = propertyIterationList[x];
                     var currentParamKey = $"{currentPropName}{y}";
 
                     // Don't want to try to update the Id values, leads to failure
@@ -214,7 +230,7 @@ namespace IBFramework.Data.MySQL
 
                     sb.Append($"@{currentParamKey}");
 
-                    if (x < _propertyNames.Count - 1)
+                    if (x < propertyIterationList.Count - 1)
                         sb.Append(", ");
                     else
                         sb.Append(")");
@@ -228,7 +244,7 @@ namespace IBFramework.Data.MySQL
                 }
             }
 
-            var sqlValueString = $"({GeneratePropertyNameString(!isInsert)})";
+            var sqlValueString = $"({GeneratePropertyNameString(!isInsert, includeSelectAlias)})";
 
             var query = GenerateInsertQuery(sqlValueString, sb.ToString());
 
@@ -248,7 +264,7 @@ namespace IBFramework.Data.MySQL
         #region Variables & Constants
 
         private const string idParamKey = "@entityId";
-        private readonly string whereIdEqualsParam = $"`Id` = " + idParamKey;
+        private readonly string whereIdEqualsParam = $"WHERE `Id` = " + idParamKey;
 
         #endregion
 
@@ -317,7 +333,7 @@ namespace IBFramework.Data.MySQL
             }
             else
             {
-                return BaseGenerateInsertReplaceQuery(new List<TEntity> { entity }, ref parms, false);
+                return BaseGenerateInsertReplaceQuery(new List<TEntity> { entity }, ref parms, false, false);
             }
 
         }

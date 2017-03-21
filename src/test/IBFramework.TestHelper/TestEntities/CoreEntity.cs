@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace IBFramework.TestHelper.TestEntities
 {
-    public class CoreEntity : BaseTestEntity<int>
+    public class CoreEntity : BaseTestIntEntity
     {
         public ParentEntity ParentEntity { get; set; }
 

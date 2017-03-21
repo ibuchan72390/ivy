@@ -29,7 +29,7 @@ namespace IBFramework.Data.MySQL.IntegrationTest
 
         public void Dispose()
         {
-            _sut.DeleteAll();
+            TestCleaner.CleanDatabase();
         }
 
         #endregion

@@ -64,9 +64,11 @@ namespace IBFramework.Data.MySQL.Test
 
             var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
 
-            var expectedAttrString = attrs.Aggregate((x, y) => x + $", {y}");
+            var expectedAttrString = attrs.
+                                        Select(x => $"`THIS`.{x}").
+                                        Aggregate((x, y) => x + $", {y}");
 
-            string expected = $"SELECT {expectedAttrString} FROM ChildEntity WHERE `Id` = @entityId;";
+            string expected = $"SELECT {expectedAttrString} FROM ChildEntity `THIS` WHERE `Id` = @entityId;";
 
             Assert.Equal(expected, result);
             Assert.True(parms.Count == 1);

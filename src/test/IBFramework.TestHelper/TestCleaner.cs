@@ -9,9 +9,20 @@ namespace IBFramework.TestHelper
     {
         public static void CleanDatabase()
         {
-            var repo = ServiceLocator.Instance.Resolve<IBlobRepository<BlobEntity>>();
+            CleanTable<BlobEntity>();
+            CleanTable<StringIdEntity>();
+            CleanTable<GuidIdEntity>();
+            CleanTable<ChildEntity>();
+            CleanTable<CoreEntity>();
+            CleanTable<ParentEntity>();
+        }
 
+        public static void CleanTable<T>()
+            where T : class
+        {
+            var repo = ServiceLocator.Instance.Resolve<IBlobRepository<T>>();
             repo.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
+            repo.DeleteAll();
         }
     }
 }

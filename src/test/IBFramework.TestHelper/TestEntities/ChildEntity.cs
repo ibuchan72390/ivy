@@ -2,7 +2,7 @@
 
 namespace IBFramework.TestHelper.TestEntities
 {
-    public class ChildEntity : BaseTestEntity<int>
+    public class ChildEntity : BaseTestIntEntity
     {
         public CoreEntity CoreEntity { get; set; }
     }

@@ -6,11 +6,23 @@ namespace IBFramework.Core.Data.SQL
     public interface ISqlGenerator<TEntity>
     {
         /*
-         * SELECT {selectPrefix} FROM TEntity WHERE {sqlWhere}
+         * SQL Server Equivalent:
+         * 
+         *  SELECT *   -- <-- pick any columns here from your table, if you wanna exclude the RowNumber
+         *  FROM (SELECT ROW_NUMBER OVER(ORDER BY ID DESC) RowNumber, * 
+         *        FROM Reflow  
+         *        WHERE ReflowProcessID = somenumber) t
+         *  WHERE RowNumber >= 20 AND RowNumber <= 40    
+         * 
+         * 
+         * MySQL Equivalent:
+         * 
+         * SELECT * FROM TEntity JOIN {sqlJoin} WHERE {sqlWhere} LIMIT {limit} OFFSET {offset}
+         * 
          * 
          * Simple select all if no params provided
          */
-        string GenerateGetQuery(string selectPrefix = null, string sqlWhere = null);
+        string GenerateGetQuery(string sqlWhere = null, string sqlJoin = null, int? limit = null, int? offset = null);
 
         /*
          * DELETE FROM TEntity WHERE {sqlWhere}

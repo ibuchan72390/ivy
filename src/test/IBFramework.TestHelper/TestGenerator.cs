@@ -12,9 +12,6 @@ namespace IBFramework.TestHelper
     {
         #region Variables & Constants
 
-        //private static readonly IRandomizationHelper _rand =
-        //    ServiceLocator.Instance.Resolve<IRandomizationHelper>();
-
         private static IRandomizationHelper _rand =>
             ServiceLocator.Instance.Resolve<IRandomizationHelper>();
 
@@ -28,8 +25,7 @@ namespace IBFramework.TestHelper
 
         #region ChildEntity
 
-        public static ChildEntity GenerateForTest(this ChildEntity entity, CoreEntity parent = null,
-            string name = null, int? integer = null, decimal? deci = null)
+        public static ChildEntity GenerateForTest(this ChildEntity entity)
         {
             RandomizeTestBase<ChildEntity>(entity);
 
@@ -39,8 +35,7 @@ namespace IBFramework.TestHelper
             return entity;
         }
 
-        public static ChildEntity SaveForTest(this ChildEntity entity, CoreEntity parent = null,
-            string name = null, int? integer = null, decimal? deci = null)
+        public static ChildEntity SaveForTest(this ChildEntity entity)
         {
             var created = entity.GenerateForTest();
             return SaveEntity<ChildEntity, int>(created);
@@ -60,10 +55,10 @@ namespace IBFramework.TestHelper
             return entity;
         }
 
-        public static CoreEntity SaveForTest(this CoreEntity entity)
+        public static CoreEntity SaveForTest(this CoreEntity entity, ITranConn tc = null)
         {
             var created = entity.GenerateForTest();
-            return SaveEntity<CoreEntity, int>(created);
+            return SaveEntity<CoreEntity, int>(created, tc);
         }
 
         #endregion
@@ -80,7 +75,7 @@ namespace IBFramework.TestHelper
             return entity;
         }
 
-        public static GuidIdEntity SaveForTest(this GuidIdEntity entity)
+        public static GuidIdEntity SaveForTest(this GuidIdEntity entity, ITranConn tc = null)
         {
             var created = entity.GenerateForTest();
             return SaveEntity<GuidIdEntity, Guid>(created);
@@ -97,10 +92,10 @@ namespace IBFramework.TestHelper
             return entity;
         }
 
-        public static ParentEntity SaveForTest(this ParentEntity entity)
+        public static ParentEntity SaveForTest(this ParentEntity entity, ITranConn tc = null)
         {
             var created = entity.GenerateForTest();
-            return SaveEntity<ParentEntity, int>(created);
+            return SaveEntity<ParentEntity, int>(created, tc);
         }
 
         #endregion
@@ -117,10 +112,10 @@ namespace IBFramework.TestHelper
             return entity;
         }
 
-        public static StringIdEntity SaveForTest(this StringIdEntity entity)
+        public static StringIdEntity SaveForTest(this StringIdEntity entity, ITranConn tc = null)
         {
             var created = entity.GenerateForTest();
-            return SaveEntity<StringIdEntity, string>(created);
+            return SaveEntity<StringIdEntity, string>(created, tc);
         }
 
         #endregion
@@ -133,11 +128,11 @@ namespace IBFramework.TestHelper
             return entity;
         }
 
-        public static BlobEntity SaveForTest(this BlobEntity entity)
+        public static BlobEntity SaveForTest(this BlobEntity entity, ITranConn tc = null)
         {
             var created = entity.GenerateForTest();
 
-            SaveEntity<BlobEntity>(entity);
+            SaveEntity<BlobEntity>(entity, tc);
 
             return entity;
         }
@@ -146,24 +141,24 @@ namespace IBFramework.TestHelper
 
         #region Helper Methods
 
-        private static TEntity SaveEntity<TEntity, TKey>(TEntity entity)
+        private static TEntity SaveEntity<TEntity, TKey>(TEntity entity, ITranConn tc = null)
             where TEntity : class, IEntityWithTypedId<TKey>
         {
             ValidateConnectionString();
 
             var repo = ServiceLocator.Instance.Resolve<IEntityRepository<TEntity, TKey>>();
             repo.InitializeByConnectionString(connString);
-            return repo.SaveOrUpdate(entity);
+            return repo.SaveOrUpdate(entity, tc);
         }
 
-        private static TEntity SaveEntity<TEntity>(TEntity entity)
+        private static TEntity SaveEntity<TEntity>(TEntity entity, ITranConn tc = null)
             where TEntity : class
         {
             ValidateConnectionString();
 
             var repo = ServiceLocator.Instance.Resolve<IBlobRepository<TEntity>>();
             repo.InitializeByConnectionString(connString);
-            repo.Insert(entity);
+            repo.Insert(entity, tc);
 
             return entity;
         }

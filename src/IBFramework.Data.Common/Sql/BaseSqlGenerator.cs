@@ -15,6 +15,8 @@ namespace IBFramework.Data.Common.Sql
 
         protected IList<string> _propertyNames = null;
 
+        protected const string SelectAlias = "`THIS`";
+
         #endregion
 
         #region Constructor
@@ -29,27 +31,43 @@ namespace IBFramework.Data.Common.Sql
 
         #region Helper Methods
 
-        protected string GeneratePropertyNameString(bool includeId)
+        protected string GeneratePropertyNameString(bool includeId, bool includeSelectAlias)
         {
             SetupAttrsIfNotDefined();
 
             if (!includeId)
             {
                 var filteredPropNames = _propertyNames.Where(x => x != "Id");
-                return FormatPropertyNameCollection(filteredPropNames);
+
+                filteredPropNames = filteredPropNames.Select(FormatPropertyName);
+
+                filteredPropNames = PrependSelectAliasIfNecessary(filteredPropNames, includeSelectAlias);
+
+                return filteredPropNames.Aggregate((x, y) => x + $", {y}");
             }
             else
             {
                 // use this as your property string to prevent the table scan
                 // Is this faster than using a stringbuilder?
-                //return _propertyNames.Select(x => $"[{x}]").Aggregate((x, y) => x + $", {y}");
-                return FormatPropertyNameCollection(_propertyNames);
+
+                var adjustedPropNames = _propertyNames.Select(FormatPropertyName);
+
+                adjustedPropNames = PrependSelectAliasIfNecessary(adjustedPropNames, includeSelectAlias);
+
+                return adjustedPropNames.Aggregate((x, y) => x + $", {y}");
             }
         }
 
-        private string FormatPropertyNameCollection(IEnumerable<string> propNames)
+        //private string FormatPropertyNameCollection(IEnumerable<string> propNames)
+        //{
+        //    return propNames.Select(FormatPropertyName).Aggregate((x, y) => x + $", {y}");
+        //}
+
+        private IEnumerable<string> PrependSelectAliasIfNecessary(IEnumerable<string> propNames, bool includeSelectAlias)
         {
-            return propNames.Select(FormatPropertyName).Aggregate((x, y) => x + $", {y}");
+            return includeSelectAlias ?
+                propNames.Select(x => $"{SelectAlias}.{x}") :
+                propNames;
         }
 
         protected void SetupAttrsIfNotDefined()
@@ -62,15 +80,39 @@ namespace IBFramework.Data.Common.Sql
             }
         }
 
-        protected string AppendWhereIfDefined(string currentSql, string sqlWhere)
+        //protected string AppendWhereIfDefined(string currentSql, string sqlWhere)
+        //{
+        //    if (string.IsNullOrEmpty(sqlWhere))
+        //    {
+        //        return currentSql;
+        //    }
+        //    else
+        //    {
+        //        return $"{currentSql} WHERE {sqlWhere}";
+        //    }
+        //}
+
+        //protected string AppendJoinIfDefined(string currentSql, string joinClause)
+        //{
+        //    if (string.IsNullOrEmpty(joinClause))
+        //    {
+        //        return currentSql;
+        //    }
+        //    else
+        //    {
+        //        return $"{currentSql} WHERE {joinClause}";
+        //    }
+        //}
+
+        protected string AppendIfDefined(string currentSql, string additionalClause)
         {
-            if (string.IsNullOrEmpty(sqlWhere))
+            if (string.IsNullOrEmpty(additionalClause))
             {
                 return currentSql;
             }
             else
             {
-                return $"{currentSql} WHERE {sqlWhere}";
+                return $"{currentSql} {additionalClause}";
             }
         }
 

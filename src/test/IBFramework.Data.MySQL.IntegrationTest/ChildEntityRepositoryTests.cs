@@ -3,6 +3,7 @@ using IBFramework.IoC;
 using IBFramework.TestHelper;
 using IBFramework.TestHelper.TestEntities;
 using IBFramework.TestHelper.TestValues;
+using System;
 using Xunit;
 
 namespace IBFramework.Data.MySQL.IntegrationTest
@@ -12,7 +13,7 @@ namespace IBFramework.Data.MySQL.IntegrationTest
      * Since ChildEntity has a reference to CoreEntity, we'll want it to
      * properly assign the CoreEntityId wherever possible
      */
-    public class ChildEntityRepositoryTests : MySqlIntegrationTestBase
+    public class ChildEntityRepositoryTests : MySqlIntegrationTestBase, IDisposable
     {
         #region Variables & Constants
 
@@ -27,6 +28,11 @@ namespace IBFramework.Data.MySQL.IntegrationTest
             _sut = ServiceLocator.Instance.Resolve<IEntityRepository<ChildEntity, int>>();
 
             _sut.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
+        }
+
+        public void Dispose()
+        {
+            TestCleaner.CleanDatabase();
         }
 
         #endregion

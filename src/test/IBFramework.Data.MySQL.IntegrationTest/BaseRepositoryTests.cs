@@ -1,4 +1,5 @@
 ﻿using IBFramework.Core.Data;
+using IBFramework.Data.Common;
 using IBFramework.IoC;
 using IBFramework.TestHelper;
 using IBFramework.TestHelper.TestEntities;
@@ -27,7 +28,7 @@ namespace IBFramework.Data.MySQL.IntegrationTest
 
         public void Dispose()
         {
-            _sut.DeleteAll();
+            TestCleaner.CleanDatabase();
         }
 
         #endregion

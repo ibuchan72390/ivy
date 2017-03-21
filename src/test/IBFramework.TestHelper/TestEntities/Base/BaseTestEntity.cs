@@ -39,4 +39,9 @@ namespace IBFramework.TestHelper.TestEntities.Base
             return base.Equals(other) && Id.Equals(other.Id);
         }
     }
+
+    public class BaseTestIntEntity : BaseTestEntity<int>, IEntity, IEquatable<BaseTestEntity>
+    {
+    }
+
 }

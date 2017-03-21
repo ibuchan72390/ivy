@@ -101,6 +101,14 @@ namespace IBFramework.Data.Common
         //        async tran => await tran.Connection.ExecuteAsync(sql, parms, tran.Transaction), tc);
         //}
 
+        protected IEnumerable<T> FindBy(string joinClause = null, string whereClause = null, int? limit = null,
+            int? offset = null, Dictionary<string, object> parms = null, ITranConn tc = null)
+        {
+            var query = _sqlGenerator.GenerateGetQuery(whereClause, joinClause, limit, offset);
+
+            return InternalExecuteQuery<T>(query, tc, parms);
+        }
+
         #endregion
     }
 
@@ -203,7 +211,7 @@ namespace IBFramework.Data.Common
 
             var idInList = string.Join(",", ids);
 
-            var query = _sqlGenerator.GenerateGetQuery(null, $"`Id` IN ({idInList})");
+            var query = _sqlGenerator.GenerateGetQuery(null, $"WHERE `Id` IN ({idInList})");
 
             return InternalExecuteQuery<T>(query, tc, parms);
         }

@@ -2,6 +2,7 @@
 using IBFramework.IoC;
 using IBFramework.TestHelper;
 using IBFramework.TestHelper.TestEntities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -39,9 +40,11 @@ namespace IBFramework.Data.MySQL.Test
 
             var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
 
-            var expectedAttrString = attrs.Aggregate((x, y) => x + $", {y}");
+            var expectedAttrString = attrs.
+                                        Select(x => $"`THIS`.{x}").
+                                        Aggregate((x, y) => x + $", {y}");
 
-            string expected = $"SELECT {expectedAttrString} FROM ChildEntity;";
+            string expected = $"SELECT {expectedAttrString} FROM ChildEntity `THIS`;";
 
             Assert.Equal(expected, result);
         }
@@ -51,29 +54,112 @@ namespace IBFramework.Data.MySQL.Test
         {
             ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
 
-            var result = _sut.GenerateGetQuery(null, "Id = @id");
+            var result = _sut.GenerateGetQuery(null, "WHERE Id = @id");
 
             var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
 
-            var expectedAttrString = attrs.Aggregate((x, y) => x + $", {y}");
+            var expectedAttrString = attrs.
+                                        Select(x => $"`THIS`.{x}").
+                                        Aggregate((x, y) => x + $", {y}");
 
-            string expected = $"SELECT {expectedAttrString} FROM ChildEntity WHERE Id = @id;";
+            string expected = $"SELECT {expectedAttrString} FROM ChildEntity `THIS` WHERE Id = @id;";
 
             Assert.Equal(expected, result);
         }
 
         [Fact]
-        public void GenerateGetQuery_Works_As_Expected_With_Select_Prefix()
+        public void GenerateGetQuery_Works_As_Expected_With_Limit()
         {
+            const int limit = 5;
+
             ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
 
-            var result = _sut.GenerateGetQuery("TOP 100");
+            var result = _sut.GenerateGetQuery(null, null, limit);
 
             var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
 
-            var expectedAttrString = attrs.Aggregate((x, y) => x + $", {y}");
+            var expectedAttrString = attrs.
+                                        Select(x => $"`THIS`.{x}").
+                                        Aggregate((x, y) => x + $", {y}");
 
-            string expected = $"SELECT TOP 100 {expectedAttrString} FROM ChildEntity;";
+            string expected = $"SELECT TOP 100 {expectedAttrString} FROM ChildEntity `THIS` LIMIT {limit};";
+
+            Assert.Equal(expected, result);
+        }
+
+
+        [Fact]
+        public void GenerateGetQuery_Works_As_Expected_With_Limit_And_Offset()
+        {
+            const int limit = 5;
+            const int offset = 10;
+
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
+
+            var result = _sut.GenerateGetQuery(null, null, limit, offset);
+
+            var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
+
+            var expectedAttrString = attrs.
+                                        Select(x => $"`THIS`.{x}").
+                                        Aggregate((x, y) => x + $", {y}");
+
+            string expected = $"SELECT TOP 100 {expectedAttrString} FROM ChildEntity `THIS` LIMIT {limit} OFFSET {offset};";
+
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public void GenerateGetQuery_Offset_Without_Limit_Throws_Exception()
+        {
+            const int offset = 10;
+
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
+
+            var e = Assert.Throws<Exception>(() => _sut.GenerateGetQuery(null, null, null, offset));
+
+            Assert.Equal("Unable to use a limit without an offset", e.Message);
+        }
+
+        [Fact]
+        public void GenerateGetQuery_Works_As_Expected_With_Join_Clause()
+        {
+            const string joinClause = "JOIN CoreEntity ON CoreEntity.Id = ChildEntity.CoreEntityId";
+
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
+
+            var result = _sut.GenerateGetQuery(null, joinClause);
+
+            var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
+
+            var expectedAttrString = attrs.
+                            Select(x => $"`THIS`.{x}").
+                            Aggregate((x, y) => x + $", {y}");
+
+            string expected = $"SELECT {expectedAttrString} FROM ChildEntity `THIS` {joinClause};";
+
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public void GenerateGetQuery_Works_As_Expected_With_All_Params()
+        {
+            const string whereClause = "WHERE Id = @Id";
+            const string joinClause = "JOIN CoreEntity ON CoreEntity.Id = ChildEntity.CoreEntityId";
+            const int limit = 5;
+            const int offset = 10;
+
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
+
+            var result = _sut.GenerateGetQuery(whereClause, joinClause, limit, offset);
+
+            var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
+
+            var expectedAttrString = attrs.
+                Select(x => $"`THIS`.{x}").
+                Aggregate((x, y) => x + $", {y}");
+
+            string expected = $"SELECT {expectedAttrString} FROM ChildEntity `THIS` {joinClause} {whereClause} LIMIT {limit} OFFSET {offset};";
 
             Assert.Equal(expected, result);
         }
@@ -99,7 +185,7 @@ namespace IBFramework.Data.MySQL.Test
         {
             ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
 
-            var result = _sut.GenerateDeleteQuery("`Id` = @id");
+            var result = _sut.GenerateDeleteQuery("WHERE `Id` = @id");
 
             string expected = $"DELETE FROM ChildEntity WHERE `Id` = @id;";
 
@@ -281,20 +367,14 @@ namespace IBFramework.Data.MySQL.Test
         {
             ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
 
-            var result = _sut.GenerateUpdateQuery("`Name` = 'test'", "Id = @id");
+            var result = _sut.GenerateUpdateQuery("`Name` = 'test'", "WHERE `Id` = @id");
 
-            const string expected = "UPDATE ChildEntity SET `Name` = 'test' WHERE Id = @id;";
+            const string expected = "UPDATE ChildEntity SET `Name` = 'test' WHERE `Id` = @id;";
 
             Assert.Equal(expected, result);
         }
 
         #endregion
-
-        #endregion
-
-        #region Helper Methods
-
-        private string FormatSqlAttr(string item) => $"`{item}`";
 
         #endregion
     }

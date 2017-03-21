@@ -47,7 +47,7 @@ namespace IBFramework.Data.MySQL.Test
 
             Assert.Equal(expected, result);
             Assert.True(parms.Count == 1);
-            Assert.Equal(idVal, parms["@entityId"]);
+            Assert.Equal(idVal.ToString(), parms["@entityId"]);
         }
 
         #endregion
@@ -65,13 +65,15 @@ namespace IBFramework.Data.MySQL.Test
 
             var attrs = _propertyGenerator.GetSqlPropertyNames<GuidIdEntity>().Select(FormatSqlAttr);
 
-            var expectedAttrString = attrs.Aggregate((x, y) => x + $", {y}");
+            var expectedAttrString = attrs.
+                                        Select(x => $"`THIS`.{x}").
+                                        Aggregate((x, y) => x + $", {y}");
 
-            string expected = $"SELECT {expectedAttrString} FROM GuidIdEntity WHERE `Id` = @entityId;";
+            string expected = $"SELECT {expectedAttrString} FROM GuidIdEntity `THIS` WHERE `Id` = @entityId;";
 
             Assert.Equal(expected, result);
             Assert.True(parms.Count == 1);
-            Assert.Equal(idVal, parms["@entityId"]);
+            Assert.Equal(idVal.ToString(), parms["@entityId"]);
         }
 
         #endregion
