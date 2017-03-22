@@ -30,14 +30,14 @@ namespace IBFramework.Data.Common.Base
 
         #region Public Methods
 
-        public string ConnectionString { get; private set; }
+        public virtual string ConnectionString { get; private set; }
 
-        public void InitializeByConnectionString(string connectionString)
+        public virtual void InitializeByConnectionString(string connectionString)
         {
             Repo.InitializeByConnectionString(connectionString);
         }
 
-        public void InitializeByDatabaseKey(string databaseKey)
+        public virtual void InitializeByDatabaseKey(string databaseKey)
         {
             Repo.InitializeByDatabaseKey(databaseKey);
         }

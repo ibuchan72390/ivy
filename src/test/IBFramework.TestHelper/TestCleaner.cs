@@ -12,7 +12,6 @@ namespace IBFramework.TestHelper
         {
             CleanTable<BlobEntity>();
             CleanTable<StringEntity>();
-            //CleanTable<GuidEntity>();
             CleanTable<ChildEntity>();
             CleanTable<FlippedBlobEntity>();
             CleanTable<CoreEntity>();
