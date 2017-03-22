@@ -174,16 +174,52 @@ namespace IBFramework.Data.MySQL
                 var targetPropertyName = currentPropName.Substring(0, currentPropName.Length - 2);
                 var targetProp = _entityType.GetProperty(targetPropertyName);
                 object targetPropEntity = targetProp.GetValue(entity);
-                var targetPropCast = (IEntityWithTypedId<int>)targetPropEntity;
 
-                if (targetPropCast.Id == 0)
+                /*
+                 * At this point, if the value is null, the property simply has not been populated
+                 */
+                if (targetPropEntity == null)
                 {
                     targetPropValue = null;
                 }
                 else
                 {
-                    targetPropValue = targetPropCast.Id;
+                    /*
+                     * This is going to be a bad strategy, we're going to need to find another way to handle this
+                     * Cast to null is fucking stupid
+                     */
+                    var targetPropIntCast = targetPropEntity as IEntityWithTypedId<int>;
+                    var targetPropStringCast = targetPropEntity as IEntityWithTypedId<string>;
+
+                    if (targetPropIntCast != null)
+                    {
+                        if (targetPropIntCast.Id == 0)
+                        {
+                            targetPropValue = null;
+                        }
+                        else
+                        {
+                            targetPropValue = targetPropIntCast.Id;
+                        }
+                    }
+                    else if (targetPropStringCast != null)
+                    {
+                        if (targetPropStringCast.Id == null)
+                        {
+                            targetPropValue = null;
+                        }
+                        else
+                        {
+                            targetPropValue = targetPropStringCast.Id;
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("Unable to cast the current object to an IEntityWithTypedId");
+                    }
                 }
+
+                
             }
             else
             {

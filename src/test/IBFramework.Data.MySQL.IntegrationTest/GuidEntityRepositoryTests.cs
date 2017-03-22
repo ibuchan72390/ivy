@@ -5,6 +5,8 @@
  * Id NVARCHAR column to the GUID Id attribute
  * The string to GUID translation appears to be invalid
  * 
+ * https://andydote.co.uk/2014/07/22/configuring-dapper-to-work-with-custom-types/
+ * This guy may be onto something with the SqlMapper custom functionality
  */
 
 

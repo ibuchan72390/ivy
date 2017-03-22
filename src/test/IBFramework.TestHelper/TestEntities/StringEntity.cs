@@ -3,10 +3,10 @@ using IBFramework.TestUtilities;
 
 namespace IBFramework.TestHelper.TestEntities
 {
-    public class StringIdEntity : BaseTestEntity<string>
+    public class StringEntity : BaseTestEntity<string>
     {
         // Any non-integer entities need to populate their own Id
-        public StringIdEntity()
+        public StringEntity()
         {
             Id = TestIncrementer.StringVal;
         }

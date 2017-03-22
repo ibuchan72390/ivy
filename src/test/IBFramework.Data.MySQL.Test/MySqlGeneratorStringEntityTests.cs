@@ -37,13 +37,13 @@ namespace IBFramework.Data.MySQL.Test
         [Fact]
         public void GenerateDeleteQuery_Generates_As_Expected()
         {
-            ISqlGenerator<StringIdEntity, string> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<StringIdEntity, string>>();
+            ISqlGenerator<StringEntity, string> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<StringEntity, string>>();
 
             string idVal = _randomizationHelper.RandomString();
             var parms = new Dictionary<string, object>();
             var result = _sut.GenerateDeleteQuery(idVal, ref parms);
 
-            var attrs = _propertyGenerator.GetSqlPropertyNames<StringIdEntity>().Select(FormatSqlAttr);
+            var attrs = _propertyGenerator.GetSqlPropertyNames<StringEntity>().Select(FormatSqlAttr);
 
             var expectedAttrString = attrs.Aggregate((x, y) => x + $", {y}");
 
@@ -61,13 +61,13 @@ namespace IBFramework.Data.MySQL.Test
         [Fact]
         public void GenerateGetQuery_Generates_As_Expected()
         {
-            ISqlGenerator<StringIdEntity, string> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<StringIdEntity, string>>();
+            ISqlGenerator<StringEntity, string> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<StringEntity, string>>();
 
             string idVal = _randomizationHelper.RandomString();
             var parms = new Dictionary<string, object>();
             var result = _sut.GenerateGetQuery(idVal, ref parms);
 
-            var attrs = _propertyGenerator.GetSqlPropertyNames<StringIdEntity>().Select(FormatSqlAttr);
+            var attrs = _propertyGenerator.GetSqlPropertyNames<StringEntity>().Select(FormatSqlAttr);
 
             var expectedAttrString = attrs.
                                         Select(x => $"`THIS`.{x}").
@@ -87,14 +87,14 @@ namespace IBFramework.Data.MySQL.Test
         [Fact]
         public void GenerateSaveOrUpdateQuery_Generates_As_Expected_For_Save()
         {
-            ISqlGenerator<StringIdEntity, string> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<StringIdEntity, string>>();
+            ISqlGenerator<StringEntity, string> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<StringEntity, string>>();
 
-            var StringIdEntity = new StringIdEntity().GenerateForTest();
+            var StringIdEntity = new StringEntity().GenerateForTest();
 
             var parms = new Dictionary<string, object>();
             var result = _sut.GenerateSaveOrUpdateQuery(StringIdEntity, ref parms);
 
-            var attrs = _propertyGenerator.GetSqlPropertyNames<StringIdEntity>();
+            var attrs = _propertyGenerator.GetSqlPropertyNames<StringEntity>();
 
             var expectedAttrString = attrs.Select(FormatSqlAttr).Aggregate((x, y) => x + $", {y}");
             var expectedParamString = attrs.Aggregate("", (x, y) => $"{x}@{y}0, ");

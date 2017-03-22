@@ -1,6 +1,7 @@
 ﻿using IBFramework.Core.Data;
 using IBFramework.IoC;
 using IBFramework.TestHelper.TestEntities;
+using IBFramework.TestHelper.TestEntities.Flipped;
 using IBFramework.TestHelper.TestValues;
 
 namespace IBFramework.TestHelper
@@ -10,11 +11,13 @@ namespace IBFramework.TestHelper
         public static void CleanDatabase()
         {
             CleanTable<BlobEntity>();
-            CleanTable<StringIdEntity>();
-            CleanTable<GuidIdEntity>();
+            CleanTable<StringEntity>();
+            //CleanTable<GuidEntity>();
             CleanTable<ChildEntity>();
+            CleanTable<FlippedBlobEntity>();
             CleanTable<CoreEntity>();
             CleanTable<ParentEntity>();
+            CleanTable<FlippedStringEntity>();
         }
 
         public static void CleanTable<T>()

@@ -82,7 +82,7 @@ namespace IBFramework.Data.MySQL.Test
                                         Select(x => $"`THIS`.{x}").
                                         Aggregate((x, y) => x + $", {y}");
 
-            string expected = $"SELECT TOP 100 {expectedAttrString} FROM ChildEntity `THIS` LIMIT {limit};";
+            string expected = $"SELECT {expectedAttrString} FROM ChildEntity `THIS` LIMIT {limit};";
 
             Assert.Equal(expected, result);
         }
@@ -104,7 +104,7 @@ namespace IBFramework.Data.MySQL.Test
                                         Select(x => $"`THIS`.{x}").
                                         Aggregate((x, y) => x + $", {y}");
 
-            string expected = $"SELECT TOP 100 {expectedAttrString} FROM ChildEntity `THIS` LIMIT {limit} OFFSET {offset};";
+            string expected = $"SELECT {expectedAttrString} FROM ChildEntity `THIS` LIMIT {limit} OFFSET {offset};";
 
             Assert.Equal(expected, result);
         }

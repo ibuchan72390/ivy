@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Dapper;
 using IBFramework.Core.Data.Domain;
 using System.Linq;
+using System;
 
 namespace IBFramework.Data.Common
 {
@@ -13,7 +14,7 @@ namespace IBFramework.Data.Common
      */
 
     public abstract class BaseRepository<T> : IBaseRepository<T>
-        where T : class
+        where T : class, IEntityWithReferences
     {
         #region Variables & Constants
 
@@ -57,18 +58,18 @@ namespace IBFramework.Data.Common
 
         #region Public Methods
 
-        public void DeleteAll(ITranConn tc = null)
+        public virtual void DeleteAll(ITranConn tc = null)
         {
             var query = _sqlGenerator.GenerateDeleteQuery();
 
             InternalExecuteNonQuery(query, tc);
         }
 
-        public IEnumerable<T> GetAll(ITranConn tc = null)
+        public virtual IEnumerable<T> GetAll(ITranConn tc = null)
         {
             var query = _sqlGenerator.GenerateGetQuery();
 
-            return InternalExecuteQuery<T>(query);
+            return InternalExecuteQuery(query);
         }
 
         #endregion
@@ -77,15 +78,70 @@ namespace IBFramework.Data.Common
 
         // There's got to be a way to extract all this transaction stuff into another method
         // I'd almost like to make it the tranConnGenerator piece
-        protected IEnumerable<TReturn> InternalExecuteQuery<TReturn>(string sql, ITranConn tc = null, object parms = null)
+        protected virtual IEnumerable<T> InternalExecuteQuery(string sql, ITranConn tc = null, object parms = null)
+        {
+            //return _tranHelper.WrapInTransaction(
+            //    tran => tran.Connection.Query<T>(sql, parms, tran.Transaction));
+
+            return _tranHelper.WrapInTransaction(
+                tran =>
+                {
+                    using (var reader = tran.Connection.ExecuteReader(sql, parms, tran.Transaction))
+                    {
+                        IList<int> fkIndices = new List<int>();
+
+                        for (var i = 0; i < reader.FieldCount; i++)
+                        {
+                            var colName = reader.GetName(i);
+
+                            // Either Id column or an Id reference
+                            if (colName.Substring(colName.Length - 2, 2) == "Id" && colName.Length > 2)
+                            {
+                                fkIndices.Add(i);
+                            }
+                        }
+
+                        var parser = reader.GetRowParser<T>();
+
+                        IList<T> results = new List<T>();
+
+                        while (reader.Read())
+                        {
+                            var referenceList = fkIndices.ToDictionary(x => reader.GetName(x), x => reader.GetValue(x));
+
+                            T result = parser(reader);
+
+                            result.References = referenceList;
+
+                            results.Add(result);
+                        }
+
+                        reader.Close();
+
+                        return results;
+                    }
+
+                }, tc);
+        }
+
+        protected virtual IEnumerable<TReturn> InternalExecuteAlternateTypeQuery<TReturn>(string sql, ITranConn tc = null, object parms = null)
         {
             return _tranHelper.WrapInTransaction(
-                tran => tran.Connection.Query<TReturn>(sql, parms, tran.Transaction), tc);
+                tran => tran.Connection.Query<TReturn>(sql, parms, tran.Transaction));
         }
-        protected void InternalExecuteNonQuery(string sql, ITranConn tc = null, object parms = null)
+
+        protected virtual void InternalExecuteNonQuery(string sql, ITranConn tc = null, object parms = null)
         {
             _tranHelper.WrapInTransaction(
                 tran => tran.Connection.Execute(sql, parms, tran.Transaction), tc);
+        }
+
+        protected IEnumerable<T> FindBy(string joinClause = null, string whereClause = null, int? limit = null,
+            int? offset = null, Dictionary<string, object> parms = null, ITranConn tc = null)
+        {
+            var query = _sqlGenerator.GenerateGetQuery(whereClause, joinClause, limit, offset);
+
+            return InternalExecuteQuery(query, tc, parms);
         }
 
         // Async functionality for future expansion
@@ -101,20 +157,12 @@ namespace IBFramework.Data.Common
         //        async tran => await tran.Connection.ExecuteAsync(sql, parms, tran.Transaction), tc);
         //}
 
-        protected IEnumerable<T> FindBy(string joinClause = null, string whereClause = null, int? limit = null,
-            int? offset = null, Dictionary<string, object> parms = null, ITranConn tc = null)
-        {
-            var query = _sqlGenerator.GenerateGetQuery(whereClause, joinClause, limit, offset);
-
-            return InternalExecuteQuery<T>(query, tc, parms);
-        }
-
         #endregion
     }
 
 
     public class BlobRepository<T> : BaseRepository<T>, IBlobRepository<T>
-        where T: class
+        where T: class, IEntityWithReferences
     {
         #region Constructor
 
@@ -130,7 +178,7 @@ namespace IBFramework.Data.Common
 
         #region Public Methods
 
-        public void Insert(T entity, ITranConn tc = null)
+        public virtual void Insert(T entity, ITranConn tc = null)
         {
             Dictionary<string, object> parms = new Dictionary<string, object>();
 
@@ -139,7 +187,7 @@ namespace IBFramework.Data.Common
             InternalExecuteNonQuery(query, tc, parms);
         }
 
-        public void BulkInsert(IEnumerable<T> entities, ITranConn tc = null)
+        public virtual void BulkInsert(IEnumerable<T> entities, ITranConn tc = null)
         {
             Dictionary<string, object> parms = new Dictionary<string, object>();
 
@@ -178,7 +226,7 @@ namespace IBFramework.Data.Common
 
         #region Public Methods
 
-        public void Delete(T entity, ITranConn tc = null)
+        public virtual void Delete(T entity, ITranConn tc = null)
         {
             Dictionary<string, object> parms = new Dictionary<string, object>();
 
@@ -187,7 +235,7 @@ namespace IBFramework.Data.Common
             InternalExecuteNonQuery(query, tc, parms);
         }
 
-        public void DeleteById(TKey id, ITranConn tc = null)
+        public virtual void DeleteById(TKey id, ITranConn tc = null)
         {
             Dictionary<string, object> parms = new Dictionary<string, object>();
 
@@ -196,16 +244,16 @@ namespace IBFramework.Data.Common
             InternalExecuteNonQuery(query, tc, parms);
         }
 
-        public T GetById(TKey id, ITranConn tc = null)
+        public virtual T GetById(TKey id, ITranConn tc = null)
         {
             Dictionary<string, object> parms = new Dictionary<string, object>();
 
             var query = localSqlGenerator.GenerateGetQuery(id, ref parms);
 
-            return InternalExecuteQuery<T>(query, tc, parms).SingleOrDefault();
+            return InternalExecuteQuery(query, tc, parms).SingleOrDefault();
         }
 
-        public IEnumerable<T> GetByIdList(IEnumerable<TKey> ids, ITranConn tc = null)
+        public virtual IEnumerable<T> GetByIdList(IEnumerable<TKey> ids, ITranConn tc = null)
         {
             Dictionary<string, object> parms = new Dictionary<string, object>();
 
@@ -213,17 +261,21 @@ namespace IBFramework.Data.Common
 
             var query = _sqlGenerator.GenerateGetQuery(null, $"WHERE `Id` IN ({idInList})");
 
-            return InternalExecuteQuery<T>(query, tc, parms);
+            return InternalExecuteQuery(query, tc, parms);
         }
 
-        public T SaveOrUpdate(T entity, ITranConn tc = null)
+        public virtual T SaveOrUpdate(T entity, ITranConn tc = null)
         {
+            /*
+             * Refs will not get populated on saves, only on gets
+             */
+
             Dictionary<string, object> parms = new Dictionary<string, object>();
 
             var query = localSqlGenerator.GenerateSaveOrUpdateQuery(entity, ref parms);
 
             // results should contain our new Id value if this is an insert
-            var results = InternalExecuteQuery<TKey>(query, tc, parms);
+            var results = InternalExecuteAlternateTypeQuery<TKey>(query, tc, parms);
 
             if (results.Any())
             {
@@ -231,6 +283,69 @@ namespace IBFramework.Data.Common
             }
 
             return entity;
+        }
+
+        #endregion
+
+        #region Helper Methods
+
+        // There's got to be a way to extract all this transaction stuff into another method
+        // I'd almost like to make it the tranConnGenerator piece
+        protected override IEnumerable<T> InternalExecuteQuery(string sql, ITranConn tc = null, object parms = null)
+        {
+            return _tranHelper.WrapInTransaction(
+                tran =>
+                {
+                    using (var reader = tran.Connection.ExecuteReader(sql, parms, tran.Transaction))
+                    {
+                        IList<int> fkIndices = new List<int>();
+                        int idIndex = -1;
+
+                        for (var i = 0; i < reader.FieldCount; i++)
+                        {
+                            var colName = reader.GetName(i);
+
+                            // Either Id column or an Id reference
+                            if (colName.Substring(colName.Length - 2, 2) == "Id")
+                            {
+                                if (colName.Length > 2)
+                                {
+                                    fkIndices.Add(i);
+                                }
+                                else
+                                {
+                                    idIndex = i;
+                                }
+                            }
+                        }
+
+                        if (idIndex == -1)
+                        {
+                            throw new Exception("Unable to determine the Id column for reference generation!");
+                        }
+
+                        var parser = reader.GetRowParser<T>();
+
+                        IList<T> results = new List<T>();
+
+                        while (reader.Read())
+                        {
+                            var referenceList = fkIndices.ToDictionary(x => reader.GetName(x), x => reader.GetValue(x));
+                            //resultsRefsDict.Add((TKey)reader.GetValue(idIndex), referenceList);
+
+                            T result = parser(reader);
+
+                            result.References = referenceList;
+
+                            results.Add(result);
+                        }
+
+                        reader.Close();
+
+                        return results;
+                    }
+
+                }, tc);
         }
 
         #endregion

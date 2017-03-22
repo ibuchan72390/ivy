@@ -4,6 +4,7 @@ using IBFramework.Core.Utility;
 using IBFramework.IoC;
 using IBFramework.TestHelper.TestEntities;
 using IBFramework.TestHelper.TestEntities.Base;
+using IBFramework.TestHelper.TestEntities.Flipped;
 using System;
 
 namespace IBFramework.TestHelper
@@ -65,21 +66,21 @@ namespace IBFramework.TestHelper
 
         #region GuidIdEntity
 
-        public static GuidIdEntity GenerateForTest(this GuidIdEntity entity)
-        {
-            RandomizeTestBase<GuidIdEntity>(entity);
+        //public static GuidEntity GenerateForTest(this GuidEntity entity)
+        //{
+        //    RandomizeTestBase<GuidEntity>(entity);
 
-            if (entity.CoreEntity == null)
-                entity.CoreEntity = new CoreEntity().GenerateForTest();
+        //    if (entity.CoreEntity == null)
+        //        entity.CoreEntity = new CoreEntity().GenerateForTest();
 
-            return entity;
-        }
+        //    return entity;
+        //}
 
-        public static GuidIdEntity SaveForTest(this GuidIdEntity entity, ITranConn tc = null)
-        {
-            var created = entity.GenerateForTest();
-            return SaveEntity<GuidIdEntity, Guid>(created);
-        }
+        //public static GuidEntity SaveForTest(this GuidEntity entity, ITranConn tc = null)
+        //{
+        //    var created = entity.GenerateForTest();
+        //    return SaveEntity<GuidEntity, Guid>(created);
+        //}
 
         #endregion
 
@@ -102,9 +103,9 @@ namespace IBFramework.TestHelper
 
         #region StringIdEntity
 
-        public static StringIdEntity GenerateForTest(this StringIdEntity entity)
+        public static StringEntity GenerateForTest(this StringEntity entity)
         {
-            RandomizeTestBase<StringIdEntity>(entity);
+            RandomizeTestBase<StringEntity>(entity);
 
             if (entity.CoreEntity == null)
                 entity.CoreEntity = new CoreEntity().GenerateForTest();
@@ -112,11 +113,32 @@ namespace IBFramework.TestHelper
             return entity;
         }
 
-        public static StringIdEntity SaveForTest(this StringIdEntity entity, ITranConn tc = null)
+        public static StringEntity SaveForTest(this StringEntity entity, ITranConn tc = null)
         {
             var created = entity.GenerateForTest();
-            return SaveEntity<StringIdEntity, string>(created, tc);
+            return SaveEntity<StringEntity, string>(created, tc);
         }
+
+        #endregion
+
+        #region FlippedStringEntity
+
+        #region StringIdEntity
+
+        public static FlippedStringEntity GenerateForTest(this FlippedStringEntity entity)
+        {
+            RandomizeTestBase<FlippedStringEntity>(entity);
+
+            return entity;
+        }
+
+        public static FlippedStringEntity SaveForTest(this FlippedStringEntity entity, ITranConn tc = null)
+        {
+            var created = entity.GenerateForTest();
+            return SaveEntity<FlippedStringEntity, string>(created, tc);
+        }
+
+        #endregion
 
         #endregion
 
@@ -133,6 +155,25 @@ namespace IBFramework.TestHelper
             var created = entity.GenerateForTest();
 
             SaveEntity<BlobEntity>(entity, tc);
+
+            return entity;
+        }
+
+        #endregion
+
+        #region FlippedBlobEntity
+
+        public static FlippedBlobEntity GenerateForTest(this FlippedBlobEntity entity)
+        {
+            RandomizeTestBase(entity);
+            return entity;
+        }
+
+        public static FlippedBlobEntity SaveForTest(this FlippedBlobEntity entity, ITranConn tc = null)
+        {
+            var created = entity.GenerateForTest();
+
+            SaveEntity<FlippedBlobEntity>(entity, tc);
 
             return entity;
         }
