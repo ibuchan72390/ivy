@@ -28,7 +28,7 @@ namespace IBFramework.Data.MySQL.Test
 
             var result = _sut.GenerateSaveOrUpdateQuery(dbKey, ref parms);
 
-            const string expected = "INSERT INTO DatabaseKey (`Key`, `ConnectionString`) VALUES (@Key0, @ConnectionString0);SELECT LAST_INSERT_ID();";
+            const string expected = "INSERT INTO databasekey (`Key`, `ConnectionString`) VALUES (@Key0, @ConnectionString0);SELECT LAST_INSERT_ID();";
 
             Assert.Equal(expected, result);
         }

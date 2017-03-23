@@ -42,7 +42,7 @@ namespace IBFramework.Data.MySQL.Test
 
             var expectedAttrString = attrs.Aggregate((x, y) => x + $", {y}");
 
-            string expected = $"DELETE FROM ChildEntity WHERE `Id` = @entityId;";
+            string expected = $"DELETE FROM childentity WHERE `Id` = @entityId;";
 
             Assert.Equal(expected, result);
             Assert.True(parms.Count == 1);
@@ -68,7 +68,7 @@ namespace IBFramework.Data.MySQL.Test
                                         Select(x => $"`THIS`.{x}").
                                         Aggregate((x, y) => x + $", {y}");
 
-            string expected = $"SELECT {expectedAttrString} FROM ChildEntity `THIS` WHERE `Id` = @entityId;";
+            string expected = $"SELECT {expectedAttrString} FROM childentity `THIS` WHERE `Id` = @entityId;";
 
             Assert.Equal(expected, result);
             Assert.True(parms.Count == 1);
@@ -95,7 +95,7 @@ namespace IBFramework.Data.MySQL.Test
             var expectedParamString = attrs.Aggregate("", (x, y) => $"{x}@{y}0, ");
             expectedParamString = expectedParamString.Substring(0, expectedParamString.Length - 2);
 
-            var expected = $"INSERT INTO ChildEntity ({expectedAttrString}) VALUES ({expectedParamString});SELECT LAST_INSERT_ID();";
+            var expected = $"INSERT INTO childentity ({expectedAttrString}) VALUES ({expectedParamString});SELECT LAST_INSERT_ID();";
 
             Assert.Equal(expected, result);
             Assert.True(parms.Count == attrs.Count()); // param for each attr, not just id
@@ -117,7 +117,7 @@ namespace IBFramework.Data.MySQL.Test
             var expectedParamString = attrs.Aggregate("", (x, y) => $"{x}`{y}` = @{y}, ");
             expectedParamString = expectedParamString.Substring(0, expectedParamString.Length - 2);
 
-            var expected = $"UPDATE ChildEntity SET {expectedParamString} WHERE `Id` = @entityId;";
+            var expected = $"UPDATE childentity SET {expectedParamString} WHERE `Id` = @entityId;";
 
             Assert.Equal(expected, result);
             Assert.True(parms.Count == allAttrs.Count()); // param for each attr, not just id

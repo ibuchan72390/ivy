@@ -4,7 +4,6 @@ using IBFramework.TestHelper;
 using IBFramework.TestHelper.TestEntities;
 using IBFramework.TestHelper.TestEntities.Flipped;
 using IBFramework.TestHelper.TestValues;
-using IBFramework.Utility.Extensions;
 using System;
 using System.Linq;
 using Xunit;
@@ -60,7 +59,7 @@ namespace IBFramework.Data.MySQL.IntegrationTest
 
             var item = items.First();
 
-            var coreId = item.SafeGetIntRef(x => x.CoreEntity);
+            var coreId = item.SafeGetIntRef<FlippedBlobEntity, CoreEntity>(x => x.CoreEntity);
 
             Assert.Equal(coreEntity.Id, coreId);
         }
@@ -80,7 +79,7 @@ namespace IBFramework.Data.MySQL.IntegrationTest
 
             var result = repo.GetById(childEntity.Id);
 
-            var referenceAsId = result.SafeGetIntRef(x => x.CoreEntity);
+            var referenceAsId = result.SafeGetIntRef<ChildEntity, CoreEntity>(x => x.CoreEntity);
 
             Assert.Equal(coreEntity.Id, referenceAsId);
         }
@@ -100,7 +99,7 @@ namespace IBFramework.Data.MySQL.IntegrationTest
 
             var result = repo.GetById(coreEntity.Id);
 
-            var referenceAsId = result.SafeGetStringRef(x => x.FlippedStringEntity);
+            var referenceAsId = result.SafeGetStringRef<CoreEntity, FlippedStringEntity>(x => x.FlippedStringEntity);
 
             Assert.Equal(fsEntity.Id, referenceAsId);
         }

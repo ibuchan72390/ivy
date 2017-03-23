@@ -53,7 +53,7 @@ namespace IBFramework.Data.Common.Test
         {
             var sut = ServiceLocator.Instance.Resolve<ISqlGenerator<CoreEntity>>();
 
-            var localExpected = baseExpectedAttrs.Concat(new List<string> { "ParentEntityId" });
+            var localExpected = baseExpectedAttrs.Concat(new List<string> { "ParentEntityId", "FlippedStringEntityId" });
 
             var results = _sut.GetSqlPropertyNames<CoreEntity>();
 

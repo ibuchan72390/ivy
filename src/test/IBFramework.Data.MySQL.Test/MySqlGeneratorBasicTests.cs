@@ -44,7 +44,7 @@ namespace IBFramework.Data.MySQL.Test
                                         Select(x => $"`THIS`.{x}").
                                         Aggregate((x, y) => x + $", {y}");
 
-            string expected = $"SELECT {expectedAttrString} FROM ChildEntity `THIS`;";
+            string expected = $"SELECT {expectedAttrString} FROM childentity `THIS`;";
 
             Assert.Equal(expected, result);
         }
@@ -62,7 +62,7 @@ namespace IBFramework.Data.MySQL.Test
                                         Select(x => $"`THIS`.{x}").
                                         Aggregate((x, y) => x + $", {y}");
 
-            string expected = $"SELECT {expectedAttrString} FROM ChildEntity `THIS` WHERE Id = @id;";
+            string expected = $"SELECT {expectedAttrString} FROM childentity `THIS` WHERE Id = @id;";
 
             Assert.Equal(expected, result);
         }
@@ -82,7 +82,7 @@ namespace IBFramework.Data.MySQL.Test
                                         Select(x => $"`THIS`.{x}").
                                         Aggregate((x, y) => x + $", {y}");
 
-            string expected = $"SELECT {expectedAttrString} FROM ChildEntity `THIS` LIMIT {limit};";
+            string expected = $"SELECT {expectedAttrString} FROM childentity `THIS` LIMIT {limit};";
 
             Assert.Equal(expected, result);
         }
@@ -104,7 +104,7 @@ namespace IBFramework.Data.MySQL.Test
                                         Select(x => $"`THIS`.{x}").
                                         Aggregate((x, y) => x + $", {y}");
 
-            string expected = $"SELECT {expectedAttrString} FROM ChildEntity `THIS` LIMIT {limit} OFFSET {offset};";
+            string expected = $"SELECT {expectedAttrString} FROM childentity `THIS` LIMIT {limit} OFFSET {offset};";
 
             Assert.Equal(expected, result);
         }
@@ -136,7 +136,7 @@ namespace IBFramework.Data.MySQL.Test
                             Select(x => $"`THIS`.{x}").
                             Aggregate((x, y) => x + $", {y}");
 
-            string expected = $"SELECT {expectedAttrString} FROM ChildEntity `THIS` {joinClause};";
+            string expected = $"SELECT {expectedAttrString} FROM childentity `THIS` {joinClause};";
 
             Assert.Equal(expected, result);
         }
@@ -145,7 +145,7 @@ namespace IBFramework.Data.MySQL.Test
         public void GenerateGetQuery_Works_As_Expected_With_All_Params()
         {
             const string whereClause = "WHERE Id = @Id";
-            const string joinClause = "JOIN CoreEntity ON CoreEntity.Id = ChildEntity.CoreEntityId";
+            const string joinClause = "JOIN coreentity ON CoreEntity.Id = childentity.CoreEntityId";
             const int limit = 5;
             const int offset = 10;
 
@@ -159,7 +159,7 @@ namespace IBFramework.Data.MySQL.Test
                 Select(x => $"`THIS`.{x}").
                 Aggregate((x, y) => x + $", {y}");
 
-            string expected = $"SELECT {expectedAttrString} FROM ChildEntity `THIS` {joinClause} {whereClause} LIMIT {limit} OFFSET {offset};";
+            string expected = $"SELECT {expectedAttrString} FROM childentity `THIS` {joinClause} {whereClause} LIMIT {limit} OFFSET {offset};";
 
             Assert.Equal(expected, result);
         }
@@ -175,7 +175,7 @@ namespace IBFramework.Data.MySQL.Test
 
             var result = _sut.GenerateDeleteQuery();
 
-            string expected = $"DELETE FROM ChildEntity;";
+            string expected = $"DELETE FROM childentity;";
 
             Assert.Equal(expected, result);
         }
@@ -187,7 +187,7 @@ namespace IBFramework.Data.MySQL.Test
 
             var result = _sut.GenerateDeleteQuery("WHERE `Id` = @id");
 
-            string expected = $"DELETE FROM ChildEntity WHERE `Id` = @id;";
+            string expected = $"DELETE FROM childentity WHERE `Id` = @id;";
 
             Assert.Equal(expected, result);
         }
@@ -203,7 +203,7 @@ namespace IBFramework.Data.MySQL.Test
 
             var result = _sut.GenerateInsertQuery("(`Name`)", "('test')");
 
-            string expected = $"INSERT INTO ChildEntity (`Name`) VALUES ('test');";
+            string expected = $"INSERT INTO childentity (`Name`) VALUES ('test');";
 
             Assert.Equal(expected, result);
         }
@@ -215,7 +215,7 @@ namespace IBFramework.Data.MySQL.Test
 
             var result = _sut.GenerateInsertQuery("`Name`)", "('test')");
 
-            string expected = $"INSERT INTO ChildEntity (`Name`) VALUES ('test');";
+            string expected = $"INSERT INTO childentity (`Name`) VALUES ('test');";
 
             Assert.Equal(expected, result);
         }
@@ -227,7 +227,7 @@ namespace IBFramework.Data.MySQL.Test
 
             var result = _sut.GenerateInsertQuery("(`Name`", "('test')");
 
-            string expected = $"INSERT INTO ChildEntity (`Name`) VALUES ('test');";
+            string expected = $"INSERT INTO childentity (`Name`) VALUES ('test');";
 
             Assert.Equal(expected, result);
         }
@@ -239,7 +239,7 @@ namespace IBFramework.Data.MySQL.Test
 
             var result = _sut.GenerateInsertQuery("(`Name`)", "'test')");
 
-            string expected = $"INSERT INTO ChildEntity (`Name`) VALUES ('test');";
+            string expected = $"INSERT INTO childentity (`Name`) VALUES ('test');";
 
             Assert.Equal(expected, result);
         }
@@ -251,7 +251,7 @@ namespace IBFramework.Data.MySQL.Test
 
             var result = _sut.GenerateInsertQuery("(`Name`)", "('test'");
 
-            string expected = $"INSERT INTO ChildEntity (`Name`) VALUES ('test');";
+            string expected = $"INSERT INTO childentity (`Name`) VALUES ('test');";
 
             Assert.Equal(expected, result);
         }
@@ -271,7 +271,7 @@ namespace IBFramework.Data.MySQL.Test
 
             var result = _sut.GenerateInsertQuery(entity, ref parms);
 
-            string expected = $"INSERT INTO BlobEntity (`Name`, `Integer`, `Decimal`, `Double`) VALUES (@Name0, @Integer0, @Decimal0, @Double0);";
+            string expected = $"INSERT INTO blobentity (`Name`, `Integer`, `Decimal`, `Double`) VALUES (@Name0, @Integer0, @Decimal0, @Double0);";
 
             Assert.Equal(expected, result);
         }
@@ -287,7 +287,7 @@ namespace IBFramework.Data.MySQL.Test
 
             var result = _sut.GenerateInsertQuery(entity, ref parms);
 
-            var entityProps = entity.GetType().GetProperties();
+            var entityProps = entity.GetType().GetProperties().Where(x => x.Name != "References");
 
             foreach (var prop in entityProps)
             {
@@ -314,7 +314,7 @@ namespace IBFramework.Data.MySQL.Test
 
             var result = _sut.GenerateInsertQuery(entities, ref parms);
 
-            string expected = $"INSERT INTO BlobEntity (`Name`, `Integer`, `Decimal`, `Double`) VALUES (@Name0, @Integer0, @Decimal0, @Double0), (@Name1, @Integer1, @Decimal1, @Double1), (@Name2, @Integer2, @Decimal2, @Double2);";
+            string expected = $"INSERT INTO blobentity (`Name`, `Integer`, `Decimal`, `Double`) VALUES (@Name0, @Integer0, @Decimal0, @Double0), (@Name1, @Integer1, @Decimal1, @Double1), (@Name2, @Integer2, @Decimal2, @Double2);";
 
             Assert.Equal(expected, result);
         }
@@ -332,7 +332,7 @@ namespace IBFramework.Data.MySQL.Test
 
             var result = _sut.GenerateInsertQuery(entities, ref parms);
 
-            var entityProps = entities[0].GetType().GetProperties();
+            var entityProps = entities[0].GetType().GetProperties().Where(x => x.Name != "References");
 
             for (var x = 0; x < entities.Count; x++)
             {
@@ -357,7 +357,7 @@ namespace IBFramework.Data.MySQL.Test
 
             var result = _sut.GenerateUpdateQuery("`Name` = 'test'");
 
-            const string expected = "UPDATE ChildEntity SET `Name` = 'test';";
+            const string expected = "UPDATE childentity SET `Name` = 'test';";
 
             Assert.Equal(expected, result);
         }
@@ -369,7 +369,7 @@ namespace IBFramework.Data.MySQL.Test
 
             var result = _sut.GenerateUpdateQuery("`Name` = 'test'", "WHERE `Id` = @id");
 
-            const string expected = "UPDATE ChildEntity SET `Name` = 'test' WHERE `Id` = @id;";
+            const string expected = "UPDATE childentity SET `Name` = 'test' WHERE `Id` = @id;";
 
             Assert.Equal(expected, result);
         }

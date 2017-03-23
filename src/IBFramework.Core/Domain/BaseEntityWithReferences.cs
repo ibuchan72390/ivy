@@ -16,65 +16,53 @@ namespace IBFramework.Core.Domain
 
         #endregion
 
-        #region Public Methods
+        #region Extension Methods
 
-        //public int SafeGetIntReference<TSource, TProperty>(
-        //    Expression<Func<TSource, TProperty>> propertyLambda)
-        //    where TProperty : IEntityWithTypedId<int>
-        //{
-        //    var propertyName = GetPropertyInfo(propertyLambda);
+        public int SafeGetIntRef<TSource, TProperty>(Expression<Func<TSource, TProperty>> processFn)
+            where TSource : IEntityWithReferences
+            where TProperty : IEntityWithTypedId<int>
+        {
+            var propertyName = GetPropertyInfo(processFn);
 
-        //    var key = $"{propertyName}{ReferenceTail}";
+            var refName = propertyName + "Id";
 
-        //    if (References.ContainsKey(key))
-        //    {
-        //        // Cast with failure
-        //        return (int)References[key];
-        //    }
-        //    else
-        //    {
-        //        return -1;
-        //    }
-        //}
+            return (int)References[refName];
+        }
 
-        //public string SafeGetStringReference<TSource, TProperty>(
-        //    Expression<Func<TSource, TProperty>> propertyLambda)
-        //    where TProperty : IEntityWithTypedId<string>
-        //{
-        //    var propertyName = GetPropertyInfo(propertyLambda);
+        public string SafeGetStringRef<TSource, TProperty>(Expression<Func<TSource, TProperty>> processFn)
+            where TSource : IEntityWithReferences
+            where TProperty : IEntityWithTypedId<string>
+        {
+            var propertyName = GetPropertyInfo(processFn);
 
-        //    var key = $"{propertyName}{ReferenceTail}";
+            var refName = propertyName + "Id";
 
-        //    if (References.ContainsKey(key))
-        //    {
-        //        // Cast with failure
-        //        return (string)References[key];
-        //    }
-        //    else
-        //    {
-        //        return null;
-        //    }
-        //}
+            return (string)References[refName];
+        }
 
         #endregion
 
         #region Helper Methods
 
-        //private T SafeGetReference<T>(string propertyName)
-        //{
-        //    var key = $"{propertyName}{ReferenceTail}";
+        private static string GetPropertyInfo<TSource, TProperty>(
+            Expression<Func<TSource, TProperty>> propertyLambda)
+        {
+            Type type = typeof(TSource);
 
-        //    if (References.ContainsKey(key))
-        //    {
-        //        return (T)References[key];
-        //    }
-        //    else
-        //    {
-        //        return default(T);
-        //    }
-        //}
+            MemberExpression member = propertyLambda.Body as MemberExpression;
+            if (member == null)
+                throw new ArgumentException(string.Format(
+                    "Expression '{0}' refers to a method, not a property.",
+                    propertyLambda.ToString()));
 
+            PropertyInfo propInfo = member.Member as PropertyInfo;
+            if (propInfo == null)
+                throw new ArgumentException(string.Format(
+                    "Expression '{0}' refers to a field, not a property.",
+                    propertyLambda.ToString()));
 
+            return propInfo.Name;
+        }
 
         #endregion
     }

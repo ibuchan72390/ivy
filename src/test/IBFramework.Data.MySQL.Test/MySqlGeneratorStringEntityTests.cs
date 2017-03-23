@@ -47,7 +47,7 @@ namespace IBFramework.Data.MySQL.Test
 
             var expectedAttrString = attrs.Aggregate((x, y) => x + $", {y}");
 
-            string expected = $"DELETE FROM StringIdEntity WHERE `Id` = @entityId;";
+            string expected = $"DELETE FROM stringentity WHERE `Id` = @entityId;";
 
             Assert.Equal(expected, result);
             Assert.True(parms.Count == 1);
@@ -73,7 +73,7 @@ namespace IBFramework.Data.MySQL.Test
                                         Select(x => $"`THIS`.{x}").
                                         Aggregate((x, y) => x + $", {y}");
 
-            string expected = $"SELECT {expectedAttrString} FROM StringIdEntity `THIS` WHERE `Id` = @entityId;";
+            string expected = $"SELECT {expectedAttrString} FROM stringentity `THIS` WHERE `Id` = @entityId;";
 
             Assert.Equal(expected, result);
             Assert.True(parms.Count == 1);
@@ -100,7 +100,7 @@ namespace IBFramework.Data.MySQL.Test
             var expectedParamString = attrs.Aggregate("", (x, y) => $"{x}@{y}0, ");
             expectedParamString = expectedParamString.Substring(0, expectedParamString.Length - 2);
 
-            var expected = $"REPLACE INTO StringIdEntity ({expectedAttrString}) VALUES ({expectedParamString});";
+            var expected = $"REPLACE INTO stringentity ({expectedAttrString}) VALUES ({expectedParamString});";
 
             Assert.Equal(expected, result);
             Assert.True(parms.Count == attrs.Count()); // param for each attr, not just id

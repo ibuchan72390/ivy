@@ -11,6 +11,12 @@ namespace IBFramework.Data.MySQL
 {
     public class MySqlGenerator<TEntity> : BaseSqlGenerator<TEntity>, ISqlGenerator<TEntity>
     {
+        #region Variables & Constants
+
+        private string _tableName = null;
+
+        #endregion
+
         #region Constructor
 
         public MySqlGenerator(ISqlPropertyGenerator propertyGenerator)
@@ -25,7 +31,7 @@ namespace IBFramework.Data.MySQL
 
         public string GenerateDeleteQuery(string sqlWhere = null)
         {
-            var sql = AppendIfDefined($"DELETE FROM {_entityType.Name}", sqlWhere);
+            var sql = AppendIfDefined($"DELETE FROM {GetTableName()}", sqlWhere);
             return $"{sql};";
         }
 
@@ -38,7 +44,7 @@ namespace IBFramework.Data.MySQL
             var sql = "SELECT ";
 
             // We need to use the THIS as an alias in order to 
-            sql += $"{attributeNames} FROM {_entityType.Name} {SelectAlias}";
+            sql += $"{attributeNames} FROM {GetTableName()} {SelectAlias}";
 
             sql = AppendIfDefined(sql, sqlJoin);
 
@@ -62,12 +68,12 @@ namespace IBFramework.Data.MySQL
             sqlValue = WrapInParenthesesIfNotWrapped(sqlValue);
             insertClause = WrapInParenthesesIfNotWrapped(insertClause);
 
-            return $"INSERT INTO {_entityType.Name} {sqlValue} VALUES {insertClause};";
+            return $"INSERT INTO {GetTableName()} {sqlValue} VALUES {insertClause};";
         }
 
         public string GenerateUpdateQuery(string sqlSet, string sqlWhere = null)
         {
-            var sql = $"UPDATE {_entityType.Name} SET {sqlSet}";
+            var sql = $"UPDATE {GetTableName()} SET {sqlSet}";
 
             sql = AppendIfDefined(sql, sqlWhere);
 
@@ -112,47 +118,6 @@ namespace IBFramework.Data.MySQL
         public string GenerateInsertQuery(IEnumerable<TEntity> entities, ref Dictionary<string, object> parms)
         {
             return BaseGenerateInsertReplaceQuery(entities, ref parms, true, false);
-
-            //SetupAttrsIfNotDefined();
-
-            //var sb = new StringBuilder();
-
-            //var entityList = entities.ToList();
-
-            //for (var y = 0; y < entityList.Count; y++)
-            //{
-            //    for (var x = 0; x < _propertyNames.Count; x++)
-            //    {
-            //        var currentPropName = _propertyNames[x];
-            //        var currentParamKey = $"{currentPropName}{y}";
-
-            //        // Don't want to try to update the Id values, leads to failure
-            //        // Eventually, we should use these values to update FK references
-            //        if (currentPropName == "Id") continue;
-
-            //        // Setup the SQL Insert
-            //        if (x == 0)
-            //            sb.Append("(");
-
-            //        sb.Append($"@{currentParamKey}");
-
-            //        if (x < _propertyNames.Count - 1)
-            //            sb.Append(", ");
-            //        else
-            //            sb.Append(")");
-
-            //        GenerateEntityAttributeParams(entities.ElementAt(y), currentPropName, currentParamKey, ref parms);
-            //    }
-
-            //    if (y < entityList.Count - 1)
-            //    {
-            //        sb.Append(", ");
-            //    }
-            //}
-
-            //var sqlValueString = $"({GeneratePropertyNameString(false)})";
-
-            //return GenerateInsertQuery(sqlValueString, sb.ToString());
         }
         
         #endregion
@@ -288,6 +253,25 @@ namespace IBFramework.Data.MySQL
                 return query;
             else
                 return query.Replace("INSERT", "REPLACE");
+        }
+
+        protected string GetTableName()
+        {
+            /*
+             * MySQL defaults to use lower case table names because of the case sensitivity of different file systems
+             * - Microsoft Windows doesn't care about file case
+             * - Unix systems (Lambda & RDS) do care about file case
+             * - We're going to treat everything lower case on the generator, that way Entity names are nice and readable
+             * 
+             * http://stackoverflow.com/questions/28540573/lower-case-table-names-set-to-2-workbench-still-does-not-allow-lowercase-databa
+             */
+
+            if (_tableName == null)
+            {
+                _tableName = _entityType.Name.ToLower();
+            }
+
+            return _tableName;
         }
 
         #endregion

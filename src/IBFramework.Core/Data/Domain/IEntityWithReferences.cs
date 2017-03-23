@@ -8,18 +8,12 @@ namespace IBFramework.Core.Data.Domain
     {
         Dictionary<string, object> References { get; set; }
 
+        int SafeGetIntRef<TSource, TProperty>(Expression<Func<TSource, TProperty>> processFn)
+            where TSource : IEntityWithReferences
+            where TProperty : IEntityWithTypedId<int>;
 
-        /*
-         * There has GOT to be a better way to do this piece...
-         * 
-         * I'm not sure how to automatically type TSource to the current type of this
-         */
-        //int SafeGetIntReference<TSource, TProperty>(
-        //    Expression<Func<TSource, TProperty>> propertyLambda)
-        //    where TProperty : IEntityWithTypedId<int>;
-
-        //string SafeGetStringReference<TSource, TProperty>(
-        //    Expression<Func<TSource, TProperty>> propertyLambda)
-        //    where TProperty : IEntityWithTypedId<string>;
+        string SafeGetStringRef<TSource, TProperty>(Expression<Func<TSource, TProperty>> processFn)
+            where TSource : IEntityWithReferences
+            where TProperty : IEntityWithTypedId<string>;
     }
 }
