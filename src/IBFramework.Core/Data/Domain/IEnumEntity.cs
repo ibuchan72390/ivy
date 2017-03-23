@@ -1,6 +1,6 @@
 ﻿namespace IBFramework.Core.Data.Domain
 {
-    public interface IEnumEntity<TKey> : IEntityWithTypedId<TKey>
+    public interface IEnumEntityWithTypedId<TKey> : IEntityWithTypedId<TKey>
     {
         string Name { get; set; }
 
@@ -10,12 +10,7 @@
     }
 
     // Is this even necessary or is it inferred from usage????
-    //public interface IEnumEntity : IEntity
-    //{
-    //    string Name { get; set; }
-
-    //    string FriendlyName { get; set; }
-
-    //    int SortOrder { get; set; }
-    //}
+    public interface IEnumEntity : IEnumEntityWithTypedId<int>, IEntity
+    {
+    }
 }
