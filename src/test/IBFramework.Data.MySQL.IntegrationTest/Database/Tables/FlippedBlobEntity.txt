@@ -1,0 +1,9 @@
+CREATE TABLE `flippedblobentity` (
+  `CoreEntityId` int(11) DEFAULT NULL,
+  `Name` varchar(200) DEFAULT NULL,
+  `Integer` int(11) DEFAULT NULL,
+  `Decimal` decimal(10,2) DEFAULT NULL,
+  `Double` double DEFAULT NULL,
+  KEY `FK_flippedblobentity_coreentity_idx` (`CoreEntityId`),
+  CONSTRAINT `FK_flippedblobentity_coreentity` FOREIGN KEY (`CoreEntityId`) REFERENCES `coreentity` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -1,0 +1,8 @@
+CREATE TABLE `flippedstringentity` (
+  `Id` varchar(200) NOT NULL,
+  `Name` varchar(200) DEFAULT NULL,
+  `Integer` int(11) DEFAULT NULL,
+  `Decimal` decimal(10,2) DEFAULT NULL,
+  `Double` double DEFAULT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

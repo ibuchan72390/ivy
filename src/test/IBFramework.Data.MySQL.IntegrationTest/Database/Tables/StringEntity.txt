@@ -1,0 +1,11 @@
+CREATE TABLE `stringentity` (
+  `Id` varchar(200) NOT NULL,
+  `Name` varchar(200) DEFAULT NULL,
+  `Integer` int(11) DEFAULT NULL,
+  `Decimal` decimal(10,2) DEFAULT NULL,
+  `Double` double DEFAULT NULL,
+  `CoreEntityId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `FK_StringIdEntity_CoreEntity_idx` (`CoreEntityId`),
+  CONSTRAINT `FK_StringIdEntity_CoreEntity` FOREIGN KEY (`CoreEntityId`) REFERENCES `coreentity` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

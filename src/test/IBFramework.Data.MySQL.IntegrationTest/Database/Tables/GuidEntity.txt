@@ -1,0 +1,11 @@
+CREATE TABLE `guidentity` (
+  `Id` varchar(40) NOT NULL,
+  `Name` varchar(200) DEFAULT NULL,
+  `Integer` int(11) DEFAULT NULL,
+  `Decimal` decimal(10,2) DEFAULT NULL,
+  `Double` double DEFAULT NULL,
+  `CoreEntityId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `CoreEntityId_idx` (`CoreEntityId`),
+  CONSTRAINT `CoreEntityId` FOREIGN KEY (`CoreEntityId`) REFERENCES `coreentity` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

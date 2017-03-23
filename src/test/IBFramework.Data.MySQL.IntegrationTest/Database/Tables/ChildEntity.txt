@@ -1,0 +1,11 @@
+CREATE TABLE `childentity` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `CoreEntityId` int(11) DEFAULT NULL,
+  `Name` varchar(200) DEFAULT NULL,
+  `Integer` int(11) DEFAULT NULL,
+  `Decimal` decimal(10,0) DEFAULT NULL,
+  `Double` double DEFAULT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `CoreEntityId_idx` (`CoreEntityId`),
+  CONSTRAINT `FK_ChildEntity_CoreEntity` FOREIGN KEY (`CoreEntityId`) REFERENCES `coreentity` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

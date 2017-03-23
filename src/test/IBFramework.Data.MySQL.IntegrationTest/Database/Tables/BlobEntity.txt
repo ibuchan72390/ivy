@@ -1,0 +1,6 @@
+CREATE TABLE `blobentity` (
+  `Name` varchar(200) NOT NULL,
+  `Integer` int(11) DEFAULT NULL,
+  `Decimal` decimal(10,2) DEFAULT NULL,
+  `Double` double DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

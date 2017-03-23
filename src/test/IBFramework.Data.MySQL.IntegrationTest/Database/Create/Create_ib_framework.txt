@@ -1,0 +1,13 @@
+DROP DATABASE IF EXISTS framework_test;
+CREATE DATABASE framework_test;
+
+USE framework_test;
+
+SOURCE Tables/BlobEntity.txt
+SOURCE Tables/ParentEntity.txt
+SOURCE Tables/FlippedStringEntity.txt
+SOURCE Tables/CoreEntity.txt
+SOURCE Tables/FlippedBlobEntity.txt
+SOURCE Tables/GuidEntity.txt
+SOURCE Tables/StringEntity.txt
+SOURCE Tables/ChildEntity.txt
