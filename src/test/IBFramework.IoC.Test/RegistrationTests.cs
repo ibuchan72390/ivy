@@ -78,5 +78,20 @@ namespace IBFramework.IoC.Tests
 
             Assert.Same(myClass, result);
         }
+
+        [Fact]
+        public void Can_Register_To_Container_By_Instance_With_Interface_Type_Generate_Container_And_Resolve()
+        {
+            var testClassInstance = new TestClass { Integer = 100 };
+
+            _sut.RegisterInstance<ITestInterface, TestClass>(testClassInstance);
+
+            var container = _sut.GenerateContainer();
+
+            var result = container.Resolve<ITestInterface>();
+
+            Assert.IsType<TestClass>(result);
+            Assert.Equal(testClassInstance.Integer, result.Integer);
+        }
     }
 }

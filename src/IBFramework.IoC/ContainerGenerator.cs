@@ -49,6 +49,11 @@ namespace IBFramework.IoC
             _builder.Add(new ServiceDescriptor(typeof(T), instance));
         }
 
+        public void RegisterInstance<TInterface, T>(T instance) where T : class, TInterface, new()
+        {
+            _builder.Add(new ServiceDescriptor(typeof(TInterface), instance));
+        }
+
         public void RegisterSingleton(Type registrationType, Type implementationType)
         {
             _builder.Add(new ServiceDescriptor(registrationType, implementationType, ServiceLifetime.Singleton));

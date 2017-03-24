@@ -19,6 +19,7 @@ namespace IBFramework.Core.IoC
         void RegisterTransient(Type registrationType, Type implementationType);
         void RegisterTransient<TInterface, TImplementation>();
 
+        void RegisterInstance<TInterface, T>(T instance) where T : class, TInterface, new();
         void RegisterInstance<T>(T instance) where T : class, new();
 
 
