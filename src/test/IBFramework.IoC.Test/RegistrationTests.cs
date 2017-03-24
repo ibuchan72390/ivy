@@ -1,5 +1,6 @@
 ﻿using IBFramework.Core.IoC;
 using IBFramework.TestHelper;
+using Moq;
 using Xunit;
 
 namespace IBFramework.IoC.Tests
@@ -70,7 +71,7 @@ namespace IBFramework.IoC.Tests
         {
             var myClass = new TestClass();
 
-            _sut.RegisterInstance(myClass);
+            _sut.RegisterInstance<TestClass>(myClass);
 
             var container = _sut.GenerateContainer();
 
@@ -84,7 +85,7 @@ namespace IBFramework.IoC.Tests
         {
             var testClassInstance = new TestClass { Integer = 100 };
 
-            _sut.RegisterInstance<ITestInterface, TestClass>(testClassInstance);
+            _sut.RegisterInstance<ITestInterface>(testClassInstance);
 
             var container = _sut.GenerateContainer();
 
@@ -92,6 +93,25 @@ namespace IBFramework.IoC.Tests
 
             Assert.IsType<TestClass>(result);
             Assert.Equal(testClassInstance.Integer, result.Integer);
+        }
+
+        [Fact]
+        public void Can_Register_To_Container_By_Instance_With_Interface_Type_Generate_Container_And_Resolve_With_Moq()
+        {
+            const int intReturn = 100;
+
+            var interfaceMock = new Mock<ITestInterface>();
+            interfaceMock.Setup(x => x.Integer).Returns(intReturn);
+
+            _sut.RegisterInstance<ITestInterface>(interfaceMock.Object);
+
+            var container = _sut.GenerateContainer();
+
+            var result = container.Resolve<ITestInterface>();
+
+            Assert.Equal(intReturn, result.Integer);
+
+            interfaceMock.Verify(x => x.Integer, Times.Once);
         }
     }
 }

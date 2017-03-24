@@ -44,12 +44,13 @@ namespace IBFramework.IoC
 
         #region Registration
 
-        public void RegisterInstance<T>(T instance) where T : class, new()
-        {
-            _builder.Add(new ServiceDescriptor(typeof(T), instance));
-        }
+        // Previous attempt - should NOT be generic, the generic types don't work well with the Moq library
+        //public void RegisterInstance<T>(T instance) where T : class, new()
+        //{
+        //    _builder.Add(new ServiceDescriptor(typeof(T), instance));
+        //}
 
-        public void RegisterInstance<TInterface, T>(T instance) where T : class, TInterface, new()
+        public void RegisterInstance<TInterface>(object instance)
         {
             _builder.Add(new ServiceDescriptor(typeof(TInterface), instance));
         }
