@@ -2,6 +2,8 @@ CREATE TABLE `coreentity` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `ParentEntityId` int(11) DEFAULT NULL,
   `FlippedStringEntityId` varchar(200) DEFAULT NULL,
+  `WeirdAlternateIntegerId` int(11) DEFAULT NULL,
+  `WeirdAlternateStringId` varchar(200) DEFAULT NULL,
   `Name` varchar(200) DEFAULT NULL,
   `Integer` int(11) DEFAULT NULL,
   `Decimal` decimal(10,2) DEFAULT NULL,
@@ -11,4 +13,4 @@ CREATE TABLE `coreentity` (
   KEY `FK_CoreEntity_FlippedStringEntity_idx` (`FlippedStringEntityId`),
   CONSTRAINT `FK_CoreEntity_FlippedStringEntity` FOREIGN KEY (`FlippedStringEntityId`) REFERENCES `flippedstringentity` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_CoreEntity_ParentEntity` FOREIGN KEY (`ParentEntityId`) REFERENCES `parententity` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;

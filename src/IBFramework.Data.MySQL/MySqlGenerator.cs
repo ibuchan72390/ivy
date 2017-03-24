@@ -134,7 +134,26 @@ namespace IBFramework.Data.MySQL
             // Setup the parameters
             object targetPropValue;
 
-            if (currentPropName.Substring(currentPropName.Length - 2) == "Id" && currentPropName != "Id")
+            var currentProp = _entityType.GetProperties().FirstOrDefault(x => x.Name == currentPropName);
+
+            bool isEntityAttr = false;
+
+            if (currentProp == null &&
+                currentPropName.Substring(currentPropName.Length - 2) == "Id" &&
+                currentPropName != "Id")
+            {
+                var propName = currentPropName.Substring(0, currentPropName.Length - 2);
+                currentProp = _entityType.GetProperties().FirstOrDefault(x => x.Name == propName);
+
+                var interfaces = currentProp.PropertyType.GetInterfaces();
+
+                var genericInterfaces = interfaces.Where(x => x.IsConstructedGenericType).Select(x => x.GetGenericTypeDefinition());
+
+                isEntityAttr = genericInterfaces.Contains(typeof(IEntityWithTypedId<>));
+            }
+
+
+            if (isEntityAttr)
             {
                 var targetPropertyName = currentPropName.Substring(0, currentPropName.Length - 2);
                 var targetProp = _entityType.GetProperty(targetPropertyName);

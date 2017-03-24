@@ -9,12 +9,9 @@ namespace IBFramework.TestHelper.TestEntities
     {
         public ParentEntity ParentEntity { get; set; }
 
+        public int WeirdAlternateIntegerId { get; set; }
 
-        //[Ignore]
-        //public GuidEntity GuidIdEntity { get; set; }
-
-        //public FlippedGuidEntity FlippedGuidEntity { get; set; }
-
+        public string WeirdAlternateStringId { get; set; }
 
         [Ignore]
         public StringEntity StringIdEntity { get; set; }

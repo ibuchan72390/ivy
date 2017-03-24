@@ -53,6 +53,9 @@ namespace IBFramework.TestHelper
             if (entity.ParentEntity == null)
                 entity.ParentEntity = new ParentEntity().GenerateForTest();
 
+            if (entity.WeirdAlternateIntegerId == 0) entity.WeirdAlternateIntegerId = 1;
+            if (entity.WeirdAlternateStringId == null) entity.WeirdAlternateStringId = "TEST";
+
             return entity;
         }
 
