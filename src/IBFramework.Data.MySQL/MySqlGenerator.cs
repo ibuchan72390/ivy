@@ -87,15 +87,15 @@ namespace IBFramework.Data.MySQL
 
         public string GenerateUpdateQuery(TEntity entity, ref Dictionary<string, object> parms, string sqlWhere = null)
         {
-            SetupAttrsIfNotDefined();
-
             var sb = new StringBuilder();
 
             sb.Append($"SET ");
 
-            for (var x = 0; x < _propertyNames.Count; x++)
+            IList<string> propertyIterationList = GetPropertyNames(false).ToList();
+
+            for (var x = 0; x < propertyIterationList.Count; x++)
             {
-                var currentPropName = _propertyNames[x];
+                var currentPropName = propertyIterationList[x];
                 var currentParamKey = $"@{currentPropName}";
 
                 // Don't want to try to update the Id values, leads to failure
@@ -104,7 +104,7 @@ namespace IBFramework.Data.MySQL
 
                 sb.Append($"`{currentPropName}` = {currentParamKey}");
 
-                if (x != _propertyNames.Count - 1)
+                if (x != propertyIterationList.Count - 1)
                 {
                     sb.Append(", ");
                 }
@@ -221,15 +221,16 @@ namespace IBFramework.Data.MySQL
 
         protected string BaseGenerateInsertReplaceQuery(IEnumerable<TEntity> entities, ref Dictionary<string, object> parms, bool isInsert, bool includeSelectAlias)
         {
-            SetupAttrsIfNotDefined();
-
             var sb = new StringBuilder();
 
             //int commaLimit = isInsert ? 2 : 1;
 
-            IList<string> propertyIterationList = isInsert ?
-                _propertyNames.Where(x => x != "Id").ToList() :
-                _propertyNames;
+            //IList<string> propertyIterationList = isInsert ?
+            //    _propertyNames.Where(x => x != "Id").ToList() :
+            //    _propertyNames;
+
+            IList<string> propertyIterationList = GetPropertyNames(includeId: !isInsert).ToList();
+
 
             var entityList = entities.ToList();
 

@@ -13,7 +13,9 @@ namespace IBFramework.Data.Common.Sql
         protected readonly Type _entityType;
         protected readonly ISqlPropertyGenerator _propertyGenerator;
 
-        protected IList<string> _propertyNames = null;
+        // Cache values
+        private IList<string> _propertyNames = null;
+        private IList<string> _propertyNamesSansId = null;
 
         protected const string SelectAlias = "`THIS`";
 
@@ -33,11 +35,9 @@ namespace IBFramework.Data.Common.Sql
 
         protected string GeneratePropertyNameString(bool includeId, bool includeSelectAlias)
         {
-            SetupAttrsIfNotDefined();
-
             if (!includeId)
             {
-                var filteredPropNames = _propertyNames.Where(x => x != "Id");
+                var filteredPropNames = GetPropertyNames(false);
 
                 filteredPropNames = filteredPropNames.Select(FormatPropertyName);
 
@@ -50,7 +50,7 @@ namespace IBFramework.Data.Common.Sql
                 // use this as your property string to prevent the table scan
                 // Is this faster than using a stringbuilder?
 
-                var adjustedPropNames = _propertyNames.Select(FormatPropertyName);
+                var adjustedPropNames = GetPropertyNames(true);
 
                 adjustedPropNames = PrependSelectAliasIfNecessary(adjustedPropNames, includeSelectAlias);
 
@@ -70,15 +70,15 @@ namespace IBFramework.Data.Common.Sql
                 propNames;
         }
 
-        protected void SetupAttrsIfNotDefined()
-        {
-            if (_propertyNames == null)
-            {
-                _propertyNames = _propertyGenerator.
-                    GetSqlPropertyNames<TEntity>().
-                    ToList();
-            }
-        }
+        //protected void SetupAttrsIfNotDefined()
+        //{
+        //    if (_propertyNames == null)
+        //    {
+        //        _propertyNames = _propertyGenerator.
+        //            GetSqlPropertyNames<TEntity>().
+        //            ToList();
+        //    }
+        //}
 
         //protected string AppendWhereIfDefined(string currentSql, string sqlWhere)
         //{
@@ -135,6 +135,32 @@ namespace IBFramework.Data.Common.Sql
         {
             return parms.GetType().GetProperties()
                 .ToDictionary(x => x.Name, x => x.GetValue(parms));
+        }
+
+        protected IEnumerable<string> GetPropertyNames(bool includeId)
+        {
+            if (_propertyNames == null)
+            {
+                _propertyNames = _propertyGenerator.
+                    GetSqlPropertyNames<TEntity>().
+                    ToList();
+            }
+
+            if (includeId)
+            {
+                return _propertyNames;
+            }
+            else
+            {
+                if (_propertyNamesSansId == null)
+                {
+                    _propertyNamesSansId = _propertyNames
+                        .Where(x => x != "Id")
+                        .ToList();
+                }
+
+                return _propertyNamesSansId;
+            }
         }
 
         #endregion

@@ -86,11 +86,11 @@ namespace IBFramework.Data.MSSQL
 
         public string GenerateInsertQuery(IEnumerable<TEntity> entities, ref Dictionary<string, object> parms)
         {
-            SetupAttrsIfNotDefined();
-
             var sb = new StringBuilder();
 
             var entityList = entities.ToList();
+
+            var _propertyNames = GetPropertyNames(true).ToList();
 
             for (var y = 0; y < entityList.Count; y++)
             {
