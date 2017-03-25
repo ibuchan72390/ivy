@@ -4,7 +4,7 @@ using System;
 
 namespace IBFramework.TestHelper.TestEntities.Base
 {
-    public class BaseTestEntity : BaseEntityWithReferences, IEquatable<BaseTestEntity>
+    public class BaseTestEntity : BaseEntityWithReferences, IBaseTestEntity
     {
         #region Variables & Constants
 
@@ -22,7 +22,7 @@ namespace IBFramework.TestHelper.TestEntities.Base
 
         public double Double { get; set; }
 
-        public bool Equals(BaseTestEntity other)
+        public bool Equals(IBaseTestEntity other)
         {
             return (
                     Name.Equals(other.Name) &&
@@ -35,7 +35,7 @@ namespace IBFramework.TestHelper.TestEntities.Base
         #endregion
     }
 
-    public class BaseTestEntity<TKey> : BaseTestEntity, IEntityWithTypedId<TKey>, IEquatable<BaseTestEntity<TKey>>
+    public class BaseTestEntity<TKey> : BaseTestEntity, IBaseTestEntity<TKey>
     {
         #region Variables & Constants
 
@@ -45,7 +45,7 @@ namespace IBFramework.TestHelper.TestEntities.Base
 
         #region Public Methods
 
-        public bool Equals(BaseTestEntity<TKey> other)
+        public bool Equals(IBaseTestEntity<TKey> other)
         {
             return base.Equals(other) && Id.Equals(other.Id);
         }
