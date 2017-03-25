@@ -18,7 +18,10 @@ namespace IBFramework.Data.Common
     {
         #region Variables & Constants
 
-        protected readonly IDatabaseKeyManager _databaseKeyManager;
+        // Never accessed directly
+        private readonly IDatabaseKeyManager _databaseKeyManager;
+
+        // Currently accessed directly, but we should be using the internal protected methods
         protected readonly ITransactionHelper _tranHelper;
         protected readonly ISqlGenerator<T> _sqlGenerator;
 
@@ -75,6 +78,47 @@ namespace IBFramework.Data.Common
         #endregion
 
         #region Helper Methods
+
+
+        protected IEnumerable<T> InternalSelect(string joinClause = null, string whereClause = null, int? limit = null,
+            int? offset = null, Dictionary<string, object> parms = null, ITranConn tc = null)
+        {
+            var query = _sqlGenerator.GenerateGetQuery(whereClause, joinClause, limit, offset);
+
+            return InternalExecuteQuery(query, tc, parms);
+        }
+
+        protected void InternalUpdate(string setClause, string whereClause = null, Dictionary<string, object> parms = null, ITranConn tc = null)
+        {
+            var sql = _sqlGenerator.GenerateUpdateQuery(setClause, whereClause);
+
+            InternalExecuteNonQuery(sql, tc, parms);
+        }
+
+        protected void InternalDelete(string whereClause = null, Dictionary<string, object> parms = null, ITranConn tc = null)
+        {
+            var sql = _sqlGenerator.GenerateDeleteQuery(whereClause);
+
+            InternalExecuteNonQuery(sql, tc, parms);
+        }
+
+        // Async functionality for future expansion
+        //protected Task<IEnumerable<TReturn>> InternalExecuteQueryAsync<TReturn>(string sql, ITranConn tc = null, object parms = null)
+        //{
+        //    return _tranHelper.WrapInTransaction(
+        //        async tran => await tran.Connection.QueryAsync<TReturn>(sql, parms, tran.Transaction), tc);
+        //}
+
+        //protected Task InternalExecuteNonQueryAsync(string sql, ITranConn tc = null, object parms = null)
+        //{
+        //    return _tranHelper.WrapInTransaction(
+        //        async tran => await tran.Connection.ExecuteAsync(sql, parms, tran.Transaction), tc);
+        //}
+
+        #endregion
+
+        #region Methods that should be private eventually....
+
 
         // There's got to be a way to extract all this transaction stuff into another method
         // I'd almost like to make it the tranConnGenerator piece
@@ -135,27 +179,6 @@ namespace IBFramework.Data.Common
             _tranHelper.WrapInTransaction(
                 tran => tran.Connection.Execute(sql, parms, tran.Transaction), tc);
         }
-
-        protected IEnumerable<T> FindBy(string joinClause = null, string whereClause = null, int? limit = null,
-            int? offset = null, Dictionary<string, object> parms = null, ITranConn tc = null)
-        {
-            var query = _sqlGenerator.GenerateGetQuery(whereClause, joinClause, limit, offset);
-
-            return InternalExecuteQuery(query, tc, parms);
-        }
-
-        // Async functionality for future expansion
-        //protected Task<IEnumerable<TReturn>> InternalExecuteQueryAsync<TReturn>(string sql, ITranConn tc = null, object parms = null)
-        //{
-        //    return _tranHelper.WrapInTransaction(
-        //        async tran => await tran.Connection.QueryAsync<TReturn>(sql, parms, tran.Transaction), tc);
-        //}
-
-        //protected Task InternalExecuteNonQueryAsync(string sql, ITranConn tc = null, object parms = null)
-        //{
-        //    return _tranHelper.WrapInTransaction(
-        //        async tran => await tran.Connection.ExecuteAsync(sql, parms, tran.Transaction), tc);
-        //}
 
         #endregion
     }

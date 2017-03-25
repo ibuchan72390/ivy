@@ -73,7 +73,7 @@ namespace IBFramework.Data.MySQL
 
         public string GenerateUpdateQuery(string sqlSet, string sqlWhere = null)
         {
-            var sql = $"UPDATE {GetTableName()} SET {sqlSet}";
+            var sql = $"UPDATE {GetTableName()} {sqlSet}";
 
             sql = AppendIfDefined(sql, sqlWhere);
 
@@ -91,7 +91,7 @@ namespace IBFramework.Data.MySQL
 
             var sb = new StringBuilder();
 
-            //sb.Append($"UPDATE {_entityType.Name} SET ");
+            sb.Append($"SET ");
 
             for (var x = 0; x < _propertyNames.Count; x++)
             {

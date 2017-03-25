@@ -355,7 +355,7 @@ namespace IBFramework.Data.MySQL.Test
         {
             ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
 
-            var result = _sut.GenerateUpdateQuery("`Name` = 'test'");
+            var result = _sut.GenerateUpdateQuery("SET `Name` = 'test'");
 
             const string expected = "UPDATE childentity SET `Name` = 'test';";
 
@@ -367,7 +367,7 @@ namespace IBFramework.Data.MySQL.Test
         {
             ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
 
-            var result = _sut.GenerateUpdateQuery("`Name` = 'test'", "WHERE `Id` = @id");
+            var result = _sut.GenerateUpdateQuery("SET `Name` = 'test'", "WHERE `Id` = @id");
 
             const string expected = "UPDATE childentity SET `Name` = 'test' WHERE `Id` = @id;";
 

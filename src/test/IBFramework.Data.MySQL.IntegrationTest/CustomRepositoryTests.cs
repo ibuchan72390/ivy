@@ -15,6 +15,7 @@ using IBFramework.TestHelper;
 using System.Linq;
 using IBFramework.TestHelper.TestValues;
 using System;
+using IBFramework.Utility.Extensions;
 
 namespace IBFramework.Data.MySQL.IntegrationTest
 {
@@ -26,11 +27,29 @@ namespace IBFramework.Data.MySQL.IntegrationTest
 
         private interface ICustomParentEntityRepository : IEntityRepository<ParentEntity>
         {
+            #region InternalSelect
+
             IEnumerable<ParentEntity> GetByCoreEntityId(int coreEntityId, ITranConn tc = null);
 
             IEnumerable<ParentEntity> GetByName(string name, ITranConn tc = null);
 
             IEnumerable<ParentEntity> GetTop5(ITranConn tc = null);
+
+            #endregion
+
+            #region InternalUpdate
+
+            void UpdateNameById(int id, string newName, ITranConn tc = null);
+
+            void UpdateAllNames(string newName, ITranConn tc = null);
+
+            #endregion
+
+            #region InternalDelete
+
+            void DeleteByName(string name, ITranConn tc = null);
+
+            #endregion
         }
 
         private class CustomParentEntityRepository : EntityRepository<ParentEntity>, ICustomParentEntityRepository
@@ -43,6 +62,8 @@ namespace IBFramework.Data.MySQL.IntegrationTest
             {
             }
 
+            #region InteralSelect
+
             public IEnumerable<ParentEntity> GetByCoreEntityId(int coreEntityId, ITranConn tc = null)
             {
                 const string sqlJoin = "JOIN CoreEntity CORE ON (THIS.Id = CORE.ParentEntityId)";
@@ -51,7 +72,7 @@ namespace IBFramework.Data.MySQL.IntegrationTest
                 var parms = new Dictionary<string, object>();
                 parms.Add("@coreEntityId", coreEntityId);
 
-                return FindBy(sqlJoin, sqlWhere, null, null, parms, tc);
+                return InternalSelect(sqlJoin, sqlWhere, null, null, parms, tc);
             }
 
             public IEnumerable<ParentEntity> GetByName(string name, ITranConn tc = null)
@@ -61,13 +82,54 @@ namespace IBFramework.Data.MySQL.IntegrationTest
                 var parms = new Dictionary<string, object>();
                 parms.Add("@entityName", name);
 
-                return FindBy(null, sqlWhere, null, null, parms, tc);
+                return InternalSelect(null, sqlWhere, null, null, parms, tc);
             }
 
             public IEnumerable<ParentEntity> GetTop5(ITranConn tc = null)
             {
-                return FindBy(limit: 5);
+                return InternalSelect(limit: 5);
             }
+
+            #endregion
+
+            #region InternalUpdate
+
+            public void UpdateAllNames(string newName, ITranConn tc = null)
+            {
+                const string setClause = "SET `Name` = @newName";
+
+                var parms = new Dictionary<string, object> { {"@newName", newName } };
+
+                InternalUpdate(setClause, null, parms, tc);
+            }
+
+            public void UpdateNameById(int id, string newName, ITranConn tc = null)
+            {
+                const string setClause = "SET `Name` = @newName";
+                const string sqlWhere = "WHERE `Id` = @id";
+
+                var parms = new Dictionary<string, object> { { "@newName", newName }, { "@id", id } };
+
+                InternalUpdate(setClause, sqlWhere, parms, tc);
+            }
+
+            #endregion
+
+            #region InternalDelete
+
+            public void DeleteByName(string name, ITranConn tc = null)
+            {
+                const string sqlWhere = "WHERE `Name` = @name";
+
+                var parms = new Dictionary<string, object>
+                {
+                    { "@name", name }
+                };
+
+                InternalDelete(sqlWhere, parms, tc);
+            }
+
+            #endregion
         }
 
         #endregion
@@ -102,6 +164,8 @@ namespace IBFramework.Data.MySQL.IntegrationTest
         #endregion
 
         #region Tests
+
+        #region InternalSelect
 
         [Fact]
         public void CustomWhereClause_Query_Works_As_Expected()
@@ -146,6 +210,68 @@ namespace IBFramework.Data.MySQL.IntegrationTest
 
             Assert.Equal(entity.Id, result.Id);
         }
+
+        #endregion
+
+        #region InternalUpdate
+
+        [Fact]
+        public void Custom_Update_Works_As_Expected()
+        {
+            const string newName = "My Sample Name";
+
+            var entities = Enumerable.Range(0, 3).Select(x => new ParentEntity().SaveForTest()).ToList();
+
+            _sut.UpdateAllNames(newName);
+
+            var results = _sut.GetAll();
+
+            results.Each(x => Assert.Equal(newName, x.Name));
+        }
+
+        [Fact]
+        public void Custom_Update_With_Where_Clause_Works_As_Expected()
+        {
+            const string newName = "My Sample Name";
+
+            var entities = Enumerable.Range(0, 3).Select(x => new ParentEntity().SaveForTest()).ToList();
+
+            var updateEntity = entities.First();
+
+            _sut.UpdateNameById(updateEntity.Id, newName);
+
+            var results = _sut.GetAll();
+
+            foreach (var result in results)
+            {
+                if (result.Id == updateEntity.Id)
+                {
+                    Assert.Equal(newName, result.Name);
+                }
+                else
+                {
+                    Assert.NotEqual(newName, result.Name);
+                }
+            }
+        }
+
+        #endregion
+
+        #region InternalDelete
+
+        [Fact]
+        public void Delete_With_Custom_Where_Works_As_Expected()
+        {
+            var entity = new ParentEntity().SaveForTest();
+
+            Assert.NotNull(_sut.GetById(entity.Id));
+
+            _sut.DeleteByName(entity.Name);
+
+            Assert.Null(_sut.GetById(entity.Id));
+        }
+
+        #endregion
 
         #endregion
 
