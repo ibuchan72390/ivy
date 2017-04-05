@@ -6,7 +6,15 @@ namespace IBFramework.Data.Common
 {
     public class DatabaseKeyManager : IDatabaseKeyManager
     {
-        private Dictionary<string, string> _databaseKeyDict;
+        #region Variables & Constants
+
+        private Dictionary<string, string> _databaseKeyDict = null;
+
+        public bool IsInitialized => _databaseKeyDict == null;
+
+        #endregion
+
+        #region Public Methods
 
         public string GetConnectionString(string databaseKey)
         {
@@ -32,5 +40,7 @@ namespace IBFramework.Data.Common
 
             _databaseKeyDict = databaseKeyDict;
         }
+
+        #endregion
     }
 }

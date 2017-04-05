@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using IBFramework.Core.Data.Init;
+using System.Collections.Generic;
 
 namespace IBFramework.Core.Data
 {
-    public interface IDatabaseKeyManager
+    public interface IDatabaseKeyManager : IIsInitialized
     {
         string GetConnectionString(string databaseKey);
 
