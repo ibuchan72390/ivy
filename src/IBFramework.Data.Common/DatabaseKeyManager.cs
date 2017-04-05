@@ -10,7 +10,7 @@ namespace IBFramework.Data.Common
 
         private Dictionary<string, string> _databaseKeyDict = null;
 
-        public bool IsInitialized => _databaseKeyDict == null;
+        public bool IsInitialized => _databaseKeyDict != null;
 
         #endregion
 
