@@ -3,7 +3,7 @@
 
   "dependencies": {
     "IBFramework.Core": "1.0.0-*",
-    "NETStandard.Library": "1.6.1",
+    "NETStandard.Library": "1.6.0",
     "IBFramework.Data.Common": "1.0.0-*",
     "Microsoft.Extensions.DependencyInjection": "1.0.0"
   },

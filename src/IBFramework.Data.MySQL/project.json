@@ -5,7 +5,7 @@
     "IBFramework.Core": "1.0.0-*",
     "IBFramework.Data.Common": "1.0.0-*",
     "MySql.Data": "7.0.7-m61",
-    "NETStandard.Library": "1.6.1"
+    "NETStandard.Library": "1.6.0"
   },
 
   "frameworks": {
