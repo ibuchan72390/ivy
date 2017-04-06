@@ -1,6 +1,6 @@
 :: This batch file assumes that you have NuGet.exe in your path variables
 
-ECHO OFF
+::ECHO OFF
 
 :: Setup Package Directory
 RD /s /q Packages
@@ -33,13 +33,24 @@ EXIT
 
 	:: Copy out the param
 	SET ProjectName=%1
+	SET Config=%ProjectName%.nuspec
 	
 	:: Pack and relocate the nupkg file
 	CD %ProjectName%
-	dotnet pack
-	CD Bin\Debug
-	MOVE /y *.nupkg %PackageDir%
 	
+	IF EXIST %Config% (
+		dotnet pack -c %Config%
+		
+		CD Bin\%Config%
+		
+	) ELSE (
+		dotnet pack
+			
+		CD Bin\Debug
+	)
+	
+	MOVE /y *.nupkg %PackageDir%
+
 	:: Return to the original directory
 	CD ../../../
 

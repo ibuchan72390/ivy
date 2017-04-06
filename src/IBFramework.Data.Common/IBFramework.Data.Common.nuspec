@@ -11,5 +11,11 @@
     <description>Common data project which sets up the central data elements for reuse.</description>
     <releaseNotes>Initial Release.</releaseNotes>
     <copyright>Copyright 2017</copyright>
+    
+    <dependencies>
+      <dependency id="Dapper" version="1.50.2"></dependency>
+      <dependency id="Dapper.FluentMap" version="1.5.1"></dependency>
+    </dependencies>
+    
   </metadata>
 </package>

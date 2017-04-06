@@ -11,5 +11,10 @@
     <description>MySQL data project used to augment the data project with MySQL specific functionality.</description>
     <releaseNotes>Initial Release.</releaseNotes>
     <copyright>Copyright 2017</copyright>
+
+    <dependencies>
+      <dependency id="MySql.Data" version="7.0.7-m61"></dependency>
+    </dependencies>
+    
   </metadata>
 </package>
