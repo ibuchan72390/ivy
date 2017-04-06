@@ -134,7 +134,8 @@ namespace IBFramework.Data.MySQL
             // Setup the parameters
             object targetPropValue;
 
-            var currentProp = _entityType.GetProperties().FirstOrDefault(x => x.Name == currentPropName);
+            var entityProps = _entityType.GetProperties();
+            var currentProp = entityProps.FirstOrDefault(x => x.Name == currentPropName);
 
             bool isEntityAttr = false;
 

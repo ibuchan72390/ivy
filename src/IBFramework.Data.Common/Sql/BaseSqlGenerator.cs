@@ -52,6 +52,8 @@ namespace IBFramework.Data.Common.Sql
 
                 var adjustedPropNames = GetPropertyNames(true);
 
+                adjustedPropNames = adjustedPropNames.Select(FormatPropertyName);
+
                 adjustedPropNames = PrependSelectAliasIfNecessary(adjustedPropNames, includeSelectAlias);
 
                 return adjustedPropNames.Aggregate((x, y) => x + $", {y}");
