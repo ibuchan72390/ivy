@@ -16,54 +16,54 @@ namespace IBFramework.Core.Domain
 
         #endregion
 
-        #region Extension Methods
+        //#region Extension Methods
 
-        public int SafeGetIntRef<TSource, TProperty>(Expression<Func<TSource, TProperty>> processFn)
-            where TSource : IEntityWithReferences
-            where TProperty : IEntityWithTypedId<int>
-        {
-            var propertyName = GetPropertyInfo(processFn);
+        //public int SafeGetIntRef<TSource, TProperty>(Expression<Func<TSource, TProperty>> processFn)
+        //    where TSource : IEntityWithReferences
+        //    where TProperty : IEntityWithTypedId<int>
+        //{
+        //    var propertyName = GetPropertyInfo(processFn);
 
-            var refName = propertyName + "Id";
+        //    var refName = propertyName + "Id";
 
-            return (int)References[refName];
-        }
+        //    return (int)References[refName];
+        //}
 
-        public string SafeGetStringRef<TSource, TProperty>(Expression<Func<TSource, TProperty>> processFn)
-            where TSource : IEntityWithReferences
-            where TProperty : IEntityWithTypedId<string>
-        {
-            var propertyName = GetPropertyInfo(processFn);
+        //public string SafeGetStringRef<TSource, TProperty>(Expression<Func<TSource, TProperty>> processFn)
+        //    where TSource : IEntityWithReferences
+        //    where TProperty : IEntityWithTypedId<string>
+        //{
+        //    var propertyName = GetPropertyInfo(processFn);
 
-            var refName = propertyName + "Id";
+        //    var refName = propertyName + "Id";
 
-            return (string)References[refName];
-        }
+        //    return (string)References[refName];
+        //}
 
-        #endregion
+        //#endregion
 
-        #region Helper Methods
+        //#region Helper Methods
 
-        private static string GetPropertyInfo<TSource, TProperty>(
-            Expression<Func<TSource, TProperty>> propertyLambda)
-        {
-            Type type = typeof(TSource);
+        //private static string GetPropertyInfo<TSource, TProperty>(
+        //    Expression<Func<TSource, TProperty>> propertyLambda)
+        //{
+        //    Type type = typeof(TSource);
 
-            MemberExpression member = propertyLambda.Body as MemberExpression;
-            if (member == null)
-                throw new ArgumentException(string.Format(
-                    "Expression '{0}' refers to a method, not a property.",
-                    propertyLambda.ToString()));
+        //    MemberExpression member = propertyLambda.Body as MemberExpression;
+        //    if (member == null)
+        //        throw new ArgumentException(string.Format(
+        //            "Expression '{0}' refers to a method, not a property.",
+        //            propertyLambda.ToString()));
 
-            PropertyInfo propInfo = member.Member as PropertyInfo;
-            if (propInfo == null)
-                throw new ArgumentException(string.Format(
-                    "Expression '{0}' refers to a field, not a property.",
-                    propertyLambda.ToString()));
+        //    PropertyInfo propInfo = member.Member as PropertyInfo;
+        //    if (propInfo == null)
+        //        throw new ArgumentException(string.Format(
+        //            "Expression '{0}' refers to a field, not a property.",
+        //            propertyLambda.ToString()));
 
-            return propInfo.Name;
-        }
+        //    return propInfo.Name;
+        //}
 
-        #endregion
+        //#endregion
     }
 }

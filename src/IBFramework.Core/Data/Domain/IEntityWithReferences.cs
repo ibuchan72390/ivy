@@ -8,12 +8,12 @@ namespace IBFramework.Core.Data.Domain
     {
         Dictionary<string, object> References { get; set; }
 
-        int SafeGetIntRef<TSource, TProperty>(Expression<Func<TSource, TProperty>> processFn)
-            where TSource : IEntityWithReferences
-            where TProperty : IEntityWithTypedId<int>;
+        //int SafeGetIntRef<TSource, TProperty>(Expression<Func<TSource, TProperty>> processFn)
+        //    where TSource : IEntityWithReferences
+        //    where TProperty : IEntityWithTypedId<int>;
 
-        string SafeGetStringRef<TSource, TProperty>(Expression<Func<TSource, TProperty>> processFn)
-            where TSource : IEntityWithReferences
-            where TProperty : IEntityWithTypedId<string>;
+        //string SafeGetStringRef<TSource, TProperty>(Expression<Func<TSource, TProperty>> processFn)
+        //    where TSource : IEntityWithReferences
+        //    where TProperty : IEntityWithTypedId<string>;
     }
 }
