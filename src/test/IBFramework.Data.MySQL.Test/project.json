@@ -5,7 +5,7 @@
     "NETStandard.Library": "1.6.0",
     "IBFramework.Core": "1.0.0",
     "IBFramework.IoC": "1.0.0",
-    "xunit": "2.2.0-beta4-build3444",
+    "xunit": "2.2.0",
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
     "IBFramework.TestHelper": "1.0.0-*",
     "IBFramework.TestUtilities": "1.0.0-*",
