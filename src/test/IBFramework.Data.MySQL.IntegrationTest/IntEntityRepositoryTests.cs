@@ -112,6 +112,19 @@ namespace IBFramework.Data.MySQL.IntegrationTest
             tc.Dispose();
         }
 
+        [Fact]
+        public void GetByIdList_Returns_Empty_On_Empty_List()
+        {
+            Assert.Empty(_sut.GetByIdList(new List<int>()));
+        }
+
+        [Fact]
+        public void GetByIdList_Returns_Empty_On_Null_List()
+        {
+            Assert.Empty(_sut.GetByIdList(null));
+
+        }
+
         #endregion
 
         #region SaveOrUpdate

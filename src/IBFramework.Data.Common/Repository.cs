@@ -278,6 +278,8 @@ namespace IBFramework.Data.Common
 
         public virtual IEnumerable<T> GetByIdList(IEnumerable<TKey> ids, ITranConn tc = null)
         {
+            if (ids == null || !ids.Any()) return new List<T>();
+
             Dictionary<string, object> parms = new Dictionary<string, object>();
 
             var idInList = string.Join(",", ids);
