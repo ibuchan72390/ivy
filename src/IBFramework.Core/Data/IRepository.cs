@@ -1,9 +1,11 @@
 ﻿using IBFramework.Core.Data.Domain;
 using IBFramework.Core.Data.Init;
+using System;
 using System.Collections.Generic;
 
 namespace IBFramework.Core.Data
 {
+    // Base
     public interface IBaseRepository<TObject> : IInitialize
         where TObject : class
     {
@@ -12,6 +14,8 @@ namespace IBFramework.Core.Data
         void DeleteAll(ITranConn tc = null);
     }
 
+
+    // Blob
     public interface IBlobRepository<TEntity> : IBaseRepository<TEntity>
         where TEntity : class
     {
@@ -20,6 +24,8 @@ namespace IBFramework.Core.Data
         void BulkInsert(IEnumerable<TEntity> entities, ITranConn tc = null);
     }
 
+
+    // Entity
     public interface IEntityRepository<TEntity, TKey> : IBaseRepository<TEntity>
         where TEntity : class, IEntityWithTypedId<TKey>
     {
@@ -38,6 +44,20 @@ namespace IBFramework.Core.Data
 
     public interface IEntityRepository<TEntity> : IEntityRepository<TEntity, int>
         where TEntity : class, IEntity
+    {
+    }
+
+    // EnumEntity
+    public interface IEnumEntityRepository<TEntity, TKey, TEnum> : IEntityRepository<TEntity, TKey>
+        where TEntity : class, IEnumEntityWithTypedId<TKey, TEnum>
+        where TEnum : struct, IComparable, IFormattable, IConvertible
+    {
+        TEntity GetByName(TEnum enumVal, ITranConn tc = null);
+    }
+
+    public interface IEnumEntityRepository<TEntity, TEnum> : IEnumEntityRepository<TEntity, int, TEnum>
+        where TEntity : class, IEnumEntity<TEnum>
+        where TEnum : struct, IComparable, IFormattable, IConvertible
     {
     }
 }

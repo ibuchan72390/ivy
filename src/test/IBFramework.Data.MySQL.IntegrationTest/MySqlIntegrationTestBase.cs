@@ -19,6 +19,10 @@ namespace IBFramework.Data.MySQL.IntegrationTest
 
                 TestExtensions.Init(connectionString);
             });
+
+            
+            // Clean Database
+            TestCleaner.CleanDatabase();
         }
 
         public ITranConn TestTranConn =>

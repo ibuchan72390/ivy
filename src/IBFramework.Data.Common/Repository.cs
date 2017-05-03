@@ -13,6 +13,8 @@ namespace IBFramework.Data.Common
      * that specifically inherits from this repository. 
      */
 
+    #region Base
+
     public abstract class BaseRepository<T> : IBaseRepository<T>
         where T : class, IEntityWithReferences
     {
@@ -183,6 +185,9 @@ namespace IBFramework.Data.Common
         #endregion
     }
 
+    #endregion
+
+    #region Blob
 
     public class BlobRepository<T> : BaseRepository<T>, IBlobRepository<T>
         where T: class, IEntityWithReferences
@@ -221,6 +226,10 @@ namespace IBFramework.Data.Common
 
         #endregion
     }
+
+    #endregion
+
+    #region Entity
 
     public class EntityRepository<T, TKey> : BaseRepository<T>, IEntityRepository<T, TKey>
         where T : class, IEntityWithTypedId<TKey>
@@ -388,4 +397,62 @@ namespace IBFramework.Data.Common
         }
     }
 
+    #endregion
+
+    #region EnumEntity
+
+    public class EnumEntityRepository<T, TKey, TEnum> : EntityRepository<T, TKey>, IEnumEntityRepository<T, TKey, TEnum>
+        where T : class, IEnumEntityWithTypedId<TKey, TEnum>
+        where TEnum : struct, IComparable, IFormattable, IConvertible
+    {
+
+        #region Constructor
+
+        public EnumEntityRepository(
+            IDatabaseKeyManager databaseKeyManager,
+            ITransactionHelper tranHelper,
+            ISqlGenerator<T, TKey> sqlGenerator)
+            : base(databaseKeyManager, tranHelper, sqlGenerator)
+        {
+
+        }
+
+        #endregion
+
+        #region
+
+        public T GetByName(TEnum enumVal, ITranConn tc = null)
+        {
+            const string sqlWhere = "WHERE `THIS`.`Name` = @enumVal";
+
+            var parms = new Dictionary<string, object> { { "@enumVal", enumVal.ToString() } };
+
+            var results = InternalSelect(whereClause: sqlWhere, parms: parms, tc: tc);
+
+            if (results.Count() > 1)
+            {
+                throw new Exception("Multiple objects found matching the provided Enumeration Value. " + 
+                    $"Table: {typeof(T).Name} / Search Value: {enumVal.ToString()}");
+            }
+
+            return results.FirstOrDefault();
+        }
+
+        #endregion
+    }
+
+    public class EnumEntityRepository<T, TEnum> : EnumEntityRepository<T, int, TEnum>, IEnumEntityRepository<T, TEnum>
+        where T : class, IEnumEntity<TEnum>
+        where TEnum : struct, IComparable, IFormattable, IConvertible
+    {
+        public EnumEntityRepository(
+            IDatabaseKeyManager databaseKeyManager,
+            ITransactionHelper tranHelper,
+            ISqlGenerator<T, int> sqlGenerator)
+            : base(databaseKeyManager, tranHelper, sqlGenerator)
+        {
+        }
+    }
+
+    #endregion
 }

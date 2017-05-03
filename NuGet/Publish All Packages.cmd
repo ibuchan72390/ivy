@@ -37,3 +37,10 @@ ECHO Publishing IBFramework.Utility
 ECHO --------------------------------
 
 CALL PushPackage.cmd IBFramework.Utility
+
+
+ECHO --------------------------------
+ECHO Publishing IBFramework.TestUtilities
+ECHO --------------------------------
+
+CALL PushPackage.cmd IBFramework.TestUtilities

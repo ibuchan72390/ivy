@@ -2,14 +2,14 @@
 <package >
   <metadata>
     <id>IBFramework.Data.Common</id>
-    <version>1.0.0.0</version>
+    <version>1.0.2</version>
     <title>IBFramework.Data.Common</title>
     <authors>Ian Buchan</authors>
     <owners>Ian Buchan</owners>
     <projectUrl>https://github.com/ibuchan72390/ib-framework</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Common data project which sets up the central data elements for reuse.</description>
-    <releaseNotes>Initial Release.</releaseNotes>
+    <releaseNotes>Additional support for EnumEntity functionality in Framework</releaseNotes>
     <copyright>Copyright 2017</copyright>
     
     <dependencies>

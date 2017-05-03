@@ -183,6 +183,25 @@ namespace IBFramework.TestHelper
 
         #endregion
 
+        #region TestEnumEntity
+
+        public static TestEnumEntity GenerateForTest(this TestEnumEntity entity)
+        {
+            if (entity.Name == null) entity.Name = _rand.RandomString();
+            if (entity.FriendlyName == null) entity.FriendlyName = entity.Name;
+
+            return entity;
+        }
+
+        public static TestEnumEntity SaveForTest(this TestEnumEntity entity, ITranConn tc = null)
+        {
+            entity = entity.GenerateForTest();
+
+            return SaveEntity<TestEnumEntity, int>(entity, tc);
+        }
+
+        #endregion
+
         #region Helper Methods
 
         private static TEntity SaveEntity<TEntity, TKey>(TEntity entity, ITranConn tc = null)

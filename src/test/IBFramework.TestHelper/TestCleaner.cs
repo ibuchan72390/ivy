@@ -17,6 +17,7 @@ namespace IBFramework.TestHelper
             CleanTable<CoreEntity>();
             CleanTable<ParentEntity>();
             CleanTable<FlippedStringEntity>();
+            CleanTable<TestEnumEntity>();
         }
 
         public static void CleanTable<T>()

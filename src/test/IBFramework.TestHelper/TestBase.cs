@@ -37,5 +37,6 @@ namespace IBFramework.TestHelper
             var svcLocator = container.Resolve<IServiceLocator>();
             svcLocator.Init(container);
         }
+
     }
 }

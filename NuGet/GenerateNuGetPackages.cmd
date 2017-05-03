@@ -1,6 +1,9 @@
 :: This batch file assumes that you have NuGet.exe in your path variables
 
-::ECHO OFF
+:: Package version comes directly from the project.json file!
+:: If you need to update the package version, simply update the version at the top of the file.
+
+ECHO OFF
 
 :: Setup Package Directory
 RD /s /q Packages
@@ -27,6 +30,10 @@ CALL :PackageProject IBFramework.IoC
 :: Build IBFramework.Utility
 CALL :PackageProject IBFramework.Utility
 
+:: Build IBFramework.TestUtilities
+CALL :PackageProject test\IBFramework.TestUtilities
+
+PAUSE
 EXIT
 
 :PackageProject
@@ -37,17 +44,11 @@ EXIT
 	
 	:: Pack and relocate the nupkg file
 	CD %ProjectName%
-	
-	IF EXIST %Config% (
-		dotnet pack -c %Config%
+
+	dotnet pack
 		
-		CD Bin\%Config%
-		
-	) ELSE (
-		dotnet pack
-			
-		CD Bin\Debug
-	)
+	CD Bin\Debug
+
 	
 	MOVE /y *.nupkg %PackageDir%
 

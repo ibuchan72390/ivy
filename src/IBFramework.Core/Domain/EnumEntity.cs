@@ -1,4 +1,5 @@
 ﻿using IBFramework.Core.Data.Domain;
+using System;
 
 namespace IBFramework.Core.Domain
 {
@@ -6,16 +7,33 @@ namespace IBFramework.Core.Domain
      * Base Entity for reference types,
      * makes working with enumeration values or dropdowns on the UI very simple
      */
-    public class EnumEntityWithTypedId<TKey> : EntityWithTypedId<TKey>, IEnumEntityWithTypedId<TKey>
+    public class EnumEntityWithTypedId<TKey, TEnum> : EntityWithTypedId<TKey>, IEnumEntityWithTypedId<TKey, TEnum>
+         where TEnum : struct, IComparable, IFormattable, IConvertible
     {
         public string Name { get; set; }
 
         public string FriendlyName { get; set; }
 
         public int SortOrder { get; set; }
+
+        public TEnum GetEnumValue()
+        {
+            TEnum result;
+
+            var success = System.Enum.TryParse<TEnum>(Name, out result);
+
+            if (!success)
+            {
+                throw new Exception("Working with an EnumEntity whose DB values do not match the Entity values! " + 
+                    $"Enum Type: {typeof(TEnum).Name} / Db Name: {Name}");
+            }
+
+            return result;
+        }
     }
 
-    public class EnumEntity : EnumEntityWithTypedId<int>, IEnumEntity
+    public class EnumEntity<TEnum> : EnumEntityWithTypedId<int, TEnum>, IEnumEntity<TEnum>
+        where TEnum : struct, IComparable, IFormattable, IConvertible
     {
     }
 

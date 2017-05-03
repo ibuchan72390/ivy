@@ -11,3 +11,4 @@ SOURCE Tables/FlippedBlobEntity.txt
 SOURCE Tables/GuidEntity.txt
 SOURCE Tables/StringEntity.txt
 SOURCE Tables/ChildEntity.txt
+SOURCE Tables/TestEnumEntity.txt
