@@ -6,7 +6,8 @@ namespace IBFramework.Core.Data.Base.Entity
 {
     public interface IEntityCrudService<TEntity, TRepo> : 
         IEntityService<TEntity, TRepo>,
-        IGetAllDeleteAll<TEntity>,
+        IGetAll<TEntity>,
+        IDeleteAll<TEntity>,
         IEntityDelete<TEntity>,
         IEntityGet<TEntity>,
         IEntitySaveOrUpdate<TEntity>

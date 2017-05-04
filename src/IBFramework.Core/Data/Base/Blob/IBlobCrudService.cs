@@ -5,7 +5,8 @@ namespace IBFramework.Core.Data.Base.Blob
 {
     public interface IBlobCrudService<TEntity, TRepo> : 
         IBlobService<TEntity, TRepo>,
-        IGetAllDeleteAll<TEntity>,
+        IGetAll<TEntity>,
+        IDeleteAll<TEntity>,
         IBlobInsert<TEntity>
         
         where TEntity : class
