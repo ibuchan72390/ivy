@@ -1,4 +1,5 @@
 ﻿using IBFramework.Core.Data.Domain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -29,6 +30,15 @@ namespace IBFramework.TestUtilities
             var incomingIds = incoming.Select(x => x.Id);
 
             FullBasicListExclusion<TKey>(itemIds, incomingIds);
+        }
+
+        public static void EnumEqual<TEnum>(IEnumEntity<TEnum> entity1, IEnumEntity<TEnum> entity2)
+            where TEnum : struct, IComparable, IFormattable, IConvertible
+        {
+            Assert.Equal(entity1.Id, entity2.Id);
+            Assert.Equal(entity1.Name, entity2.Name);
+            Assert.Equal(entity1.FriendlyName, entity2.FriendlyName);
+            Assert.Equal(entity1.SortOrder, entity2.SortOrder);
         }
     }
 }
