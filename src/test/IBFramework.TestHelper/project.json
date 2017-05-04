@@ -2,11 +2,11 @@
   "version": "1.0.0-*",
 
   "dependencies": {
-    "IBFramework.Caching": "1.0.0-*",
-    "IBFramework.Data.Common": "1.0.0-*",
+    "IBFramework.Caching": "1.0-*",
+    "IBFramework.Data.Common": "1.0.2",
     "IBFramework.IoC": "1.0.0-*",
     "IBFramework.TestUtilities": "1.0.0-*",
-    "IBFramework.Utility": "1.0.0-*",
+    "IBFramework.Utility": "1.0.1",
     "NETStandard.Library": "1.6.0"
   },
 

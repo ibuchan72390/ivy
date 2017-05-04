@@ -2,7 +2,7 @@
   "version": "1.0.1",
 
   "dependencies": {
-    "IBFramework.Core": "1.0.0-*",
+    "IBFramework.Core": "1.0.1",
     "NETStandard.Library": "1.6.0"
   },
 

@@ -2,8 +2,8 @@
   "version": "1.0.2",
 
   "dependencies": {
-    "IBFramework.Core": "1.0.0-*",
-    "IBFramework.Data.Common": "1.0.0-*",
+    "IBFramework.Core": "1.0.1",
+    "IBFramework.Data.Common": "1.0.2",
     "MySql.Data": "7.0.7-m61",
     "NETStandard.Library": "1.6.0"
   },

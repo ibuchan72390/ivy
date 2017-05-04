@@ -3,7 +3,7 @@
 
   "dependencies": {
     "NETStandard.Library": "1.6.0",
-    "IBFramework.Core": "1.0.0",
+    "IBFramework.Core": "1.0.1",
     "IBFramework.Data.MSSQL": "1.0.0",
     "xunit": "2.2.0",
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
