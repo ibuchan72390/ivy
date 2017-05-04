@@ -2,15 +2,22 @@
 
 namespace IBFramework.Core.Data.Domain
 {
-    public interface IEnumEntityWithTypedId<TKey, TEnum> : IEntityWithTypedId<TKey>
-        where TEnum: struct, IComparable, IFormattable, IConvertible
+    public interface IEnumEntityProperties
     {
         string Name { get; set; }
 
         string FriendlyName { get; set; }
 
         int SortOrder { get; set; }
+    }
 
+    public interface IEnumEntityWithTypedId<TKey> : IEntityWithTypedId<TKey>, IEnumEntityProperties
+    {
+    }
+
+    public interface IEnumEntityWithTypedId<TKey, TEnum> : IEnumEntityWithTypedId<TKey>
+        where TEnum: struct, IComparable, IFormattable, IConvertible
+    {
         TEnum GetEnumValue();
     }
 

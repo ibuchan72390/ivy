@@ -401,20 +401,58 @@ namespace IBFramework.Data.Common
 
     #region EnumEntity
 
-    public class EnumEntityRepository<T, TKey, TEnum> : EntityRepository<T, TKey>, IEnumEntityRepository<T, TKey, TEnum>
-        where T : class, IEnumEntityWithTypedId<TKey, TEnum>
+    //public class EnumEntityRepository<T, TKey, TEnum> : EntityRepository<T, TKey>, IEnumEntityRepository<T, TKey, TEnum>
+    //    where T : class, IEnumEntityWithTypedId<TKey, TEnum>
+    //    where TEnum : struct, IComparable, IFormattable, IConvertible
+    //{
+
+    //    #region Constructor
+
+    //    public EnumEntityRepository(
+    //        IDatabaseKeyManager databaseKeyManager,
+    //        ITransactionHelper tranHelper,
+    //        ISqlGenerator<T, TKey> sqlGenerator)
+    //        : base(databaseKeyManager, tranHelper, sqlGenerator)
+    //    {
+
+    //    }
+
+    //    #endregion
+
+    //    #region
+
+    //    public T GetByName(TEnum enumVal, ITranConn tc = null)
+    //    {
+    //        const string sqlWhere = "WHERE `THIS`.`Name` = @enumVal";
+
+    //        var parms = new Dictionary<string, object> { { "@enumVal", enumVal.ToString() } };
+
+    //        var results = InternalSelect(whereClause: sqlWhere, parms: parms, tc: tc);
+
+    //        if (results.Count() > 1)
+    //        {
+    //            throw new Exception("Multiple objects found matching the provided Enumeration Value. " + 
+    //                $"Table: {typeof(T).Name} / Search Value: {enumVal.ToString()}");
+    //        }
+
+    //        return results.FirstOrDefault();
+    //    }
+
+    //    #endregion
+    //}
+
+    public class EnumEntityRepository<T, TEnum> : EntityRepository<T>, IEnumEntityRepository<T, TEnum>
+        where T : class, IEnumEntity<TEnum>
         where TEnum : struct, IComparable, IFormattable, IConvertible
     {
-
         #region Constructor
 
         public EnumEntityRepository(
             IDatabaseKeyManager databaseKeyManager,
             ITransactionHelper tranHelper,
-            ISqlGenerator<T, TKey> sqlGenerator)
+            ISqlGenerator<T, int> sqlGenerator)
             : base(databaseKeyManager, tranHelper, sqlGenerator)
         {
-
         }
 
         #endregion
@@ -431,7 +469,7 @@ namespace IBFramework.Data.Common
 
             if (results.Count() > 1)
             {
-                throw new Exception("Multiple objects found matching the provided Enumeration Value. " + 
+                throw new Exception("Multiple objects found matching the provided Enumeration Value. " +
                     $"Table: {typeof(T).Name} / Search Value: {enumVal.ToString()}");
             }
 
@@ -439,19 +477,6 @@ namespace IBFramework.Data.Common
         }
 
         #endregion
-    }
-
-    public class EnumEntityRepository<T, TEnum> : EnumEntityRepository<T, int, TEnum>, IEnumEntityRepository<T, TEnum>
-        where T : class, IEnumEntity<TEnum>
-        where TEnum : struct, IComparable, IFormattable, IConvertible
-    {
-        public EnumEntityRepository(
-            IDatabaseKeyManager databaseKeyManager,
-            ITransactionHelper tranHelper,
-            ISqlGenerator<T, int> sqlGenerator)
-            : base(databaseKeyManager, tranHelper, sqlGenerator)
-        {
-        }
     }
 
     #endregion

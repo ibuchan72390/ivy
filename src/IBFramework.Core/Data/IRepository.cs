@@ -48,16 +48,23 @@ namespace IBFramework.Core.Data
     }
 
     // EnumEntity
-    public interface IEnumEntityRepository<TEntity, TKey, TEnum> : IEntityRepository<TEntity, TKey>
+    public interface IEnumEntityRepository<TEntity, TKey, TEnum> : IEntityRepository<TEntity, TKey>, IGetByName<TEntity, TEnum>
         where TEntity : class, IEnumEntityWithTypedId<TKey, TEnum>
+        where TEnum : struct, IComparable, IFormattable, IConvertible
+    {
+    }
+
+    public interface IEnumEntityRepository<TEntity, TEnum> : IEntityRepository<TEntity>, IGetByName<TEntity, TEnum>
+        where TEntity : class, IEnumEntity<TEnum>
+        where TEnum : struct, IComparable, IFormattable, IConvertible
+    {
+    }
+
+    // GetByName
+    public interface IGetByName<TEntity, TEnum>
         where TEnum : struct, IComparable, IFormattable, IConvertible
     {
         TEntity GetByName(TEnum enumVal, ITranConn tc = null);
     }
 
-    public interface IEnumEntityRepository<TEntity, TEnum> : IEnumEntityRepository<TEntity, int, TEnum>
-        where TEntity : class, IEnumEntity<TEnum>
-        where TEnum : struct, IComparable, IFormattable, IConvertible
-    {
-    }
 }

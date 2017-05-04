@@ -21,7 +21,7 @@ namespace IBFramework.Data.Common.IoC
             containerGenerator.RegisterTransient(typeof(IEntityRepository<>), typeof(EntityRepository<>));
             containerGenerator.RegisterTransient(typeof(IEntityRepository<,>), typeof(EntityRepository<,>));
             containerGenerator.RegisterTransient(typeof(IEnumEntityRepository<,>), typeof(EnumEntityRepository<,>));
-            containerGenerator.RegisterTransient(typeof(IEnumEntityRepository<,,>), typeof(EnumEntityRepository<,,>));
+            //containerGenerator.RegisterTransient(typeof(IEnumEntityRepository<,,>), typeof(EnumEntityRepository<,,>));
         }
     }
 

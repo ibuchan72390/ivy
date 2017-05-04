@@ -1,9 +1,11 @@
 ﻿using IBFramework.Core.Data;
-using IBFramework.Core.Data.Base;
+using IBFramework.Core.Data.Base.Blob;
 
-namespace IBFramework.Data.Common.Base
+namespace IBFramework.Data.Common.Base.Blob
 {
-    public class BaseBlobService<TEntity, TRepo> : IBlobService<TEntity, TRepo>
+    public class BaseBlobService<TEntity, TRepo> : 
+        IBlobService<TEntity, TRepo>
+
         where TEntity : class
         where TRepo : IBlobRepository<TEntity>
     {

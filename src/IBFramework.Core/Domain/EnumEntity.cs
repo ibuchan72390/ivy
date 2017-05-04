@@ -7,15 +7,19 @@ namespace IBFramework.Core.Domain
      * Base Entity for reference types,
      * makes working with enumeration values or dropdowns on the UI very simple
      */
-    public class EnumEntityWithTypedId<TKey, TEnum> : EntityWithTypedId<TKey>, IEnumEntityWithTypedId<TKey, TEnum>
-         where TEnum : struct, IComparable, IFormattable, IConvertible
+
+    public class EnumEntityWithTypedId<TKey> : EntityWithTypedId<TKey>, IEnumEntityWithTypedId<TKey>
     {
         public string Name { get; set; }
 
         public string FriendlyName { get; set; }
 
         public int SortOrder { get; set; }
+    }
 
+    public class EnumEntityWithTypedId<TKey, TEnum> : EnumEntityWithTypedId<TKey>, IEnumEntityWithTypedId<TKey, TEnum>
+         where TEnum : struct, IComparable, IFormattable, IConvertible
+    {
         public TEnum GetEnumValue()
         {
             TEnum result;
