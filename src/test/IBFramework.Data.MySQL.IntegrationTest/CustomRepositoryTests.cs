@@ -16,6 +16,7 @@ using System.Linq;
 using IBFramework.TestHelper.TestValues;
 using System;
 using IBFramework.Utility.Extensions;
+using IBFramework.TestUtilities;
 
 namespace IBFramework.Data.MySQL.IntegrationTest
 {
@@ -27,6 +28,14 @@ namespace IBFramework.Data.MySQL.IntegrationTest
 
         private interface ICustomParentEntityRepository : IEntityRepository<ParentEntity>
         {
+            #region GetBasicTypeList
+
+            string GetNameById(int id, ITranConn tc = null);
+
+            IEnumerable<int> GetAllIds(ITranConn tc = null);
+
+            #endregion
+
             #region InternalSelect
 
             IEnumerable<ParentEntity> GetByCoreEntityId(int coreEntityId, ITranConn tc = null);
@@ -61,6 +70,29 @@ namespace IBFramework.Data.MySQL.IntegrationTest
                 : base(databaseKeyManager, tranHelper, sqlGenerator)
             {
             }
+
+            #region GetBasicTypeList
+
+            public string GetNameById(int id, ITranConn tc = null)
+            {
+                const string sql = "SELECT `Name` FROM `parententity` WHERE `Id` = @id";
+
+                var parms = new Dictionary<string, object>
+                {
+                    { "@id", id }
+                };
+
+                return GetBasicTypeList<string>(sql, parms, tc).FirstOrDefault();
+            }
+
+            public IEnumerable<int> GetAllIds(ITranConn tc = null)
+            {
+                const string sql = "SELECT `Id` FROM `parententity`";
+
+                return GetBasicTypeList<int>(sql, null, tc);
+            }
+
+            #endregion
 
             #region InteralSelect
 
@@ -164,6 +196,51 @@ namespace IBFramework.Data.MySQL.IntegrationTest
         #endregion
 
         #region Tests
+
+        #region GetBasicTypeList
+
+        [Fact]
+        public void GetNameById_Returns_As_Expected()
+        {
+            var targetEntity = new ParentEntity().SaveForTest();
+
+            var result = _sut.GetNameById(targetEntity.Id);
+
+            Assert.Equal(targetEntity.Name, result);
+        }
+
+        [Fact]
+        public void GetNameById_Returns_As_Expected_When_No_Result()
+        {
+            var result = _sut.GetNameById(-1);
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public void GetAllIds_Returns_As_Expected()
+        {
+            const int toMake = 5;
+
+            var entities = Enumerable.Range(0, toMake).
+                Select(x => new ParentEntity().SaveForTest()).
+                ToList();
+
+            var entityIds = entities.Select(x => x.Id);
+
+            var results = _sut.GetAllIds();
+
+            AssertExtensions.FullBasicListExclusion(entityIds, results);
+        }
+
+        [Fact]
+        public void GetAllIds_Returns_As_Expected_When_No_Result()
+        {
+            var results = _sut.GetAllIds();
+
+            Assert.Empty(results);
+        }
+
+        #endregion
 
         #region InternalSelect
 

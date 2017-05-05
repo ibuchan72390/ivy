@@ -81,6 +81,10 @@ namespace IBFramework.Data.Common
 
         #region Helper Methods
 
+        protected IEnumerable<TBasic> GetBasicTypeList<TBasic>(string sql, Dictionary<string, object> parms, ITranConn tc = null)
+        {
+            return InternalExecuteAlternateTypeQuery<TBasic>(sql, tc, parms);
+        }
 
         protected IEnumerable<T> InternalSelect(string joinClause = null, string whereClause = null, int? limit = null,
             int? offset = null, Dictionary<string, object> parms = null, ITranConn tc = null)
