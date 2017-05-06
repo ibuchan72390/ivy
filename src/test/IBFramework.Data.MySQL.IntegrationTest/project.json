@@ -9,7 +9,7 @@
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
     "IBFramework.TestHelper": "1.0.0-*",
     "IBFramework.TestUtilities": "1.0.0-*",
-    "IBFramework.Data.MySQL": "1.0.2"
+    "IBFramework.Data.MySQL": "1.0.2-*"
   },
 
   "testRunner": "xunit",

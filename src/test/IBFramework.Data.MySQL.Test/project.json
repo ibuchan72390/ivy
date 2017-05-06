@@ -2,14 +2,14 @@
   "version": "1.0.0-*",
 
   "dependencies": {
-    "NETStandard.Library": "1.6.0",
-    "IBFramework.Core": "1.0.1",
-    "IBFramework.IoC": "1.0.0",
-    "xunit": "2.2.0",
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
+    "IBFramework.Core": "1.0.1",
+    "IBFramework.Data.MySQL": "1.0.2-*",
+    "IBFramework.IoC": "1.0.0",
     "IBFramework.TestHelper": "1.0.0-*",
     "IBFramework.TestUtilities": "1.0.0-*",
-    "IBFramework.Data.MySQL": "1.0.2"
+    "NETStandard.Library": "1.6.0",
+    "xunit": "2.2.0"
   },
 
   "testRunner": "xunit",
