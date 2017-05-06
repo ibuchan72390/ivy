@@ -104,7 +104,7 @@ namespace IBFramework.Data.MySQL.IntegrationTest
                 var parms = new Dictionary<string, object>();
                 parms.Add("@coreEntityId", coreEntityId);
 
-                return InternalSelect(sqlJoin, sqlWhere, null, null, parms, tc);
+                return InternalSelect(null, sqlJoin, sqlWhere, null, null, parms, tc);
             }
 
             public IEnumerable<ParentEntity> GetByName(string name, ITranConn tc = null)
@@ -114,7 +114,7 @@ namespace IBFramework.Data.MySQL.IntegrationTest
                 var parms = new Dictionary<string, object>();
                 parms.Add("@entityName", name);
 
-                return InternalSelect(null, sqlWhere, null, null, parms, tc);
+                return InternalSelect(null, null, sqlWhere, null, null, parms, tc);
             }
 
             public IEnumerable<ParentEntity> GetTop5(ITranConn tc = null)
@@ -278,6 +278,8 @@ namespace IBFramework.Data.MySQL.IntegrationTest
             var entity = new ParentEntity().SaveForTest();
 
             var coreEntity = new CoreEntity { ParentEntity = entity }.SaveForTest();
+
+            Enumerable.Range(0, 3).Select(x => new CoreEntity { ParentEntity = entity }.SaveForTest()).ToList();
 
             var results = _sut.GetByCoreEntityId(coreEntity.Id);
 

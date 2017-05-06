@@ -50,11 +50,29 @@ namespace IBFramework.Data.MySQL.Test
         }
 
         [Fact]
+        public void GenerateGetQuery_Works_As_Expected_With_Select_Prefix()
+        {
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
+
+            var result = _sut.GenerateGetQuery("DISTINCT");
+
+            var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
+
+            var expectedAttrString = attrs.
+                                        Select(x => $"`THIS`.{x}").
+                                        Aggregate((x, y) => x + $", {y}");
+
+            string expected = $"SELECT DISTINCT {expectedAttrString} FROM childentity `THIS`;";
+
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
         public void GenerateGetQuery_Works_As_Expected_With_Where_Clause()
         {
             ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
 
-            var result = _sut.GenerateGetQuery(null, "WHERE Id = @id");
+            var result = _sut.GenerateGetQuery(null, null, "WHERE Id = @id");
 
             var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
 
@@ -74,7 +92,7 @@ namespace IBFramework.Data.MySQL.Test
 
             ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
 
-            var result = _sut.GenerateGetQuery(null, null, limit);
+            var result = _sut.GenerateGetQuery(null, null, null, limit);
 
             var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
 
@@ -96,7 +114,7 @@ namespace IBFramework.Data.MySQL.Test
 
             ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
 
-            var result = _sut.GenerateGetQuery(null, null, limit, offset);
+            var result = _sut.GenerateGetQuery(null, null, null, limit, offset);
 
             var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
 
@@ -116,7 +134,7 @@ namespace IBFramework.Data.MySQL.Test
 
             ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
 
-            var e = Assert.Throws<Exception>(() => _sut.GenerateGetQuery(null, null, null, offset));
+            var e = Assert.Throws<Exception>(() => _sut.GenerateGetQuery(null, null, null, null, offset));
 
             Assert.Equal("Unable to use a limit without an offset", e.Message);
         }
@@ -128,7 +146,7 @@ namespace IBFramework.Data.MySQL.Test
 
             ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
 
-            var result = _sut.GenerateGetQuery(null, joinClause);
+            var result = _sut.GenerateGetQuery(null, null, joinClause);
 
             var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
 
@@ -151,7 +169,7 @@ namespace IBFramework.Data.MySQL.Test
 
             ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
 
-            var result = _sut.GenerateGetQuery(whereClause, joinClause, limit, offset);
+            var result = _sut.GenerateGetQuery(null, whereClause, joinClause, limit, offset);
 
             var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
 

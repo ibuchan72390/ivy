@@ -35,13 +35,18 @@ namespace IBFramework.Data.MySQL
             return $"{sql};";
         }
 
-        public string GenerateGetQuery(string sqlWhere = null, string sqlJoin = null, int? limit = default(int?), int? offset = default(int?))
+        public string GenerateGetQuery(string selectPrefix = null, string sqlWhere = null, string sqlJoin = null, int? limit = default(int?), int? offset = default(int?))
         {
             if (offset.HasValue && !limit.HasValue) throw new Exception("Unable to use a limit without an offset");
 
             var attributeNames = GeneratePropertyNameString(true, true);
 
             var sql = "SELECT ";
+
+            if (selectPrefix != null)
+            {
+                sql = $"{sql}{selectPrefix} ";
+            }
 
             // We need to use the THIS as an alias in order to 
             sql += $"{attributeNames} FROM {GetTableName()} {SelectAlias}";

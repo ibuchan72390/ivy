@@ -44,7 +44,7 @@ namespace IBFramework.Data.MSSQL
             return $"{sql};";
         }
 
-        public string GenerateGetQuery(string selectPrefix = null, string sqlWhere = null, int? limit = null, int? offset = null)
+        public string GenerateGetQuery(string selectPrefix = null, string sqlJoin = null, string sqlWhere = null, int? limit = null, int? offset = null)
         {
             var attributeNames = GeneratePropertyNameString(true, true);
 

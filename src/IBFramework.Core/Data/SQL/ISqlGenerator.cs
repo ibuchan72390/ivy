@@ -22,7 +22,7 @@ namespace IBFramework.Core.Data.SQL
          * 
          * Simple select all if no params provided
          */
-        string GenerateGetQuery(string sqlWhere = null, string sqlJoin = null, int? limit = null, int? offset = null);
+        string GenerateGetQuery(string selectPrefix = null, string sqlWhere = null, string sqlJoin = null, int? limit = null, int? offset = null);
 
         /*
          * DELETE FROM TEntity WHERE {sqlWhere}

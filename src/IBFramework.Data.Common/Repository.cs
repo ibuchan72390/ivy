@@ -86,10 +86,10 @@ namespace IBFramework.Data.Common
             return InternalExecuteAlternateTypeQuery<TBasic>(sql, tc, parms);
         }
 
-        protected IEnumerable<T> InternalSelect(string joinClause = null, string whereClause = null, int? limit = null,
+        protected IEnumerable<T> InternalSelect(string selectPrefix = null, string joinClause = null, string whereClause = null, int? limit = null,
             int? offset = null, Dictionary<string, object> parms = null, ITranConn tc = null)
         {
-            var query = _sqlGenerator.GenerateGetQuery(whereClause, joinClause, limit, offset);
+            var query = _sqlGenerator.GenerateGetQuery(selectPrefix, whereClause, joinClause, limit, offset);
 
             return InternalExecuteQuery(query, tc, parms);
         }
