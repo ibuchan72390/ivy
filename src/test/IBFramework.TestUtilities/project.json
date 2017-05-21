@@ -2,7 +2,7 @@
   "version": "1.0.0.1",
 
   "dependencies": {
-    "IBFramework.Core": "1.0.1",
+    "IBFramework.Caching.Core": "1.0.0-*",
     "IBFramework.IoC": "1.0.0-*",
     "NETStandard.Library": "1.6.0",
     "xunit": "2.2.0"

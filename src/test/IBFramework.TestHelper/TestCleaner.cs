@@ -1,4 +1,4 @@
-﻿using IBFramework.Core.Data;
+﻿using IBFramework.Data.Core.Interfaces;
 using IBFramework.IoC;
 using IBFramework.TestHelper.TestEntities;
 using IBFramework.TestHelper.TestEntities.Flipped;

@@ -1,10 +1,10 @@
-﻿using IBFramework.Core.Data;
-using IBFramework.Core.Data.Domain;
-using IBFramework.Core.Utility;
+﻿using IBFramework.Data.Core.Interfaces;
+using IBFramework.Data.Core.Interfaces.Domain;
 using IBFramework.IoC;
 using IBFramework.TestHelper.TestEntities;
 using IBFramework.TestHelper.TestEntities.Base;
 using IBFramework.TestHelper.TestEntities.Flipped;
+using IBFramework.Utility.Core;
 using System;
 
 namespace IBFramework.TestHelper

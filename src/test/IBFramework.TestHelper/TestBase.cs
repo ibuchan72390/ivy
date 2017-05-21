@@ -1,7 +1,7 @@
 ﻿using IBFramework.Caching.IoC;
-using IBFramework.Core.IoC;
 using IBFramework.IoC;
-using IBFramework.IoC.Installers;
+using IBFramework.IoC.Core;
+using IBFramework.IoC.IoC;
 using IBFramework.Utility.IoC;
 using System;
 

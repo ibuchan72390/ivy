@@ -1,4 +1,4 @@
-﻿using IBFramework.Core.Caching;
+﻿using IBFramework.Caching.Core;
 using IBFramework.IoC;
 using System.IO;
 

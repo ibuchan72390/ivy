@@ -1,0 +1,27 @@
+{
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "IBFramework.IoC": "1.0.0-*",
+    "NETStandard.Library": "1.6.0",
+    "xunit": "2.2.0",
+    "dotnet-test-xunit": "2.2.0-preview2-build1029",
+    "IBFramework.TestHelper": "1.0.0-*",
+    "IBFramework.Data.MySQL": "1.0.2.2",
+    "Moq": "4.7.9"
+  },
+
+  "testRunner": "xunit",
+
+  // Not 100% sure I understand this section and its requirements
+  "runtimes": {
+    "win10-x86": {},
+    "win10-x64": {}
+  },
+
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": [ "dnxcore50", "netcoreapp1.0" ]
+    }
+  }
+}

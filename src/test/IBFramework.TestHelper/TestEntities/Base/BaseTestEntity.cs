@@ -1,5 +1,5 @@
-﻿using IBFramework.Core.Data.Domain;
-using IBFramework.Core.Domain;
+﻿using IBFramework.Data.Core.Domain;
+using IBFramework.Data.Core.Interfaces.Domain;
 using System;
 
 namespace IBFramework.TestHelper.TestEntities.Base
