@@ -1,8 +1,18 @@
-﻿{
+{
   "version": "1.0.0-*",
 
   "dependencies": {
-    "NETStandard.Library": "1.6.0"
+    "IBFramework.Auth0": "1.0.0-*",
+    "IBFramework.Auth0.Core": "1.0.0-*",
+    "IBFramework.Auth0.IoC": "1.0.0-*",
+    "IBFramework.IoC": "1.0.0-*",
+    "IBFramework.IoC.Core": "1.0.0-*",
+    "IBFramework.TestHelper": "1.0.0-*",
+    "IBFramework.Web.Core": "1.0.0-*",
+    "Microsoft.AspNetCore.Http": "1.0.2",
+    "Moq": "4.7.10",
+    "NETStandard.Library": "1.6.0",
+    "xunit": "2.2.0"
   },
 
   "frameworks": {

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using IBFramework.Auth0.Core.Services;
+using IBFramework.Web.Core.Client;
+using System;
 using System.Threading.Tasks;
 
 namespace IBFramework.Auth0.Services

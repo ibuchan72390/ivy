@@ -4,8 +4,11 @@
   "dependencies": {
     "IBFramework.Auth0.Core": "1.0.0-*",
     "IBFramework.Web.Core": "1.0.0-*",
-    "Microsoft.Extensions.Logging.Abstractions": "1.0.0",
-    "NETStandard.Library": "1.6.0"
+    "Microsoft.Extensions.Logging.Abstractions": "1.0.2",
+    "Microsoft.IdentityModel.Protocols": "2.0.0",
+    "Microsoft.IdentityModel.Protocols.OpenIdConnect": "2.0.0",
+    "NETStandard.Library": "1.6.0",
+    "System.IdentityModel.Tokens.Jwt": "5.0.0"
   },
 
   "frameworks": {

@@ -1,6 +1,12 @@
 ﻿using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Threading;
+using IBFramework.Auth0.Core.Services;
+using IBFramework.Auth0.Core.Providers;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.IdentityModel.Protocols;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace IBFramework.Auth0.Services
 {
@@ -28,6 +34,9 @@ namespace IBFramework.Auth0.Services
             _configProvider = configProvider;
         }
 
+        #endregion
+
+        #region Public Method
 
         /*
          * http://www.jerriepelser.com/blog/manually-validating-rs256-jwt-dotnet/

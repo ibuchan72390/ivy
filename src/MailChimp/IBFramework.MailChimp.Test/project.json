@@ -1,8 +1,15 @@
-﻿{
+{
   "version": "1.0.0-*",
 
   "dependencies": {
-    "NETStandard.Library": "1.6.0"
+    "IBFramework.MailChimp": "1.0.0-*",
+    "IBFramework.MailChimp.Core": "1.0.0-*",
+    "IBFramework.TestHelper": "1.0.0-*",
+    "IBFramework.Validation.Core": "1.0.0-*",
+    "Microsoft.Extensions.Logging": "1.0.0",
+    "Moq": "4.7.10",
+    "NETStandard.Library": "1.6.0",
+    "xunit": "2.2.0"
   },
 
   "frameworks": {

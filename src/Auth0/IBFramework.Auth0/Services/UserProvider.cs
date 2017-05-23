@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using IBFramework.Auth0.Core.Services;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Linq;
 using System.Security.Claims;

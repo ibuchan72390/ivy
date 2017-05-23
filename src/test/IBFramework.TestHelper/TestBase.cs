@@ -3,6 +3,7 @@ using IBFramework.IoC;
 using IBFramework.IoC.Core;
 using IBFramework.IoC.IoC;
 using IBFramework.Utility.IoC;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 
 namespace IBFramework.TestHelper
@@ -19,7 +20,7 @@ namespace IBFramework.TestHelper
             Init();
         }
 
-        protected void Init(Action<IContainerGenerator> additionalContainerFns = null)
+        protected void Init(Action<IContainerGenerator> additionalContainerFns = null, Action<IServiceCollection> additionalServiceLocatorFns = null)
         {
             var containerGen = new ContainerGenerator();
 
@@ -30,11 +31,14 @@ namespace IBFramework.TestHelper
 
             additionalContainerFns?.Invoke(containerGen);
 
+            additionalServiceLocatorFns?.Invoke(containerGen.GetServiceCollection());
+
             // Generate Container
             var container = containerGen.GenerateContainer();
 
             // Resolve and initialize singleton ServiceLocator instance
             var svcLocator = container.Resolve<IServiceLocator>();
+
             svcLocator.Init(container);
         }
 

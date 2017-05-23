@@ -1,0 +1,16 @@
+{
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "IBFramework.Amazon.S3": "1.0.0-*",
+    "IBFramework.Amazon.S3.Core": "1.0.0-*",
+    "IBFramework.IoC.Core": "1.0.0-*",
+    "NETStandard.Library": "1.6.0"
+  },
+
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": "dnxcore50"
+    }
+  }
+}

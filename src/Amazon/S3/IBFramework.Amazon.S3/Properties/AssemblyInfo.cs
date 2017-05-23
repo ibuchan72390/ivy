@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("IBFramework.MailChimp.Test")]
+[assembly: AssemblyProduct("IBFramework.Amazon.S3")]
 [assembly: AssemblyTrademark("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
@@ -15,4 +15,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("4f759813-7f83-4b25-91d1-058cea0a657d")]
+[assembly: Guid("348ec3af-92d3-4f75-a44d-b738d1ff4565")]

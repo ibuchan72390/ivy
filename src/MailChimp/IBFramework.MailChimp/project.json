@@ -7,7 +7,7 @@
     "IBFramework.Validation": "1.0.0-*",
     "IBFramework.Validation.Core": "1.0.0-*",
     "IBFramework.Web.Core": "1.0.0-*",
-    "Microsoft.Extensions.Logging.Abstractions": "1.0.0",
+    "Microsoft.Extensions.Logging.Abstractions": "1.0.2",
     "NETStandard.Library": "1.6.0"
   },
 

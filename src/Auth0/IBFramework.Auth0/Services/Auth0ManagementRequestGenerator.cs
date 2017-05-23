@@ -1,5 +1,7 @@
-﻿using IBFramework.Auth0.Core.Providers;
+﻿using IBFramework.Auth0.Core.Models;
+using IBFramework.Auth0.Core.Providers;
 using IBFramework.Auth0.Core.Services;
+using IBFramework.Web.Json;
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -11,6 +13,7 @@ namespace IBFramework.Auth0.Services
     {
         #region Variables & Constants
 
+        private readonly IJsonSerializationService _serializationService;
         private readonly IAuth0ConfigurationProvider _configProvider;
         private readonly IUserProvider _userProvider;
 
@@ -19,9 +22,11 @@ namespace IBFramework.Auth0.Services
         #region Constructor
 
         public Auth0ManagementRequestGenerator(
+            IJsonSerializationService serializationService,
             IAuth0ConfigurationProvider configProvider,
             IUserProvider userProvider)
         {
+            _serializationService = serializationService;
             _configProvider = configProvider;
             _userProvider = userProvider;
         }
@@ -51,7 +56,7 @@ namespace IBFramework.Auth0.Services
                 grant_type = "client_credentials"
             };
 
-            var tokenBodyString = JsonConvert.SerializeObject(tokenReqBody);
+            var tokenBodyString = _serializationService.Serialize(tokenReqBody);
 
             req.Content = new StringContent(tokenBodyString, Encoding.UTF8, "application/json");
 
@@ -67,7 +72,7 @@ namespace IBFramework.Auth0.Services
                 client_id = _configProvider.SpaClientId
             };
 
-            var stringContent = JsonConvert.SerializeObject(verifyEmail);
+            var stringContent = _serializationService.Serialize(verifyEmail);
 
             var req = new HttpRequestMessage
             {
