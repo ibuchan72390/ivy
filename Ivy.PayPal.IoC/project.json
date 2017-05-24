@@ -1,0 +1,16 @@
+{
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "Ivy.IoC.Core": "1.0.0.0",
+    "Ivy.PayPal": "1.0.0.0",
+    "Ivy.PayPal.Core": "1.0.0.0",
+    "NETStandard.Library": "1.6.0"
+  },
+
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": "dnxcore50"
+    }
+  }
+}

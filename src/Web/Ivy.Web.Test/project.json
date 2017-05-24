@@ -1,0 +1,31 @@
+{
+  "version": "1.0.0.0",
+
+  "dependencies": {
+    "NETStandard.Library": "1.6.0",
+    "xunit": "2.2.0",
+    "dotnet-test-xunit": "2.2.0-preview2-build1029",
+    "Ivy.Web.Core": "1.0.0.0",
+    "Ivy.Web": "1.0.0.0",
+    "Ivy.Web.IoC": "1.0.0.0",
+    "Ivy.IoC": "1.0.0.0",
+    "Ivy.IoC.Core": "1.0.0.0",
+    "Ivy.TestHelper": "1.0.0.0",
+    "Moq": "4.7.10"
+  },
+
+  "testRunner": "xunit",
+
+  "runtimes": {
+    "win10-x86": {},
+    "win10-x64": {},
+    "osx.10.10-x64": {},
+    "ubuntu.16.04-x64": {}
+  },
+
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": [ "dnxcore50", "netcoreapp1.0" ]
+    }
+  }
+}
