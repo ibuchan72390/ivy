@@ -1,5 +1,4 @@
-﻿using Ivy.Caching.IoC;
-using Ivy.IoC;
+﻿using Ivy.IoC;
 using Ivy.IoC.Core;
 using Ivy.IoC.IoC;
 using Ivy.Utility.IoC;
@@ -55,7 +54,6 @@ namespace Ivy.TestHelper
         {
             // Installations
             containerGen.InstallIvyIoC();
-            containerGen.InstallIvyCaching();
             containerGen.InstallIvyUtility();
 
             _additionalContainerFns?.Invoke(containerGen);

@@ -1,8 +1,10 @@
 ﻿using Ivy.IoC.Core;
 using Ivy.Transformer.Base;
 using Ivy.Transformer.Base.Entity;
+using Ivy.Transformer.Base.Pagination;
 using Ivy.Transformer.Core.Interfaces.Entity;
 using Ivy.Transformer.Core.Interfaces.EnumEntity;
+using Ivy.Transformer.Core.Interfaces.Pagination;
 
 /*
  * We should be able to make it so we can request a single base transformer if necessary
@@ -28,6 +30,9 @@ namespace Ivy.Transformer.IoC
             container.RegisterSingleton(typeof(IEnumEntityToViewModelListTransformer<,>), typeof(BaseEnumEntityTransformer<,>));
 
             container.RegisterSingleton(typeof(IEnumEntityTransformer<,>), typeof(BaseEnumEntityTransformer<,>));
+
+            // Paginated Transformers
+            container.RegisterSingleton(typeof(IPaginatedResponseTransformer<,,>), typeof(PaginatedResponseTransformer<,,>));
         }
     }
 

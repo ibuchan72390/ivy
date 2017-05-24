@@ -2,6 +2,7 @@
   "version": "1.0.0.0",
 
   "dependencies": {
+    "Ivy.Data.Common": "1.0.0.0",
     "Ivy.Data.Core": "1.0.0.0",
     "NETStandard.Library": "1.6.0"
   },

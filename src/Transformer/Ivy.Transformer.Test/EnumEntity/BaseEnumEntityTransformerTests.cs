@@ -1,7 +1,7 @@
-﻿using Ivy.Data.Core.Domain;
-using Ivy.IoC;
+﻿using Ivy.IoC;
+using Ivy.TestHelper.TestEntities;
 using Ivy.Transformer.Core.Interfaces.EnumEntity;
-using Ivy.Transformer.Core.Models;
+using Ivy.Transformer.Test.Models;
 using System.Linq;
 using Xunit;
 
@@ -9,26 +9,6 @@ namespace Ivy.Transformer.Test.Base
 {
     public class BaseEnumEntityTransformerTests : TransformerTestBase
     {
-        #region Test Classes
-
-        public enum TestEnum
-        {
-            Test1,
-            Test2,
-            Test3,
-            Test4
-        };
-
-        public class TestEnumEntity : EnumEntity<TestEnum>
-        {
-        }
-
-        public class TestEnumEntityModel : BaseEnumEntityModel
-        {
-        }
-
-        #endregion
-
         #region Tests
 
         [Fact]
