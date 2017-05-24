@@ -1,6 +1,8 @@
 ﻿using Ivy.Data.Core.Interfaces;
 using Ivy.Data.Core.Interfaces.Base.Blob;
 using System.Collections.Generic;
+using Ivy.Data.Core.Interfaces.Pagination;
+using System;
 
 namespace Ivy.Data.Common.Base.Blob
 {
@@ -35,6 +37,11 @@ namespace Ivy.Data.Common.Base.Blob
         public virtual IEnumerable<TEntity> GetAll(ITranConn tc = null)
         {
             return Repo.GetAll(tc);
+        }
+
+        public IPaginationResponse<TEntity> GetAll(IPaginationRequest request, ITranConn tc = null)
+        {
+            return Repo.GetAll(request, tc);
         }
 
         public virtual void Insert(TEntity entity, ITranConn tc = null)

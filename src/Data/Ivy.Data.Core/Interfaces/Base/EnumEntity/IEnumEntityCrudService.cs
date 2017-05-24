@@ -7,6 +7,7 @@ namespace Ivy.Data.Core.Interfaces.Base.EnumEntity
 {
     public interface IEnumEntityCrudService<TEntity, TRepo, TEnum> : 
         IEnumEntityService<TEntity, TRepo, TEnum>,
+
         IEntityDelete<TEntity>,
         IEntitySaveOrUpdate<TEntity>,
         IEnumEntityGet<TEntity, TEnum>

@@ -7,6 +7,7 @@ namespace Ivy.Data.Core.Interfaces.Base.Entity
     public interface IEntityCrudService<TEntity, TRepo> : 
         IEntityService<TEntity, TRepo>,
         IGetAll<TEntity>,
+        IPaginatedGetAll<TEntity>,
         IDeleteAll<TEntity>,
         IEntityDelete<TEntity>,
         IEntityGet<TEntity>,

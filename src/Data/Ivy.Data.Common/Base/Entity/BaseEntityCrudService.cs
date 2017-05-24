@@ -2,6 +2,8 @@
 using Ivy.Data.Core.Interfaces.Base.Entity;
 using Ivy.Data.Core.Interfaces.Domain;
 using System.Collections.Generic;
+using Ivy.Data.Core.Interfaces.Pagination;
+using System;
 
 namespace Ivy.Data.Common.Base.Entity
 {
@@ -41,6 +43,11 @@ namespace Ivy.Data.Common.Base.Entity
         public virtual IEnumerable<TEntity> GetAll(ITranConn tc = null)
         {
             return Repo.GetAll(tc);
+        }
+
+        public IPaginationResponse<TEntity> GetAll(IPaginationRequest request, ITranConn tc = null)
+        {
+            return Repo.GetAll(request, tc);
         }
 
         public virtual TEntity GetById(int id, ITranConn tc = null)

@@ -6,6 +6,7 @@ namespace Ivy.Data.Core.Interfaces.Base.Blob
     public interface IBlobCrudService<TEntity, TRepo> : 
         IBlobService<TEntity, TRepo>,
         IGetAll<TEntity>,
+        IPaginatedGetAll<TEntity>,
         IDeleteAll<TEntity>,
         IBlobInsert<TEntity>
         
