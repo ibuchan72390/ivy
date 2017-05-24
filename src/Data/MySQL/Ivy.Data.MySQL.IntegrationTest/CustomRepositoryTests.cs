@@ -1,7 +1,6 @@
 ﻿using Ivy.IoC;
 using System.Collections.Generic;
 using Ivy.Utility.IoC;
-using Ivy.Caching.IoC;
 using Xunit;
 using System.Linq;
 using System;
@@ -173,7 +172,6 @@ namespace Ivy.Data.MySQL.IntegrationTest
             var containerGen = ServiceLocator.Instance.Resolve<IContainerGenerator>();
 
             containerGen.InstallIvyIoC();
-            containerGen.InstallIvyCaching();
             containerGen.InstallIvyUtility();
 
             containerGen.InstallIvyCommonData();

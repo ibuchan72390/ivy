@@ -1,7 +1,8 @@
-﻿using Ivy.Data.Common.Pagination;
-using Ivy.Transformer.Core.Interfaces.Pagination;
+﻿using Ivy.Transformer.Core.Interfaces.Pagination;
 using Ivy.Transformer.Core.Models.Pagination;
 using Ivy.Transformer.Core.Interfaces.Entity;
+using Ivy.Data.Core.Interfaces.Pagination;
+using Ivy.Transformer.Core.Interfaces.Models;
 
 namespace Ivy.Transformer.Base.Pagination
 {
@@ -27,7 +28,7 @@ namespace Ivy.Transformer.Base.Pagination
 
         #region Public Methods
 
-        public PaginatedResponseViewModel<TModel> Transform(PaginationResponse<TEntity> paginationResponse)
+        public IPaginatedResponseViewModel<TModel> Transform(IPaginationResponse<TEntity> paginationResponse)
         {
             var models = _transformer.Transform(paginationResponse.Data);
 
