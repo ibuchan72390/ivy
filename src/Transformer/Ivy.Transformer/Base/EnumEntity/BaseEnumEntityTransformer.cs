@@ -7,8 +7,8 @@ namespace Ivy.Transformer.Base
 {
     public class BaseEnumEntityTransformer<TEnumEntity, TEnumModel> : 
         BaseEntityTransformer<TEnumEntity, TEnumModel>, 
-        IEnumEntityToViewModelListTransformer<TEnumEntity, TEnumModel>,
-        IEnumEntityToViewModelTransformer<TEnumEntity, TEnumModel>
+        IEnumEntityTransformer<TEnumEntity, TEnumModel>
+
         where TEnumEntity : IEnumEntityProperties, IEntity, new()
         where TEnumModel : BaseEnumEntityModel, new()
     {

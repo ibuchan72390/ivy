@@ -16,6 +16,8 @@ using Ivy.Data.Common.IoC;
 using Ivy.IoC.IoC;
 using Ivy.MySQL.IoC;
 using Ivy.TestUtilities;
+using Ivy.Data.Core.Interfaces.Pagination;
+using Ivy.Data.Common.Pagination;
 
 namespace Ivy.Data.MySQL.IntegrationTest
 {
@@ -42,6 +44,12 @@ namespace Ivy.Data.MySQL.IntegrationTest
             IEnumerable<ParentEntity> GetByName(string name, ITranConn tc = null);
 
             IEnumerable<ParentEntity> GetTop5(ITranConn tc = null);
+
+            #endregion
+
+            #region PaginatedSelect
+
+            IPaginationResponse<ParentEntity> SearchByName(IPaginationRequest request, ITranConn tc = null);
 
             #endregion
 
@@ -119,6 +127,19 @@ namespace Ivy.Data.MySQL.IntegrationTest
             public IEnumerable<ParentEntity> GetTop5(ITranConn tc = null)
             {
                 return InternalSelect(limit: 5);
+            }
+
+            #endregion
+
+            #region PaginatedSelect
+
+            public IPaginationResponse<ParentEntity> SearchByName(IPaginationRequest request, ITranConn tc = null)
+            {
+                const string sqlWhere = "WHERE THIS.Name LIKE CONCAT('%', @search, '%')";
+
+                var parms = new Dictionary<string, object> { { "@search", request.Search } };
+
+                return InternalSelectPaginated(null, null, sqlWhere, request, parms, tc);
             }
 
             #endregion
@@ -286,6 +307,65 @@ namespace Ivy.Data.MySQL.IntegrationTest
             var result = results.First();
 
             Assert.Equal(entity.Id, result.Id);
+        }
+
+        #endregion
+
+        #region InternalPaginatedSelect
+
+        [Fact]
+        public void FindByName_Works_As_Expected_With_Pagination()
+        {
+            const string nameLike = "TEST";
+            const int viableEntities = 4;
+
+            var expectedEntities = Enumerable.Range(0, viableEntities).
+                Select(x => new ParentEntity { Name = $"{nameLike}{x}" }.SaveForTest()).
+                ToList();
+
+            var alternateEntities = Enumerable.Range(0, 4).
+                Select(x => new ParentEntity().SaveForTest()).
+                ToList();
+
+            var req = new PaginationRequest();
+            req.Search = nameLike;
+            req.PageCount = 10;
+            req.PageNumber = 1;
+
+            var results = _sut.SearchByName(req);
+
+            Assert.Equal(viableEntities * 2, results.TotalCount);
+            Assert.Equal(viableEntities, results.Data.Count());
+            AssertExtensions.FullEntityListExclusion(expectedEntities, results.Data);
+        }
+
+        [Fact]
+        public void FindByName_Works_As_Expected_With_Limited_Pagination()
+        {
+            const string nameLike = "TEST";
+            const int viableEntities = 4;
+            const int pageCount = 2;
+
+            var expectedEntities = Enumerable.Range(0, viableEntities).
+                Select(x => new ParentEntity { Name = $"{nameLike}{x}" }.SaveForTest()).
+                ToList();
+
+            var expected = expectedEntities.Take(2);
+
+            var alternateEntities = Enumerable.Range(0, 4).
+                Select(x => new ParentEntity().SaveForTest()).
+                ToList();
+
+            var req = new PaginationRequest();
+            req.Search = nameLike;
+            req.PageCount = pageCount;
+            req.PageNumber = 1;
+
+            var results = _sut.SearchByName(req);
+
+            Assert.Equal(viableEntities * 2, results.TotalCount);
+            Assert.Equal(pageCount, results.Data.Count());
+            AssertExtensions.FullEntityListExclusion(expected, results.Data);
         }
 
         #endregion

@@ -5,7 +5,10 @@ namespace Ivy.Transformer.Core.Interfaces.EnumEntity
 {
     public interface IEnumEntityTransformer<TEnumEntity, TViewModel> : 
         IEnumEntityToViewModelTransformer<TEnumEntity, TViewModel>,
-        IEnumEntityToViewModelListTransformer<TEnumEntity, TViewModel>
+        IEnumEntityToViewModelListTransformer<TEnumEntity, TViewModel>,
+        IViewModelToEnumEntityTransformer<TEnumEntity, TViewModel>,
+        IViewModelToEnumEntityListTransformer<TEnumEntity, TViewModel>
+
         where TEnumEntity : IEntity, IEnumEntityProperties
         where TViewModel : BaseEnumEntityModel
     {

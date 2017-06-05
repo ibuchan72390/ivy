@@ -11,10 +11,12 @@ namespace Ivy.Transformer.Test.Base
     {
         #region Tests
 
+        #region Entity -> VM
+
         [Fact]
-        public void BaseTransformer_Converts_EntityWithTypedId_To_Model_As_Expected()
+        public void BaseTransformer_Converts_EnumEntity_To_Model_As_Expected()
         {
-            var _sut = ServiceLocator.Instance.Resolve<IEnumEntityToViewModelTransformer<TestEnumEntity, TestEnumEntityModel>>();
+            var _sut = ServiceLocator.Instance.Resolve<IEnumEntityTransformer<TestEnumEntity, TestEnumEntityModel>>();
 
             var entity = new TestEnumEntity { Id = 1, Name = "Name", FriendlyName = "FriendlyName" };
 
@@ -24,9 +26,9 @@ namespace Ivy.Transformer.Test.Base
         }
 
         [Fact]
-        public void BaseTransformer_Converts_EntityWithTypedId_To_Model_List_As_Expected()
+        public void BaseTransformer_Converts_EnumEntity_To_Model_List_As_Expected()
         {
-            var _sut = ServiceLocator.Instance.Resolve<IEnumEntityToViewModelListTransformer<TestEnumEntity, TestEnumEntityModel>>();
+            var _sut = ServiceLocator.Instance.Resolve<IEnumEntityTransformer<TestEnumEntity, TestEnumEntityModel>>();
 
             var entities = Enumerable.Range(0, 4).Select(x => new TestEnumEntity { Id = x, Name = $"Name{x}", FriendlyName = $"FriendlyName{x}" });
 
@@ -38,6 +40,40 @@ namespace Ivy.Transformer.Test.Base
                 AssertEntityEquality(model, targetModel);
             }
         }
+
+        #endregion
+
+        #region VM -> Entity
+
+        [Fact]
+        public void BaseTransformer_Converts_Model_To_EnumEntity_As_Expected()
+        {
+            var _sut = ServiceLocator.Instance.Resolve<IEnumEntityTransformer<TestEnumEntity, TestEnumEntityModel>>();
+
+            var model = new TestEnumEntityModel { Id = 1, Name = "Name", FriendlyName = "FriendlyName" };
+
+            var result = _sut.Transform(model);
+
+            AssertEntityEquality(result, model);
+        }
+
+        [Fact]
+        public void BaseTransformer_Converts_Model_To_EnumEntity_List_As_Expected()
+        {
+            var _sut = ServiceLocator.Instance.Resolve<IEnumEntityTransformer<TestEnumEntity, TestEnumEntityModel>>();
+
+            var models = Enumerable.Range(0, 4).Select(x => new TestEnumEntityModel { Id = x, Name = $"Name{x}", FriendlyName = $"FriendlyName{x}" });
+
+            var results = _sut.Transform(models);
+
+            foreach (var model in models)
+            {
+                var result = results.FirstOrDefault(x => x.Id == model.Id);
+                AssertEntityEquality(result, model);
+            }
+        }
+
+        #endregion
 
         #endregion
 
