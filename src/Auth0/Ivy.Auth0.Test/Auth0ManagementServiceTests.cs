@@ -22,7 +22,7 @@ namespace Ivy.Auth0.Test
         private readonly Mock<IAuth0ManagementRequestGenerator> _mockRequestGen;
 
         private readonly string apiToken = "TEST";
-        private readonly HttpRequestMessage req;
+        private readonly HttpRequestMessage req = new HttpRequestMessage();
 
         #endregion
 
@@ -50,10 +50,13 @@ namespace Ivy.Auth0.Test
 
             _sut = container.Resolve<IAuth0ManagementService>();
 
-
             _mockTokenGenerator.
                 Setup(x => x.GetApiAuthTokenAsync()).
                 ReturnsAsync(apiToken);
+
+            _mockRequestGen.
+                Setup(x => x.GenerateVerifyEmailRequest(apiToken)).
+                Returns(req);
         }
 
         #endregion
