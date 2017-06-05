@@ -5,19 +5,40 @@ namespace Ivy.Data.Common.Transaction
 {
     public class TransactionHelper : ITransactionHelper
     {
+        #region Variables & Constants
+
         public string ConnectionString { get; private set; }
+
         private readonly ITranConnGenerator _tcGenerator;
+        private readonly IDatabaseKeyManager _dbKeyManager;
+
+        #endregion
+
+        #region Constructor
 
         public TransactionHelper(
-            ITranConnGenerator tcGenerator)
+            ITranConnGenerator tcGenerator,
+            IDatabaseKeyManager dbKeyManager)
         {
             _tcGenerator = tcGenerator;
+            _dbKeyManager = dbKeyManager;
         }
+
+        #endregion
+
+        #region Initialization
 
         public void InitializeByConnectionString(string connectionString)
         {
             ConnectionString = connectionString;
         }
+
+        public void InitializeByDatabaseKey(string databaseKey)
+        {
+            ConnectionString = _dbKeyManager.GetConnectionString(databaseKey);
+        }
+
+        #endregion
 
         public void WrapInTransaction(Action<ITranConn> tranConnFn, ITranConn tc = null)
         {
@@ -91,5 +112,6 @@ namespace Ivy.Data.Common.Transaction
 
             return result;
         }
+
     }
 }

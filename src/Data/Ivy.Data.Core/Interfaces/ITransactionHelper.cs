@@ -3,7 +3,7 @@ using System;
 
 namespace Ivy.Data.Core.Interfaces
 {
-    public interface ITransactionHelper : IInitializeByConnectionString
+    public interface ITransactionHelper : IInitialize
     {
         void WrapInTransaction(Action<ITranConn> tranConnFn, ITranConn tc = null);
 
