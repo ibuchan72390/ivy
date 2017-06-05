@@ -4,12 +4,12 @@
   "dependencies": {
     "Ivy.IoC": "1.0.0.0",
     "Ivy.TestHelper": "1.0.0.0",
-    "Ivy.Transformer": "1.0.0.0",
-    "Ivy.Transformer.Core": "1.0.0.0",
+    "Ivy.Transformer": "1.0.0.1",
+    "Ivy.Transformer.Core": "1.0.0.1",
     "NETStandard.Library": "1.6.0",
     "xunit": "2.2.0",
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
-    "Ivy.Transformer.IoC": "1.0.0.0"
+    "Ivy.Transformer.IoC": "1.0.0.1"
   },
 
   "testRunner": "xunit",
