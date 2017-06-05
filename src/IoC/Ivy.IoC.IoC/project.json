@@ -2,7 +2,7 @@
   "version": "1.0.0.0",
 
   "dependencies": {
-    "Ivy.IoC": "1.0.0.0",
+    "Ivy.IoC": "1.0.0.1",
     "Ivy.IoC.Core": "1.0.0.0",
     "NETStandard.Library": "1.6.0"
   },
