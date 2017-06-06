@@ -3,6 +3,7 @@ using Ivy.Data.Core.Interfaces.Base.EnumEntity;
 using Ivy.Data.Core.Interfaces.Domain;
 using System;
 using System.Collections.Generic;
+using Ivy.Data.Core.Interfaces.Pagination;
 
 namespace Ivy.Data.Common.Base.EnumEntity
 {
@@ -30,9 +31,24 @@ namespace Ivy.Data.Common.Base.EnumEntity
             Repo.Delete(entity, tc);
         }
 
+        public void DeleteAll(ITranConn tc = null)
+        {
+            Repo.DeleteAll();
+        }
+
         public virtual void DeleteById(int id, ITranConn tc = null)
         {
             Repo.DeleteById(id, tc);
+        }
+
+        public IEnumerable<TEntity> GetAll(ITranConn tc = null)
+        {
+            return Repo.GetAll(tc);
+        }
+
+        public IPaginationResponse<TEntity> GetAll(IPaginationRequest request, ITranConn tc = null)
+        {
+            return Repo.GetAll(request, tc);
         }
 
         public virtual TEntity GetById(int id, ITranConn tc = null)
