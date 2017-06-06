@@ -1,9 +1,9 @@
 {
-  "version": "1.0.0.1",
+  "version": "1.0.0.2",
 
   "dependencies": {
     "NETStandard.Library": "1.6.0",
-    "Ivy.Data.Common": "1.0.0.2",
+    "Ivy.Data.Common": "1.0.0.3",
     "Microsoft.Extensions.DependencyInjection": "1.0.0",
     "Ivy.IoC.Core": "1.0.0.0"
   },

@@ -3,8 +3,8 @@
 
   "dependencies": {
     "Ivy.IoC.Core": "1.0.0.0",
-    "Ivy.Transformer": "1.0.0.2",
-    "Ivy.Transformer.Core": "1.0.0.1",
+    "Ivy.Transformer": "1.0.0.3",
+    "Ivy.Transformer.Core": "1.0.0.2",
     "NETStandard.Library": "1.6.0"
   },
 
