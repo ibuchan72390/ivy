@@ -41,37 +41,41 @@ namespace Ivy.Amazon.S3.Services
 
         #region Public Methods
 
-
-        public string GetCloudFrontSignedFileUrl(string bucketName, string objectKey)
+        public string GetCloudFrontSignedFileDownloadUrl(string bucketName, string objectKey)
         {
-            return PrivateGetFileAsync(bucketName, objectKey);
+            return PrivateGetFileUrlAsync(bucketName, objectKey, HttpVerb.GET);
         }
 
-        public string GetCloudFrontSignedVideoUrl(string bucketName, string objectKey, ResolutionTypeName resolution)
+        public string GetCloudFrontSignedVideoDownloadUrl(string bucketName, string objectKey, ResolutionTypeName resolution)
         {
-            //ResolutionTypeName resolutionEnum;
-            //bool success = Enum.TryParse(resolution, out resolutionEnum);
+            var videoKey = _videoKeyGen.GetS3VideoDownloadKey(objectKey, resolution);
 
-            //if (!success)
-            //{
-            //    throw new Exception($"Unable to parse the received resolution to a ResolutionTypeName.  Received: {resolution}");
-            //}
+            return PrivateGetFileUrlAsync(bucketName, videoKey, HttpVerb.GET);
+        }
 
-            var videoKey = _videoKeyGen.GetS3VideoKey(objectKey, resolution);
+        public string GetCloudFrontSignedFileUploadUrl(string bucketName, string objectKey)
+        {
+            return PrivateGetFileUrlAsync(bucketName, objectKey, HttpVerb.PUT);
+        }
 
-            return PrivateGetFileAsync(bucketName, videoKey);
+        public string GetCloudFrontSignedVideoUploadUrl(string bucketName, string objectKey)
+        {
+            var videoKey = _videoKeyGen.GetS3VideoUploadKey(objectKey);
+
+            return PrivateGetFileUrlAsync(bucketName, videoKey, HttpVerb.PUT);
         }
 
         #endregion
 
         #region Helper Methods
 
-        private string PrivateGetFileAsync(string bucketName, string fileKey)
+        private string PrivateGetFileUrlAsync(string bucketName, string fileKey, HttpVerb verb)
         {
             GetPreSignedUrlRequest request = new GetPreSignedUrlRequest
             {
                 BucketName = bucketName,
                 Key = fileKey,
+                Verb = verb,
 
                 // I think this will do the trick?
                 // It seems to indicate that once the connection is established, the download should complete.
@@ -82,7 +86,6 @@ namespace Ivy.Amazon.S3.Services
 
             return _s3ClientService.GetPreSignedURL(request);
         }
-
 
         #endregion
     }

@@ -22,16 +22,16 @@ namespace Ivy.Amazon.S3.Services
 
         #region Public Methods
 
-        public string GetS3VideoKey(string objectKey, ResolutionTypeName resolution)
+        public string GetS3VideoDownloadKey(string objectKey, ResolutionTypeName resolution)
         {
-            //if (s3Ref.S3ContentType.GetEnumValue() != S3ContentTypeName.Video)
-            //{
-            //    throw new Exception($"Unable to GetS3VideoKey for non-video content! S3Content.Id: {s3Ref.Id}");
-            //}
-
             string massagedResolution = _resolutionTranslator.GetResolutionString(resolution);
 
             return $"Videos/{massagedResolution}/{objectKey}";
+        }
+
+        public string GetS3VideoUploadKey(string objectKey)
+        {
+            return $"Videos/Upload/{objectKey}";
         }
 
         #endregion

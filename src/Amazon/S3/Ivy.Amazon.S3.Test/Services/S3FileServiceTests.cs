@@ -50,10 +50,10 @@ namespace Ivy.Amazon.S3.Test.Services
 
         #region Tests
 
-        #region GetCloudFrontSignedFileUrl
+        #region GetCloudFrontSignedFileDownloadUrl
 
         [Fact]
-        public void GetCloudFrontSignedFileUrl_Passes_Params_As_Expected()
+        public void GetCloudFrontSignedFileDownloadUrl_Passes_Params_As_Expected()
         {
             const string expectedReturn = "TEST";
 
@@ -65,24 +65,26 @@ namespace Ivy.Amazon.S3.Test.Services
             _mockS3.Setup(x => x.GetPreSignedURL(It.Is<GetPreSignedUrlRequest>(
                 y => y.BucketName == bucketName &&
                      y.Key == key &&
-                     y.Expires == expectedNow))).Returns(expectedReturn);
+                     y.Expires == expectedNow &&
+                     y.Verb == HttpVerb.GET))).Returns(expectedReturn);
 
-            var result = _sut.GetCloudFrontSignedFileUrl(bucketName, key);
+            var result = _sut.GetCloudFrontSignedFileDownloadUrl(bucketName, key);
 
             Assert.Equal(expectedReturn, result);
 
             _mockS3.Verify(x => x.GetPreSignedURL(It.Is<GetPreSignedUrlRequest>(
                 y => y.BucketName == bucketName &&
                      y.Key == key &&
-                     y.Expires == expectedNow)), Times.Once);
+                     y.Expires == expectedNow &&
+                     y.Verb == HttpVerb.GET)), Times.Once);
         }
 
         #endregion
 
-        #region GetCloudFrontSignedVideoUrl
+        #region GetCloudFrontSignedVideoDownloadUrl
 
         [Fact]
-        public void GetCloudFrontSignedVideoUrl_Passes_Params_As_Expected()
+        public void GetCloudFrontSignedVideoDownloadUrl_Passes_Params_As_Expected()
         {
             const ResolutionTypeName resolution = ResolutionTypeName.High;
             const string expectedReturn = "TEST";
@@ -91,25 +93,96 @@ namespace Ivy.Amazon.S3.Test.Services
 
             var videoKeyGen = ServiceLocator.Instance.Resolve<IS3VideoKeyGenerator>();
 
-            
-            string expectedKey = videoKeyGen.GetS3VideoKey(key, resolution);
+            string expectedKey = videoKeyGen.GetS3VideoDownloadKey(key, resolution);
 
             var expectedNow = now.AddMinutes(1);
 
             _mockS3.Setup(x => x.GetPreSignedURL(It.Is<GetPreSignedUrlRequest>(
                 y => y.BucketName == bucketName &&
                      y.Key == expectedKey &&
-                     y.Expires == expectedNow
-                     ))).Returns(expectedReturn);
+                     y.Expires == expectedNow &&
+                     y.Verb == HttpVerb.GET
+                ))).Returns(expectedReturn);
 
-            var result = _sut.GetCloudFrontSignedVideoUrl(bucketName, key, resolution);
+            var result = _sut.GetCloudFrontSignedVideoDownloadUrl(bucketName, key, resolution);
 
             Assert.Equal(expectedReturn, result);
 
             _mockS3.Verify(x => x.GetPreSignedURL(It.Is<GetPreSignedUrlRequest>(
                 y => y.BucketName == bucketName &&
                      y.Key == expectedKey &&
-                     y.Expires == expectedNow)), Times.Once);
+                     y.Expires == expectedNow &&
+                     y.Verb == HttpVerb.GET
+                )), Times.Once);
+        }
+
+        #endregion
+
+        #region GetCloudFrontSignedFileUploadUrl
+
+        [Fact]
+        public void GetCloudFrontSignedFileUploadUrl_Passes_Params_As_Expected()
+        {
+            const string expectedReturn = "TEST";
+
+            const string bucketName = "TESTBucket";
+            const string key = "TESTKey";
+
+            var expectedNow = now.AddMinutes(1);
+
+            _mockS3.Setup(x => x.GetPreSignedURL(It.Is<GetPreSignedUrlRequest>(
+                y => y.BucketName == bucketName &&
+                     y.Key == key &&
+                     y.Expires == expectedNow &&
+                     y.Verb == HttpVerb.PUT
+                ))).Returns(expectedReturn);
+
+            var result = _sut.GetCloudFrontSignedFileUploadUrl(bucketName, key);
+
+            Assert.Equal(expectedReturn, result);
+
+            _mockS3.Verify(x => x.GetPreSignedURL(It.Is<GetPreSignedUrlRequest>(
+                y => y.BucketName == bucketName &&
+                     y.Key == key &&
+                     y.Expires == expectedNow &&
+                     y.Verb == HttpVerb.PUT
+                )), Times.Once);
+        }
+
+        #endregion
+
+        #region GetCloudFrontSignedVideoUploadUrl
+
+        [Fact]
+        public void GetCloudFrontSignedVideoUploadUrl_Passes_Params_As_Expected()
+        {
+            const string expectedReturn = "TEST";
+            const string bucketName = "TESTBucket";
+            const string key = "TESTKey";
+
+            var videoKeyGen = ServiceLocator.Instance.Resolve<IS3VideoKeyGenerator>();
+
+            string expectedKey = videoKeyGen.GetS3VideoUploadKey(key);
+
+            var expectedNow = now.AddMinutes(1);
+
+            _mockS3.Setup(x => x.GetPreSignedURL(It.Is<GetPreSignedUrlRequest>(
+                y => y.BucketName == bucketName &&
+                     y.Key == expectedKey &&
+                     y.Expires == expectedNow &&
+                     y.Verb == HttpVerb.PUT
+                ))).Returns(expectedReturn);
+
+            var result = _sut.GetCloudFrontSignedVideoUploadUrl(bucketName, key);
+
+            Assert.Equal(expectedReturn, result);
+
+            _mockS3.Verify(x => x.GetPreSignedURL(It.Is<GetPreSignedUrlRequest>(
+                y => y.BucketName == bucketName &&
+                     y.Key == expectedKey &&
+                     y.Expires == expectedNow &&
+                     y.Verb == HttpVerb.PUT
+                )), Times.Once);
         }
 
         #endregion
