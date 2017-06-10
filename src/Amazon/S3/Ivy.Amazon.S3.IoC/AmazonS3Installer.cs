@@ -8,10 +8,9 @@ namespace Ivy.Amazon.S3.IoC
     {
         public void Install(IContainerGenerator containerGenerator)
         {
-            containerGenerator.RegisterSingleton<IS3FileService, S3FileService>();
-            containerGenerator.RegisterSingleton<IS3ResolutionTranslator, S3ResolutionTranslator>();
+            containerGenerator.RegisterSingleton<IS3SignedUrlService, S3SignedUrlService>();
             containerGenerator.RegisterSingleton<IS3UrlHelper, S3UrlHelper>();
-            containerGenerator.RegisterSingleton<IS3VideoKeyGenerator, S3VideoKeyGenerator>();
+            containerGenerator.RegisterSingleton<IS3FileValidator, S3FileValidator>();
         }
     }
 

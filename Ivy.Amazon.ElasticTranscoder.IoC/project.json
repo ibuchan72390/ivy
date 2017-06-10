@@ -1,10 +1,10 @@
 {
-  "version": "1.0.0.1",
+  "version": "1.0.0.0",
 
   "dependencies": {
+    "Ivy.Amazon.ElasticTranscoder": "1.0.0.0",
+    "Ivy.Amazon.ElasticTranscoder.Core": "1.0.0.0",
     "Ivy.IoC.Core": "1.0.0.0",
-    "Ivy.MailChimp": "1.0.0.1",
-    "Ivy.MailChimp.Core": "1.0.0.0",
     "NETStandard.Library": "1.6.0"
   },
 
