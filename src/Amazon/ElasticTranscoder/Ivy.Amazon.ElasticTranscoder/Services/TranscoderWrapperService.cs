@@ -45,12 +45,12 @@ namespace Ivy.Amazon.ElasticTranscoder.Services
 
             req.Input = new JobInput();
             req.Input.Container = "auto";
-            req.Input.Key = $"{startBucket}/{startObject}";
+            req.Input.Key = $"{startObject}";
 
             req.Outputs = outputs.Select(
                 x => new CreateJobOutput
                 {
-                    Key = $"{startBucket}/{x.OutputPrefix}/{objectName}",
+                    Key = $"{x.OutputPrefix}/{objectName}",
                     PresetId = x.PresetId
                 }).ToList();
 
