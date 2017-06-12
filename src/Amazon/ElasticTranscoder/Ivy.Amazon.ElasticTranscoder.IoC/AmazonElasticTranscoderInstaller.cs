@@ -15,7 +15,7 @@ namespace Ivy.Amazon.ElasticTranscoder.IoC
 
     public static class AmazonElasticTranscoderInstallerExtension
     {
-        public static IContainerGenerator InstallIvyAmazonS3(this IContainerGenerator containerGenerator)
+        public static IContainerGenerator InstallIvyAmazonElasticTranscoder(this IContainerGenerator containerGenerator)
         {
             new AmazonElasticTranscoderInstaller().Install(containerGenerator);
             return containerGenerator;
