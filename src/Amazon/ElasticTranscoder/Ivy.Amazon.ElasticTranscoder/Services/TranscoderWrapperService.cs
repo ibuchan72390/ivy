@@ -1,7 +1,6 @@
 ﻿using Amazon.ElasticTranscoder;
 using Amazon.ElasticTranscoder.Model;
 using Ivy.Amazon.ElasticTranscoder.Core.Services;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Ivy.Amazon.ElasticTranscoder.Core.Models;
@@ -35,7 +34,8 @@ namespace Ivy.Amazon.ElasticTranscoder.Services
 
         #region Public Methods
 
-        public async Task<IEnumerable<TranscoderJobCreateResponse>> BeginTranscodeAsync(string startBucket, string startObject, IEnumerable<TranscoderJobOutput> outputs)
+        public async Task<IEnumerable<TranscoderJobCreateResponse>> BeginTranscodeAsync(string startBucket, 
+            string startObject, IEnumerable<TranscoderJobOutput> outputs)
         {
             var objectName = startObject.Split('/').Last();
 
