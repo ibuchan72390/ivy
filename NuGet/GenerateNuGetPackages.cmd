@@ -36,6 +36,9 @@ CD ../../src
 
 :: Standard Projects
 
+:: Build Amazon Elastic Transcoder
+CALL :CreateProjectPackage Amazon\ElasticTranscoder\Ivy.Amazon.ElasticTranscoder
+
 :: Build Amazon S3
 CALL :CreateProjectPackage Amazon\S3\Ivy.Amazon.S3
 
