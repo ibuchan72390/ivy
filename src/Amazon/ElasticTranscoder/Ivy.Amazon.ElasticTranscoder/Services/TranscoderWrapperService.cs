@@ -8,6 +8,7 @@ using Ivy.Amazon.ElasticTranscoder.Core.Models;
 using System.Collections.Generic;
 using Ivy.Utility.Util;
 using Ivy.Amazon.ElasticTranscoder.Core.Enums;
+using Ivy.Amazon.ElasticTranscoder.Core.Providers;
 
 namespace Ivy.Amazon.ElasticTranscoder.Services
 {
@@ -16,15 +17,18 @@ namespace Ivy.Amazon.ElasticTranscoder.Services
         #region Variables & Constants
 
         private readonly IAmazonElasticTranscoder _transcoderSvc;
+        private readonly ITranscoderConfigProvider _configProvider;
 
         #endregion
 
         #region Constructor
 
         public TranscoderWrapperService(
-            IAmazonElasticTranscoder transcoderSvc)
+            IAmazonElasticTranscoder transcoderSvc,
+            ITranscoderConfigProvider configProvider)
         {
             _transcoderSvc = transcoderSvc;
+            _configProvider = configProvider;
         }
 
         #endregion
@@ -36,6 +40,8 @@ namespace Ivy.Amazon.ElasticTranscoder.Services
             var objectName = startObject.Split('/').Last();
 
             var req = new CreateJobRequest();
+
+            req.PipelineId = _configProvider.PipelineId;
 
             req.Input = new JobInput();
             req.Input.Container = "auto";
