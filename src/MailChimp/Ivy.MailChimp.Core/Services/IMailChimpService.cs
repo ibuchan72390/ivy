@@ -1,5 +1,5 @@
 ﻿using Ivy.MailChimp.Core.Models;
-using Ivy.Validation.Core;
+using Ivy.Validation.Core.Interfaces;
 using System.Threading.Tasks;
 
 namespace Ivy.MailChimp.Core.Services

@@ -2,7 +2,7 @@
   "version": "1.0.0.0",
 
   "dependencies": {
-    "Ivy.Validation.Core": "1.0.0.0",
+    "Ivy.Validation.Core": "1.0.0.1",
     "NETStandard.Library": "1.6.0"
   },
 

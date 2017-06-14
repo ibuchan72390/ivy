@@ -1,4 +1,4 @@
-﻿namespace Ivy.Validation.Core
+﻿namespace Ivy.Validation.Core.Interfaces
 {
     public interface IValidationResult
     {

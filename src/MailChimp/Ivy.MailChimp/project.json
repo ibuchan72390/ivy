@@ -4,8 +4,7 @@
   "dependencies": {
     "Ivy.MailChimp.Core": "1.0.0.0",
     "Ivy.Utility": "1.0.0.4",
-    "Ivy.Validation": "1.0.0.0",
-    "Ivy.Validation.Core": "1.0.0.0",
+    "Ivy.Validation.Core": "1.0.0.1",
     "Ivy.Web.Core": "1.0.0.0",
     "Microsoft.Extensions.Logging.Abstractions": "1.0.2",
     "NETStandard.Library": "1.6.0"

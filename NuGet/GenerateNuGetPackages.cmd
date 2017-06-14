@@ -63,8 +63,8 @@ CALL :CreateProjectPackage Transformer\Ivy.Transformer
 :: Build Utility
 CALL :CreateProjectPackage Utility\Ivy.Utility
 
-:: Build Validation
-CALL :CreateProjectPackage Validation\Ivy.Validation
+:: Build Validation (Core Only)
+CALL :PackageProject Validation\Ivy.Validation.Core
 
 :: Build Web
 CALL :CreateProjectPackage Web\Ivy.Web

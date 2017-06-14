@@ -1,6 +1,6 @@
-﻿using Ivy.Validation.Core;
+﻿using Ivy.Validation.Core.Interfaces;
 
-namespace Ivy.Validation
+namespace Ivy.Validation.Core.DomainModel
 {
     public class ValidationResult : IValidationResult
     {

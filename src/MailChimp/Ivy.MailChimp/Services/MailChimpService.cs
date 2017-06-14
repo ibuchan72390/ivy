@@ -1,8 +1,8 @@
 ﻿using Ivy.MailChimp.Core.Enums;
 using Ivy.MailChimp.Core.Models;
 using Ivy.MailChimp.Core.Services;
-using Ivy.Validation;
-using Ivy.Validation.Core;
+using Ivy.Validation.Core.DomainModel;
+using Ivy.Validation.Core.Interfaces;
 using System.Threading.Tasks;
 
 namespace Ivy.MailChimp.Services
