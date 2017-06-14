@@ -1,6 +1,5 @@
 ﻿using Ivy.IoC;
-using Ivy.Utility.Extensions;
-using Microsoft.Extensions.DependencyInjection;
+using Ivy.Utility.Core.Extensions;
 using System.Net.Http;
 using Xunit;
 using System.Text;

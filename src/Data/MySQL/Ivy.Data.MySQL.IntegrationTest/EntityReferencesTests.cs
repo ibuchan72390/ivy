@@ -4,7 +4,7 @@ using Ivy.TestHelper;
 using Ivy.TestHelper.TestEntities;
 using Ivy.TestHelper.TestEntities.Flipped;
 using Ivy.TestHelper.TestValues;
-using Ivy.Utility.Extensions;
+using Ivy.Utility.Core.Extensions;
 using System;
 using System.Linq;
 using Xunit;

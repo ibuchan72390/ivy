@@ -5,9 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Ivy.Amazon.ElasticTranscoder.Core.Models;
 using System.Collections.Generic;
-using Ivy.Utility.Util;
 using Ivy.Amazon.ElasticTranscoder.Core.Enums;
 using Ivy.Amazon.ElasticTranscoder.Core.Providers;
+using Ivy.Utility.Core.Util;
 
 namespace Ivy.Amazon.ElasticTranscoder.Services
 {

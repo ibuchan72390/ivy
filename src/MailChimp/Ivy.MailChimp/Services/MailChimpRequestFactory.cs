@@ -6,7 +6,7 @@ using Ivy.MailChimp.Core.Services;
 using Ivy.MailChimp.Core.Providers;
 using Ivy.MailChimp.Core.Models;
 using Ivy.Web.Json;
-using Ivy.Utility.Extensions;
+using Ivy.Utility.Core.Extensions;
 
 namespace Ivy.MailChimp.Services
 {

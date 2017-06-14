@@ -6,7 +6,7 @@ using Ivy.Amazon.ElasticTranscoder.Test.Base;
 using Ivy.IoC;
 using Ivy.IoC.Core;
 using Ivy.TestUtilities;
-using Ivy.Utility.Extensions;
+using Ivy.Utility.Core.Extensions;
 using Moq;
 using System.Linq;
 using System.Threading;

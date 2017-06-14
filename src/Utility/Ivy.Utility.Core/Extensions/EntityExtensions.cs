@@ -5,12 +5,22 @@
  */
 
 
+/*
+ * This lives in Core as to prevent forcing consumers to reference the implementation project.
+ * 
+ * It's standard to reference the Core in other projects, just makes good sense to reference the interfaces,
+ * then we let the IoC container determine the implementation at runtime.
+ * 
+ * As such, since we reference the interfaces anyway, it makes sense for these implementation to exist here.
+ * Implementations should exist in Core for PURE FUNCTIONS ONLY
+ */
+
 using Ivy.Data.Core.Interfaces.Domain;
 using System;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Ivy.Utility.Extensions
+namespace Ivy.Utility.Core.Extensions
 {
     public static class EntityExtensions
     {
@@ -20,27 +30,30 @@ namespace Ivy.Utility.Extensions
             where TSource : IEntityWithReferences
             where TProperty : IEntityWithTypedId<int>
         {
-            var propertyName = GetPropertyInfo(processFn);
-
-            var refName = propertyName + "Id";
-
-            return (int)refEntity.References[refName];
+            return GetRefAndCast<TSource, TProperty, int>(refEntity, processFn);
         }
 
         public static string SafeGetStringRef<TSource, TProperty>(this TSource refEntity, Expression<Func<TSource, TProperty>> processFn)
             where TSource : IEntityWithReferences
             where TProperty : IEntityWithTypedId<string>
         {
-            var propertyName = GetPropertyInfo(processFn);
-
-            var refName = propertyName + "Id";
-
-            return (string)refEntity.References[refName];
+            return GetRefAndCast<TSource, TProperty, string>(refEntity, processFn);
         }
 
         #endregion
 
         #region Helper Methods
+
+        private static TCast GetRefAndCast<TSource, TProperty, TCast>(this TSource refEntity, Expression<Func<TSource, TProperty>> processFn)
+            where TSource : IEntityWithReferences
+            where TProperty : IEntityWithTypedId<TCast>
+        {
+            var propertyName = GetPropertyInfo(processFn);
+
+            var refName = propertyName + "Id";
+
+            return (TCast)refEntity.References[refName];
+        }
 
         private static string GetPropertyInfo<TSource, TProperty>(
             Expression<Func<TSource, TProperty>> propertyLambda)

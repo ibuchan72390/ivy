@@ -4,7 +4,7 @@ using Ivy.Utility.IoC;
 using Xunit;
 using System.Linq;
 using System;
-using Ivy.Utility.Extensions;
+using Ivy.Utility.Core.Extensions;
 using Ivy.Data.Core.Interfaces;
 using Ivy.Data.Core.Interfaces.SQL;
 using Ivy.TestHelper.TestEntities;

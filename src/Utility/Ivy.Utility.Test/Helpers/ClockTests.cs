@@ -4,7 +4,7 @@ using Ivy.Utility.Core;
 using System;
 using Xunit;
 
-namespace Ivy.Utility.Test
+namespace Ivy.Utility.Test.Helpers
 {
     public class ClockTests : TestBase
     {

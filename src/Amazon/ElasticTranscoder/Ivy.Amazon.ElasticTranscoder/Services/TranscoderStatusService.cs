@@ -3,7 +3,7 @@ using Amazon.ElasticTranscoder.Model;
 using Ivy.Amazon.ElasticTranscoder.Core.Enums;
 using Ivy.Amazon.ElasticTranscoder.Core.Models;
 using Ivy.Amazon.ElasticTranscoder.Core.Services;
-using Ivy.Utility.Util;
+using Ivy.Utility.Core.Util;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

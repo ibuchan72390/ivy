@@ -2,9 +2,10 @@
 using Ivy.TestHelper;
 using Ivy.Utility.Core;
 using System;
+using System.Linq;
 using Xunit;
 
-namespace Ivy.Utility.Test
+namespace Ivy.Utility.Test.Helpers
 {
     public class RandomizationHelperTests : TestBase
     {
@@ -41,6 +42,15 @@ namespace Ivy.Utility.Test
             TestRandomSample(
                 () => _sut.RandomString(),
                 (a, b) => a.Equals(b));
+        }
+
+        [Fact]
+        public void RandomString_Doesnt_Create_Duplicates()
+        {
+            var origItems = Enumerable.Range(0, 10).Select(x => _sut.RandomString());
+            var distinctItems = origItems.Distinct();
+
+            Assert.Equal(origItems.Count(), distinctItems.Count());
         }
 
         [Fact]

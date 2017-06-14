@@ -1,9 +1,9 @@
 {
-  "version": "1.0.0.1",
+  "version": "1.0.0.2",
 
   "dependencies": {
     "Ivy.IoC.Core": "1.0.0.0",
-    "Ivy.MailChimp": "1.0.0.1",
+    "Ivy.MailChimp": "1.0.0.2",
     "Ivy.MailChimp.Core": "1.0.0.0",
     "NETStandard.Library": "1.6.0"
   },

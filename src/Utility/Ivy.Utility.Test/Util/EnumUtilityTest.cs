@@ -1,9 +1,9 @@
 ﻿using Ivy.TestHelper;
-using Ivy.Utility.Util;
+using Ivy.Utility.Core.Util;
 using System.Linq;
 using Xunit;
 
-namespace Ivy.Utility.Test
+namespace Ivy.Utility.Test.Util
 {
     public class EnumUtilityTest
     {
