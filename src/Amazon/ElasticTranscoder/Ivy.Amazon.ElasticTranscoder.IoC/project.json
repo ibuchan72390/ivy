@@ -1,8 +1,8 @@
 {
-  "version": "1.0.0.3",
+  "version": "1.0.0.4",
 
   "dependencies": {
-    "Ivy.Amazon.ElasticTranscoder": "1.0.0.3",
+    "Ivy.Amazon.ElasticTranscoder": "1.0.0.4",
     "Ivy.Amazon.ElasticTranscoder.Core": "1.0.0.0",
     "Ivy.IoC.Core": "1.0.0.0",
     "NETStandard.Library": "1.6.0"

@@ -46,7 +46,7 @@ CALL :CreateProjectPackage Amazon\S3\Ivy.Amazon.S3
 CALL :CreateProjectPackage Auth0\Ivy.Auth0
 
 :: Build Caching
-CALL :CreateProjectPackage Caching\Ivy.Caching
+::CALL :CreateProjectPackage Caching\Ivy.Caching
 
 :: Build IoC
 CALL :CreateProjectPackage IoC\Ivy.IoC

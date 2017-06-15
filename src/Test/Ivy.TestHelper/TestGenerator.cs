@@ -235,7 +235,7 @@ namespace Ivy.TestHelper
         }
 
         private static void RandomizeTestBase<T>(T entity)
-            where T : BaseTestEntity
+            where T : IBaseTestEntity
         {
             if (entity.Decimal == 0)
             {
