@@ -1,5 +1,6 @@
 ﻿using Ivy.Data.Core.Interfaces;
 using System;
+using System.Threading.Tasks;
 
 namespace Ivy.Data.Common.Transaction
 {
@@ -118,5 +119,82 @@ namespace Ivy.Data.Common.Transaction
             return result;
         }
 
+        public async Task WrapInTransactionAsync(Func<ITranConn, Task> tranConnFn, ITranConn tc = null)
+        {
+            bool myTran = false;
+
+            if (tc == null)
+            {
+                tc = _tcGenerator.GenerateTranConn(ConnectionString);
+                myTran = true;
+            }
+
+            try
+            {
+                await tranConnFn(tc);
+
+                if (myTran)
+                {
+                    tc.Transaction.Commit();
+                }
+            }
+            catch (Exception)
+            {
+                if (myTran)
+                {
+                    tc.Transaction.Rollback();
+                }
+
+                throw;
+            }
+            finally
+            {
+                if (myTran)
+                {
+                    tc.Dispose();
+                }
+            }
+        }
+
+        public async Task<T> WrapInTransactionAsync<T>(Func<ITranConn, Task<T>> tranConnFn, ITranConn tc = null)
+        {
+            bool myTran = false;
+
+            if (tc == null)
+            {
+                tc = _tcGenerator.GenerateTranConn(ConnectionString);
+                myTran = true;
+            }
+
+            T result;
+
+            try
+            {
+                result = await tranConnFn(tc);
+
+                if (myTran)
+                {
+                    tc.Transaction.Commit();
+                }
+            }
+            catch (Exception)
+            {
+                if (myTran)
+                {
+                    tc.Transaction.Rollback();
+                }
+
+                throw;
+            }
+            finally
+            {
+                if (myTran)
+                {
+                    tc.Dispose();
+                }
+            }
+
+            return result;
+        }
     }
 }
