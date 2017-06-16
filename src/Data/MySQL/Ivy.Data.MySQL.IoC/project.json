@@ -1,9 +1,9 @@
 {
-  "version": "1.0.0.3",
+  "version": "1.0.0.4",
 
   "dependencies": {
-    "Ivy.Data.Core": "1.0.0.2",
-    "Ivy.Data.MySQL": "1.0.0.3",
+    "Ivy.Data.Core": "1.0.0.3",
+    "Ivy.Data.MySQL": "1.0.0.4",
     "Ivy.IoC.Core": "1.0.0.0",
     "NETStandard.Library": "1.6.0"
   },

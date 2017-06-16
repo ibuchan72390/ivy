@@ -1,8 +1,8 @@
 {
-  "version": "1.0.0.3",
+  "version": "1.0.0.4",
 
   "dependencies": {
-    "Ivy.Data.Common": "1.0.0.4",
+    "Ivy.Data.Common": "1.0.0.5",
     "MySql.Data": "7.0.7-m61",
     "NETStandard.Library": "1.6.0"
   },

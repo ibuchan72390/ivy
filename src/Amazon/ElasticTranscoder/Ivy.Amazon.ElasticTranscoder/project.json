@@ -1,10 +1,10 @@
 {
-  "version": "1.0.0.5",
+  "version": "1.0.0.6",
 
   "dependencies": {
     "AWSSDK.ElasticTranscoder": "3.3.1.14",
     "Ivy.Amazon.ElasticTranscoder.Core": "1.0.0.0",
-    "Ivy.Utility.Core": "1.0.0.3",
+    "Ivy.Utility.Core": "1.0.0.4",
     "NETStandard.Library": "1.6.0"
   },
 
