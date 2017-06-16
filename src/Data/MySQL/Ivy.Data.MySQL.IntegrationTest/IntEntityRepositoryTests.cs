@@ -190,7 +190,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
         }
 
         [Fact]
-        public void Delete_Can_Take_TranConn()
+        public void Delete_Can_Commit_With_TranConn()
         {
             var tranGen = ServiceLocator.Instance.Resolve<ITranConnGenerator>();
 
@@ -200,7 +200,112 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
             _sut.Delete(testEntity, tc);
 
+            // Appears this must be an explicit commit
+            tc.Transaction.Commit();
             tc.Dispose();
+
+            var result = _sut.GetById(testEntity.Id);
+
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public void Delete_Can_Commit_With_Null_TranConn()
+        {
+            ITranConn tc = null;
+
+            var testEntity = new ParentEntity().SaveForTest(tc);
+
+            _sut.Delete(testEntity, tc);
+
+            var result = _sut.GetById(testEntity.Id);
+
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public void Delete_Can_Commit_With_TranHelper()
+        {
+            var tranHelper = ServiceLocator.Instance.Resolve<ITransactionHelper>();
+            tranHelper.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
+
+            ParentEntity testEntity = new ParentEntity().SaveForTest();
+
+            tranHelper.WrapInTransaction(tran => 
+            {
+                _sut.Delete(testEntity, tran);
+            });
+
+            var result = _sut.GetById(testEntity.Id);
+
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public void Delete_Can_Commit_With_TranHelper_And_Tran()
+        {
+            var tranHelper = ServiceLocator.Instance.Resolve<ITransactionHelper>();
+            tranHelper.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
+
+            var tranGen = ServiceLocator.Instance.Resolve<ITranConnGenerator>();
+            var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
+
+            ParentEntity testEntity = new ParentEntity().SaveForTest();
+
+            tranHelper.WrapInTransaction(tran =>
+            {
+                _sut.Delete(testEntity, tran);
+            }, tc);
+
+            // Must manually commit and dispose here
+            tc.Transaction.Commit();
+            tc.Dispose();
+
+            var result = _sut.GetById(testEntity.Id);
+
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public void Delete_Can_Rollback_With_TranConn()
+        {
+            var tranGen = ServiceLocator.Instance.Resolve<ITranConnGenerator>();
+            var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
+
+            var testEntity = new ParentEntity().SaveForTest(tc);
+
+            _sut.Delete(testEntity, tc);
+
+            tc.Transaction.Rollback();
+
+            var result = _sut.GetById(testEntity.Id);
+
+            Assert.NotNull(result);
+        }
+
+        [Fact]
+        public void Delete_Can_Rollback_With_TranHelper_And_Tran()
+        {
+            var tranHelper = ServiceLocator.Instance.Resolve<ITransactionHelper>();
+            tranHelper.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
+
+            var tranGen = ServiceLocator.Instance.Resolve<ITranConnGenerator>();
+            var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
+
+            ParentEntity testEntity = new ParentEntity().SaveForTest();
+
+            tranHelper.WrapInTransaction(tran =>
+            {
+                _sut.Delete(testEntity, tran);
+            }, tc);
+
+            tc.Transaction.Rollback();
+
+            tc.Dispose();
+
+            var result = _sut.GetById(testEntity.Id);
+
+            Assert.NotNull(result);
         }
 
         #endregion

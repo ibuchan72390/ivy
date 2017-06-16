@@ -59,14 +59,13 @@ namespace Ivy.Data.MySQL.IntegrationTest
         {
             var entity = new BlobEntity().GenerateForTest();
 
-            var tranGenerator = ServiceLocator.Instance.Resolve<ITransactionHelper>();
-            tranGenerator.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
+            var tranGenerator = ServiceLocator.Instance.Resolve<ITranConnGenerator>();
+            var tran = tranGenerator.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
-            tranGenerator.WrapInTransaction(tran => 
-            {
-                _sut.Insert(entity, tran);
-                tran.Transaction.Rollback();
-            });
+            _sut.Insert(entity, tran);
+            tran.Transaction.Rollback();
+
+            tran.Dispose();
 
             var results = _sut.GetAll().ToList();
 
@@ -113,14 +112,13 @@ namespace Ivy.Data.MySQL.IntegrationTest
         {
             var entities = Enumerable.Range(0, 5).Select(x => new BlobEntity().GenerateForTest()).ToList();
 
-            var tranGenerator = ServiceLocator.Instance.Resolve<ITransactionHelper>();
-            tranGenerator.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
+            var tranGenerator = ServiceLocator.Instance.Resolve<ITranConnGenerator>();
+            var tc = tranGenerator.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
-            tranGenerator.WrapInTransaction(tran =>
-            {
-                _sut.BulkInsert(entities, tran);
-                tran.Transaction.Rollback();
-            });
+            _sut.BulkInsert(entities, tc);
+            tc.Transaction.Rollback();
+
+            tc.Dispose();
 
             var results = _sut.GetAll().ToList();
 

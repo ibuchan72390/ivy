@@ -53,6 +53,11 @@ namespace Ivy.Data.Common.Transaction
             try
             {
                 tranConnFn(tc);
+
+                if (myTran)
+                {
+                    tc.Transaction.Commit();
+                }
             }
             catch (Exception)
             {
