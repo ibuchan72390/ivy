@@ -102,7 +102,7 @@ namespace Ivy.Amazon.ElasticTranscoder.Test.Services
             );
 
             var response = new CreateJobResponse();
-            response.Job = new Job();
+            response.Job = new Job { Id = "TESTING-123" };
             response.Job.Outputs = outputs.Select(x => new JobOutput { PresetId = x.PresetId, Status = resultStatus.ToString() }).ToList();
 
             var outputPresets = outputs.Select(x => x.PresetId);
@@ -119,6 +119,7 @@ namespace Ivy.Amazon.ElasticTranscoder.Test.Services
 
             foreach (var output in results)
             {
+                Assert.Equal(response.Job.Id, output.ParentJobId);
                 Assert.True(outputPresets.Contains(output.PresetId));
                 Assert.Equal(resultStatus, output.Status);
             }

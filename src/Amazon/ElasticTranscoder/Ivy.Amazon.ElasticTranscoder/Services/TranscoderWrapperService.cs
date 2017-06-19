@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using Ivy.Amazon.ElasticTranscoder.Core.Enums;
 using Ivy.Amazon.ElasticTranscoder.Core.Providers;
 using Ivy.Utility.Core.Util;
+using Ivy.Utility.Core.Extensions;
 
 namespace Ivy.Amazon.ElasticTranscoder.Services
 {
@@ -57,13 +58,17 @@ namespace Ivy.Amazon.ElasticTranscoder.Services
 
             var response = await _transcoderSvc.CreateJobAsync(req);
 
-            return response.Job.Outputs.Select(x => 
+            var responses = response.Job.Outputs.Select(x => 
                 new TranscoderJobCreateResponse
                 {
                     JobId = x.Id,
                     PresetId = x.PresetId,
                     Status = EnumUtility.Parse<TranscoderJobStatusName>(x.Status)
-                });
+                }).ToList();
+
+            responses.Each(x => x.ParentJobId = response.Job.Id);
+
+            return responses;
         }
 
         #endregion
