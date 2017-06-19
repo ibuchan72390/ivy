@@ -3,9 +3,9 @@
 
   "dependencies": {
     "AWSSDK.ElasticTranscoder": "3.3.1.14",
-    "Ivy.Amazon.ElasticTranscoder": "1.0.0.6",
-    "Ivy.Amazon.ElasticTranscoder.Core": "1.0.0.0",
-    "Ivy.Amazon.ElasticTranscoder.IoC": "1.0.0.6",
+    "Ivy.Amazon.ElasticTranscoder": "1.0.0.7",
+    "Ivy.Amazon.ElasticTranscoder.Core": "1.0.0.1",
+    "Ivy.Amazon.ElasticTranscoder.IoC": "1.0.0.7",
     "Ivy.IoC": "1.0.0.4",
     "Ivy.TestHelper": "1.0.0.9",
     "Moq": "4.7.25",
