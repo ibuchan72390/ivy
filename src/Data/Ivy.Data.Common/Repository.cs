@@ -7,6 +7,7 @@ using Ivy.Data.Core.Interfaces;
 using Ivy.Data.Core.Interfaces.Domain;
 using Ivy.Data.Core.Interfaces.SQL;
 using Ivy.Data.Core.Interfaces.Pagination;
+using System.Reflection;
 
 namespace Ivy.Data.Common
 {
@@ -366,16 +367,42 @@ namespace Ivy.Data.Common
                         IList<int> fkIndices = new List<int>();
                         int idIndex = -1;
 
+                        var props = typeof(T).GetProperties();
+
                         for (var i = 0; i < reader.FieldCount; i++)
                         {
                             var colName = reader.GetName(i);
 
                             // Either Id column or an Id reference
+                            // Is there some way we can check that this is an object entity reference???
                             if (colName.Substring(colName.Length - 2, 2) == "Id")
                             {
                                 if (colName.Length > 2)
                                 {
-                                    fkIndices.Add(i);
+                                    /*
+                                     * May want to find some way to cache these values to ensure performance
+                                     */
+
+                                    var targetPropName = colName.Substring(0, colName.Length - 2);
+
+                                    // Some attribute names will end in Id even though they aren't truly FK objects
+                                    // In order to counteract this, we need to find the prop and verify it's an FK
+                                    // If no prop exists when we drop the "Id" from the attr name, it's not an FK
+                                    var targetProp = props.FirstOrDefault(x => x.Name == targetPropName);
+
+                                    if (targetProp != null)
+                                    {
+                                        var declaringInterfaces = targetProp.DeclaringType.GetInterfaces();
+
+                                        // Need to use name based matching here in order to circumnavigate the generic context
+                                        // If we don't, the actual TType affects the matching
+                                        var entityInterface = declaringInterfaces.FirstOrDefault(x => x.Name == typeof(IEntityWithTypedId<>).Name);
+
+                                        if (entityInterface != null)
+                                        {
+                                            fkIndices.Add(i);
+                                        }
+                                    }
                                 }
                                 else
                                 {
