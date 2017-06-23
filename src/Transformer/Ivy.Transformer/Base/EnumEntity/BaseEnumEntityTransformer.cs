@@ -1,7 +1,9 @@
-﻿using Ivy.Data.Core.Interfaces.Domain;
+﻿using System.Collections.Generic;
+using Ivy.Data.Core.Interfaces.Domain;
 using Ivy.Transformer.Base.Entity;
 using Ivy.Transformer.Core.Interfaces.EnumEntity;
 using Ivy.Transformer.Core.Models;
+using System.Linq;
 
 namespace Ivy.Transformer.Base
 {
@@ -20,6 +22,7 @@ namespace Ivy.Transformer.Base
 
             model.Name = entity.Name;
             model.FriendlyName = entity.FriendlyName;
+            model.SortOrder = entity.SortOrder;
 
             return model;
         }
@@ -34,6 +37,14 @@ namespace Ivy.Transformer.Base
             entity.FriendlyName = model.FriendlyName;
 
             return entity;
+        }
+
+        public override IEnumerable<TEnumEntity> Transform(IEnumerable<TEnumModel> models)
+        {
+            var results = base.Transform(models);
+            
+            // Ensure they're returned in the correct order when going to the UI
+            return results.OrderBy(x => x.SortOrder);
         }
     }
 }

@@ -18,11 +18,11 @@ namespace Ivy.Transformer.Test.Base
         {
             var _sut = ServiceLocator.Instance.Resolve<IEnumEntityTransformer<TestEnumEntity, TestEnumEntityModel>>();
 
-            var entity = new TestEnumEntity { Id = 1, Name = "Name", FriendlyName = "FriendlyName" };
+            var entity = new TestEnumEntity { Id = 1, Name = "Name", FriendlyName = "FriendlyName", SortOrder = 1 };
 
             var result = _sut.Transform(entity);
 
-            AssertEntityEquality(entity, result);
+            AssertEntityEquality(entity, result, true);
         }
 
         [Fact]
@@ -30,14 +30,20 @@ namespace Ivy.Transformer.Test.Base
         {
             var _sut = ServiceLocator.Instance.Resolve<IEnumEntityTransformer<TestEnumEntity, TestEnumEntityModel>>();
 
-            var entities = Enumerable.Range(0, 4).Select(x => new TestEnumEntity { Id = x, Name = $"Name{x}", FriendlyName = $"FriendlyName{x}" });
+            var entities = Enumerable.Range(0, 4).Select(x => new TestEnumEntity { Id = x, Name = $"Name{x}", FriendlyName = $"FriendlyName{x}", SortOrder = x });
 
-            var result = _sut.Transform(entities);
+            var results = _sut.Transform(entities);
 
             foreach (var model in entities)
             {
-                var targetModel = result.FirstOrDefault(x => x.Id == model.Id);
-                AssertEntityEquality(model, targetModel);
+                var targetModel = results.FirstOrDefault(x => x.Id == model.Id);
+                AssertEntityEquality(model, targetModel, true);
+            }
+
+            for (var i = 0; i < results.Count(); i++)
+            {
+                var target = results.ElementAt(i);
+                Assert.Equal(i, target.SortOrder);
             }
         }
 
@@ -50,11 +56,11 @@ namespace Ivy.Transformer.Test.Base
         {
             var _sut = ServiceLocator.Instance.Resolve<IEnumEntityTransformer<TestEnumEntity, TestEnumEntityModel>>();
 
-            var model = new TestEnumEntityModel { Id = 1, Name = "Name", FriendlyName = "FriendlyName" };
+            var model = new TestEnumEntityModel { Id = 1, Name = "Name", FriendlyName = "FriendlyName", SortOrder = 1 };
 
             var result = _sut.Transform(model);
 
-            AssertEntityEquality(result, model);
+            AssertEntityEquality(result, model, false);
         }
 
         [Fact]
@@ -62,14 +68,14 @@ namespace Ivy.Transformer.Test.Base
         {
             var _sut = ServiceLocator.Instance.Resolve<IEnumEntityTransformer<TestEnumEntity, TestEnumEntityModel>>();
 
-            var models = Enumerable.Range(0, 4).Select(x => new TestEnumEntityModel { Id = x, Name = $"Name{x}", FriendlyName = $"FriendlyName{x}" });
+            var models = Enumerable.Range(0, 4).Select(x => new TestEnumEntityModel { Id = x, Name = $"Name{x}", FriendlyName = $"FriendlyName{x}", SortOrder = x });
 
             var results = _sut.Transform(models);
 
             foreach (var model in models)
             {
                 var result = results.FirstOrDefault(x => x.Id == model.Id);
-                AssertEntityEquality(result, model);
+                AssertEntityEquality(result, model, false);
             }
         }
 
@@ -79,11 +85,14 @@ namespace Ivy.Transformer.Test.Base
 
         #region Helper Methods
 
-        private void AssertEntityEquality(TestEnumEntity entity, TestEnumEntityModel result)
+        private void AssertEntityEquality(TestEnumEntity entity, TestEnumEntityModel result, bool validateSort)
         {
             Assert.Equal(entity.Id, result.Id);
             Assert.Equal(entity.Name, result.Name);
             Assert.Equal(entity.FriendlyName, result.FriendlyName);
+
+            if (validateSort)
+                Assert.Equal(entity.SortOrder, result.SortOrder);
         }
 
         #endregion
