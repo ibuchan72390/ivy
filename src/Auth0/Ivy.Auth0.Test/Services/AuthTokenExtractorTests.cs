@@ -6,7 +6,7 @@ using Microsoft.Extensions.Primitives;
 using System.Collections.Generic;
 using Xunit;
 
-namespace Ivy.Auth0.Test
+namespace Ivy.Auth0.Test.Services
 {
     public class AuthTokenExtractorTests : Auth0TestBase
     {

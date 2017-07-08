@@ -1,8 +1,8 @@
 {
-  "version": "1.0.0.0",
+  "version": "1.0.0.1",
 
   "dependencies": {
-    "Ivy.Web.Core": "1.0.0.0",
+    "Ivy.Web.Core": "1.0.0.1",
     "Microsoft.Extensions.Logging.Abstractions": "1.0.2",
     "NETStandard.Library": "1.6.0",
     "Newtonsoft.Json": "9.0.1"

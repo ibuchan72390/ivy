@@ -91,6 +91,43 @@ namespace Ivy.Web.Test.Client
 
         #endregion
 
+        #region SendApiData
+
+        [Fact]
+        public void SendApiData_Returns_As_Expected()
+        {
+            const string testContent = "TEST-Content";
+
+            response.Content = new StringContent(testContent);
+
+            _clientHelperMock.Setup(x => x.Send(request)).Returns(response);
+
+            var result = _sut.SendApiData(request);
+
+            Assert.Same(response, result);
+        }
+
+        [Fact]
+        public void SendApiData_Throws_Error_If_Response_Not_Success()
+        {
+            response.StatusCode = System.Net.HttpStatusCode.NotFound;
+
+            _clientHelperMock.Setup(x => x.Send(request)).Returns(response);
+
+            var e = Assert.Throws<Exception>(() => _sut.SendApiData(request));
+
+            string expectedErr = "Unsuccessful response received when requesting API! " +
+                                 $"Request Uri: {response.RequestMessage.RequestUri.ToString()} / " +
+                                 $"Status Code: {response.StatusCode} / Reason: {response.ReasonPhrase}";
+
+
+            Assert.Equal(expectedErr, e.Message);
+
+            _clientHelperMock.Verify(x => x.Send(request), Times.Once);
+        }
+
+        #endregion
+
         #region GetApiDataAsync
 
         [Fact]
@@ -118,6 +155,43 @@ namespace Ivy.Web.Test.Client
             _clientHelperMock.Setup(x => x.SendAsync(request)).ReturnsAsync(response);
 
             var e = await Assert.ThrowsAsync<Exception>(async () => await _sut.GetApiDataAsync<BlobEntity>(request));
+
+            string expectedErr = "Unsuccessful response received when requesting API! " +
+                                 $"Request Uri: {response.RequestMessage.RequestUri.ToString()} / " +
+                                 $"Status Code: {response.StatusCode} / Reason: {response.ReasonPhrase}";
+
+
+            Assert.Equal(expectedErr, e.Message);
+
+            _clientHelperMock.Verify(x => x.SendAsync(request), Times.Once);
+        }
+
+        #endregion
+
+        #region SendApiDataAsync
+
+        [Fact]
+        public async void SendApiDataAsync_Returns_As_Expected()
+        {
+            const string testContent = "TEST-Content";
+
+            response.Content = new StringContent(testContent);
+
+            _clientHelperMock.Setup(x => x.SendAsync(request)).ReturnsAsync(response);
+
+            var result = await _sut.SendApiDataAsync(request);
+
+            Assert.Same(response, result);
+        }
+
+        [Fact]
+        public async void SendApiDataAsync_Throws_Error_If_Response_Not_Success()
+        {
+            response.StatusCode = System.Net.HttpStatusCode.NotFound;
+
+            _clientHelperMock.Setup(x => x.SendAsync(request)).ReturnsAsync(response);
+
+            var e = await Assert.ThrowsAsync<Exception>(async () => await _sut.SendApiDataAsync(request));
 
             string expectedErr = "Unsuccessful response received when requesting API! " +
                                  $"Request Uri: {response.RequestMessage.RequestUri.ToString()} / " +

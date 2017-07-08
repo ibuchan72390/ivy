@@ -1,9 +1,9 @@
 {
-  "version": "1.0.0-*",
+  "version": "1.0.0.1",
 
   "dependencies": {
     "Ivy.IoC.Core": "1.0.0.0",
-    "Ivy.PayPal": "1.0.0.0",
+    "Ivy.PayPal": "1.0.0.1",
     "Ivy.PayPal.Core": "1.0.0.0",
     "NETStandard.Library": "1.6.0"
   },

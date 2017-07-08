@@ -1,9 +1,10 @@
 {
-  "version": "1.0.0.0",
+  "version": "1.0.0.1",
 
   "dependencies": {
-    "Ivy.Auth0.Core": "1.0.0.0",
-    "Ivy.Web.Core": "1.0.0.0",
+    "Ivy.Auth0.Core": "1.0.0.1",
+    "Ivy.Web.Core": "1.0.0.1",
+    "Microsoft.AspNetCore.WebUtilities": "1.0.2",
     "Microsoft.Extensions.Logging.Abstractions": "1.0.2",
     "Microsoft.IdentityModel.Protocols": "2.0.0",
     "Microsoft.IdentityModel.Protocols.OpenIdConnect": "2.0.0",

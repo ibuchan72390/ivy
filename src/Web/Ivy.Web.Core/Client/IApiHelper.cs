@@ -9,8 +9,8 @@ namespace Ivy.Web.Core.Client
 
         T GetApiData<T>(HttpRequestMessage request);
 
-        //Task<HttpResponseMessage> SendApiDataAsync(HttpRequestMessage request);
+        Task<HttpResponseMessage> SendApiDataAsync(HttpRequestMessage request);
 
-        //HttpResponseMessage SendApiData(HttpRequestMessage request);
+        HttpResponseMessage SendApiData(HttpRequestMessage request);
     }
 }

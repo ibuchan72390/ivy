@@ -1,4 +1,4 @@
-﻿namespace Ivy.Auth0.Core.Models
+﻿namespace Ivy.Auth0.Core.Models.Requests
 {
     public class Auth0ApiTokenRequest
     {

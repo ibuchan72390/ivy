@@ -31,9 +31,7 @@ namespace Ivy.Web.Client
 
         public T GetApiData<T>(HttpRequestMessage request)
         {
-            var response = _clientHelper.Send(request);
-
-            CheckResponseStatus(response);
+            var response = SendApiData(request);
 
             var content = response.Content.ReadAsStringAsync().Result;
 
@@ -42,13 +40,29 @@ namespace Ivy.Web.Client
 
         public async Task<T> GetApiDataAsync<T>(HttpRequestMessage request)
         {
-            var response = await _clientHelper.SendAsync(request);
-
-            CheckResponseStatus(response);
+            var response = await SendApiDataAsync(request);
 
             var content = await response.Content.ReadAsStringAsync();
 
             return _serializationService.Deserialize<T>(content);
+        }
+
+        public HttpResponseMessage SendApiData(HttpRequestMessage request)
+        {
+            var response = _clientHelper.Send(request);
+
+            CheckResponseStatus(response);
+
+            return response;
+        }
+
+        public async Task<HttpResponseMessage> SendApiDataAsync(HttpRequestMessage request)
+        {
+            var response = await _clientHelper.SendAsync(request);
+
+            CheckResponseStatus(response);
+
+            return response;
         }
 
         #endregion

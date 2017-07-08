@@ -1,15 +1,14 @@
-﻿using Ivy.Auth0.Core.Models;
+﻿using Ivy.Auth0.Core.Models.Responses;
 using Ivy.Auth0.Core.Services;
 using Ivy.Auth0.Test.Base;
 using Ivy.IoC;
 using Ivy.IoC.Core;
 using Ivy.Web.Core.Client;
 using Moq;
-using Newtonsoft.Json;
 using System.Net.Http;
 using Xunit;
 
-namespace Ivy.Auth0.Test
+namespace Ivy.Auth0.Test.Services
 {
     public class ApiAuthTokenGeneratorTests : Auth0TestBase
     {

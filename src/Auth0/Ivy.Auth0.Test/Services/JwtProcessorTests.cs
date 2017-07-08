@@ -1,4 +1,4 @@
-﻿namespace Ivy.Auth0.Test
+﻿namespace Ivy.Auth0.Test.Services
 {
     /*
      * To set up a test for this class, please use the tool at

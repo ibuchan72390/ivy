@@ -1,4 +1,4 @@
-﻿using Ivy.Auth0.Core.Models;
+﻿using Ivy.Auth0.Core.Models.Responses;
 using Ivy.Auth0.Core.Services;
 using Ivy.Web.Core.Client;
 using System.Threading.Tasks;

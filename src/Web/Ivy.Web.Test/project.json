@@ -1,13 +1,13 @@
 {
-  "version": "1.0.0.7",
+  "version": "1.0.0.8",
 
   "dependencies": {
     "NETStandard.Library": "1.6.0",
     "xunit": "2.2.0",
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
-    "Ivy.Web.Core": "1.0.0.0",
-    "Ivy.Web": "1.0.0.0",
-    "Ivy.Web.IoC": "1.0.0.0",
+    "Ivy.Web.Core": "1.0.0.1",
+    "Ivy.Web": "1.0.0.1",
+    "Ivy.Web.IoC": "1.0.0.1",
     "Ivy.IoC": "1.0.0.5",
     "Ivy.IoC.Core": "1.0.0.0",
     "Ivy.TestHelper": "1.0.0.91",

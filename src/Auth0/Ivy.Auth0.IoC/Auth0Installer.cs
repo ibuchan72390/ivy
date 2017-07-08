@@ -10,6 +10,7 @@ namespace Ivy.Auth0.IoC
         {
             containerGenerator.RegisterSingleton<IApiAuthTokenGenerator, ApiAuthTokenGenerator>();
             containerGenerator.RegisterSingleton<IAuth0ManagementRequestGenerator, Auth0ManagementRequestGenerator>();
+            containerGenerator.RegisterSingleton<IAuth0QueryStringUriGenerator, Auth0QueryStringUriGenerator>();
             containerGenerator.RegisterSingleton<IAuth0ManagementService, Auth0ManagementService>();
             containerGenerator.RegisterSingleton<IAuth0ContextProcessor, Auth0ContextProcessor>();
             containerGenerator.RegisterSingleton<IAuthTokenExtractor, AuthTokenExtractor>();

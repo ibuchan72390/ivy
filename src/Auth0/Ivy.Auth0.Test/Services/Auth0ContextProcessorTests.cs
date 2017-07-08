@@ -13,7 +13,7 @@ using Ivy.Auth0.Core.Models;
 using Microsoft.AspNetCore.Http.Internal;
 using Ivy.Auth0.Test.Base;
 
-namespace Ivy.Auth0.Test
+namespace Ivy.Auth0.Test.Services
 {
     public class AuthContextProcessorTests : Auth0TestBase
     {
