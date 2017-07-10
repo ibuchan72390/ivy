@@ -14,12 +14,11 @@ namespace Ivy.Auth0.Services
         {
             var dict = new Dictionary<string, string>();
 
-            dict.Add("page", MassageString(req.Page.ToString()));
+            // They use zero-based indexing, we need to subtract one to get the real value
+            dict.Add("page", MassageString((req.Page - 1).ToString()));
             dict.Add("include_totals", MassageString(req.IncludeTotals.ToString()));
 
-            // They use zero-based indexing, we need to subtract one to get the real value
-            AppendIfNot(ref dict, "per_page", req.PerPage - 1, 0);
-
+            AppendIfNot(ref dict, "per_page", req.PerPage, 0);
             AppendIfNot(ref dict, "sort", req.Sort, null);
             AppendIfNot(ref dict, "connection", req.Connection, null);
             AppendIfNot(ref dict, "fields", req.Fields, null);
