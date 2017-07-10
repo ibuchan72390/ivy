@@ -27,6 +27,7 @@ namespace Ivy.Auth0.Test.Services
         const string testUserId = "TESTUserId";
 
         const string testToken = "TESTToken";
+        const string testConnection = "TESTConnection";
 
         const string testDomain = "TESTDomain.auth0.com";
         const string testApiClientId = "TESTApiClientId";
@@ -54,6 +55,7 @@ namespace Ivy.Auth0.Test.Services
             _mockConfigProvider.Setup(x => x.ApiClientId).Returns(testApiClientId);
             _mockConfigProvider.Setup(x => x.ApiClientSecret).Returns(testApiClientSecret);
             _mockConfigProvider.Setup(x => x.SpaClientId).Returns(testSpaClientId);
+            _mockConfigProvider.Setup(x => x.Connection).Returns(testConnection);
 
             _mockUserProvider = new Mock<IUserProvider>();
             containerGen.RegisterInstance<IUserProvider>(_mockUserProvider.Object);
@@ -144,9 +146,10 @@ namespace Ivy.Auth0.Test.Services
 
             var expectedBaseString = $"https://{testDomain}/api/v2/users";
 
-            var expectedUri = _queryStringGenerator.GenerateGetUsersQueryString(expectedBaseString, testModel);
-
             var req = _sut.GenerateListUsersRequest(testToken, testModel);
+
+            testModel.Connection = testConnection;
+            var expectedUri = _queryStringGenerator.GenerateGetUsersQueryString(expectedBaseString, testModel);
 
             ValidateRequest(req, expectedUri, HttpMethod.Get);
         }

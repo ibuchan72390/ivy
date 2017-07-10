@@ -92,6 +92,11 @@ namespace Ivy.Auth0.Services
         public HttpRequestMessage GenerateListUsersRequest(string managementToken, Auth0ListUsersRequest request)
         {
             var baseUriString = GetBaseUsersUri();
+
+            // Need to set this guy to the connection we use for the application
+            // Screw what the user puts, we'll override it regardless to what is correct
+            request.Connection = _configProvider.Connection;
+
             var reqUri = _queryStringGenerator.GenerateGetUsersQueryString(baseUriString, request);
 
             return SetupAuthorizedRequest(reqUri, HttpMethod.Get, managementToken);
