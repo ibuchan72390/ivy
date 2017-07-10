@@ -11,7 +11,7 @@ namespace Ivy.Auth0.Core.Providers
         string Domain { get; }
 
         // Auth0 Application-Specific: Each application will have it's own users database
-        string Connection { get; set; }
+        string Connection { get; }
 
         // SPA Client - Used for authorizing incoming Auth0 client tokens
         // Leverages an RS256 Encrypted JWT obtained via callback
