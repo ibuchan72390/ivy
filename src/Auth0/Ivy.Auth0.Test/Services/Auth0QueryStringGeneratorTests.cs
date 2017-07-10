@@ -39,7 +39,7 @@ namespace Ivy.Auth0.Test.Services
             req.Page = 10;
             req.IncludeTotals = true;
 
-            req.PerPage = 0;
+            req.PerPage = 1;
             req.Sort = null;
             req.Connection = null;
             req.Fields = null;
@@ -81,7 +81,7 @@ namespace Ivy.Auth0.Test.Services
             AssertDictEquality(resultQuery, "page", req.Page);
             AssertDictEquality(resultQuery, "include_totals", req.IncludeTotals);
 
-            AssertDictEquality(resultQuery, "per_page", req.PerPage);
+            AssertDictEquality(resultQuery, "per_page", req.PerPage - 1);
             AssertDictEquality(resultQuery, "sort", req.Sort);
             AssertDictEquality(resultQuery, "connection", req.Connection);
             AssertDictEquality(resultQuery, "fields", req.Fields);
