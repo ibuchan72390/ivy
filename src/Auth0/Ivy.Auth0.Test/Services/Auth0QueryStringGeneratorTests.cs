@@ -3,6 +3,8 @@ using Ivy.Auth0.Core.Services;
 using Ivy.Auth0.Test.Base;
 using Ivy.IoC;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Primitives;
+using System.Collections.Generic;
 using Xunit;
 
 namespace Ivy.Auth0.Test.Services
@@ -50,8 +52,8 @@ namespace Ivy.Auth0.Test.Services
             var resultQuery = QueryHelpers.ParseQuery(result.Query);
 
             Assert.Equal(2, resultQuery.Count);
-            Assert.Equal(resultQuery["page"], req.Page.ToString());
-            Assert.Equal(resultQuery["include_totals"], req.IncludeTotals.ToString());
+            AssertDictEquality(resultQuery, "page", req.Page);
+            AssertDictEquality(resultQuery, "include_totals", req.IncludeTotals);
         }
 
         [Fact]
@@ -76,19 +78,28 @@ namespace Ivy.Auth0.Test.Services
             var resultQuery = QueryHelpers.ParseQuery(result.Query);
 
             Assert.Equal(9, resultQuery.Count);
-            Assert.Equal(resultQuery["page"], req.Page.ToString());
-            Assert.Equal(resultQuery["include_totals"], req.IncludeTotals.ToString());
+            AssertDictEquality(resultQuery, "page", req.Page);
+            AssertDictEquality(resultQuery, "include_totals", req.IncludeTotals);
 
-            Assert.Equal(resultQuery["per_page"], req.PerPage.ToString());
-            Assert.Equal(resultQuery["sort"], req.Sort.ToString());
-            Assert.Equal(resultQuery["connection"], req.Connection.ToString());
-            Assert.Equal(resultQuery["fields"], req.Fields.ToString());
-            Assert.Equal(resultQuery["include_fields"], req.IncludeFields.ToString());
-            Assert.Equal(resultQuery["q"], req.QueryString.ToString());
-            Assert.Equal(resultQuery["search_engine"], req.SearchEngine.ToString());
+            AssertDictEquality(resultQuery, "per_page", req.PerPage);
+            AssertDictEquality(resultQuery, "sort", req.Sort);
+            AssertDictEquality(resultQuery, "connection", req.Connection);
+            AssertDictEquality(resultQuery, "fields", req.Fields);
+            AssertDictEquality(resultQuery, "include_fields", req.IncludeFields);
+            AssertDictEquality(resultQuery, "q", req.QueryString);
+            AssertDictEquality(resultQuery, "search_engine", req.SearchEngine);
         }
 
         #endregion
+
+        #endregion
+
+        #region Helper Methods
+
+        private void AssertDictEquality<T>(Dictionary<string, StringValues> dict, string key, T item)
+        {
+            Assert.Equal(dict[key], item.ToString().ToLower());
+        }
 
         #endregion
     }

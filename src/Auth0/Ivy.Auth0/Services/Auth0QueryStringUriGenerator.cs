@@ -14,8 +14,8 @@ namespace Ivy.Auth0.Services
         {
             var dict = new Dictionary<string, string>();
 
-            dict.Add("page", req.Page.ToString());
-            dict.Add("include_totals", req.IncludeTotals.ToString());
+            dict.Add("page", MassageString(req.Page.ToString()));
+            dict.Add("include_totals", MassageString(req.IncludeTotals.ToString()));
 
             AppendIfNot(ref dict, "per_page", req.PerPage, 0);
             AppendIfNot(ref dict, "sort", req.Sort, null);
@@ -45,8 +45,16 @@ namespace Ivy.Auth0.Services
 
             if (!value.Equals(compare))
             {
-                dict.Add(name, value.ToString());
+                // Seems that we need to make these lower case
+                // Upper case "True" value throws an error due to "Bad Request"
+                var str = MassageString(value.ToString());
+                dict.Add(name, str);
             }
+        }
+
+        private string MassageString(string str)
+        {
+            return str?.ToLower();
         }
 
         #endregion
