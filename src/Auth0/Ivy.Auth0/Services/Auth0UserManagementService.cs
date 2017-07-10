@@ -1,14 +1,13 @@
 ﻿using Ivy.Auth0.Core.Services;
-using Ivy.Web.Core.Client;
 using System.Threading.Tasks;
+using Ivy.Auth0.Core.Models;
 using Ivy.Auth0.Core.Models.Requests;
 using Ivy.Auth0.Core.Models.Responses;
-using Ivy.Auth0.Core.Models;
-using System;
+using Ivy.Web.Core.Client;
 
 namespace Ivy.Auth0.Services
 {
-    public class Auth0ManagementService : IAuth0ManagementService
+    public class Auth0UserManagementService : IAuth0UserManagementService
     {
         #region Variables & Constants
 
@@ -21,7 +20,7 @@ namespace Ivy.Auth0.Services
 
         #region Constructor
 
-        public Auth0ManagementService(
+        public Auth0UserManagementService(
             IApiHelper apiHelper,
             IUserProvider userProvider,
             IApiAuthTokenGenerator tokenGenerator,
@@ -36,15 +35,6 @@ namespace Ivy.Auth0.Services
         #endregion
 
         #region Public Methods
-
-        public async Task ResendVerificationEmailAsync()
-        {
-            var apiToken = await _tokenGenerator.GetApiAuthTokenAsync();
-
-            var req = _requestGenerator.GenerateVerifyEmailRequest(apiToken);
-
-            await _apiHelper.SendApiDataAsync(req);
-        }
 
         public async Task<Auth0ListUsersResponse> GetUsersAsync(Auth0ListUsersRequest request)
         {
@@ -92,5 +82,6 @@ namespace Ivy.Auth0.Services
         }
 
         #endregion
+
     }
 }

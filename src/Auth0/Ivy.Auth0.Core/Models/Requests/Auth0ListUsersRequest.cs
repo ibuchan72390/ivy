@@ -8,7 +8,6 @@
             Sort = "email:1";
             IncludeFields = true;
             SearchEngine = "v2";
-            PerPage = 50;
         }
 
         public int PerPage { get; set; }

@@ -1,5 +1,5 @@
 {
-  "projects": [ "src", "test", "src/IoC", "src/Data", "src/Utility", "src/Caching", "src/Test", "src/Web", ".", "src/Validation", "src/Data/MySQL" ],
+  "projects": [ "src", "test", "src/IoC", "src/Data", "src/Utility", "src/Caching", "src/Test", "src/Web", ".", "src/Validation", "src/Data/MySQL", "src/Transformer" ],
   "sdk": {
     "version": "1.0.0-preview2-003131"
   }

@@ -12,11 +12,11 @@ using Xunit;
 
 namespace Ivy.Auth0.Test.Services
 {
-    public class Auth0ManagementServiceTests : Auth0TestBase
+    public class Auth0UserManagementServiceTests : Auth0TestBase
     {
         #region Variables & Constants
 
-        private readonly IAuth0ManagementService _sut;
+        private readonly IAuth0UserManagementService _sut;
 
         private readonly Mock<IApiHelper> _mockClientHelper;
         private readonly Mock<IUserProvider> _mockUserProvider;
@@ -32,7 +32,7 @@ namespace Ivy.Auth0.Test.Services
 
         #region SetUp & TearDown
 
-        public Auth0ManagementServiceTests()
+        public Auth0UserManagementServiceTests()
         {
             var containerGen = ServiceLocator.Instance.Resolve<IContainerGenerator>();
 
@@ -52,7 +52,7 @@ namespace Ivy.Auth0.Test.Services
 
             var container = containerGen.GenerateContainer();
 
-            _sut = container.Resolve<IAuth0ManagementService>();
+            _sut = container.Resolve<IAuth0UserManagementService>();
 
             _mockTokenGenerator.
                 Setup(x => x.GetApiAuthTokenAsync()).
@@ -62,30 +62,6 @@ namespace Ivy.Auth0.Test.Services
         #endregion
 
         #region Tests
-
-        #region ResendVerificationEmailAsync
-
-        [Fact]
-        public async void ResendVerificationEmailAsync_Executes_As_Expected()
-        {
-            var response = new HttpResponseMessage();
-
-            _mockRequestGen.
-                Setup(x => x.GenerateVerifyEmailRequest(apiToken)).
-                Returns(req);
-
-            _mockClientHelper.
-                Setup(x => x.SendApiDataAsync(req)).
-                ReturnsAsync(response);
-
-            await _sut.ResendVerificationEmailAsync();
-
-            _mockTokenGenerator.Verify(x => x.GetApiAuthTokenAsync(), Times.Once);
-            _mockRequestGen.Verify(x => x.GenerateVerifyEmailRequest(apiToken), Times.Once);
-            _mockClientHelper.Verify(x => x.SendApiDataAsync(req), Times.Once);
-        }
-
-        #endregion
 
         #region GetUsersAsync
 
@@ -219,5 +195,6 @@ namespace Ivy.Auth0.Test.Services
         #endregion
 
         #endregion
+
     }
 }

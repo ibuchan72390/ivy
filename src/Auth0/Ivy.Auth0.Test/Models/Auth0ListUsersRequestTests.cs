@@ -14,7 +14,6 @@ namespace Ivy.Auth0.Test.Models
             Assert.Equal("email:1", entity.Sort);
             Assert.Equal(true, entity.IncludeFields);
             Assert.Equal("v2", entity.SearchEngine);
-            Assert.Equal(50, entity.PerPage);
         }
     }
 }
