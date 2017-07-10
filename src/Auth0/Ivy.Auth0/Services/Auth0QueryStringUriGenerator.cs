@@ -3,6 +3,7 @@ using Ivy.Auth0.Core.Models.Requests;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.WebUtilities;
 using System;
+using Ivy.Auth0.Enums;
 
 namespace Ivy.Auth0.Services
 {
@@ -20,11 +21,12 @@ namespace Ivy.Auth0.Services
 
             AppendIfNot(ref dict, "per_page", req.PerPage, 0);
             AppendIfNot(ref dict, "sort", req.Sort, null);
-            AppendIfNot(ref dict, "connection", req.Connection, null);
             AppendIfNot(ref dict, "fields", req.Fields, null);
             AppendIfNot(ref dict, "include_fields", req.IncludeFields, false);
             AppendIfNot(ref dict, "q", req.QueryString, null);
             AppendIfNot(ref dict, "search_engine", req.SearchEngine, null);
+
+            SetupConnectionQueryString(ref dict, req);
 
             return DictionaryToUri(currentUri, dict);
         }
@@ -56,6 +58,30 @@ namespace Ivy.Auth0.Services
         private string MassageString(string str)
         {
             return str?.ToLower();
+        }
+
+        private void SetupConnectionQueryString(ref Dictionary<string, string> dict, Auth0ListUsersRequest req)
+        {
+            if (req.Connection != null)
+            {
+                if (req.SearchEngine == Auth0ApiVersionNames.v2.ToString())
+                {
+                    var str = $"identities.connection:\"{MassageString(req.Connection)}\"";
+
+                    if (dict.ContainsKey("q"))
+                    {
+                        dict["q"] += $" AND {str}";
+                    }
+                    else
+                    {
+                        dict.Add("q", str);
+                    }
+                }
+                else if (req.SearchEngine == Auth0ApiVersionNames.v1.ToString())
+                {
+                    AppendIfNot(ref dict, "connection", req.Connection, null);
+                }
+            }
         }
 
         #endregion
