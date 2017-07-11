@@ -1,10 +1,10 @@
 {
-  "version": "1.0.0.96",
+  "version": "1.0.0.98",
 
   "dependencies": {
-    "Ivy.Auth0": "1.0.0.8",
-    "Ivy.Auth0.Core": "1.0.0.3",
-    "Ivy.Auth0.IoC": "1.0.0.8",
+    "Ivy.Auth0": "1.0.0.9",
+    "Ivy.Auth0.Core": "1.0.0.4",
+    "Ivy.Auth0.IoC": "1.0.0.91",
     "Ivy.IoC": "1.0.0.5",
     "Ivy.IoC.Core": "1.0.0.0",
     "Ivy.TestHelper": "1.0.0.91",
