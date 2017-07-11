@@ -23,5 +23,8 @@ namespace Ivy.Auth0.Core.Providers
         string ApiAudience { get; }
         string ApiClientId { get; }
         string ApiClientSecret { get; }
+
+        // Application-Specific Processing Configurations
+        bool UseUsername { get; }
     }
 }

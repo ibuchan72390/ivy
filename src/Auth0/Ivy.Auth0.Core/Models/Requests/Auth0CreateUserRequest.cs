@@ -26,16 +26,12 @@
 
         public string connection { get; set; }
         public string email { get; set; }
-
-        // This is a viable option, but completely optional / leaving it on here causes issues during creation
-        // If we could create a configurable variable in the Auth0 pieces, that'd be awesome
-        //public string username { get; set; }
-
         public string password { get; set; }
-        public string phone_number { get; set; }
+        public string username { get; set; } // Do not include in JSON if not setup in configs
+        public string phone_number { get; set; } // Do not include in JSON if null or empty
         public bool email_verified { get; set; }
         public bool verify_email { get; set; }
-        public bool phone_verified { get; set; }
+        public bool phone_verified { get; set; } // false if no phone number
 
         public Auth0UserMetadata user_metadata { get; set; }
         public Auth0AppMetadata app_metadata { get; set; }

@@ -2,11 +2,13 @@
 using Ivy.Auth0.Core.Models.Requests;
 using Ivy.Auth0.Core.Providers;
 using Ivy.Auth0.Core.Services;
+using Ivy.Web.Core.Json;
 using Ivy.Web.Json;
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Ivy.Auth0.Services
 {
@@ -26,6 +28,8 @@ namespace Ivy.Auth0.Services
         private readonly IAuth0ConfigurationProvider _configProvider;
         private readonly IUserProvider _userProvider;
 
+        private readonly IJsonManipulationService _jsonManipulator;
+
         #endregion
 
         #region Constructor
@@ -34,12 +38,15 @@ namespace Ivy.Auth0.Services
             IAuth0QueryStringUriGenerator queryStringGenerator,
             IJsonSerializationService serializationService,
             IAuth0ConfigurationProvider configProvider,
-            IUserProvider userProvider)
+            IUserProvider userProvider,
+            IJsonManipulationService jsonManipulator)
         {
             _queryStringGenerator = queryStringGenerator;
             _serializationService = serializationService;
             _configProvider = configProvider;
             _userProvider = userProvider;
+
+            _jsonManipulator = jsonManipulator;
         }
 
         #endregion
@@ -112,7 +119,34 @@ namespace Ivy.Auth0.Services
 
             var req = SetupAuthorizedRequest(uri, HttpMethod.Post, managementToken);
 
-            AppendStringContent(req, request);
+            //AppendStringContent(req, request);
+            var json = _serializationService.Serialize(request);
+
+            // If Phone is null or empty, we need to simply zero it out of the JSON
+            if (request.phone_number == null || request.phone_number == "")
+            {
+                json = _jsonManipulator.RemoveJsonAttribute(json, "phone_number");
+            }
+            else
+            {
+                // If we save a phone number, it 100% MUST match this regex: ^\\+[0-9]{1,15}$
+                // If this regex does not match, then we will definitely fail
+                Match validPhone = Regex.Match(request.phone_number, "^\\+[0-9]{1,15}$");
+
+                if (!validPhone.Success)
+                {
+                    throw new Exception("Invalid phone number received! Must match regex - ^\\+[0-9]{1,15}$" + 
+                        $" / Phone: {request.phone_number}");
+                }
+            }
+
+            // If Username functionality isn't enabled, it must be removed from the JSON
+            if (!_configProvider.UseUsername)
+            {
+                json = _jsonManipulator.RemoveJsonAttribute(json, "username");
+            }
+
+            req.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
             return req;
         }

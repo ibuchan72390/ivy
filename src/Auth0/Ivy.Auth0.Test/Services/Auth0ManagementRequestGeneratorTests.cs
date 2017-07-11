@@ -170,6 +170,92 @@ namespace Ivy.Auth0.Test.Services
             ValidateRequest(req, expectedUri, HttpMethod.Post);
         }
 
+        [Fact]
+        public void GenerateCreateUserRequest_Removes_Phone_If_Phone_Null()
+        {
+            var testModel = new Auth0CreateUserRequest { phone_number = null };
+
+            var expectedUri = new Uri($"https://{testDomain}/api/v2/users");
+
+            var req = _sut.GenerateCreateUserRequest(testToken, testModel);
+
+            ValidateRequest(req, expectedUri, HttpMethod.Post);
+
+            var stringContent = req.Content as StringContent;
+
+            var result = stringContent.ReadAsStringAsync().Result;
+
+            // Username has been removed
+            Assert.True(result.IndexOf("phone_number") == -1);
+
+            var resultModel = JsonConvert.DeserializeObject<Auth0CreateUserRequest>(result);
+
+            Assert.Null(resultModel.phone_number);
+        }
+
+        [Fact]
+        public void GenerateCreateUserRequest_Removes_Phone_If_Phone_Empty()
+        {
+            var testModel = new Auth0CreateUserRequest { phone_number = "" };
+
+            var expectedUri = new Uri($"https://{testDomain}/api/v2/users");
+
+            var req = _sut.GenerateCreateUserRequest(testToken, testModel);
+
+            ValidateRequest(req, expectedUri, HttpMethod.Post);
+
+            var stringContent = req.Content as StringContent;
+
+            var result = stringContent.ReadAsStringAsync().Result;
+
+            // Username has been removed
+            Assert.True(result.IndexOf("phone_number") == -1);
+
+            var resultModel = JsonConvert.DeserializeObject<Auth0CreateUserRequest>(result);
+
+            Assert.Null(resultModel.phone_number);
+        }
+
+        [Fact]
+        public void GenerateCreateUserRequest_Validates_Phone_Against_Auth0_Regex()
+        {
+            var request = new Auth0CreateUserRequest { phone_number = "TEST" };
+
+            var expectedUri = new Uri($"https://{testDomain}/api/v2/users");
+
+            var e = Assert.Throws<Exception>(() => _sut.GenerateCreateUserRequest(testToken, request));
+
+            var expectedMsg = "Invalid phone number received! Must match regex - ^\\+[0-9]{1,15}$" +
+                        $" / Phone: {request.phone_number}";
+
+            Assert.Equal(expectedMsg, e.Message);
+        }
+
+        [Fact]
+        public void GenerateCreateUserRequest_Removes_Username_If_UseUsername_Config_False()
+        {
+            _mockConfigProvider.Setup(x => x.UseUsername).Returns(false);
+
+            var testModel = new Auth0CreateUserRequest { username = "TEST" };
+
+            var expectedUri = new Uri($"https://{testDomain}/api/v2/users");
+
+            var req = _sut.GenerateCreateUserRequest(testToken, testModel);
+
+            ValidateRequest(req, expectedUri, HttpMethod.Post);
+
+            var stringContent = req.Content as StringContent;
+
+            var result = stringContent.ReadAsStringAsync().Result;
+
+            // Username has been removed
+            Assert.True(result.IndexOf("username") == -1);
+
+            var resultModel = JsonConvert.DeserializeObject<Auth0CreateUserRequest>(result);
+
+            Assert.Null(resultModel.username);
+        }
+
         #endregion
 
         #region GenerateGetUserRequest
