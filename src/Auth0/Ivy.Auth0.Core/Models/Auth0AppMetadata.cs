@@ -15,7 +15,7 @@ namespace Ivy.Auth0.Core.Models
 
         #region Public Vars
 
-        IEnumerable<string> roles { get; set; }
+        public IEnumerable<string> roles { get; set; }
 
         #endregion
     }
