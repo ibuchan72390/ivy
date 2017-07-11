@@ -75,7 +75,8 @@ namespace Ivy.Web.Client
             {
                 throw new Exception("Unsuccessful response received when requesting API! " + 
                                     $"Request Uri: {response.RequestMessage.RequestUri.ToString()} / " + 
-                                    $"Status Code: {response.StatusCode} / Reason: {response.ReasonPhrase}");
+                                    $"Status Code: {response.StatusCode.ToString()} / Reason: {response.ReasonPhrase} / " + 
+                                    $"Message: {response.RequestMessage}");
             }
         }
 
