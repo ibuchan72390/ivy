@@ -16,6 +16,7 @@ namespace Ivy.Web.IoC
 
             // Json
             container.RegisterSingleton<IJsonSerializationService, JsonSerializationService>();
+            container.RegisterSingleton<IJsonManipulationService, JsonManipulationService>();
         }
     }
 
