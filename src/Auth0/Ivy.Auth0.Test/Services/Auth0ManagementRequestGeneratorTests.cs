@@ -185,8 +185,9 @@ namespace Ivy.Auth0.Test.Services
 
             var result = stringContent.ReadAsStringAsync().Result;
 
-            // Username has been removed
+            // Phone and verified has been removed
             Assert.True(result.IndexOf("phone_number") == -1);
+            Assert.True(result.IndexOf("phone_verified") == -1);
 
             var resultModel = JsonConvert.DeserializeObject<Auth0CreateUserRequest>(result);
 
@@ -208,8 +209,9 @@ namespace Ivy.Auth0.Test.Services
 
             var result = stringContent.ReadAsStringAsync().Result;
 
-            // Username has been removed
+            // Phone and verified has been removed
             Assert.True(result.IndexOf("phone_number") == -1);
+            Assert.True(result.IndexOf("phone_verified") == -1);
 
             var resultModel = JsonConvert.DeserializeObject<Auth0CreateUserRequest>(result);
 

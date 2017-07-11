@@ -126,6 +126,7 @@ namespace Ivy.Auth0.Services
             if (request.phone_number == null || request.phone_number == "")
             {
                 json = _jsonManipulator.RemoveJsonAttribute(json, "phone_number");
+                json = _jsonManipulator.RemoveJsonAttribute(json, "phone_verified");
             }
             else
             {
