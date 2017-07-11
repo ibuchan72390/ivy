@@ -68,13 +68,13 @@ namespace Ivy.Auth0.Services
                 {
                     var str = $"identities.connection:\"{MassageString(req.Connection)}\"";
 
-                    if (dict.ContainsKey("q"))
+                    if (dict.ContainsKey("q") && !string.IsNullOrEmpty(dict["q"]))
                     {
                         dict["q"] += $" AND {str}";
                     }
                     else
                     {
-                        dict.Add("q", str);
+                        dict["q"] = str;
                     }
                 }
                 else if (req.SearchEngine == Auth0ApiVersionNames.v1.ToString())
