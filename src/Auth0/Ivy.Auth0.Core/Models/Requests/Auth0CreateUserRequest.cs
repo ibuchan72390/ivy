@@ -14,6 +14,10 @@
         public Auth0CreateUserRequest()
         {
             verify_email = true;
+
+            // We get errors if these are left null
+            user_metadata = new Auth0UserMetadata();
+            app_metadata = new Auth0AppMetadata();
         }
 
         #endregion
@@ -22,7 +26,11 @@
 
         public string connection { get; set; }
         public string email { get; set; }
-        public string username { get; set; }
+
+        // This is a viable option, but completely optional / leaving it on here causes issues during creation
+        // If we could create a configurable variable in the Auth0 pieces, that'd be awesome
+        //public string username { get; set; }
+
         public string password { get; set; }
         public string phone_number { get; set; }
         public bool email_verified { get; set; }
