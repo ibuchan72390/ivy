@@ -1,9 +1,9 @@
 {
-  "version": "1.0.0.1",
+  "version": "1.0.0.2",
 
   "dependencies": {
     "Ivy.IoC.Core": "1.0.0.0",
-    "Ivy.Web": "1.0.0.1",
+    "Ivy.Web": "1.0.0.2",
     "Ivy.Web.Core": "1.0.0.1",
     "NETStandard.Library": "1.6.0"
   },
