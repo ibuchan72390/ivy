@@ -2,13 +2,11 @@
 using Ivy.Auth0.Core.Models.Requests;
 using Ivy.Auth0.Core.Providers;
 using Ivy.Auth0.Core.Services;
-using Ivy.Web.Core.Json;
 using Ivy.Web.Json;
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace Ivy.Auth0.Services
 {
@@ -28,7 +26,7 @@ namespace Ivy.Auth0.Services
         private readonly IAuth0ConfigurationProvider _configProvider;
         private readonly IUserProvider _userProvider;
 
-        private readonly IJsonManipulationService _jsonManipulator;
+        private readonly IAuth0JsonGenerator _jsonGenerator;
 
         #endregion
 
@@ -39,14 +37,14 @@ namespace Ivy.Auth0.Services
             IJsonSerializationService serializationService,
             IAuth0ConfigurationProvider configProvider,
             IUserProvider userProvider,
-            IJsonManipulationService jsonManipulator)
+            IAuth0JsonGenerator jsonGenerator)
         {
             _queryStringGenerator = queryStringGenerator;
             _serializationService = serializationService;
             _configProvider = configProvider;
             _userProvider = userProvider;
 
-            _jsonManipulator = jsonManipulator;
+            _jsonGenerator = jsonGenerator;
         }
 
         #endregion
@@ -119,35 +117,9 @@ namespace Ivy.Auth0.Services
 
             var req = SetupAuthorizedRequest(uri, HttpMethod.Post, managementToken);
 
-            //AppendStringContent(req, request);
-            var json = _serializationService.Serialize(request);
+            var json = _jsonGenerator.ConfigureCreateUserJson(request);
 
-            // If Phone is null or empty, we need to simply zero it out of the JSON
-            if (request.phone_number == null || request.phone_number == "")
-            {
-                json = _jsonManipulator.RemoveJsonAttribute(json, "phone_number");
-                json = _jsonManipulator.RemoveJsonAttribute(json, "phone_verified");
-            }
-            else
-            {
-                // If we save a phone number, it 100% MUST match this regex: ^\\+[0-9]{1,15}$
-                // If this regex does not match, then we will definitely fail
-                Match validPhone = Regex.Match(request.phone_number, "^\\+[0-9]{1,15}$");
-
-                if (!validPhone.Success)
-                {
-                    throw new Exception("Invalid phone number received! Must match regex - ^\\+[0-9]{1,15}$" + 
-                        $" / Phone: {request.phone_number}");
-                }
-            }
-
-            // If Username functionality isn't enabled, it must be removed from the JSON
-            if (!_configProvider.UseUsername)
-            {
-                json = _jsonManipulator.RemoveJsonAttribute(json, "username");
-            }
-
-            req.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            AppendStringContent(req, json);
 
             return req;
         }
@@ -170,7 +142,9 @@ namespace Ivy.Auth0.Services
 
             var req = SetupAuthorizedRequest(uri, new HttpMethod("PATCH"), managementToken);
 
-            AppendStringContent(req, request);
+            var json = _jsonGenerator.ConfigureUpdateUserJson(request);
+
+            AppendStringContent(req, json);
 
             return req;
         }
@@ -213,7 +187,12 @@ namespace Ivy.Auth0.Services
         private void AppendStringContent<T>(HttpRequestMessage req, T data)
         {
             var stringContent = _serializationService.Serialize(data);
-            req.Content = new StringContent(stringContent, Encoding.UTF8, "application/json");
+            AppendStringContent(req, stringContent);
+        }
+
+        private void AppendStringContent(HttpRequestMessage req, string data)
+        {
+            req.Content = new StringContent(data, Encoding.UTF8, "application/json");
         }
 
         private void AppendAcceptJsonHeader(HttpRequestMessage req)

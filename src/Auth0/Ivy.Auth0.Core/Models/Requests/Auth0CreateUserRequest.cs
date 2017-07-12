@@ -1,4 +1,6 @@
-﻿namespace Ivy.Auth0.Core.Models.Requests
+﻿using Ivy.Auth0.Core.Models.Interfaces;
+
+namespace Ivy.Auth0.Core.Models.Requests
 {
     /*
      * The only values you're going to need to populate here are going to be 
@@ -7,7 +9,7 @@
      * as well.
      */
 
-    public class Auth0CreateUserRequest
+    public class Auth0CreateUserRequest : IAuth0Phone, IAuth0Username
     {
         #region Constructor
 

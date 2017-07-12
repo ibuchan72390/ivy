@@ -17,6 +17,8 @@ namespace Ivy.Auth0.IoC
             containerGenerator.RegisterSingleton<IAuthTokenExtractor, AuthTokenExtractor>();
             containerGenerator.RegisterSingleton<IJwtProcessor, JwtProcessor>();
             containerGenerator.RegisterSingleton<IUserProvider, UserProvider>();
+            containerGenerator.RegisterSingleton<IAuth0JsonManipulator, Auth0JsonManipulator>();
+            containerGenerator.RegisterSingleton<IAuth0JsonGenerator, Auth0JsonGenerator>();
 
             // API Services
             containerGenerator.RegisterSingleton<IAuth0AccountManagementService, Auth0AccountManagementService>();

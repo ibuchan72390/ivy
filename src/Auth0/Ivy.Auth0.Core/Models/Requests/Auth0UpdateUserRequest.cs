@@ -1,12 +1,14 @@
-﻿namespace Ivy.Auth0.Core.Models.Requests
+﻿using Ivy.Auth0.Core.Models.Interfaces;
+
+namespace Ivy.Auth0.Core.Models.Requests
 {
-    public class Auth0UpdateUserRequest
+    public class Auth0UpdateUserRequest : IAuth0Phone, IAuth0Username
     {
         public string user_id { get; set; }
 
         public bool blocked { get; set; }
         public bool email_verified { get; set; }
-        //string email { get; set; } We're never going to let them change this, that's a terrible idea
+        public string email { get; set; }
         public bool verify_email { get; set; }
         public string phone_number { get; set; }
         public bool phone_verified { get; set; }
