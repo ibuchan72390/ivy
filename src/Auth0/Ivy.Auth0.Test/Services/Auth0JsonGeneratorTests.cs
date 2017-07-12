@@ -70,6 +70,8 @@ namespace Ivy.Auth0.Test.Services
 
             var json = _serializationService.Serialize(req);
 
+            Assert.True(json.Contains("user_id"));
+
             _mockJsonManipulator.Setup(x => x.EditPhoneJson(json, req)).Returns(json);
             _mockJsonManipulator.Setup(x => x.EditUsernameJson(json, req)).Returns(json);
 
@@ -77,6 +79,8 @@ namespace Ivy.Auth0.Test.Services
 
             _mockJsonManipulator.Verify(x => x.EditPhoneJson(It.IsAny<string>(), req), Times.Once);
             _mockJsonManipulator.Verify(x => x.EditUsernameJson(It.IsAny<string>(), req), Times.Once);
+
+            Assert.False(result.Contains("user_id"));
         }
 
         [Fact]

@@ -41,6 +41,9 @@ namespace Ivy.Auth0.Services
         {
             var json = BaseConfigureJson(request);
 
+            // Seems that we can't maintain this on the model, they expect this as a URL param
+            json = _jsonManipulator.RemoveJsonAttribute(json, "user_id");
+
             if (string.IsNullOrEmpty(request.phone_number))
             {
                 json = _jsonManipulator.RemoveJsonAttribute(json, "verify_phone_number");
