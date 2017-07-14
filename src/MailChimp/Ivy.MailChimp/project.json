@@ -1,11 +1,11 @@
 {
-  "version": "1.0.0.8",
+  "version": "1.0.0.9",
 
   "dependencies": {
     "Ivy.MailChimp.Core": "1.0.0.1",
     "Ivy.Utility": "1.0.0.7",
     "Ivy.Validation.Core": "1.0.0.1",
-    "Ivy.Web.Core": "1.0.0.2",
+    "Ivy.Web.Core": "1.0.0.3",
     "Microsoft.Extensions.Logging.Abstractions": "1.0.2",
     "NETStandard.Library": "1.6.0"
   },

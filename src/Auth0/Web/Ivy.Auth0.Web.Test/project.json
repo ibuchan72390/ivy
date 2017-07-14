@@ -10,7 +10,7 @@
     "NETStandard.Library": "1.6.0",
     "xunit": "2.2.0",
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
-    "Ivy.Web.IoC": "1.0.0.3",
+    "Ivy.Web.IoC": "1.0.0.4",
     "Microsoft.Extensions.Logging": "1.0.2"
   },
 

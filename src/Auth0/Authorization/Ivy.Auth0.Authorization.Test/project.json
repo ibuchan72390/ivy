@@ -10,7 +10,7 @@
     "Ivy.Auth0.Authorization.Core": "1.0.1.000",
     "Moq": "4.7.10",
     "Microsoft.Extensions.Logging": "1.0.2",
-    "Ivy.Web.IoC": "1.0.0.3"
+    "Ivy.Web.IoC": "1.0.0.4"
   },
 
   "testRunner": "xunit",
