@@ -1,6 +1,6 @@
 ﻿using Ivy.IoC;
 using Ivy.TestHelper.TestEntities;
-using Ivy.Web.Json;
+using Ivy.Web.Core.Json;
 using Ivy.Web.Test.Base;
 using Xunit;
 

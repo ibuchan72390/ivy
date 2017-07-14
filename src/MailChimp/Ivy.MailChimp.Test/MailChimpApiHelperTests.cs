@@ -4,7 +4,7 @@ using Ivy.MailChimp.Core.Models;
 using Ivy.MailChimp.Core.Services;
 using Ivy.MailChimp.Test.Base;
 using Ivy.Web.Core.Client;
-using Ivy.Web.Json;
+using Ivy.Web.Core.Json;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System.Net.Http;

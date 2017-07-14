@@ -1,5 +1,5 @@
 ﻿using Ivy.Web.Core.Client;
-using Ivy.Web.Json;
+using Ivy.Web.Core.Json;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;

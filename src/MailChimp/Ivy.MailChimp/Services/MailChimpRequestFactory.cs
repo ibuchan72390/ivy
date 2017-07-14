@@ -5,7 +5,7 @@ using System.Net.Http.Headers;
 using Ivy.MailChimp.Core.Services;
 using Ivy.MailChimp.Core.Providers;
 using Ivy.MailChimp.Core.Models;
-using Ivy.Web.Json;
+using Ivy.Web.Core.Json;
 using Ivy.Utility.Core.Extensions;
 
 namespace Ivy.MailChimp.Services

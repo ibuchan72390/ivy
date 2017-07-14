@@ -1,0 +1,16 @@
+{
+  "version": "1.0.1.000",
+
+  "dependencies": {
+    "Microsoft.AspNetCore.Http.Abstractions": "1.0.2",
+    "NETStandard.Library": "1.6.0",
+    "Newtonsoft.Json": "9.0.1",
+    "System.Security.Claims": "4.0.1"
+  },
+
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": "dnxcore50"
+    }
+  }
+}

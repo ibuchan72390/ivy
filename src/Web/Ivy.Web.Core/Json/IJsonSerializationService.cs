@@ -1,4 +1,4 @@
-﻿namespace Ivy.Web.Json
+﻿namespace Ivy.Web.Core.Json
 {
     public interface IJsonSerializationService
     {

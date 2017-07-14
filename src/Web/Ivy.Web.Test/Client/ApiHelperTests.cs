@@ -2,6 +2,7 @@
 using Ivy.IoC.Core;
 using Ivy.TestHelper.TestEntities;
 using Ivy.Web.Core.Client;
+using Ivy.Web.Core.Json;
 using Ivy.Web.Json;
 using Ivy.Web.Test.Base;
 using Moq;

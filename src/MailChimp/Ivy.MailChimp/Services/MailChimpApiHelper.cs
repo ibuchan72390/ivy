@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Ivy.Web.Core.Client;
 using Ivy.MailChimp.Core.Models;
-using Ivy.Web.Json;
+using Ivy.Web.Core.Json;
 
 namespace Ivy.MailChimp.Services
 {
