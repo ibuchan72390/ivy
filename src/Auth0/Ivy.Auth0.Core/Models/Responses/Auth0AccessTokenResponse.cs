@@ -1,4 +1,4 @@
-﻿namespace Ivy.Auth0.Management.Core.Models.Responses
+﻿namespace Ivy.Auth0.Core.Models.Responses
 {
     public class Auth0AccessTokenResponse
     {

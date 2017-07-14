@@ -14,26 +14,6 @@ SET PackageDir=%CD%
 CD ../../src
 
 
-
-:: Build IBFramework.Core
-::CALL :PackageProjects IBFramework.Core
-
-:: Build IBFramework.Data.Common
-::CALL :PackageProjects IBFramework.Data.Common
-
-:: Build IBFramework.Data.MySQL
-::CALL :PackageProjects IBFramework.Data.MySQL
-
-:: Build IBFramework.IoC
-::CALL :PackageProjects IBFramework.IoC
-
-:: Build IBFramework.Utility
-::CALL :PackageProjects IBFramework.Utility
-
-:: Build IBFramework.TestUtilities
-::CALL :PackageProjects test\IBFramework.TestUtilities
-
-
 :: Standard Projects
 
 :: Build Amazon Elastic Transcoder
@@ -42,8 +22,17 @@ CALL :CreateProjectPackage Amazon\ElasticTranscoder\Ivy.Amazon.ElasticTranscoder
 :: Build Amazon S3
 CALL :CreateProjectPackage Amazon\S3\Ivy.Amazon.S3
 
-:: Build Auth0
-CALL :CreateProjectPackage Auth0\Ivy.Auth0
+:: Build Auth0.Core
+CALL :PackageProject Auth0\Ivy.Auth0.Core
+
+:: Build Auth0.Authorization
+CALL :CreateProjectPackage Auth0\Authorization\Ivy.Auth0.Authorization
+
+:: Build Auth0.Management
+CALL :CreateProjectPackage Auth0\Management\Ivy.Auth0.Management
+
+:: Build Auth0.Web
+CALL :CreateProjectPackage Auth0\Web\Ivy.Auth0.Web
 
 :: Build Caching
 ::CALL :CreateProjectPackage Caching\Ivy.Caching

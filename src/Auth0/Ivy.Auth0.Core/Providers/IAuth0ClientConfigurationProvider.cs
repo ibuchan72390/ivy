@@ -4,7 +4,6 @@
     {
         // SPA Client - Used for authorizing incoming Auth0 client tokens
         // Leverages an RS256 Encrypted JWT obtained via callback
-        string SpaAudience { get; }
         string SpaClientId { get; }
     }
 }

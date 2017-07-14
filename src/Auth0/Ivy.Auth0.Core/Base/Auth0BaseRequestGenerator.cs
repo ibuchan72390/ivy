@@ -90,6 +90,21 @@ namespace Ivy.Auth0.Core.Base
             req.Headers.Add("accept", "application/json");
         }
 
+
+        private HttpMethod _patchMethod;
+        protected HttpMethod PatchMethod
+        {
+            get
+            {
+                if (_patchMethod == null)
+                {
+                    _patchMethod = new HttpMethod("PATCH");
+                }
+
+                return _patchMethod;
+            }
+        }
+
         #endregion
     }
 }

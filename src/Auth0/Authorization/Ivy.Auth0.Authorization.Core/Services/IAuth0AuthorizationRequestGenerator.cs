@@ -1,17 +1,17 @@
-﻿using System.Net.Http;
+﻿using Ivy.Auth0.Core.Sevices;
+using System.Collections.Generic;
+using System.Net.Http;
 
 namespace Ivy.Auth0.Authorization.Core.Services
 {
-    public interface IAuth0AuthorizationRequestGenerator
+    public interface IAuth0AuthorizationRequestGenerator : IApiTokenRequestGenerator
     {
-        HttpRequestMessage GenerateAuthorizationApiTokenRequest();
+        HttpRequestMessage GenerateGetRolesRequest(string authToken);
 
-        HttpRequestMessage GenerateGetRolesRequest();
+        HttpRequestMessage GenerateGetUserRolesRequest(string authToken, string authId);
 
-        HttpRequestMessage GenerateGetUserRolesRequest(string authId);
+        HttpRequestMessage GenerateAddUserRolesRequest(string authToken, string authId, IEnumerable<string> roleId);
 
-        HttpRequestMessage GenerateAddUserRoleRequest(string authId, string roleId);
-
-        HttpRequestMessage GenerateDeleteUserRoleRequest(string authId, string roleId);
+        HttpRequestMessage GenerateDeleteUserRolesRequest(string authToken, string authId, IEnumerable<string> roleId);
     }
 }

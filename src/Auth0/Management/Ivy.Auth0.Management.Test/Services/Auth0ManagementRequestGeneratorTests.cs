@@ -84,7 +84,7 @@ namespace Ivy.Auth0.Management.Test.Services
         [Fact]
         public async void GenerateManagementApiTokenRequest_Works_As_Expected()
         {
-            var req = _sut.GenerateManagementApiTokenRequest();
+            var req = _sut.GenerateApiTokenRequest();
 
             Assert.Equal(HttpMethod.Post, req.Method);
 

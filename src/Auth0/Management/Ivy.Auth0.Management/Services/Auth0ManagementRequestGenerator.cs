@@ -16,7 +16,9 @@ namespace Ivy.Auth0.Management.Services
      * allows for a better separation of concerns internally.
      */
 
-    public class Auth0ManagementRequestGenerator : Auth0BaseRequestGenerator, IAuth0ManagementRequestGenerator
+    public class Auth0ManagementRequestGenerator : 
+        Auth0BaseRequestGenerator, 
+        IAuth0ManagementRequestGenerator
     {
         #region Variables & Constants
 
@@ -49,7 +51,7 @@ namespace Ivy.Auth0.Management.Services
 
         #region Public Methods
 
-        public HttpRequestMessage GenerateManagementApiTokenRequest()
+        public HttpRequestMessage GenerateApiTokenRequest()
         {
             return GenerateBaseTokenRequest($"https://{_config.Domain}/api/v2/");
         }
@@ -117,7 +119,7 @@ namespace Ivy.Auth0.Management.Services
             request.connection = _config.Connection;
             request.client_id = _clientConfig.SpaClientId;
 
-            var req = SetupAuthorizedRequest(uri, new HttpMethod("PATCH"), managementToken);
+            var req = SetupAuthorizedRequest(uri, PatchMethod, managementToken);
 
             var json = _jsonGenerator.ConfigureUpdateUserJson(request);
 

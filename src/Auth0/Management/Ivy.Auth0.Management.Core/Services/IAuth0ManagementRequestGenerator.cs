@@ -1,12 +1,11 @@
-﻿using Ivy.Auth0.Management.Core.Models.Requests;
+﻿using Ivy.Auth0.Core.Sevices;
+using Ivy.Auth0.Management.Core.Models.Requests;
 using System.Net.Http;
 
 namespace Ivy.Auth0.Management.Core.Services
 {
-    public interface IAuth0ManagementRequestGenerator
+    public interface IAuth0ManagementRequestGenerator : IApiTokenRequestGenerator
     {
-        HttpRequestMessage GenerateManagementApiTokenRequest();
-
         HttpRequestMessage GenerateVerifyEmailRequest(string managementToken, string userId);
 
         HttpRequestMessage GenerateListUsersRequest(string managementToken, Auth0ListUsersRequest request);

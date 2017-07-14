@@ -1,5 +1,7 @@
 ﻿using System;
 using Ivy.IoC.Core;
+using Ivy.Auth0.Authorization.Services;
+using Ivy.Auth0.Authorization.Core.Services;
 
 namespace Ivy.Auth0.Authorization.IoC
 {
@@ -7,24 +9,9 @@ namespace Ivy.Auth0.Authorization.IoC
     {
         public void Install(IContainerGenerator containerGenerator)
         {
-            //containerGenerator.RegisterSingleton<IApiManagementTokenGenerator, ApiAuthTokenGenerator>();
-            //containerGenerator.RegisterSingleton<IAuth0ManagementRequestGenerator, Auth0ManagementRequestGenerator>();
-            //containerGenerator.RegisterSingleton<IAuth0QueryStringUriGenerator, Auth0QueryStringUriGenerator>();
-            //containerGenerator.RegisterSingleton<IAuth0ContextProcessor, Auth0ContextProcessor>();
-            //containerGenerator.RegisterSingleton<IAuthTokenExtractor, AuthTokenExtractor>();
-            //containerGenerator.RegisterSingleton<IJwtProcessor, JwtProcessor>();
-            //containerGenerator.RegisterSingleton<IUserProvider, UserProvider>();
-            //containerGenerator.RegisterSingleton<IAuth0JsonManipulator, Auth0JsonManipulator>();
-            //containerGenerator.RegisterSingleton<IAuth0JsonGenerator, Auth0JsonGenerator>();
-
-            //// API Services
-            //containerGenerator.RegisterSingleton<IAuth0AccountManagementService, Auth0AccountManagementService>();
-            //containerGenerator.RegisterSingleton<IAuth0UserManagementService, Auth0UserManagementService>();
-
-            //// Transformer
-            //containerGenerator.RegisterSingleton<IUserPaginatedRequestTransformer, UserPaginatedRequestTransformer>();
-
-            throw new NotImplementedException();
+            containerGenerator.RegisterSingleton<IAuth0AuthorizationRequestGenerator, Auth0AuthorizationRequestGenerator>();
+            containerGenerator.RegisterSingleton<IAuth0AuthorizationService, Auth0AuthorizationService>();
+            containerGenerator.RegisterSingleton<IAuthorizationApiTokenGenerator, AuthorizationApiTokenGenerator>();
         }
     }
 

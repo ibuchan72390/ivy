@@ -19,7 +19,7 @@ namespace Ivy.Auth0.Management.Test.Services
         private readonly IAuth0UserManagementService _sut;
 
         private readonly Mock<IApiHelper> _mockClientHelper;
-        private readonly Mock<IApiManagementTokenGenerator> _mockTokenGenerator;
+        private readonly Mock<IManagementApiTokenGenerator> _mockTokenGenerator;
         private readonly Mock<IAuth0ManagementRequestGenerator> _mockRequestGen;
 
         const string TestUserId = "TESTUserId";
@@ -40,8 +40,8 @@ namespace Ivy.Auth0.Management.Test.Services
             _mockClientHelper = new Mock<IApiHelper>();
             containerGen.RegisterInstance<IApiHelper>(_mockClientHelper.Object);
             
-            _mockTokenGenerator = new Mock<IApiManagementTokenGenerator>();
-            containerGen.RegisterInstance<IApiManagementTokenGenerator>(_mockTokenGenerator.Object);
+            _mockTokenGenerator = new Mock<IManagementApiTokenGenerator>();
+            containerGen.RegisterInstance<IManagementApiTokenGenerator>(_mockTokenGenerator.Object);
 
             _mockRequestGen = new Mock<IAuth0ManagementRequestGenerator>();
             containerGen.RegisterInstance<IAuth0ManagementRequestGenerator>(_mockRequestGen.Object);
@@ -51,7 +51,7 @@ namespace Ivy.Auth0.Management.Test.Services
             _sut = container.Resolve<IAuth0UserManagementService>();
 
             _mockTokenGenerator.
-                Setup(x => x.GetApiAuthTokenAsync()).
+                Setup(x => x.GetApiTokenAsync()).
                 ReturnsAsync(apiToken);
         }
 
@@ -79,7 +79,7 @@ namespace Ivy.Auth0.Management.Test.Services
 
             Assert.Same(responseModel, result);
 
-            _mockTokenGenerator.Verify(x => x.GetApiAuthTokenAsync(), Times.Once);
+            _mockTokenGenerator.Verify(x => x.GetApiTokenAsync(), Times.Once);
             _mockRequestGen.Verify(x => x.GenerateListUsersRequest(apiToken, model), Times.Once);
             _mockClientHelper.Verify(x => x.GetApiDataAsync<Auth0ListUsersResponse>(req), Times.Once);
         }
@@ -106,7 +106,7 @@ namespace Ivy.Auth0.Management.Test.Services
 
             Assert.Same(responseModel, result);
 
-            _mockTokenGenerator.Verify(x => x.GetApiAuthTokenAsync(), Times.Once);
+            _mockTokenGenerator.Verify(x => x.GetApiTokenAsync(), Times.Once);
             _mockRequestGen.Verify(x => x.GenerateCreateUserRequest(apiToken, model), Times.Once);
             _mockClientHelper.Verify(x => x.GetApiDataAsync<Auth0User>(req), Times.Once);
         }
@@ -132,7 +132,7 @@ namespace Ivy.Auth0.Management.Test.Services
 
             Assert.Same(responseModel, result);
 
-            _mockTokenGenerator.Verify(x => x.GetApiAuthTokenAsync(), Times.Once);
+            _mockTokenGenerator.Verify(x => x.GetApiTokenAsync(), Times.Once);
             _mockRequestGen.Verify(x => x.GenerateGetUserRequest(apiToken, TestUserId), Times.Once);
             _mockClientHelper.Verify(x => x.GetApiDataAsync<Auth0User>(req), Times.Once);
         }
@@ -159,7 +159,7 @@ namespace Ivy.Auth0.Management.Test.Services
 
             Assert.Same(responseModel, result);
 
-            _mockTokenGenerator.Verify(x => x.GetApiAuthTokenAsync(), Times.Once);
+            _mockTokenGenerator.Verify(x => x.GetApiTokenAsync(), Times.Once);
             _mockRequestGen.Verify(x => x.GenerateUpdateUserRequest(apiToken, requestModel), Times.Once);
             _mockClientHelper.Verify(x => x.GetApiDataAsync<Auth0User>(req), Times.Once);
         }
@@ -183,7 +183,7 @@ namespace Ivy.Auth0.Management.Test.Services
 
             await _sut.DeleteUserAsync(TestUserId);
 
-            _mockTokenGenerator.Verify(x => x.GetApiAuthTokenAsync(), Times.Once);
+            _mockTokenGenerator.Verify(x => x.GetApiTokenAsync(), Times.Once);
             _mockRequestGen.Verify(x => x.GenerateDeleteUserRequest(apiToken, TestUserId), Times.Once);
             _mockClientHelper.Verify(x => x.SendApiDataAsync(req), Times.Once);
         }

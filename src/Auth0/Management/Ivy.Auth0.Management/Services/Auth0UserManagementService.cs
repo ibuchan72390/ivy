@@ -12,7 +12,7 @@ namespace Ivy.Auth0.Management.Services
         #region Variables & Constants
 
         private readonly IApiHelper _apiHelper;
-        private readonly IApiManagementTokenGenerator _tokenGenerator;
+        private readonly IManagementApiTokenGenerator _tokenGenerator;
         private readonly IAuth0ManagementRequestGenerator _requestGenerator;
 
         #endregion
@@ -21,7 +21,7 @@ namespace Ivy.Auth0.Management.Services
 
         public Auth0UserManagementService(
             IApiHelper apiHelper,
-            IApiManagementTokenGenerator tokenGenerator,
+            IManagementApiTokenGenerator tokenGenerator,
             IAuth0ManagementRequestGenerator requestGenerator)
         {
             _apiHelper = apiHelper;
@@ -35,7 +35,7 @@ namespace Ivy.Auth0.Management.Services
 
         public async Task<Auth0ListUsersResponse> GetUsersAsync(Auth0ListUsersRequest request)
         {
-            var apiToken = await _tokenGenerator.GetApiAuthTokenAsync();
+            var apiToken = await _tokenGenerator.GetApiTokenAsync();
 
             var req = _requestGenerator.GenerateListUsersRequest(apiToken, request);
 
@@ -44,7 +44,7 @@ namespace Ivy.Auth0.Management.Services
 
         public async Task<Auth0User> CreateUserAsync(Auth0CreateUserRequest request)
         {
-            var apiToken = await _tokenGenerator.GetApiAuthTokenAsync();
+            var apiToken = await _tokenGenerator.GetApiTokenAsync();
 
             var req = _requestGenerator.GenerateCreateUserRequest(apiToken, request);
 
@@ -53,7 +53,7 @@ namespace Ivy.Auth0.Management.Services
 
         public async Task<Auth0User> GetUserAsync(string userId)
         {
-            var apiToken = await _tokenGenerator.GetApiAuthTokenAsync();
+            var apiToken = await _tokenGenerator.GetApiTokenAsync();
 
             var req = _requestGenerator.GenerateGetUserRequest(apiToken, userId);
 
@@ -62,7 +62,7 @@ namespace Ivy.Auth0.Management.Services
 
         public async Task<Auth0User> UpdateUserAsync(Auth0UpdateUserRequest request)
         {
-            var apiToken = await _tokenGenerator.GetApiAuthTokenAsync();
+            var apiToken = await _tokenGenerator.GetApiTokenAsync();
 
             var req = _requestGenerator.GenerateUpdateUserRequest(apiToken, request);
 
@@ -71,7 +71,7 @@ namespace Ivy.Auth0.Management.Services
 
         public async Task DeleteUserAsync(string userId)
         {
-            var apiToken = await _tokenGenerator.GetApiAuthTokenAsync();
+            var apiToken = await _tokenGenerator.GetApiTokenAsync();
 
             var req = _requestGenerator.GenerateDeleteUserRequest(apiToken, userId);
 

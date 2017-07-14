@@ -9,7 +9,7 @@ namespace Ivy.Auth0.Management.Services
         #region Variables & Constants
 
         private readonly IApiHelper _apiHelper;
-        private readonly IApiManagementTokenGenerator _tokenGenerator;
+        private readonly IManagementApiTokenGenerator _tokenGenerator;
         private readonly IAuth0ManagementRequestGenerator _requestGenerator;
 
         #endregion
@@ -18,7 +18,7 @@ namespace Ivy.Auth0.Management.Services
 
         public Auth0AccountManagementService(
             IApiHelper apiHelper,
-            IApiManagementTokenGenerator tokenGenerator,
+            IManagementApiTokenGenerator tokenGenerator,
             IAuth0ManagementRequestGenerator requestGenerator)
         {
             _apiHelper = apiHelper;
@@ -32,7 +32,7 @@ namespace Ivy.Auth0.Management.Services
 
         public async Task ResendVerificationEmailAsync(string userId)
         {
-            var apiToken = await _tokenGenerator.GetApiAuthTokenAsync();
+            var apiToken = await _tokenGenerator.GetApiTokenAsync();
 
             var req = _requestGenerator.GenerateVerifyEmailRequest(apiToken, userId);
 

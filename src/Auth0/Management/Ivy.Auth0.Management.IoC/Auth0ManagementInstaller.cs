@@ -10,7 +10,7 @@ namespace Ivy.Auth0.Management.IoC
     {
         public void Install(IContainerGenerator containerGenerator)
         {
-            containerGenerator.RegisterSingleton<IApiManagementTokenGenerator, ApiManagementTokenGenerator>();
+            containerGenerator.RegisterSingleton<IManagementApiTokenGenerator, ApiManagementTokenGenerator>();
             containerGenerator.RegisterSingleton<IAuth0ManagementRequestGenerator, Auth0ManagementRequestGenerator>();
             containerGenerator.RegisterSingleton<IAuth0QueryStringUriGenerator, Auth0QueryStringUriGenerator>();
             containerGenerator.RegisterSingleton<IAuth0JsonManipulator, Auth0JsonManipulator>();
