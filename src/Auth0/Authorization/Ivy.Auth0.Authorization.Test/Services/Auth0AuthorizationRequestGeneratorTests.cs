@@ -26,8 +26,7 @@ namespace Ivy.Auth0.Authorization.Test.Services
         private readonly Mock<IAuth0GenericConfigurationProvider> _mockConfig;
         private readonly Mock<IAuth0ClientConfigurationProvider> _mockClientConfig;
         private readonly Mock<IAuth0ApiConfigurationProvider> _mockApiConfig;
-        private readonly Mock<IAuth0AuthorizationConfigProvider> _mockManagementConfig;
-        private readonly Mock<IAuth0AuthorizationConfigProvider> _mockAuthConfig;
+        private readonly Mock<IAuth0AuthorizationConfigurationProvider> _mockAuthConfig;
 
         const string testUserId = "TESTUserId";
 
@@ -73,11 +72,8 @@ namespace Ivy.Auth0.Authorization.Test.Services
             _mockClientConfig.Setup(x => x.SpaClientId).Returns(testSpaClientId);
             containerGen.RegisterInstance<IAuth0ClientConfigurationProvider>(_mockClientConfig.Object);
 
-            _mockManagementConfig = new Mock<IAuth0AuthorizationConfigProvider>();
-            containerGen.RegisterInstance<IAuth0AuthorizationConfigProvider>(_mockManagementConfig.Object);
-
-            _mockAuthConfig = new Mock<IAuth0AuthorizationConfigProvider>();
-            containerGen.RegisterInstance<IAuth0AuthorizationConfigProvider>(_mockAuthConfig.Object);
+            _mockAuthConfig = new Mock<IAuth0AuthorizationConfigurationProvider>();
+            containerGen.RegisterInstance<IAuth0AuthorizationConfigurationProvider>(_mockAuthConfig.Object);
 
             _mockAuthConfig.Setup(x => x.AuthorizationUrl).Returns(testAuthUrl);
 

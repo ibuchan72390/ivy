@@ -11,7 +11,7 @@
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
     "Microsoft.Extensions.Logging": "1.0.2",
     "Ivy.Web.IoC": "1.0.0.4",
-    "Ivy.Auth0.Management.IoC": "1.0.1.000"
+    "Ivy.Auth0.Management.IoC": "1.0.1.001"
   },
 
   "testRunner": "xunit",

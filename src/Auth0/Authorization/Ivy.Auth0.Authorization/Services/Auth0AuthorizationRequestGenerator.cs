@@ -15,7 +15,7 @@ namespace Ivy.Auth0.Authorization.Services
     {
         #region Variables & Constants
 
-        private readonly IAuth0AuthorizationConfigProvider _authConfig;
+        private readonly IAuth0AuthorizationConfigurationProvider _authConfig;
 
         #endregion
 
@@ -25,7 +25,7 @@ namespace Ivy.Auth0.Authorization.Services
             IJsonSerializationService serializationService,
             IAuth0GenericConfigurationProvider config,
             IAuth0ApiConfigurationProvider apiConfig,
-            IAuth0AuthorizationConfigProvider authConfig)
+            IAuth0AuthorizationConfigurationProvider authConfig)
             : base(config, apiConfig, serializationService)
         {
             _authConfig = authConfig;

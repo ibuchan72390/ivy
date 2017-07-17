@@ -16,7 +16,9 @@ namespace Ivy.Auth0.Management.Services
             var dict = new Dictionary<string, string>();
 
             // They use zero-based indexing, we need to subtract one to get the real value
-            dict.Add("page", MassageString((req.Page - 1).ToString()));
+            var pageNum = req.Page < 1 ? 0 : req.Page - 1;
+
+            dict.Add("page", MassageString(pageNum.ToString()));
             dict.Add("include_totals", MassageString(req.IncludeTotals.ToString()));
 
             AppendIfNot(ref dict, "per_page", req.PerPage, 0);

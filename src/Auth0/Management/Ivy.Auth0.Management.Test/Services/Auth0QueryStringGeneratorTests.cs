@@ -37,7 +37,7 @@ namespace Ivy.Auth0.Management.Test.Services
             var currentUri = "https://google.com";
 
             var req = new Auth0ListUsersRequest();
-            req.Page = 10;
+            req.Page = -10;
             req.IncludeTotals = true;
 
             req.PerPage = 0;
@@ -53,7 +53,7 @@ namespace Ivy.Auth0.Management.Test.Services
             var resultQuery = QueryHelpers.ParseQuery(result.Query);
 
             Assert.Equal(2, resultQuery.Count);
-            AssertDictEquality(resultQuery, "page", req.Page - 1);
+            AssertDictEquality(resultQuery, "page", 0);
             AssertDictEquality(resultQuery, "include_totals", req.IncludeTotals);
         }
 
@@ -79,7 +79,7 @@ namespace Ivy.Auth0.Management.Test.Services
             var resultQuery = QueryHelpers.ParseQuery(result.Query);
 
             Assert.Equal(9, resultQuery.Count);
-            AssertDictEquality(resultQuery, "page", req.Page - 1);
+            AssertDictEquality(resultQuery, "page", 0);
             AssertDictEquality(resultQuery, "include_totals", req.IncludeTotals);
 
             AssertDictEquality(resultQuery, "per_page", req.PerPage);
@@ -98,7 +98,7 @@ namespace Ivy.Auth0.Management.Test.Services
             var currentUri = "https://google.com";
 
             var req = new Auth0ListUsersRequest();
-            req.Page = 0;
+            req.Page = 1;
             req.IncludeTotals = false;
 
             req.PerPage = 25;
@@ -114,7 +114,7 @@ namespace Ivy.Auth0.Management.Test.Services
             var resultQuery = QueryHelpers.ParseQuery(result.Query);
 
             Assert.Equal(8, resultQuery.Count);
-            AssertDictEquality(resultQuery, "page", req.Page - 1);
+            AssertDictEquality(resultQuery, "page", 0);
             AssertDictEquality(resultQuery, "include_totals", req.IncludeTotals);
 
             AssertDictEquality(resultQuery, "per_page", req.PerPage);
@@ -132,7 +132,7 @@ namespace Ivy.Auth0.Management.Test.Services
             var currentUri = "https://google.com";
 
             var req = new Auth0ListUsersRequest();
-            req.Page = 0;
+            req.Page = 5;
             req.IncludeTotals = false;
 
             req.PerPage = 25;
@@ -165,7 +165,7 @@ namespace Ivy.Auth0.Management.Test.Services
             var currentUri = "https://google.com";
 
             var req = new Auth0ListUsersRequest();
-            req.Page = 0;
+            req.Page = 10;
             req.IncludeTotals = false;
 
             req.PerPage = 25;
