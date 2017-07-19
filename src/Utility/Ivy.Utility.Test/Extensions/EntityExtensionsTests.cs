@@ -26,6 +26,54 @@ namespace Ivy.Utility.Test.Extensions
             Assert.Equal(idVal, result);
         }
 
+        [Fact]
+        public void SafeGetIntRef_Properly_Returns_Id_For_Nullable_Integer_Reference()
+        {
+            var entity = new CoreEntity();
+            entity.References = new Dictionary<string, object>
+            {
+                { "ParentEntityId", DBNull.Value }
+            };
+
+            var result = entity.SafeGetIntRef<CoreEntity, ParentEntity>(x => x.ParentEntity);
+
+            Assert.Equal(0, result);
+        }
+
+        #endregion
+
+        #region SafeGetNullableIntRef
+
+        [Fact]
+        public void SafeGetNullableIntRef_Properly_Returns_Id_For_Integer_Reference()
+        {
+            const int idVal = 123;
+
+            var entity = new CoreEntity();
+            entity.References = new Dictionary<string, object>
+            {
+                { "ParentEntityId", idVal }
+            };
+
+            var result = entity.SafeGetNullableIntRef<CoreEntity, ParentEntity>(x => x.ParentEntity);
+
+            Assert.Equal(idVal, result);
+        }
+
+        [Fact]
+        public void SafeGetNullableIntRef_Properly_Returns_Id_For_Nullable_Integer_Reference()
+        {
+            var entity = new CoreEntity();
+            entity.References = new Dictionary<string, object>
+            {
+                { "ParentEntityId", DBNull.Value }
+            };
+
+            var result = entity.SafeGetNullableIntRef<CoreEntity, ParentEntity>(x => x.ParentEntity);
+
+            Assert.Equal(null, result);
+        }
+
         #endregion
 
         #region SafeGetStringRef

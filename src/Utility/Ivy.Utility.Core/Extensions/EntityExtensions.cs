@@ -39,6 +39,16 @@ namespace Ivy.Utility.Core.Extensions
             return GetRefAndCast<TSource, TProperty, int>(refEntity, processFn);
         }
 
+        /*
+         * Required for nullable foreign key references
+         */
+        public static int? SafeGetNullableIntRef<TSource, TProperty>(this TSource refEntity, Expression<Func<TSource, TProperty>> processFn)
+            where TSource : IEntityWithReferences
+            where TProperty : IEntityWithTypedId<int>
+        {
+            return GetRefAndCast<TSource, TProperty, int?>(refEntity, processFn);
+        }
+
         public static string SafeGetStringRef<TSource, TProperty>(this TSource refEntity, Expression<Func<TSource, TProperty>> processFn)
             where TSource : IEntityWithReferences
             where TProperty : IEntityWithTypedId<string>
@@ -108,7 +118,6 @@ namespace Ivy.Utility.Core.Extensions
 
         private static TCast GetRefAndCast<TSource, TProperty, TCast>(this TSource refEntity, Expression<Func<TSource, TProperty>> processFn)
             where TSource : IEntityWithReferences
-            where TProperty : IEntityWithTypedId<TCast>
         {
             var propertyName = GetPropertyInfo(processFn);
 
@@ -140,6 +149,12 @@ namespace Ivy.Utility.Core.Extensions
 
         private static TReturn GetCastReference<TReturn>(IEntityWithReferences refEntity, string refKey)
         {
+            var targetRef = refEntity.References[refKey];
+
+            if (targetRef.GetType() == typeof(System.DBNull)) {
+                return default(TReturn);
+            }
+
             return (TReturn)refEntity.References[refKey];
         }
 
