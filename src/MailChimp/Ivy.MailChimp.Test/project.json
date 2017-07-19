@@ -1,8 +1,8 @@
 {
-  "version": "1.0.0.94",
+  "version": "1.0.0.95",
 
   "dependencies": {
-    "Ivy.MailChimp": "1.0.0.9",
+    "Ivy.MailChimp": "1.0.0.91",
     "Ivy.MailChimp.Core": "1.0.0.1",
     "Ivy.TestHelper": "1.0.0.91",
     "Ivy.Validation.Core": "1.0.0.1",
@@ -12,7 +12,7 @@
     "xunit": "2.2.0",
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
     "Ivy.Web.IoC": "1.0.0.4",
-    "Ivy.MailChimp.IoC": "1.0.0.9"
+    "Ivy.MailChimp.IoC": "1.0.0.91"
   },
 
   "testRunner": "xunit",
