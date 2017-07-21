@@ -1,8 +1,8 @@
 {
-  "version": "1.0.0.3",
+  "version": "1.0.0.4",
 
   "dependencies": {
-    "Ivy.IoC": "1.0.0.5",
+    "Ivy.IoC": "1.0.0.6",
     "NETStandard.Library": "1.6.0",
     "xunit": "2.2.0"
   },
