@@ -1,8 +1,8 @@
 {
-  "version": "1.0.0.8",
+  "version": "1.0.0.9",
 
   "dependencies": {
-    "Ivy.Amazon.S3": "1.0.0.8",
+    "Ivy.Amazon.S3": "1.0.0.9",
     "Ivy.Amazon.S3.Core": "1.0.0.4",
     "Ivy.IoC.Core": "1.0.0.0",
     "NETStandard.Library": "1.6.0"

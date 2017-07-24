@@ -1,10 +1,10 @@
 {
-  "version": "1.0.0.8",
+  "version": "1.0.0.9",
 
   "dependencies": {
     "AWSSDK.S3": "3.3.6.1",
     "Ivy.Amazon.S3.Core": "1.0.0.4",
-    "Ivy.Utility.Core": "1.0.0.5",
+    "Ivy.Utility.Core": "1.0.0.6",
     "Microsoft.Extensions.Logging.Abstractions": "1.0.2",
     "NETStandard.Library": "1.6.0"
   },
