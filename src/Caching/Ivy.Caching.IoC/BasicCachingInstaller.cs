@@ -8,7 +8,7 @@ namespace Ivy.Caching.IoC
     {
         public void Install(IContainerGenerator containerGenerator)
         {
-            containerGenerator.RegisterTransient(typeof(IObjectCache<>), typeof(BasicObjectCache<>));
+            containerGenerator.RegisterSingleton(typeof(IObjectCache<>), typeof(BasicObjectCache<>));
         }
     }
 

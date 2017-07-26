@@ -54,6 +54,25 @@ namespace Ivy.Caching.Test.Basic
         }
 
         [Fact]
+        public void Parallel_Caches_Dont_Affect_Each_Other()
+        {
+            var testClassCache = new TestClass();
+            var testClassCollectionCache = Enumerable.Range(0, 4).Select(x => new TestClass());
+
+            var entityCache = ServiceLocator.Instance.Resolve<IObjectCache<TestClass>>();
+            entityCache.Init(() => testClassCache);
+
+            var collectionCache = ServiceLocator.Instance.Resolve<IObjectCache<IEnumerable<TestClass>>>();
+            collectionCache.Init(() => testClassCollectionCache);
+
+            var resultEntityCache = entityCache.GetCache();
+            Assert.Same(testClassCache, resultEntityCache);
+
+            var resultCollectionCache = collectionCache.GetCache();
+            Assert.Same(testClassCollectionCache, resultCollectionCache);
+        }
+
+        [Fact]
         public void ObjectCache_Can_Create_Persistent_Cache()
         {
             var myClasses = Enumerable.Range(1, 5).Select(x => new TestClass { Integer = x }).ToList();

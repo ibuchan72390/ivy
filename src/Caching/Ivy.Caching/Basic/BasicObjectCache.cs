@@ -36,7 +36,8 @@ namespace Ivy.Caching.Basic
 
             if (!_cache.TryGetValue(GetCacheKey(), out result))
             {
-                _cache.Set(GetCacheKey(), _getCacheFn());
+                result = _getCacheFn();
+                _cache.Set(GetCacheKey(), result);
             }
 
             return result;
@@ -52,7 +53,10 @@ namespace Ivy.Caching.Basic
                 _getCacheFn = getCache;
             }
 
-            _cache.Set(cacheKey, _getCacheFn());
+            // Don't fire the method until we attempt to access the cache
+            // Firing the method on initialization causes unnecessary caching
+            // We only want to cache items when we attempt to access them on the first hit
+            //_cache.Set(cacheKey, _getCacheFn());
         }
 
         public virtual void RefreshCache()
