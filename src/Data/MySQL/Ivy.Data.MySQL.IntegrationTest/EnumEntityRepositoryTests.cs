@@ -3,7 +3,10 @@ using Ivy.IoC;
 using Ivy.TestHelper;
 using Ivy.TestHelper.TestEntities;
 using Ivy.TestHelper.TestValues;
+using Ivy.TestUtilities;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace Ivy.Data.MySQL.IntegrationTest
@@ -66,6 +69,71 @@ namespace Ivy.Data.MySQL.IntegrationTest
                 $"Table: {typeof(TestEnumEntity).Name} / Search Value: {name.ToString()}";
 
             Assert.Equal(expectedException, e.Message);
+        }
+
+        #endregion
+
+        #region GetByNames
+
+        [Fact]
+        public void GetByNames_Returns_As_Expected_With_Results()
+        {
+            IList<TestEnum> enums = new List<TestEnum> { TestEnum.Test1, TestEnum.Test2 };
+
+            var expected = enums.Select(x => new TestEnumEntity { Name = x.ToString() }.SaveForTest()).ToList();
+
+            var results = _sut.GetByNames(enums);
+
+            AssertExtensions.FullEntityListExclusion(expected, results);
+        }
+
+        [Fact]
+        public void GetByNames_Returns_As_Expected_With_Results_And_TranConn()
+        {
+            var tranConnGen = ServiceLocator.Instance.Resolve<ITranConnGenerator>();
+
+            IList<TestEnum> enums = new List<TestEnum> { TestEnum.Test1, TestEnum.Test2 };
+
+            var expected = enums.Select(x => new TestEnumEntity { Name = x.ToString() }.SaveForTest()).ToList();
+
+            var tc = tranConnGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
+
+            var results = _sut.GetByNames(enums, tc);
+
+            tc.Transaction.Commit();
+            tc.Dispose();
+
+            AssertExtensions.FullEntityListExclusion(expected, results);
+        }
+
+        [Fact]
+        public void GetByNames_Returns_As_Expected_With_No_Results()
+        {
+            IList<TestEnum> enums = new List<TestEnum> { TestEnum.Test1, TestEnum.Test2 };
+
+            var results = _sut.GetByNames(enums);
+
+            Assert.Empty(results);
+        }
+
+        [Fact]
+        public void GetByNames_Returns_As_Expected_For_Empty()
+        {
+            IList<TestEnum> enums = new List<TestEnum> {  };
+
+            var results = _sut.GetByNames(enums);
+
+            Assert.Empty(results);
+        }
+
+        [Fact]
+        public void GetByNames_Returns_As_Expected_For_Null()
+        {
+            IList<TestEnum> enums = null;
+
+            var results = _sut.GetByNames(enums);
+
+            Assert.Empty(results);
         }
 
         #endregion

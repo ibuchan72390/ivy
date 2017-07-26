@@ -1,10 +1,10 @@
 {
-  "version": "1.0.0.8",
+  "version": "1.0.0.9",
 
   "dependencies": {
     "Dapper": "1.50.2",
     "Dapper.FluentMap": "1.5.1",
-    "Ivy.Data.Core": "1.0.0.4",
+    "Ivy.Data.Core": "1.0.0.5",
     "NETStandard.Library": "1.6.0"
   },
 

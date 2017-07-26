@@ -35,7 +35,7 @@ CALL :CreateProjectPackage Auth0\Management\Ivy.Auth0.Management
 CALL :CreateProjectPackage Auth0\Web\Ivy.Auth0.Web
 
 :: Build Caching
-::CALL :CreateProjectPackage Caching\Ivy.Caching
+CALL :CreateProjectPackage Caching\Ivy.Caching
 
 :: Build IoC
 CALL :CreateProjectPackage IoC\Ivy.IoC

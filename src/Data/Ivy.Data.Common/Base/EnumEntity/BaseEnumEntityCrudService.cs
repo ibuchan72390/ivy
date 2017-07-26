@@ -66,6 +66,11 @@ namespace Ivy.Data.Common.Base.EnumEntity
             return Repo.GetByName(name, tc);
         }
 
+        public IEnumerable<TEntity> GetByNames(IEnumerable<TEnum> enumVals, ITranConn tc = null)
+        {
+            return Repo.GetByNames(enumVals, tc);
+        }
+
         public virtual TEntity SaveOrUpdate(TEntity entity, ITranConn tc = null)
         {
             return Repo.SaveOrUpdate(entity, tc);

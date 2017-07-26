@@ -1,10 +1,10 @@
 {
-  "version": "1.0.0.98",
+  "version": "1.0.0.99",
 
   "dependencies": {
-    "Ivy.MailChimp": "1.0.0.92",
+    "Ivy.MailChimp": "1.0.0.93",
     "Ivy.MailChimp.Core": "1.0.0.1",
-    "Ivy.TestHelper": "1.0.0.94",
+    "Ivy.TestHelper": "1.0.0.95",
     "Ivy.Validation.Core": "1.0.0.1",
     "Microsoft.Extensions.Logging": "1.0.2",
     "Moq": "4.7.10",
@@ -12,7 +12,7 @@
     "xunit": "2.2.0",
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
     "Ivy.Web.IoC": "1.0.0.4",
-    "Ivy.MailChimp.IoC": "1.0.0.92"
+    "Ivy.MailChimp.IoC": "1.0.0.93"
   },
 
   "testRunner": "xunit",

@@ -534,6 +534,21 @@ namespace Ivy.Data.Common
             return results.FirstOrDefault();
         }
 
+        public IEnumerable<T> GetByNames(IEnumerable<TEnum> enumVals, ITranConn tc = null)
+        {
+            if (enumVals == null || !enumVals.Any())
+            {
+                return new List<T>();
+            }
+
+            string idInList = enumVals.Select(x => $"'{x.ToString()}'").
+                Aggregate((total, current) => $"{total}, {current}");
+
+            string sqlWhere = $"WHERE `THIS`.`Name` IN ({idInList})";
+
+            return InternalSelect(whereClause: sqlWhere, tc: tc);
+        }
+
         #endregion
     }
 
