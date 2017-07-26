@@ -1,10 +1,18 @@
-﻿using Ivy.Caching.Core;
+﻿using Ivy.Caching.Core.TriggerFile;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Ivy.Caching
+namespace Ivy.Caching.TriggerFile
 {
+    /*
+     * The trigger file manager will turn over control of the caching mechanism to the developers...
+     * This way, the logic for caching isn't completely embedded in the startup functionality.
+     * 
+     * We can set sliding expirations in the startup; however, if we wish to manually refresh the
+     * cache, we need to go in and restart the application.  With this process, you simply need to
+     * delete the representative cache file and the cache will refresh on next hit.
+     */
     public class TriggerFileManager : ITriggerFileManager
     {
         #region Variables & Constants
@@ -33,7 +41,7 @@ namespace Ivy.Caching
 
         #region Public Methods
 
-        public string GenerateTriggerFile<T>(string cacheKey = null)
+        public string GenerateTriggerFile<T>(string cacheKey)
         {
             SetTriggerFileDefaultIfNecessary();
 
@@ -65,21 +73,19 @@ namespace Ivy.Caching
             _triggerFileFolder = folderLocation;
         }
 
-        public string GetTriggerFilePath<T>(string cacheKey = null)
+        public string GetTriggerFilePath<T>(string cacheKey)
         {
-            var fileName = GenerateKeyForCreatedCaches<T>(cacheKey) + ".txt";
+            var fileName = $"{cacheKey}.txt";
 
             SetTriggerFileDefaultIfNecessary();
 
             return Path.Combine(_triggerFileFolder, fileName);
         }
 
-        public bool ShouldRefreshCache<T>(string cacheKey = null)
+        public bool ShouldRefreshCache<T>(string cacheKey)
         {
-            var createdCacheKey = GenerateKeyForCreatedCaches<T>(cacheKey);
-
             // Ensures we properly set up caches after application restarts
-            if (!_cacheRegistration.ContainsKey(createdCacheKey))
+            if (!_cacheRegistration.ContainsKey(cacheKey))
             {
                 return true;
             }
@@ -91,15 +97,15 @@ namespace Ivy.Caching
                     return true;
 
                 var comparisonDt = File.GetLastWriteTime(triggerFilePath);
-                var registerDt = _cacheRegistration[createdCacheKey];
+                var registerDt = _cacheRegistration[cacheKey];
 
                 return comparisonDt != registerDt;
             }
         }
 
-        public void TriggerCache<T>(string cacheKey = null)
+        public void TriggerCache<T>(string cacheKey)
         {
-            var cachePath = GetTriggerFilePath<T>();
+            var cachePath = GetTriggerFilePath<T>(cacheKey);
             if (File.Exists(cachePath))
             {
                 File.Delete(cachePath);
@@ -113,41 +119,36 @@ namespace Ivy.Caching
 
         private void AddToCreatedHashes<T>(string cacheKey)
         {
-            var generatedCachesKey = GenerateKeyForCreatedCaches<T>(cacheKey);
-
-            if (_cacheRegistration.ContainsKey(generatedCachesKey))
+            if (_cacheRegistration.ContainsKey(cacheKey))
                 return;
-
 
             var cacheFile = GetTriggerFilePath<T>(cacheKey);
             var cacheFileCreateDate = File.GetLastWriteTime(cacheFile);
 
-            _cacheRegistration.Add(generatedCachesKey, cacheFileCreateDate);
+            _cacheRegistration.Add(cacheKey, cacheFileCreateDate);
         }
 
         private void RemoveFromCreatedHashes<T>(string cacheKey)
         {
-            var generatedCachesKey = GenerateKeyForCreatedCaches<T>(cacheKey);
-
-            if (!_cacheRegistration.ContainsKey(generatedCachesKey))
+            if (!_cacheRegistration.ContainsKey(cacheKey))
                 return;
 
-            _cacheRegistration.Remove(generatedCachesKey);
+            _cacheRegistration.Remove(cacheKey);
         }
 
-        private string GenerateKeyForCreatedCaches<T>(string cacheKey)
-        {
-            var initial = typeof(T).FullName;
+        //private string GenerateKeyForCreatedCaches<T>(string cacheKey)
+        //{
+        //    var initial = typeof(T).FullName;
 
-            if (string.IsNullOrEmpty(cacheKey))
-            {
-                return typeof(T).FullName;
-            }
-            else
-            {
-                return $"{initial}_{cacheKey}";
-            }
-        }
+        //    if (string.IsNullOrEmpty(cacheKey))
+        //    {
+        //        return typeof(T).FullName;
+        //    }
+        //    else
+        //    {
+        //        return $"{initial}_{cacheKey}";
+        //    }
+        //}
 
         private void SetTriggerFileDefaultIfNecessary()
         {

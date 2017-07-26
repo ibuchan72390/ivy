@@ -1,4 +1,4 @@
-﻿namespace Ivy.Caching.Core
+﻿namespace Ivy.Caching.Core.TriggerFile
 {
     public interface ITriggerFileManager
     {
@@ -24,26 +24,26 @@
         /// TODO: <param name="nameKey"> key to ensure your cache doesn't overwrite another cache of the same type</param>
         /// <returns></returns>
         // TODO: string GenerateTriggerFile<T>(string nameKey = null);
-        string GenerateTriggerFile<T>(string cacheKey = null);
+        string GenerateTriggerFile<T>(string cacheKey);
 
         /// <summary>
         /// Gets the path of the trigger file for the specified object type
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        string GetTriggerFilePath<T>(string cacheKey = null);
+        string GetTriggerFilePath<T>(string cacheKey);
 
         /// <summary>
         /// Returns a boolean indicating whether or not the cache should be refreshed based on the trigger file
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        bool ShouldRefreshCache<T>(string cacheKey = null);
+        bool ShouldRefreshCache<T>(string cacheKey);
 
         /// <summary>
         /// Edits the trigger file to ensure that ShouldRefreshCache returns true
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        void TriggerCache<T>(string cacheKey = null);
+        void TriggerCache<T>(string cacheKey);
     }
 }

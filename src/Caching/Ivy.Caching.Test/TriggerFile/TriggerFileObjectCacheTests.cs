@@ -1,4 +1,5 @@
 ﻿using Ivy.Caching.Core;
+using Ivy.Caching.Test.Base;
 using Ivy.IoC;
 using Ivy.TestHelper;
 using System;
@@ -8,7 +9,7 @@ using Xunit;
 
 namespace Ivy.Caching.Test
 {
-    public class ObjectCacheTests : TestBase
+    public class ObjectCacheTests : TriggerFileCachingTestBase
     {
         [Fact]
         public void ObjectCache_Initialization_Is_Pointless_After_First_Initialization()
