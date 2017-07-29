@@ -48,33 +48,22 @@ namespace Ivy.PayPal.Services
              */
             verificationResponse = await _validator.GetValidationResultAsync(bodyStr, model);
 
+            _logger.LogInformation($"Received verification response: {verificationResponse}");
 
-            /*
-             * Was the IPN Verification valid or not?
-             */
-            try
+            if (verificationResponse.Equals("VERIFIED"))
             {
-                _logger.LogInformation($"Received verification response: {verificationResponse}");
-
-                if (verificationResponse.Equals("VERIFIED"))
-                {
-                    return true;
-                }
-                else if (verificationResponse.Equals("INVALID"))
-                {
-                    return false;
-                }
-                else
-                {
-                    throw LogAndThrowVerificationException("PayPalControler.ProcessVerificationResponse " +
-                        $"received an unexpected response type from PayPal. Received: {verificationResponse}");
-                }
+                return true;
             }
-            catch (Exception e)
+            else if (verificationResponse.Equals("INVALID"))
             {
-                throw LogAndThrowVerificationException("Catastrophic failure while processing verification response. " +
-                    $"VerificationResopnse: {verificationResponse} / Exception Message: {e.Message}");
+                return false;
             }
+            else
+            {
+                throw LogAndThrowVerificationException("PayPalControler.ProcessVerificationResponse " +
+                    $"received an unexpected response type from PayPal. Received: {verificationResponse}");
+            }
+            
         }
 
         #endregion

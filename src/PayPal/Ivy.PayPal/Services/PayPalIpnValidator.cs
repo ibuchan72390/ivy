@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Ivy.PayPal.Core.Interfaces.Models;
 using Microsoft.Extensions.Logging;
 using Ivy.Web.Core.Client;
-using Ivy.PayPal.Core.Providers;
 
 namespace Ivy.PayPal.Services
 {
@@ -15,7 +14,6 @@ namespace Ivy.PayPal.Services
         private readonly IHttpClientHelper _clientHelper;
         private readonly IPayPalRequestGenerator _requestGenerator;
 
-        private readonly IPayPalConfigProvider _provider;
         private readonly ILogger<IPayPalIpnValidator> _logger;
 
         #endregion
@@ -25,13 +23,11 @@ namespace Ivy.PayPal.Services
         public PayPalIpnValidator(
             IHttpClientHelper clientHelper,
             IPayPalRequestGenerator requestGenerator,
-            IPayPalConfigProvider provider,
             ILogger<IPayPalIpnValidator> logger)
         {
             _clientHelper = clientHelper;
             _requestGenerator = requestGenerator;
 
-            _provider = provider;
             _logger = logger;
         }
 
@@ -47,36 +43,13 @@ namespace Ivy.PayPal.Services
             {
                 var useSandbox = model.Test_Ipn == 1;
 
-                if (useSandbox != _provider.IsSandbox)
-                {
-                    int sandBoxInt = _provider.IsSandbox ? 1 : 0;
-
-                    throw new Exception("Receiving a response with an `IsSandbox` declaration that does not match the configuration. " +
-                        $"Received: {model.Test_Ipn} / Configuration: {sandBoxInt}");
-                }
-
-                var request = _requestGenerator.GenerateValidationRequest(useSandbox);
+                var request = _requestGenerator.GenerateValidationRequest(bodyStr, useSandbox);
 
                 _logger.LogInformation($"Sending PayPal IPN Post-Back for {model.Txn_Id}");
 
                 var result = await _clientHelper.SendAsync(request);
 
                 return await result.Content.ReadAsStringAsync();
-
-                //var request = WebRequest.Create(new Uri(paypalUrl)) as HttpWebRequest;
-                //request.Method = "POST";
-
-                //byte[] data = Encoding.UTF8.GetBytes(bodyStr);
-                //using (var requestStream = await Task<Stream>.Factory.FromAsync(request.BeginGetRequestStream, request.EndGetRequestStream, request))
-                //{
-                //    await requestStream.WriteAsync(data, 0, data.Length);
-                //}
-
-                //WebResponse responseObject = await Task<WebResponse>.Factory.FromAsync(request.BeginGetResponse, request.EndGetResponse, request);
-                //var responseStream = responseObject.GetResponseStream();
-                //var sr = new StreamReader(responseStream);
-                //return await sr.ReadToEndAsync();
-
             }
             catch (Exception e)
             {

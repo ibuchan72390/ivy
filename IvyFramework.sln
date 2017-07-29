@@ -176,6 +176,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Auth0.Web.IoC", "src\Au
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Auth0.Web.Test", "src\Auth0\Web\Ivy.Auth0.Web.Test\Ivy.Auth0.Web.Test.xproj", "{661CBD0A-187D-4C79-81F6-28190AC28303}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Data.Common.Caching", "src\Data\Ivy.Data.Common.Caching\Ivy.Data.Common.Caching.xproj", "{83DB9F58-05A0-4BC8-BE2F-76B97BF474FA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -440,6 +442,10 @@ Global
 		{661CBD0A-187D-4C79-81F6-28190AC28303}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{661CBD0A-187D-4C79-81F6-28190AC28303}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{661CBD0A-187D-4C79-81F6-28190AC28303}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83DB9F58-05A0-4BC8-BE2F-76B97BF474FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83DB9F58-05A0-4BC8-BE2F-76B97BF474FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83DB9F58-05A0-4BC8-BE2F-76B97BF474FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83DB9F58-05A0-4BC8-BE2F-76B97BF474FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -528,5 +534,6 @@ Global
 		{1A9F7E4A-6C34-4CB4-B48E-2E724CB4C3ED} = {97C00E47-10CF-4899-BCEE-311A5D37B0A2}
 		{4CCF6298-A236-4CCC-AFEF-AC679A8CC314} = {97C00E47-10CF-4899-BCEE-311A5D37B0A2}
 		{661CBD0A-187D-4C79-81F6-28190AC28303} = {97C00E47-10CF-4899-BCEE-311A5D37B0A2}
+		{83DB9F58-05A0-4BC8-BE2F-76B97BF474FA} = {E179ECE7-5BFE-4B6E-B666-CBA940083744}
 	EndGlobalSection
 EndGlobal

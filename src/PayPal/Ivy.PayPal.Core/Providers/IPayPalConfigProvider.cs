@@ -3,7 +3,5 @@
     public interface IPayPalConfigProvider
     {
         string ReceiverEmail { get; }
-
-        bool IsSandbox { get; }
     }
 }
