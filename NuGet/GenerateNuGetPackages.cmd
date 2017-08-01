@@ -43,6 +43,9 @@ CALL :CreateProjectPackage IoC\Ivy.IoC
 :: Build MailChimp
 CALL :CreateProjectPackage MailChimp\Ivy.MailChimp
 
+:: Build PayPal
+CALL :CreateProjectPackage PayPal\Ivy.PayPal
+
 :: Build TestUtilities
 CALL :CreateProjectPackage Test\Ivy.TestUtilities
 
