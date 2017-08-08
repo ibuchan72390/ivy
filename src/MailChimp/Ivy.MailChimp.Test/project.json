@@ -2,9 +2,9 @@
   "version": "1.0.0.99",
 
   "dependencies": {
-    "Ivy.MailChimp": "1.0.0.93",
+    "Ivy.MailChimp": "1.0.0.94",
     "Ivy.MailChimp.Core": "1.0.0.1",
-    "Ivy.TestHelper": "1.0.0.95",
+    "Ivy.TestHelper": "1.0.0.96",
     "Ivy.Validation.Core": "1.0.0.1",
     "Microsoft.Extensions.Logging": "1.0.2",
     "Moq": "4.7.10",

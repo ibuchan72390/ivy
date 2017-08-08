@@ -1,9 +1,9 @@
 {
-  "version": "1.0.0.93",
+  "version": "1.0.0.94",
 
   "dependencies": {
     "Ivy.MailChimp.Core": "1.0.0.1",
-    "Ivy.Utility": "1.0.0.91",
+    "Ivy.Utility": "1.0.0.92",
     "Ivy.Validation.Core": "1.0.0.1",
     "Ivy.Web.Core": "1.0.0.3",
     "Microsoft.Extensions.Logging.Abstractions": "1.0.2",

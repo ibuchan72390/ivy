@@ -24,7 +24,7 @@ namespace Ivy.Data.Core.Interfaces.SQL
          */
         string GenerateGetQuery(string selectPrefix = null, string sqlWhere = null, string sqlJoin = null, int? limit = null, int? offset = null);
 
-        string GenerateGetCountQuery();
+        string GenerateGetCountQuery(string sqlWhere = null, string sqlJoin = null);
 
         /*
          * DELETE FROM TEntity WHERE {sqlWhere}

@@ -334,7 +334,13 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
             var results = _sut.SearchByName(req);
 
-            Assert.Equal(viableEntities * 2, results.TotalCount);
+            // This is a bad assumption...
+            //Assert.Equal(viableEntities * 2, results.TotalCount);
+            // We want to know the total with the filter applied
+            // This way, we properly understand client-side pagination.
+            // Otherwise, total page count will never change
+
+            Assert.Equal(viableEntities, results.TotalCount);
             Assert.Equal(viableEntities, results.Data.Count());
             AssertExtensions.FullEntityListExclusion(expectedEntities, results.Data);
         }
@@ -363,7 +369,10 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
             var results = _sut.SearchByName(req);
 
-            Assert.Equal(viableEntities * 2, results.TotalCount);
+            // See above as to why this is a bad assumption
+            //Assert.Equal(viableEntities * 2, results.TotalCount);
+
+            Assert.Equal(viableEntities, results.TotalCount);
             Assert.Equal(pageCount, results.Data.Count());
             AssertExtensions.FullEntityListExclusion(expected, results.Data);
         }

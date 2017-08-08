@@ -24,14 +24,19 @@ namespace Ivy.Data.MySQL
         {
         }
 
-
         #endregion
 
         #region Public Methods
 
-        public string GenerateGetCountQuery()
+        public string GenerateGetCountQuery(string sqlWhere = null, string sqlJoin = null)
         {
-            return $"SELECT COUNT(*) FROM {GetTableName()};";
+            var sql = $"SELECT COUNT(*) FROM {GetTableName()} {SelectAlias}";
+
+            sql = AppendJoinWhereIfNecessary(sql, sqlJoin, sqlWhere);
+
+            sql += ";";
+
+            return sql;
         }
 
         public string GenerateDeleteQuery(string sqlWhere = null)
@@ -56,9 +61,7 @@ namespace Ivy.Data.MySQL
             // We need to use the THIS as an alias in order to 
             sql += $"{attributeNames} FROM {GetTableName()} {SelectAlias}";
 
-            sql = AppendIfDefined(sql, sqlJoin);
-
-            sql = AppendIfDefined(sql, sqlWhere);
+            sql = AppendJoinWhereIfNecessary(sql, sqlJoin, sqlWhere);
 
             if (limit.HasValue)
             {
@@ -305,6 +308,18 @@ namespace Ivy.Data.MySQL
             return _tableName;
         }
 
+        #endregion
+
+        #region Private Helper Methods
+
+        private string AppendJoinWhereIfNecessary(string sql, string sqlJoin, string sqlWhere)
+        {
+            sql = AppendIfDefined(sql, sqlJoin);
+
+            sql = AppendIfDefined(sql, sqlWhere);
+
+            return sql;
+        }
 
         #endregion
     }

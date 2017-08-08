@@ -116,7 +116,8 @@ namespace Ivy.Data.Common
             response.Data = InternalExecuteQuery(dataQuery, tc, parms);
 
             // Count Get
-            var countQuery = _sqlGenerator.GenerateGetCountQuery();
+            // need to pass where and join for proper understanding of filtered result set
+            var countQuery = _sqlGenerator.GenerateGetCountQuery(whereClause, joinClause); 
             response.TotalCount = InternalExecuteAlternateTypeQuery<int>(countQuery, tc, parms).FirstOrDefault();
 
             return response;

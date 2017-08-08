@@ -38,7 +38,46 @@ namespace Ivy.Data.MySQL.Test
 
             var result = _sut.GenerateGetCountQuery();
 
-            Assert.Equal($"SELECT COUNT(*) FROM childentity;", result);
+            Assert.Equal($"SELECT COUNT(*) FROM childentity `THIS`;", result);
+        }
+
+        [Fact]
+        public void GenerateGetCountQuery_Returns_As_Expected_With_SqlJoin()
+        {
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
+
+            const string sqlJoin = "JOIN CoreEntity CE ON (`THIS`.`CoreEntityId` = `CE`.`Id`)";
+
+            var result = _sut.GenerateGetCountQuery(null, sqlJoin);
+
+            Assert.Equal($"SELECT COUNT(*) FROM childentity `THIS` {sqlJoin};", result);
+        }
+
+        [Fact]
+        public void GenerateGetCountQuery_Returns_As_Expected_With_SqlWhere()
+        {
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
+
+            const string sqlWhere = "WHERE `THIS`.`CoreEntityId` = @coreEntityId";
+
+            var result = _sut.GenerateGetCountQuery(sqlWhere);
+
+            Assert.Equal($"SELECT COUNT(*) FROM childentity `THIS` {sqlWhere};", result);
+        }
+
+        [Fact]
+        public void GenerateGetCountQuery_Returns_As_Expected_With_SqlJoin_And_SqlWhere()
+        {
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
+
+            const string sqlJoin = "JOIN CoreEntity CE ON (`THIS`.`CoreEntityId` = `CE`.`Id`)";
+            const string sqlWhere = "WHERE `THIS`.`CoreEntityId` = @coreEntityId";
+
+            var result = _sut.GenerateGetCountQuery(sqlWhere, sqlJoin);
+
+            var expected = $"SELECT COUNT(*) FROM childentity `THIS` {sqlJoin} {sqlWhere};";
+
+            Assert.Equal(expected, result);
         }
 
         #endregion
