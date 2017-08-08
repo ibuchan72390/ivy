@@ -123,9 +123,11 @@ namespace Ivy.Data.MySQL.Test
         [Fact]
         public void GenerateGetQuery_Works_As_Expected_With_Where_Clause()
         {
+            const string where = "WHERE Id = @id";
+
             ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
 
-            var result = _sut.GenerateGetQuery(null, null, "WHERE Id = @id");
+            var result = _sut.GenerateGetQuery(null, null, where);
 
             var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
 
@@ -133,7 +135,27 @@ namespace Ivy.Data.MySQL.Test
                                         Select(x => $"`THIS`.{x}").
                                         Aggregate((x, y) => x + $", {y}");
 
-            string expected = $"SELECT {expectedAttrString} FROM childentity `THIS` WHERE Id = @id;";
+            string expected = $"SELECT {expectedAttrString} FROM childentity `THIS` {where};";
+
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public void GenerateGetQuery_Works_As_Expected_With_OrderBy_Clause()
+        {
+            const string orderBy = "ORDER BY `Id` DESC";
+
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
+
+            var result = _sut.GenerateGetQuery(null, null, null, orderBy);
+
+            var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
+
+            var expectedAttrString = attrs.
+                                        Select(x => $"`THIS`.{x}").
+                                        Aggregate((x, y) => x + $", {y}");
+
+            string expected = $"SELECT {expectedAttrString} FROM childentity `THIS` {orderBy};";
 
             Assert.Equal(expected, result);
         }
@@ -145,7 +167,7 @@ namespace Ivy.Data.MySQL.Test
 
             ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
 
-            var result = _sut.GenerateGetQuery(null, null, null, limit);
+            var result = _sut.GenerateGetQuery(null, null, null, null, limit);
 
             var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
 
@@ -167,7 +189,7 @@ namespace Ivy.Data.MySQL.Test
 
             ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
 
-            var result = _sut.GenerateGetQuery(null, null, null, limit, offset);
+            var result = _sut.GenerateGetQuery(null, null, null, null, limit, offset);
 
             var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
 
@@ -187,7 +209,7 @@ namespace Ivy.Data.MySQL.Test
 
             ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
 
-            var e = Assert.Throws<Exception>(() => _sut.GenerateGetQuery(null, null, null, null, offset));
+            var e = Assert.Throws<Exception>(() => _sut.GenerateGetQuery(null, null, null, null, null, offset));
 
             Assert.Equal("Unable to use a limit without an offset", e.Message);
         }
@@ -217,12 +239,13 @@ namespace Ivy.Data.MySQL.Test
         {
             const string whereClause = "WHERE Id = @Id";
             const string joinClause = "JOIN coreentity ON CoreEntity.Id = childentity.CoreEntityId";
+            const string orderClause = "ORDER BY `Id` DESC";
             const int limit = 5;
             const int offset = 10;
 
             ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
 
-            var result = _sut.GenerateGetQuery(null, whereClause, joinClause, limit, offset);
+            var result = _sut.GenerateGetQuery(null, whereClause, joinClause, orderClause, limit, offset);
 
             var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
 
@@ -230,7 +253,7 @@ namespace Ivy.Data.MySQL.Test
                 Select(x => $"`THIS`.{x}").
                 Aggregate((x, y) => x + $", {y}");
 
-            string expected = $"SELECT {expectedAttrString} FROM childentity `THIS` {joinClause} {whereClause} LIMIT {limit} OFFSET {offset};";
+            string expected = $"SELECT {expectedAttrString} FROM childentity `THIS` {joinClause} {whereClause} {orderClause} LIMIT {limit} OFFSET {offset};";
 
             Assert.Equal(expected, result);
         }

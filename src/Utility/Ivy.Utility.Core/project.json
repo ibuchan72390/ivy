@@ -1,8 +1,8 @@
 {
-  "version": "1.0.0.8",
+  "version": "1.0.0.9",
 
   "dependencies": {
-    "Ivy.Data.Core": "1.0.0.6",
+    "Ivy.Data.Core": "1.0.0.7",
     "NETStandard.Library": "1.6.0"
   },
 

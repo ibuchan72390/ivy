@@ -32,7 +32,7 @@ namespace Ivy.Data.MySQL
         {
             var sql = $"SELECT COUNT(*) FROM {GetTableName()} {SelectAlias}";
 
-            sql = AppendJoinWhereIfNecessary(sql, sqlJoin, sqlWhere);
+            sql = AppendJoinWhereOrderByIfNecessary(sql, sqlJoin, sqlWhere, null);
 
             sql += ";";
 
@@ -45,7 +45,8 @@ namespace Ivy.Data.MySQL
             return $"{sql};";
         }
 
-        public string GenerateGetQuery(string selectPrefix = null, string sqlWhere = null, string sqlJoin = null, int? limit = default(int?), int? offset = default(int?))
+        public string GenerateGetQuery(string selectPrefix = null, string sqlWhere = null, string sqlJoin = null, 
+            string sqlOrder = null, int? limit = default(int?), int? offset = default(int?))
         {
             if (offset.HasValue && !limit.HasValue) throw new Exception("Unable to use a limit without an offset");
 
@@ -61,7 +62,7 @@ namespace Ivy.Data.MySQL
             // We need to use the THIS as an alias in order to 
             sql += $"{attributeNames} FROM {GetTableName()} {SelectAlias}";
 
-            sql = AppendJoinWhereIfNecessary(sql, sqlJoin, sqlWhere);
+            sql = AppendJoinWhereOrderByIfNecessary(sql, sqlJoin, sqlWhere, sqlOrder);
 
             if (limit.HasValue)
             {
@@ -312,11 +313,13 @@ namespace Ivy.Data.MySQL
 
         #region Private Helper Methods
 
-        private string AppendJoinWhereIfNecessary(string sql, string sqlJoin, string sqlWhere)
+        private string AppendJoinWhereOrderByIfNecessary(string sql, string sqlJoin, string sqlWhere, string sqlOrderBy)
         {
             sql = AppendIfDefined(sql, sqlJoin);
 
             sql = AppendIfDefined(sql, sqlWhere);
+
+            sql = AppendIfDefined(sql, sqlOrderBy);
 
             return sql;
         }

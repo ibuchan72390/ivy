@@ -22,7 +22,7 @@ namespace Ivy.Data.Core.Interfaces.SQL
          * 
          * Simple select all if no params provided
          */
-        string GenerateGetQuery(string selectPrefix = null, string sqlWhere = null, string sqlJoin = null, int? limit = null, int? offset = null);
+        string GenerateGetQuery(string selectPrefix = null, string sqlWhere = null, string sqlJoin = null, string orderBy = null, int? limit = null, int? offset = null);
 
         string GenerateGetCountQuery(string sqlWhere = null, string sqlJoin = null);
 

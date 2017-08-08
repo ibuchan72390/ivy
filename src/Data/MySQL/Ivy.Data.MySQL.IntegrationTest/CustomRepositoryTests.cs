@@ -39,6 +39,8 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
             #region InternalSelect
 
+            IEnumerable<ParentEntity> GetAllByIdDesc(ITranConn tc = null);
+
             IEnumerable<ParentEntity> GetByCoreEntityId(int coreEntityId, ITranConn tc = null);
 
             IEnumerable<ParentEntity> GetByName(string name, ITranConn tc = null);
@@ -68,7 +70,9 @@ namespace Ivy.Data.MySQL.IntegrationTest
             #endregion
         }
 
-        private class CustomParentEntityRepository : EntityRepository<ParentEntity>, ICustomParentEntityRepository
+        private class CustomParentEntityRepository : 
+            EntityRepository<ParentEntity>, 
+            ICustomParentEntityRepository
         {
             public CustomParentEntityRepository(
                 IDatabaseKeyManager databaseKeyManager, 
@@ -103,6 +107,13 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
             #region InteralSelect
 
+            public IEnumerable<ParentEntity> GetAllByIdDesc(ITranConn tc = null)
+            {
+                const string sqlOrder = "ORDER BY `Id` DESC";
+
+                return InternalSelect(orderByClause: sqlOrder, tc: tc);
+            }
+
             public IEnumerable<ParentEntity> GetByCoreEntityId(int coreEntityId, ITranConn tc = null)
             {
                 const string sqlJoin = "JOIN CoreEntity CORE ON (THIS.Id = CORE.ParentEntityId)";
@@ -111,7 +122,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
                 var parms = new Dictionary<string, object>();
                 parms.Add("@coreEntityId", coreEntityId);
 
-                return InternalSelect(null, sqlJoin, sqlWhere, null, null, parms, tc);
+                return InternalSelect(null, sqlJoin, sqlWhere, null, null, null, parms, tc);
             }
 
             public IEnumerable<ParentEntity> GetByName(string name, ITranConn tc = null)
@@ -121,7 +132,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
                 var parms = new Dictionary<string, object>();
                 parms.Add("@entityName", name);
 
-                return InternalSelect(null, null, sqlWhere, null, null, parms, tc);
+                return InternalSelect(null, null, sqlWhere, null, null, null, parms, tc);
             }
 
             public IEnumerable<ParentEntity> GetTop5(ITranConn tc = null)
@@ -139,7 +150,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
                 var parms = new Dictionary<string, object> { { "@search", request.Search } };
 
-                return InternalSelectPaginated(null, null, sqlWhere, request, parms, tc);
+                return InternalSelectPaginated(null, null, sqlWhere, null, request, parms, tc);
             }
 
             #endregion
@@ -262,6 +273,29 @@ namespace Ivy.Data.MySQL.IntegrationTest
         #endregion
 
         #region InternalSelect
+
+        [Fact]
+        public void CustomOrderBy_Works_As_Expected()
+        {
+            var targetCount = 5;
+
+            var entities = Enumerable.Range(0, targetCount).
+                Select(x => new ParentEntity().SaveForTest()).
+                ToList();
+
+            var results = _sut.GetAllByIdDesc().ToList();
+
+            int? currentId = null;
+            foreach (var result in results)
+            {
+                if (currentId.HasValue)
+                {
+                    Assert.True(result.Id < currentId.Value);
+                }
+
+                currentId = result.Id;
+            }
+        }
 
         [Fact]
         public void CustomWhereClause_Query_Works_As_Expected()

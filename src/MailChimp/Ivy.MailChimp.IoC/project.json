@@ -3,7 +3,7 @@
 
   "dependencies": {
     "Ivy.IoC.Core": "1.0.0.0",
-    "Ivy.MailChimp": "1.0.0.94",
+    "Ivy.MailChimp": "1.0.0.95",
     "Ivy.MailChimp.Core": "1.0.0.1",
     "NETStandard.Library": "1.6.0"
   },

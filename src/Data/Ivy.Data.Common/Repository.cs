@@ -95,9 +95,9 @@ namespace Ivy.Data.Common
         }
 
         protected IEnumerable<T> InternalSelect(string selectPrefix = null, string joinClause = null, string whereClause = null,
-            int? limit = null, int? offset = null, Dictionary<string, object> parms = null, ITranConn tc = null)
+            string orderByClause = null, int? limit = null, int? offset = null, Dictionary<string, object> parms = null, ITranConn tc = null)
         {
-            var query = _sqlGenerator.GenerateGetQuery(selectPrefix, whereClause, joinClause, limit, offset);
+            var query = _sqlGenerator.GenerateGetQuery(selectPrefix, whereClause, joinClause, orderByClause, limit, offset);
 
             return InternalExecuteQuery(query, tc, parms);
         }
@@ -105,14 +105,14 @@ namespace Ivy.Data.Common
         /*
          */
         protected IPaginationResponse<T> InternalSelectPaginated(string selectPrefix = null, string joinClause = null, string whereClause = null,
-            IPaginationRequest pagingRequest = null, Dictionary<string, object> parms = null, ITranConn tc = null)
+            string orderByClause = null, IPaginationRequest pagingRequest = null, Dictionary<string, object> parms = null, ITranConn tc = null)
         {
             var offset = (pagingRequest.PageNumber - 1) * pagingRequest.PageCount;
 
             var response = new PaginationResponse<T>();
 
             // Data Get
-            var dataQuery = _sqlGenerator.GenerateGetQuery(selectPrefix, whereClause, joinClause, pagingRequest.PageCount, offset);
+            var dataQuery = _sqlGenerator.GenerateGetQuery(selectPrefix, whereClause, joinClause, orderByClause, pagingRequest.PageCount, offset);
             response.Data = InternalExecuteQuery(dataQuery, tc, parms);
 
             // Count Get
@@ -524,7 +524,7 @@ namespace Ivy.Data.Common
 
             var parms = new Dictionary<string, object> { { "@enumVal", enumVal.ToString() } };
 
-            IEnumerable<T> results = InternalSelect(null, null, sqlWhere, null, null, parms, tc);
+            IEnumerable<T> results = InternalSelect(null, null, sqlWhere, null, null, null, parms, tc);
 
             if (results.Count() > 1)
             {
