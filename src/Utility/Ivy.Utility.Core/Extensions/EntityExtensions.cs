@@ -17,6 +17,8 @@
 
 using Ivy.Data.Core.Interfaces.Domain;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -32,11 +34,24 @@ namespace Ivy.Utility.Core.Extensions
 
         #region Extension Methods
 
+        // Add the extra flexibility to allow the caller to cast the object appropriately
+        // Need this for dynamic mapping of children
+        public static TCast GetCastRef<TSource, TProperty, TCast>(this TSource refEntity, Expression<Func<TSource, TProperty>> processFn)
+            where TSource : IEntityWithReferences
+        {
+            var propertyName = GetPropertyInfo(processFn);
+
+            var refName = propertyName + idStr;
+
+            //return (TCast)refEntity.References[refName];
+            return GetCastReference<TCast>(refEntity, refName);
+        }
+
         public static int SafeGetIntRef<TSource, TProperty>(this TSource refEntity, Expression<Func<TSource, TProperty>> processFn)
             where TSource : IEntityWithReferences
             where TProperty : IEntityWithTypedId<int>
         {
-            return GetRefAndCast<TSource, TProperty, int>(refEntity, processFn);
+            return GetCastRef<TSource, TProperty, int>(refEntity, processFn);
         }
 
         /*
@@ -46,14 +61,14 @@ namespace Ivy.Utility.Core.Extensions
             where TSource : IEntityWithReferences
             where TProperty : IEntityWithTypedId<int>
         {
-            return GetRefAndCast<TSource, TProperty, int?>(refEntity, processFn);
+            return GetCastRef<TSource, TProperty, int?>(refEntity, processFn);
         }
 
         public static string SafeGetStringRef<TSource, TProperty>(this TSource refEntity, Expression<Func<TSource, TProperty>> processFn)
             where TSource : IEntityWithReferences
             where TProperty : IEntityWithTypedId<string>
         {
-            return GetRefAndCast<TSource, TProperty, string>(refEntity, processFn);
+            return GetCastRef<TSource, TProperty, string>(refEntity, processFn);
         }
 
         public static void RebuildChildEntitiesFromRefs<T>(this T entity)
@@ -99,6 +114,32 @@ namespace Ivy.Utility.Core.Extensions
             }
         }
 
+        public static void MapChildEntityCollection<TSource, TChild>(this IEnumerable<TSource> sourceEntities, IEnumerable<TChild> children,
+            Expression<Func<TChild, TSource>> getIdFn, Action<TSource, IEnumerable<TChild>> assignChildsFn)
+            where TSource : IEntity
+            where TChild : IEntityWithReferences
+        {
+            MapChildEntityWithTypedIdCollection<TSource, TChild, int>(sourceEntities, children, getIdFn, assignChildsFn);
+        }
+
+        public static void MapChildEntityWithTypedIdCollection<TSource, TChild, TKey>(this IEnumerable<TSource> sourceEntities, IEnumerable<TChild> children,
+            Expression<Func<TChild, TSource>> getIdFn, Action<TSource, IEnumerable<TChild>> assignChildsFn)
+            where TSource : IEntityWithTypedId<TKey>
+            where TChild : IEntityWithReferences
+        {
+            var groupedChildren = children.
+                GroupBy(x => x.GetCastRef<TChild, TSource, TKey>(getIdFn)).
+                ToDictionary(x => x.Key);
+
+            foreach (var entity in sourceEntities)
+            {
+                if (groupedChildren.ContainsKey(entity.Id))
+                {
+                    assignChildsFn(entity, groupedChildren[entity.Id]);
+                }
+            }
+        }
+
         #endregion
 
         #region Helper Methods
@@ -114,17 +155,6 @@ namespace Ivy.Utility.Core.Extensions
             createdEntity.Id = stringId;
 
             targetAttr.SetValue(entity, createdEntity);
-        }
-
-        private static TCast GetRefAndCast<TSource, TProperty, TCast>(this TSource refEntity, Expression<Func<TSource, TProperty>> processFn)
-            where TSource : IEntityWithReferences
-        {
-            var propertyName = GetPropertyInfo(processFn);
-
-            var refName = propertyName + idStr;
-
-            //return (TCast)refEntity.References[refName];
-            return GetCastReference<TCast>(refEntity, refName);
         }
 
         private static string GetPropertyInfo<TSource, TProperty>(

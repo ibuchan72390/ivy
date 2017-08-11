@@ -1,13 +1,19 @@
-﻿using Ivy.TestHelper.TestEntities;
+﻿using Ivy.TestHelper;
+using Ivy.TestHelper.TestEntities;
+using Ivy.TestHelper.TestEntities.Flipped;
+using Ivy.TestUtilities;
 using Ivy.Utility.Core.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace Ivy.Utility.Test.Extensions
 {
-    public class EntityExtensionsTests
+    public class EntityExtensionsTests : TestBase
     {
+        #region Tests
+
         #region SafeGetIntRef
 
         [Fact]
@@ -161,6 +167,139 @@ namespace Ivy.Utility.Test.Extensions
 
             Assert.Null(entity.ParentEntity);
         }
+
+        #endregion
+
+        #region MapChildEntityCollection
+
+        [Fact]
+        public void MapChildEntityCollection_Assigns_Entities_As_Expected()
+        {
+            // Need to demonstrate that we can bring in an IEnumerable source and children
+            // Children will have references pointing to source objects
+            // Source objects should get child mappings
+            // Dictionary is probably your best bet
+
+            const int entityCount = 4;
+            const int perCount = 2;
+
+            var entities = Enumerable.Range(0, entityCount).
+                Select(x => new CoreEntity { Id = x }.GenerateForTest()).
+                ToList();
+
+            Dictionary<CoreEntity, IEnumerable<ChildEntity>> dict = 
+                new Dictionary<CoreEntity, IEnumerable<ChildEntity>>();
+
+            foreach (var entity in entities)
+            {
+                var childs = Enumerable.Range(0, perCount).
+                    Select(x => new ChildEntity { References = new Dictionary<string, object> { { "CoreEntityId", entity.Id } } });
+
+                dict.Add(entity, childs);
+            }
+
+            var mergedValues = dict.Values.SelectMany(x => x);
+
+            entities.MapChildEntityCollection<CoreEntity, ChildEntity>(mergedValues,
+                x => x.CoreEntity,
+                (entity, childs) => entity.Children = childs.ToList());
+
+
+            foreach (var entity in entities)
+            {
+                var expected = dict[entity];
+
+                AssertExtensions.FullEntityListExclusion(expected, entity.Children);
+            }
+        }
+
+        #endregion
+
+        #region MapChildEntityWithTypedIdCollection
+
+        [Fact]
+        public void MapChildEntityWithTypedIdCollection_Assigns_Entities_As_Expected_With_Int_Id()
+        {
+            // Need to demonstrate that we can bring in an IEnumerable source and children
+            // Children will have references pointing to source objects
+            // Source objects should get child mappings
+            // Dictionary is probably your best bet
+
+            const int entityCount = 4;
+            const int perCount = 2;
+
+            var entities = Enumerable.Range(0, entityCount).
+                Select(x => new CoreEntity { Id = x }.GenerateForTest()).
+                ToList();
+
+            Dictionary<CoreEntity, IEnumerable<ChildEntity>> dict =
+                new Dictionary<CoreEntity, IEnumerable<ChildEntity>>();
+
+            foreach (var entity in entities)
+            {
+                var childs = Enumerable.Range(0, perCount).
+                    Select(x => new ChildEntity { References = new Dictionary<string, object> { { "CoreEntityId", entity.Id } } });
+
+                dict.Add(entity, childs);
+            }
+
+            var mergedValues = dict.Values.SelectMany(x => x);
+
+            entities.MapChildEntityWithTypedIdCollection<CoreEntity, ChildEntity, int>(mergedValues,
+                x => x.CoreEntity,
+                (entity, childs) => entity.Children = childs.ToList());
+
+
+            foreach (var entity in entities)
+            {
+                var expected = dict[entity];
+
+                AssertExtensions.FullEntityListExclusion(expected, entity.Children);
+            }
+        }
+
+
+        [Fact]
+        public void MapChildEntityWithTypedIdCollection_Assigns_Entities_As_Expected_With_String_Id()
+        {
+            // Need to demonstrate that we can bring in an IEnumerable source and children
+            // Children will have references pointing to source objects
+            // Source objects should get child mappings
+            // Dictionary is probably your best bet
+
+            const int entityCount = 4;
+
+            var entities = Enumerable.Range(0, entityCount).
+                Select(x => new FlippedStringEntity { Id = x.ToString() }.GenerateForTest()).
+                ToList();
+
+            Dictionary<FlippedStringEntity, CoreEntity> dict =
+                new Dictionary<FlippedStringEntity, CoreEntity>();
+
+            foreach (var entity in entities)
+            {
+                var child = new CoreEntity().GenerateForTest();
+
+                child.References = new Dictionary<string, object> { { "FlippedStringEntityId",  entity.Id } };
+
+                dict.Add(entity, child);
+            }
+
+            var mergedValues = dict.Values;
+
+            entities.MapChildEntityWithTypedIdCollection<FlippedStringEntity, CoreEntity, string>(mergedValues,
+                x => x.FlippedStringEntity,
+                (entity, childs) => entity.CoreEntity = childs.FirstOrDefault());
+
+            foreach (var entity in entities)
+            {
+                var expected = dict[entity];
+
+                Assert.Equal(expected, entity.CoreEntity);
+            }
+        }
+
+        #endregion
 
         #endregion
     }
