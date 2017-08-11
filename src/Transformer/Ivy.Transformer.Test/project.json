@@ -1,9 +1,9 @@
 {
-  "version": "1.0.0.93",
+  "version": "1.0.0.94",
 
   "dependencies": {
     "Ivy.IoC": "1.0.0.91",
-    "Ivy.TestHelper": "1.0.0.98",
+    "Ivy.TestHelper": "1.0.0.99",
     "Ivy.Transformer": "1.0.0.93",
     "Ivy.Transformer.Core": "1.0.0.91",
     "NETStandard.Library": "1.6.0",
