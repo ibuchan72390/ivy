@@ -170,10 +170,10 @@ namespace Ivy.Utility.Test.Extensions
 
         #endregion
 
-        #region MapChildEntityCollection
+        #region MapEntityChildren
 
         [Fact]
-        public void MapChildEntityCollection_Assigns_Entities_As_Expected()
+        public void MapEntityChildren_Assigns_Entities_As_Expected()
         {
             // Need to demonstrate that we can bring in an IEnumerable source and children
             // Children will have references pointing to source objects
@@ -200,7 +200,7 @@ namespace Ivy.Utility.Test.Extensions
 
             var mergedValues = dict.Values.SelectMany(x => x);
 
-            entities.MapChildEntityCollection<CoreEntity, ChildEntity>(mergedValues,
+            entities.MapEntityChildren<CoreEntity, ChildEntity>(mergedValues,
                 x => x.CoreEntity,
                 (entity, childs) => entity.Children = childs.ToList());
 
@@ -215,10 +215,10 @@ namespace Ivy.Utility.Test.Extensions
 
         #endregion
 
-        #region MapChildEntityWithTypedIdCollection
+        #region MapEntityWithTypedIdChildren
 
         [Fact]
-        public void MapChildEntityWithTypedIdCollection_Assigns_Entities_As_Expected_With_Int_Id()
+        public void MapEntityWithTypedIdChildren_Assigns_Entities_As_Expected_With_Int_Id()
         {
             // Need to demonstrate that we can bring in an IEnumerable source and children
             // Children will have references pointing to source objects
@@ -245,7 +245,7 @@ namespace Ivy.Utility.Test.Extensions
 
             var mergedValues = dict.Values.SelectMany(x => x);
 
-            entities.MapChildEntityWithTypedIdCollection<CoreEntity, ChildEntity, int>(mergedValues,
+            entities.MapEntityWithTypedIdChildren<CoreEntity, ChildEntity, int>(mergedValues,
                 x => x.CoreEntity,
                 (entity, childs) => entity.Children = childs.ToList());
 
@@ -260,7 +260,7 @@ namespace Ivy.Utility.Test.Extensions
 
 
         [Fact]
-        public void MapChildEntityWithTypedIdCollection_Assigns_Entities_As_Expected_With_String_Id()
+        public void MapEntityWithTypedIdChildren_Assigns_Entities_As_Expected_With_String_Id()
         {
             // Need to demonstrate that we can bring in an IEnumerable source and children
             // Children will have references pointing to source objects
@@ -287,7 +287,7 @@ namespace Ivy.Utility.Test.Extensions
 
             var mergedValues = dict.Values;
 
-            entities.MapChildEntityWithTypedIdCollection<FlippedStringEntity, CoreEntity, string>(mergedValues,
+            entities.MapEntityWithTypedIdChildren<FlippedStringEntity, CoreEntity, string>(mergedValues,
                 x => x.FlippedStringEntity,
                 (entity, childs) => entity.CoreEntity = childs.FirstOrDefault());
 

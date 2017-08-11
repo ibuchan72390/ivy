@@ -114,15 +114,15 @@ namespace Ivy.Utility.Core.Extensions
             }
         }
 
-        public static void MapChildEntityCollection<TSource, TChild>(this IEnumerable<TSource> sourceEntities, IEnumerable<TChild> children,
+        public static void MapEntityChildren<TSource, TChild>(this IEnumerable<TSource> sourceEntities, IEnumerable<TChild> children,
             Expression<Func<TChild, TSource>> getIdFn, Action<TSource, IEnumerable<TChild>> assignChildsFn)
             where TSource : IEntity
             where TChild : IEntityWithReferences
         {
-            MapChildEntityWithTypedIdCollection<TSource, TChild, int>(sourceEntities, children, getIdFn, assignChildsFn);
+            MapEntityWithTypedIdChildren<TSource, TChild, int>(sourceEntities, children, getIdFn, assignChildsFn);
         }
 
-        public static void MapChildEntityWithTypedIdCollection<TSource, TChild, TKey>(this IEnumerable<TSource> sourceEntities, IEnumerable<TChild> children,
+        public static void MapEntityWithTypedIdChildren<TSource, TChild, TKey>(this IEnumerable<TSource> sourceEntities, IEnumerable<TChild> children,
             Expression<Func<TChild, TSource>> getIdFn, Action<TSource, IEnumerable<TChild>> assignChildsFn)
             where TSource : IEntityWithTypedId<TKey>
             where TChild : IEntityWithReferences
