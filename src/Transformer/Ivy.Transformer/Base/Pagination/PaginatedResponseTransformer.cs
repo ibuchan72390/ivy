@@ -1,5 +1,4 @@
 ﻿using Ivy.Transformer.Core.Interfaces.Pagination;
-using Ivy.Transformer.Core.Models.Pagination;
 using Ivy.Transformer.Core.Interfaces.Entity;
 using Ivy.Data.Core.Interfaces.Pagination;
 using Ivy.Transformer.Core.Interfaces.Models;
@@ -7,6 +6,7 @@ using Ivy.Transformer.Core.Interfaces.Models;
 namespace Ivy.Transformer.Base.Pagination
 {
     public class PaginatedResponseTransformer<TEntity, TModel, TTransformer> :
+        BasePaginatedResponseTransformer<TEntity, TModel>,
         IPaginatedResponseTransformer<TEntity, TModel, TTransformer>
         where TTransformer : IEntityToViewModelListTransformer<TEntity, TModel>
     {
@@ -32,11 +32,7 @@ namespace Ivy.Transformer.Base.Pagination
         {
             var models = _transformer.Transform(paginationResponse.Data);
 
-            return new PaginatedResponseViewModel<TModel>
-            {
-                Data = models,
-                TotalCount = paginationResponse.TotalCount
-            };
+            return GenerateResponseModel(paginationResponse, models);
         }
 
         #endregion
