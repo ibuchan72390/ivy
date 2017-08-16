@@ -4,6 +4,7 @@ using System;
 using Ivy.Auth0.Enums;
 using Ivy.Auth0.Management.Core.Services;
 using Ivy.Auth0.Management.Core.Models.Requests;
+using System.Net;
 
 namespace Ivy.Auth0.Management.Services
 {
@@ -40,6 +41,10 @@ namespace Ivy.Auth0.Management.Services
         private Uri DictionaryToUri(string currentUri, Dictionary<string, string> dict)
         {
             var newUri = QueryHelpers.AddQueryString(currentUri, dict);
+
+            // Seems the above duplicate encodes unnecessarily
+            // We can't allow all items to be encoded for some reason it seems
+            newUri = WebUtility.UrlDecode(newUri);
 
             return new Uri(newUri);
         }

@@ -88,7 +88,7 @@ namespace Ivy.Auth0.Management.Test.Services
             AssertDictEquality(resultQuery, "connection", req.Connection);
             AssertDictEquality(resultQuery, "fields", req.Fields);
             AssertDictEquality(resultQuery, "include_fields", req.IncludeFields);
-            AssertDictEquality(resultQuery, "q", GetExpectedQueryString(req.QueryString), false);
+            AssertDictEquality(resultQuery, "q", req.QueryString, false);
             AssertDictEquality(resultQuery, "search_engine", req.SearchEngine);
         }
 
@@ -123,7 +123,7 @@ namespace Ivy.Auth0.Management.Test.Services
             AssertDictEquality(resultQuery, "include_fields", req.IncludeFields);
             AssertDictEquality(resultQuery, "search_engine", req.SearchEngine);
 
-            var expected = GetExpectedQueryString($"({req.QueryString}) AND identities.connection:\"{req.Connection}\"");
+            var expected = $"({req.QueryString}) AND identities.connection:\"{req.Connection}\"";
             AssertDictEquality(resultQuery, "q", expected, false);
         }
 
@@ -157,7 +157,7 @@ namespace Ivy.Auth0.Management.Test.Services
             AssertDictEquality(resultQuery, "include_fields", req.IncludeFields);
             AssertDictEquality(resultQuery, "search_engine", req.SearchEngine);
 
-            var expected = GetExpectedQueryString($"identities.connection:\"{req.Connection}\"");
+            var expected = $"identities.connection:\"{req.Connection}\"";
             AssertDictEquality(resultQuery, "q", expected, false);
         }
 
@@ -192,7 +192,7 @@ namespace Ivy.Auth0.Management.Test.Services
             AssertDictEquality(resultQuery, "include_fields", req.IncludeFields);
             AssertDictEquality(resultQuery, "search_engine", req.SearchEngine);
 
-            var expected = GetExpectedQueryString($"identities.connection:\"{req.Connection}\"");
+            var expected = $"identities.connection:\"{req.Connection}\"";
             AssertDictEquality(resultQuery, "q", expected, false);
         }
 
@@ -200,7 +200,7 @@ namespace Ivy.Auth0.Management.Test.Services
         [Fact]
         public void Auth0QueryStringGenerator_Generates_Get_User_List_With_v2_And_Complex_Query_String()
         {
-            var currentUri = "https://google.com";
+            var currentUri = "https://iamglobaleducation.auth0.com/api/v2/users";
 
             var req = new Auth0ListUsersRequest();
             req.Page = 1;
@@ -227,14 +227,15 @@ namespace Ivy.Auth0.Management.Test.Services
             AssertDictEquality(resultQuery, "search_engine", req.SearchEngine);
 
             //var expected = "(user_id%3A%22auth0%7C58f7fa9ddb5a3927da1aa529%22%20OR%20user_id%3A%22auth0%7C59946d0d31d6c842b92e6922%22)%20AND%20identities.connection%3A%22Development%22";
-            var expected = GetExpectedQueryString($"({req.QueryString}) AND identities.connection:\"{req.Connection}\"");
+            var expected = $"({req.QueryString}) AND identities.connection:\"{req.Connection}\"";
             AssertDictEquality(resultQuery, "q", expected, false);
 
             // This query string seems to work...but we're not properly matching it, let's see what's not matching up here
             const string expectedQuery = "(user_id%3A%22auth0%7C58f7fa9ddb5a3927da1aa529%22%20OR%20user_id%3A%22auth0%7C59946d0d31d6c842b92e6922%22)%20AND%20identities.connection%3A%22Development%22";
 
             var queryVal = resultQuery["q"];
-            Assert.Equal(expectedQuery, queryVal.ToString());
+            Assert.Equal(expectedQuery, GetAuth0QueryString(queryVal.ToString()));
+            Assert.Equal(expectedQuery, GetAuth0QueryString(expected));
         }
 
         [Fact]
@@ -267,7 +268,7 @@ namespace Ivy.Auth0.Management.Test.Services
             AssertDictEquality(resultQuery, "include_fields", req.IncludeFields);
             AssertDictEquality(resultQuery, "search_engine", req.SearchEngine);
 
-            var expected = GetExpectedQueryString($"identities.connection:\"{req.Connection}\"");
+            var expected = $"identities.connection:\"{req.Connection}\"";
             AssertDictEquality(resultQuery, "q", expected, false);
         }
 
@@ -302,7 +303,7 @@ namespace Ivy.Auth0.Management.Test.Services
             AssertDictEquality(resultQuery, "include_fields", req.IncludeFields);
             AssertDictEquality(resultQuery, "search_engine", req.SearchEngine);
 
-            var expected = GetExpectedQueryString($"identities.connection:\"{req.Connection}\"");
+            var expected = $"identities.connection:\"{req.Connection}\"";
             AssertDictEquality(resultQuery, "q", expected, false);
         }
 
@@ -324,13 +325,11 @@ namespace Ivy.Auth0.Management.Test.Services
             var queryString = resultQuery["q"];
 
             const string expectedQuery = "(user_id%3A%22auth0%7C58f7fa9ddb5a3927da1aa529%22%20OR%20user_id%3A%22auth0%7C59946d0d31d6c842b92e6922%22)%20AND%20identities.connection%3A%22Development%22";
-            var origExpected = WebUtility.UrlDecode(expectedQuery);
-            var origQueryString = WebUtility.UrlDecode(queryString);
 
             // WTF is this shit!?!?! - WHY IS THIS NECESSARY!?
             //queryString = queryString.ToString().Replace("+", "%20");
 
-            Assert.Equal(queryString, expectedQuery);
+            Assert.Equal(expectedQuery, GetAuth0QueryString(queryString));
         }
 
         #endregion
@@ -354,13 +353,10 @@ namespace Ivy.Auth0.Management.Test.Services
             Assert.Equal(dictEntry, value);
         }
 
-        private string GetExpectedQueryString(string val)
+        private string GetAuth0QueryString(string query)
         {
-            val = WebUtility.UrlEncode(val);
-
-            val = val.Replace("+", "%20"); // No idea why the fuck this is necessary
-
-            return val;
+            var encoded = WebUtility.UrlEncode(query);
+            return encoded.Replace("+", "%20");
         }
 
         #endregion
