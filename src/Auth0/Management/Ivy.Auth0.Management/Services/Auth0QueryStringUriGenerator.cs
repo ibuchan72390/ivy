@@ -18,14 +18,14 @@ namespace Ivy.Auth0.Management.Services
             // They use zero-based indexing, we need to subtract one to get the real value
             var pageNum = req.Page < 1 ? 0 : req.Page - 1;
 
-            dict.Add("page", MassageString(pageNum.ToString(), false));
-            dict.Add("include_totals", MassageString(req.IncludeTotals.ToString(), false));
+            dict.Add("page", pageNum.ToString());
+            dict.Add("include_totals", req.IncludeTotals.ToString().ToLower());
 
             AppendIfNot(ref dict, "per_page", req.PerPage, 0);
             AppendIfNot(ref dict, "sort", req.Sort, null);
             AppendIfNot(ref dict, "fields", req.Fields, null);
             AppendIfNot(ref dict, "include_fields", req.IncludeFields, false);
-            AppendIfNot(ref dict, "q", req.QueryString, null, true); // This will get encoded on connection string append
+            AppendIfNot(ref dict, "q", req.QueryString, null, false); // This will get encoded on connection string append
             AppendIfNot(ref dict, "search_engine", req.SearchEngine, null);
 
             SetupConnectionQueryString(ref dict, req);
@@ -44,7 +44,7 @@ namespace Ivy.Auth0.Management.Services
             return new Uri(newUri);
         }
 
-        private void AppendIfNot<T>(ref Dictionary<string, string> dict, string name, T value, T compare, bool skipEncoding = false)
+        private void AppendIfNot<T>(ref Dictionary<string, string> dict, string name, T value, T compare, bool toLower = true)
         {
             if (value == null) return;
 
@@ -52,21 +52,15 @@ namespace Ivy.Auth0.Management.Services
             {
                 // Seems that we need to make these lower case
                 // Upper case "True" value throws an error due to "Bad Request"
-                var str = MassageString(value.ToString(), skipEncoding);
+                string str = value.ToString();
+
+                if (toLower)
+                {
+                    str = str.ToLower();
+                }
+
                 dict.Add(name, str);
             }
-        }
-
-        private string MassageString(string str, bool skipEncoding)
-        {
-            str = str?.ToLower();
-
-            if (!skipEncoding)
-            {
-                str = System.Net.WebUtility.UrlEncode(str);
-            }
-
-            return str;
         }
 
         private void SetupConnectionQueryString(ref Dictionary<string, string> dict, Auth0ListUsersRequest req)
@@ -79,18 +73,27 @@ namespace Ivy.Auth0.Management.Services
 
                     if (dict.ContainsKey("q") && !string.IsNullOrEmpty(dict["q"]))
                     {
-                        var tempStr = $"({dict["q"]}) AND {str}";
-                        dict["q"] = MassageString(tempStr, false);
+                        dict["q"] = $"({dict["q"]}) AND {str}";
                     }
                     else
                     {
-                        dict["q"] = MassageString(str, false);
+                        dict["q"] = str;
                     }
                 }
                 else if (req.SearchEngine == Auth0ApiVersionNames.v1.ToString())
                 {
                     AppendIfNot(ref dict, "connection", req.Connection, null);
                 }
+            }
+
+            if (dict.ContainsKey("q") &&
+                !string.IsNullOrEmpty(dict["q"]))
+            {
+                var newQ = System.Net.WebUtility.UrlEncode(dict["q"]);
+
+                // I have no idea why this is necessary or something required by Auth0 API
+                // This does not match the standard UrlEncode from C#
+                dict["q"] = newQ.Replace("+", "%20");
             }
         }
 

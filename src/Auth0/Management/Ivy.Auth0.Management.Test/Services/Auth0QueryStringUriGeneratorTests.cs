@@ -7,6 +7,7 @@ using Microsoft.Extensions.Primitives;
 using System.Collections.Generic;
 using Xunit;
 using Microsoft.AspNetCore.WebUtilities;
+using System.Net;
 
 namespace Ivy.Auth0.Management.Test.Services
 {
@@ -87,7 +88,7 @@ namespace Ivy.Auth0.Management.Test.Services
             AssertDictEquality(resultQuery, "connection", req.Connection);
             AssertDictEquality(resultQuery, "fields", req.Fields);
             AssertDictEquality(resultQuery, "include_fields", req.IncludeFields);
-            AssertDictEquality(resultQuery, "q", req.QueryString);
+            AssertDictEquality(resultQuery, "q", GetExpectedQueryString(req.QueryString), false);
             AssertDictEquality(resultQuery, "search_engine", req.SearchEngine);
         }
 
@@ -122,9 +123,8 @@ namespace Ivy.Auth0.Management.Test.Services
             AssertDictEquality(resultQuery, "include_fields", req.IncludeFields);
             AssertDictEquality(resultQuery, "search_engine", req.SearchEngine);
 
-            var expected = System.Net.WebUtility.UrlEncode($"({req.QueryString}) AND identities.connection:\"{req.Connection}\"".ToLower());
-
-            Assert.Equal(resultQuery["q"], expected);
+            var expected = GetExpectedQueryString($"({req.QueryString}) AND identities.connection:\"{req.Connection}\"");
+            AssertDictEquality(resultQuery, "q", expected, false);
         }
 
         [Fact]
@@ -157,9 +157,8 @@ namespace Ivy.Auth0.Management.Test.Services
             AssertDictEquality(resultQuery, "include_fields", req.IncludeFields);
             AssertDictEquality(resultQuery, "search_engine", req.SearchEngine);
 
-            var expected = System.Net.WebUtility.UrlEncode($"identities.connection:\"{req.Connection.ToLower()}\"");
-
-            Assert.Equal(resultQuery["q"], expected);
+            var expected = GetExpectedQueryString($"identities.connection:\"{req.Connection}\"");
+            AssertDictEquality(resultQuery, "q", expected, false);
         }
 
         [Fact]
@@ -193,9 +192,8 @@ namespace Ivy.Auth0.Management.Test.Services
             AssertDictEquality(resultQuery, "include_fields", req.IncludeFields);
             AssertDictEquality(resultQuery, "search_engine", req.SearchEngine);
 
-            var expected = System.Net.WebUtility.UrlEncode($"identities.connection:\"{req.Connection.ToLower()}\"");
-
-            Assert.Equal(resultQuery["q"], expected);
+            var expected = GetExpectedQueryString($"identities.connection:\"{req.Connection}\"");
+            AssertDictEquality(resultQuery, "q", expected, false);
         }
 
 
@@ -209,9 +207,8 @@ namespace Ivy.Auth0.Management.Test.Services
             req.IncludeTotals = false;
 
             req.PerPage = 25;
-            req.Sort = "SORT";
-            req.Connection = "CONNECTION";
-            req.Fields = "FIELDS";
+            req.Sort = "email:1";
+            req.Connection = "Development";
             req.IncludeFields = true;
             req.QueryString = "user_id:\"auth0|58f7fa9ddb5a3927da1aa529\" OR user_id:\"auth0|59946d0d31d6c842b92e6922\"";
             req.SearchEngine = Auth0ApiVersionNames.v2.ToString();
@@ -220,18 +217,24 @@ namespace Ivy.Auth0.Management.Test.Services
 
             var resultQuery = QueryHelpers.ParseQuery(result.Query);
 
-            Assert.Equal(8, resultQuery.Count);
+            Assert.Equal(7, resultQuery.Count);
             AssertDictEquality(resultQuery, "page", 0);
             AssertDictEquality(resultQuery, "include_totals", req.IncludeTotals);
 
             AssertDictEquality(resultQuery, "per_page", req.PerPage);
             AssertDictEquality(resultQuery, "sort", req.Sort);
-            AssertDictEquality(resultQuery, "fields", req.Fields);
             AssertDictEquality(resultQuery, "include_fields", req.IncludeFields);
             AssertDictEquality(resultQuery, "search_engine", req.SearchEngine);
 
-            var expected = System.Net.WebUtility.UrlEncode($"({req.QueryString}) AND identities.connection:\"{req.Connection}\"".ToLower());
-            Assert.Equal(resultQuery["q"], expected);
+            //var expected = "(user_id%3A%22auth0%7C58f7fa9ddb5a3927da1aa529%22%20OR%20user_id%3A%22auth0%7C59946d0d31d6c842b92e6922%22)%20AND%20identities.connection%3A%22Development%22";
+            var expected = GetExpectedQueryString($"({req.QueryString}) AND identities.connection:\"{req.Connection}\"");
+            AssertDictEquality(resultQuery, "q", expected, false);
+
+            // This query string seems to work...but we're not properly matching it, let's see what's not matching up here
+            const string expectedQuery = "(user_id%3A%22auth0%7C58f7fa9ddb5a3927da1aa529%22%20OR%20user_id%3A%22auth0%7C59946d0d31d6c842b92e6922%22)%20AND%20identities.connection%3A%22Development%22";
+
+            var queryVal = resultQuery["q"];
+            Assert.Equal(expectedQuery, queryVal.ToString());
         }
 
         [Fact]
@@ -264,8 +267,8 @@ namespace Ivy.Auth0.Management.Test.Services
             AssertDictEquality(resultQuery, "include_fields", req.IncludeFields);
             AssertDictEquality(resultQuery, "search_engine", req.SearchEngine);
 
-            var expected = System.Net.WebUtility.UrlEncode($"identities.connection:\"{req.Connection.ToLower()}\"");
-            Assert.Equal(resultQuery["q"], expected);
+            var expected = GetExpectedQueryString($"identities.connection:\"{req.Connection}\"");
+            AssertDictEquality(resultQuery, "q", expected, false);
         }
 
         [Fact]
@@ -299,8 +302,35 @@ namespace Ivy.Auth0.Management.Test.Services
             AssertDictEquality(resultQuery, "include_fields", req.IncludeFields);
             AssertDictEquality(resultQuery, "search_engine", req.SearchEngine);
 
-            var expected = System.Net.WebUtility.UrlEncode($"identities.connection:\"{req.Connection.ToLower()}\"");
-            Assert.Equal(resultQuery["q"], expected);
+            var expected = GetExpectedQueryString($"identities.connection:\"{req.Connection}\"");
+            AssertDictEquality(resultQuery, "q", expected, false);
+        }
+
+        [Fact]
+        public void QueryString_Is_Converted_Appropriately()
+        {
+            var currentUri = "https://google.com";
+
+            var req = new Auth0ListUsersRequest();
+            
+            req.Connection = "Development";
+            req.QueryString = "user_id:\"auth0|58f7fa9ddb5a3927da1aa529\" OR user_id:\"auth0|59946d0d31d6c842b92e6922\"";
+            req.SearchEngine = Auth0ApiVersionNames.v2.ToString();
+
+            var result = _sut.GenerateGetUsersQueryString(currentUri, req);
+
+            var resultQuery = QueryHelpers.ParseQuery(result.Query);
+
+            var queryString = resultQuery["q"];
+
+            const string expectedQuery = "(user_id%3A%22auth0%7C58f7fa9ddb5a3927da1aa529%22%20OR%20user_id%3A%22auth0%7C59946d0d31d6c842b92e6922%22)%20AND%20identities.connection%3A%22Development%22";
+            var origExpected = WebUtility.UrlDecode(expectedQuery);
+            var origQueryString = WebUtility.UrlDecode(queryString);
+
+            // WTF is this shit!?!?! - WHY IS THIS NECESSARY!?
+            //queryString = queryString.ToString().Replace("+", "%20");
+
+            Assert.Equal(queryString, expectedQuery);
         }
 
         #endregion
@@ -309,9 +339,28 @@ namespace Ivy.Auth0.Management.Test.Services
 
         #region Helper Methods
 
-        private void AssertDictEquality<T>(Dictionary<string, StringValues> dict, string key, T item)
+        private void AssertDictEquality<T>(Dictionary<string, StringValues> dict, string key, T item, bool toLower = true)
         {
-            Assert.Equal(dict[key], item.ToString().ToLower());
+            var dictEntry = dict[key];
+            var val = item.ToString();
+
+            string value = val;
+
+            if (toLower)
+            {
+                value = val.ToLower();
+            }
+            
+            Assert.Equal(dictEntry, value);
+        }
+
+        private string GetExpectedQueryString(string val)
+        {
+            val = WebUtility.UrlEncode(val);
+
+            val = val.Replace("+", "%20"); // No idea why the fuck this is necessary
+
+            return val;
         }
 
         #endregion
