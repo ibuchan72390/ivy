@@ -1,5 +1,5 @@
 {
-  "version": "1.0.1.009",
+  "version": "1.0.1.91",
 
   "dependencies": {
     "Ivy.Auth0.Management.Core": "1.0.1.004",
@@ -11,7 +11,7 @@
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
     "Microsoft.Extensions.Logging": "1.0.2",
     "Ivy.Web.IoC": "1.0.0.4",
-    "Ivy.Auth0.Management.IoC": "1.0.1.005"
+    "Ivy.Auth0.Management.IoC": "1.0.1.6"
   },
 
   "testRunner": "xunit",
