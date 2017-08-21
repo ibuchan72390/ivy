@@ -9,5 +9,7 @@
         double RandomDouble(double min = 0, double max = 10000);
 
         decimal RandomDecimal();
+
+        bool RandomBool();
     }
 }

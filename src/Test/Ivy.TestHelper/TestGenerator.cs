@@ -256,6 +256,8 @@ namespace Ivy.TestHelper
             {
                 entity.Double = _rand.RandomDouble();
             }
+
+            entity.Boolean = _rand.RandomBool();
         }
 
         #endregion

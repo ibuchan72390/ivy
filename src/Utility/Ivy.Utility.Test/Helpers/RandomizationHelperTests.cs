@@ -40,8 +40,7 @@ namespace Ivy.Utility.Test.Helpers
         public void RandomString_Passes_Random_Sample_Test()
         {
             TestRandomSample(
-                () => _sut.RandomString(),
-                (a, b) => a.Equals(b));
+                () => _sut.RandomString());
         }
 
         [Fact]
@@ -57,31 +56,61 @@ namespace Ivy.Utility.Test.Helpers
         public void RandomDouble_Passes_Random_Sample_Test()
         {
             TestRandomSample(
-                () => _sut.RandomDouble(),
-                (a, b) => a.Equals(b));
+                () => _sut.RandomDouble());
         }
 
         [Fact]
         public void RandomInt_Passes_Random_Sample_Test()
         {
             TestRandomSample(
-                () => _sut.RandomInt(),
-                (a, b) => a.Equals(b));
+                () => _sut.RandomInt());
+        }
+
+        [Fact]
+        public void RandomInt_Can_Include_Max_Value()
+        {
+            const int min = 0;
+            const int max = 1;
+
+            // We should be able to get both in 50 Randoms
+            for (var i = 0; i < 50; i++)
+            {
+                var result = _sut.RandomInt(min, max);
+
+                if (result == max)
+                    return;
+            }
+
+            throw new Exception($"Unable to get max value of RandomInt with 2 values. Min: {min} / Max: {max}");
         }
 
         [Fact]
         public void RandomDecimal_Passes_Random_Sample_Test()
         {
             TestRandomSample(
-                () => _sut.RandomDecimal(),
-                (a, b) => a.Equals(b));
+                () => _sut.RandomDecimal());
+        }
+
+        [Fact]
+        public void RandomBoolean_Passes_Random_Sample_Test()
+        {
+            bool init = _sut.RandomBool();
+
+            // The chances of 50 in a row are absurd
+            for (var i = 0; i < 50; i++)
+            {
+                if (_sut.RandomBool() != init)
+                    return;
+            }
+
+            throw new Exception($"Random boolean returned {init} 50 times in a row");
         }
 
         #endregion
 
         #region Helper Methods
 
-        private void TestRandomSample<T>(Func<T> getFn, Func<T, T, bool> validationFn)
+        private void TestRandomSample<T>(Func<T> getFn)
         {
             // I can believe that 1 random sampling comes up the same out of ... 10?
             // Any more than that and I call bullshit, your random function is fucked up
@@ -95,7 +124,7 @@ namespace Ivy.Utility.Test.Helpers
                 var a = getFn();
                 var b = getFn();
 
-                if (validationFn(a, b))
+                if (a.Equals(b))
                 {
                     errorsHit++;
                 }

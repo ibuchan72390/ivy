@@ -365,7 +365,7 @@ namespace Ivy.Data.MySQL.Test
 
             var result = _sut.GenerateInsertQuery(entity, ref parms);
 
-            string expected = $"INSERT INTO blobentity (`Name`, `Integer`, `Decimal`, `Double`) VALUES (@Name0, @Integer0, @Decimal0, @Double0);";
+            string expected = $"INSERT INTO blobentity (`Name`, `Integer`, `Decimal`, `Double`, `Boolean`) VALUES (@Name0, @Integer0, @Decimal0, @Double0, @Boolean0);";
 
             Assert.Equal(expected, result);
         }
@@ -408,7 +408,7 @@ namespace Ivy.Data.MySQL.Test
 
             var result = _sut.GenerateInsertQuery(entities, ref parms);
 
-            string expected = $"INSERT INTO blobentity (`Name`, `Integer`, `Decimal`, `Double`) VALUES (@Name0, @Integer0, @Decimal0, @Double0), (@Name1, @Integer1, @Decimal1, @Double1), (@Name2, @Integer2, @Decimal2, @Double2);";
+            string expected = $"INSERT INTO blobentity (`Name`, `Integer`, `Decimal`, `Double`, `Boolean`) VALUES (@Name0, @Integer0, @Decimal0, @Double0, @Boolean0), (@Name1, @Integer1, @Decimal1, @Double1, @Boolean1), (@Name2, @Integer2, @Decimal2, @Double2, @Boolean2);";
 
             Assert.Equal(expected, result);
         }

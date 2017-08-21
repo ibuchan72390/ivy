@@ -5,6 +5,7 @@ CREATE TABLE `guidentity` (
   `Decimal` decimal(10,2) DEFAULT NULL,
   `Double` double DEFAULT NULL,
   `CoreEntityId` int(11) DEFAULT NULL,
+  `Boolean` bit DEFAULT 0,
   PRIMARY KEY (`Id`),
   KEY `CoreEntityId_idx` (`CoreEntityId`),
   CONSTRAINT `CoreEntityId` FOREIGN KEY (`CoreEntityId`) REFERENCES `coreentity` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION

@@ -12,6 +12,8 @@ namespace Ivy.TestHelper.TestEntities.Base
         decimal Decimal { get; set; }
 
         double Double { get; set; }
+
+        bool Boolean { get; set; }
     }
 
     public interface IBaseTestEntity<TKey> : IBaseTestEntity, IEntityWithTypedId<TKey>, IEquatable<IBaseTestEntity<TKey>>

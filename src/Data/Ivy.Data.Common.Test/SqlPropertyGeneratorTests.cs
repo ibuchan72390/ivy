@@ -22,7 +22,7 @@ namespace Ivy.Data.Common.Test
 
         private ISqlPropertyGenerator _sut;
 
-        IList<string> baseExpectedAttrs = new List<string> { "Id", "Name", "Integer", "Decimal", "Double" };
+        IList<string> baseExpectedAttrs = new List<string> { "Id", "Name", "Integer", "Decimal", "Double", "Boolean" };
 
         #endregion
 

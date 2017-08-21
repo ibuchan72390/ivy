@@ -8,7 +8,8 @@
     "Ivy.TestHelper": "1.0.1",
     "Ivy.Utility.Core": "1.0.1",
     "Ivy.Utility": "1.0.1",
-    "dotnet-test-xunit": "2.2.0-preview2-build1029"
+    "dotnet-test-xunit": "2.2.0-preview2-build1029",
+    "Moq": "4.7.25"
   },
 
   "testRunner": "xunit",

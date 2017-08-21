@@ -37,12 +37,13 @@ namespace Ivy.Web.Test.Json
                 // Needs to be exact, seems JSON can round this out to a decimal with more places
                 // No idea how that's happening, but it must be part of JSON conversion
                 // Probably has to do with decimal v double data type
-                Double = 234.987
+                Double = 234.987,
+                Boolean = false
             };
 
             var result = _sut.Serialize(blobEntity);
 
-            string expected = $"\"Name\":\"{blobEntity.Name}\",\"Integer\":{blobEntity.Integer},\"Decimal\":{blobEntity.Decimal},\"Double\":{blobEntity.Double},\"References\":null";
+            string expected = $"\"Name\":\"{blobEntity.Name}\",\"Integer\":{blobEntity.Integer},\"Decimal\":{blobEntity.Decimal},\"Double\":{blobEntity.Double},\"Boolean\":{blobEntity.Boolean.ToString().ToLower()},\"References\":null";
 
             expected = "{" + expected + "}";
 

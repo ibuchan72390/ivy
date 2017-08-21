@@ -22,13 +22,16 @@ namespace Ivy.TestHelper.TestEntities.Base
 
         public double Double { get; set; }
 
+        public bool Boolean { get; set; }
+
         public bool Equals(IBaseTestEntity other)
         {
             return (
                     Name.Equals(other.Name) &&
                     Integer.Equals(other.Integer) &&
                     Decimal.Equals(other.Decimal) &&
-                    Double.Equals(other.Double)
+                    Double.Equals(other.Double) &&
+                    Boolean.Equals(other.Boolean)
                 );
         }
 

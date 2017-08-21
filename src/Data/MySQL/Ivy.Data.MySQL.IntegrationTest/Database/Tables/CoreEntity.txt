@@ -8,6 +8,7 @@ CREATE TABLE `coreentity` (
   `Integer` int(11) DEFAULT NULL,
   `Decimal` decimal(10,2) DEFAULT NULL,
   `Double` double DEFAULT NULL,
+  `Boolean` bit DEFAULT 0,
   PRIMARY KEY (`Id`),
   KEY `FK_CoreEntity_ParentEntity_idx` (`ParentEntityId`),
   KEY `FK_CoreEntity_FlippedStringEntity_idx` (`FlippedStringEntityId`),

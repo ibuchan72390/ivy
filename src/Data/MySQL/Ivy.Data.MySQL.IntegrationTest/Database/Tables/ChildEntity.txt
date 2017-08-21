@@ -5,6 +5,7 @@ CREATE TABLE `childentity` (
   `Integer` int(11) DEFAULT NULL,
   `Decimal` decimal(10,0) DEFAULT NULL,
   `Double` double DEFAULT NULL,
+  `Boolean` bit DEFAULT 0,
   PRIMARY KEY (`Id`),
   KEY `CoreEntityId_idx` (`CoreEntityId`),
   CONSTRAINT `FK_ChildEntity_CoreEntity` FOREIGN KEY (`CoreEntityId`) REFERENCES `coreentity` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION
