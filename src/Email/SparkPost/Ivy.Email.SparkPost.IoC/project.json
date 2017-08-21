@@ -1,0 +1,16 @@
+{
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "Ivy.Email.SparkPost": "1.0.0-*",
+    "Ivy.Email.SparkPost.Core": "1.0.0-*",
+    "Ivy.IoC.Core": "1.0.0.0",
+    "NETStandard.Library": "1.6.0"
+  },
+
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": "dnxcore50"
+    }
+  }
+}
