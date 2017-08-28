@@ -1,13 +1,13 @@
 {
-  "version": "1.0.1.100",
+  "version": "1.0.1.101",
 
   "dependencies": {
-    "Ivy.Data.Common": "1.0.0.92",
-    "Ivy.IoC": "1.0.0.91",
-    "Ivy.IoC.IoC": "1.0.0.8",
-    "Ivy.TestUtilities": "1.0.0.8",
-    "Ivy.Utility": "1.0.1.100",
-    "Ivy.Utility.IoC": "1.0.1.100",
+    "Ivy.Data.Common": "1.0.0.93",
+    "Ivy.IoC": "1.0.0.92",
+    "Ivy.IoC.IoC": "1.0.0.9",
+    "Ivy.TestUtilities": "1.0.0.9",
+    "Ivy.Utility": "1.0.1.101",
+    "Ivy.Utility.IoC": "1.0.1.101",
     "NETStandard.Library": "1.6.0"
   },
 

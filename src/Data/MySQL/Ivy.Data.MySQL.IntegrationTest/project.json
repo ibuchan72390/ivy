@@ -1,20 +1,20 @@
 {
-  "version": "1.0.1.100",
+  "version": "1.0.1.101",
 
   "dependencies": {
     "NETStandard.Library": "1.6.0",
-    "Ivy.IoC": "1.0.0.91",
+    "Ivy.IoC": "1.0.0.92",
     "xunit": "2.2.0",
-    "Ivy.Data.MySQL": "1.0.0.91",
+    "Ivy.Data.MySQL": "1.0.0.92",
     "System.Linq": "4.1.0",
-    "Ivy.Utility.Core": "1.0.1.100",
+    "Ivy.Utility.Core": "1.0.1.101",
     "Ivy.IoC.Core": "1.0.0.0",
-    "Ivy.TestHelper": "1.0.1.100",
-    "Ivy.TestUtilities": "1.0.0.8",
-    "Ivy.Utility.IoC": "1.0.1.100",
-    "Ivy.Data.Common.IoC": "1.0.0.91",
-    "Ivy.IoC.IoC": "1.0.0.8",
-    "Ivy.Data.MySQL.IoC": "1.0.0.91",
+    "Ivy.TestHelper": "1.0.1.101",
+    "Ivy.TestUtilities": "1.0.0.9",
+    "Ivy.Utility.IoC": "1.0.1.101",
+    "Ivy.Data.Common.IoC": "1.0.0.92",
+    "Ivy.IoC.IoC": "1.0.0.9",
+    "Ivy.Data.MySQL.IoC": "1.0.0.92",
     "dotnet-test-xunit": "2.2.0-preview2-build1029"
   },
 
