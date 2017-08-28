@@ -168,7 +168,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
         #endregion
 
-        #region Delete
+        #region Delete (Entity)
 
         [Fact]
         public void Delete_Removes_Record_As_Expected()
@@ -194,6 +194,50 @@ namespace Ivy.Data.MySQL.IntegrationTest
             _sut.Delete(testEntity, tc);
 
             tc.Dispose();
+        }
+
+        #endregion
+
+        #region Delete (Entities)
+
+        [Fact]
+        public void Delete_Entities_Removes_Record_As_Expected()
+        {
+            var entities = Enumerable.Range(0, 3).
+                Select(x => new StringEntity().SaveForTest()).
+                ToList();
+
+            _sut.Delete(entities);
+
+            var entityIds = entities.Select(x => x.Id);
+
+            var result = _sut.GetByIdList(entityIds);
+
+            Assert.Empty(result);
+        }
+
+        [Fact]
+        public void Delete_Entities_Can_Commit_With_TranConn()
+        {
+            var tranGen = ServiceLocator.Instance.Resolve<ITranConnGenerator>();
+
+            var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
+
+            var entities = Enumerable.Range(0, 3).
+                Select(x => new StringEntity().SaveForTest()).
+                ToList();
+
+            _sut.Delete(entities, tc);
+
+            // Appears this must be an explicit commit
+            tc.Transaction.Commit();
+            tc.Dispose();
+
+            var entityIds = entities.Select(x => x.Id);
+
+            var result = _sut.GetByIdList(entityIds);
+
+            Assert.Empty(result);
         }
 
         #endregion
@@ -224,6 +268,26 @@ namespace Ivy.Data.MySQL.IntegrationTest
             _sut.DeleteById(testEntity.Id, tc);
 
             tc.Dispose();
+        }
+
+        #endregion
+
+        #region DeleteByIdList
+
+        [Fact]
+        public void DeleteByIdList_Entities_Removes_Record_As_Expected()
+        {
+            var entities = Enumerable.Range(0, 3).
+                Select(x => new StringEntity().SaveForTest()).
+                ToList();
+
+            var entityIds = entities.Select(x => x.Id);
+
+            _sut.DeleteByIdList(entityIds);
+
+            var result = _sut.GetByIdList(entityIds);
+
+            Assert.Empty(result);
         }
 
         #endregion

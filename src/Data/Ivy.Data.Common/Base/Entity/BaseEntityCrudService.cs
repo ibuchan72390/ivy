@@ -30,6 +30,11 @@ namespace Ivy.Data.Common.Base.Entity
             Repo.Delete(entity, tc);
         }
 
+        public virtual void Delete(IEnumerable<TEntity> entities, ITranConn tc = null)
+        {
+            Repo.Delete(entities, tc);
+        }
+
         public virtual void DeleteAll(ITranConn tc = null)
         {
             Repo.DeleteAll(tc);
@@ -38,6 +43,11 @@ namespace Ivy.Data.Common.Base.Entity
         public virtual void DeleteById(int id, ITranConn tc = null)
         {
             Repo.DeleteById(id, tc);
+        }
+
+        public void DeleteByIdList(IEnumerable<int> ids, ITranConn tc = null)
+        {
+            Repo.DeleteByIdList(ids, tc);
         }
 
         public virtual IEnumerable<TEntity> GetAll(ITranConn tc = null)

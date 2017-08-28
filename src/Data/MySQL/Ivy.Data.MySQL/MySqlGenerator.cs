@@ -350,15 +350,33 @@ namespace Ivy.Data.MySQL
 
         #region Public Methods
 
+        public string GenerateDeleteQuery(IEnumerable<TKey> idsToDelete, ref Dictionary<string, object> parms)
+        {
+            if (idsToDelete == null) throw new Exception("Unable to delete a key collection that is null!");
+
+            var sqlWhere = GenerateWhereIdInList(idsToDelete, ref parms);
+
+            return base.GenerateDeleteQuery(sqlWhere);
+        }
+
         public string GenerateDeleteQuery(TKey idToDelete, ref Dictionary<string, object> parms)
         {
             if (idToDelete == null) throw new Exception("Unable to delete a key that is null!");
 
             //parms = new Dictionary<string, object>();
             //parms.Add("@entityId", idToDelete.ToString());
-            AddIdToParmsDict(idToDelete, ref parms);
+            AddIdToParmsDict(idToDelete, idParamKey, ref parms);
 
             return base.GenerateDeleteQuery(whereIdEqualsParam);
+        }
+
+        public string GenerateGetQuery(IEnumerable<TKey> idsToGet, ref Dictionary<string, object> parms)
+        {
+            if (idsToGet == null) throw new Exception("Unable to get a key collection that is null!");
+
+            var sqlWhere = GenerateWhereIdInList(idsToGet, ref parms);
+
+            return base.GenerateGetQuery(sqlWhere: sqlWhere);
         }
 
         public string GenerateGetQuery(TKey idToGet, ref Dictionary<string, object> parms)
@@ -367,7 +385,7 @@ namespace Ivy.Data.MySQL
 
             //parms = new Dictionary<string, object>();
             //parms.Add("@entityId", idToGet.ToString());
-            AddIdToParmsDict(idToGet, ref parms);
+            AddIdToParmsDict(idToGet, idParamKey, ref parms);
 
             return base.GenerateGetQuery(null, whereIdEqualsParam);
         }
@@ -412,18 +430,35 @@ namespace Ivy.Data.MySQL
 
         #region Helper Methods
 
-        private void AddIdToParmsDict(TKey keyVal, ref Dictionary<string, object> parms)
+        private void AddIdToParmsDict(TKey keyVal, string key, ref Dictionary<string, object> parms)
         {
             var keyType = typeof(TKey);
 
             if (keyType == typeof(int) || keyType == typeof(string))
             {
-                parms.Add(idParamKey, keyVal);
+                parms.Add(key, keyVal);
             }
             else
             {
-                parms.Add(idParamKey, keyVal.ToString());
+                parms.Add(key, keyVal.ToString());
             }
+        }
+
+        private string GenerateWhereIdInList(IEnumerable<TKey> ids, ref Dictionary<string, object> parms)
+        {
+            var idParams = Enumerable.Range(0, ids.Count()).Select(x => $"@id{x}");
+
+            var idInList = string.Join(",", idParams);
+
+            for (var i = 0; i < ids.Count(); i++)
+            {
+                var idParam = idParams.ElementAt(i);
+                var idVal = ids.ElementAt(i);
+
+                AddIdToParmsDict(idVal, idParam, ref parms);
+            }
+
+            return $"WHERE `Id` IN ({idInList})";
         }
 
         #endregion

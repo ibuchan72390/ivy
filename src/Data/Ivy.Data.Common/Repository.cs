@@ -309,6 +309,26 @@ namespace Ivy.Data.Common
             InternalExecuteNonQuery(query, tc, parms);
         }
 
+        public void Delete(IEnumerable<T> entities, ITranConn tc = null)
+        {
+            if (entities == null || !entities.Any()) return;
+
+            var idList = entities.Select(x => x.Id);
+
+            DeleteByIdList(idList);
+        }
+
+        public void DeleteByIdList(IEnumerable<TKey> ids, ITranConn tc = null)
+        {
+            if (ids == null || !ids.Any()) return;
+
+            Dictionary<string, object> parms = new Dictionary<string, object>();
+
+            var query = localSqlGenerator.GenerateDeleteQuery(ids, ref parms);
+
+            InternalExecuteNonQuery(query, tc, parms);
+        }
+
         public virtual T GetById(TKey id, ITranConn tc = null)
         {
             Dictionary<string, object> parms = new Dictionary<string, object>();
@@ -324,9 +344,7 @@ namespace Ivy.Data.Common
 
             Dictionary<string, object> parms = new Dictionary<string, object>();
 
-            var idInList = string.Join(",", ids);
-
-            var query = _sqlGenerator.GenerateGetQuery(null, $"WHERE `Id` IN ({idInList})");
+            var query = localSqlGenerator.GenerateGetQuery(ids, ref parms);
 
             return InternalExecuteQuery(query, tc, parms);
         }

@@ -31,7 +31,12 @@ namespace Ivy.Data.Common.Base.EnumEntity
             Repo.Delete(entity, tc);
         }
 
-        public void DeleteAll(ITranConn tc = null)
+        public virtual void Delete(IEnumerable<TEntity> entities, ITranConn tc = null)
+        {
+            Repo.Delete(entities, tc);
+        }
+
+        public virtual void DeleteAll(ITranConn tc = null)
         {
             Repo.DeleteAll();
         }
@@ -41,12 +46,17 @@ namespace Ivy.Data.Common.Base.EnumEntity
             Repo.DeleteById(id, tc);
         }
 
-        public IEnumerable<TEntity> GetAll(ITranConn tc = null)
+        public virtual void DeleteByIdList(IEnumerable<int> ids, ITranConn tc = null)
+        {
+            Repo.DeleteByIdList(ids, tc);
+        }
+
+        public virtual IEnumerable<TEntity> GetAll(ITranConn tc = null)
         {
             return Repo.GetAll(tc);
         }
 
-        public IPaginationResponse<TEntity> GetAll(IPaginationRequest request, ITranConn tc = null)
+        public virtual IPaginationResponse<TEntity> GetAll(IPaginationRequest request, ITranConn tc = null)
         {
             return Repo.GetAll(request, tc);
         }
@@ -66,7 +76,7 @@ namespace Ivy.Data.Common.Base.EnumEntity
             return Repo.GetByName(name, tc);
         }
 
-        public IEnumerable<TEntity> GetByNames(IEnumerable<TEnum> enumVals, ITranConn tc = null)
+        public virtual IEnumerable<TEntity> GetByNames(IEnumerable<TEnum> enumVals, ITranConn tc = null)
         {
             return Repo.GetByNames(enumVals, tc);
         }

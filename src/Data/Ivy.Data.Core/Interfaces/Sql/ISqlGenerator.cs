@@ -58,7 +58,11 @@ namespace Ivy.Data.Core.Interfaces.SQL
     {
         // These will probably need to take params by reference somehow
 
+        string GenerateDeleteQuery(IEnumerable<TKey> idsToDelete, ref Dictionary<string, object> parms);
+
         string GenerateDeleteQuery(TKey idToDelete, ref Dictionary<string, object> parms);
+
+        string GenerateGetQuery(IEnumerable<TKey> idsToDelete, ref Dictionary<string, object> parms);
 
         string GenerateGetQuery(TKey idToGet, ref Dictionary<string, object> parms);
 
