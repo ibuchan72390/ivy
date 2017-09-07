@@ -1,5 +1,5 @@
 {
-  "version": "1.0.1.102",
+  "version": "1.0.1.103",
 
   "dependencies": {
     "AWSSDK.S3": "3.3.6.1",
