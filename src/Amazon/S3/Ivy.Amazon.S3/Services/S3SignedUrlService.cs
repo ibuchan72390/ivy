@@ -68,7 +68,7 @@ namespace Ivy.Amazon.S3.Services
 
             if (fileNameContentDisposition != null)
             {
-                request.ResponseHeaderOverrides.ContentDisposition = $"attachment: filename={fileNameContentDisposition}";
+                request.ResponseHeaderOverrides.ContentDisposition = $"attachment; filename={fileNameContentDisposition}";
             }
 
             return _s3ClientService.GetPreSignedURL(request);

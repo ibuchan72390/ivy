@@ -87,7 +87,7 @@ namespace Ivy.Amazon.S3.Test.Services
             const string key = "TESTKey";
             const string nameOverride = "TESTOverride.txt";
 
-            string expectedContentDisposition = $"attachment: filename={nameOverride}";
+            string expectedContentDisposition = $"attachment; filename={nameOverride}";
 
             var expectedNow = now.AddMinutes(1);
 
