@@ -78,6 +78,38 @@ namespace Ivy.Amazon.S3.Test.Services
                      y.Verb == HttpVerb.GET)), Times.Once);
         }
 
+        [Fact]
+        public void GetCloudFrontSignedFileDownloadUrl_Passes_Params_As_Expected_With_File_Override()
+        {
+            const string expectedReturn = "TEST";
+
+            const string bucketName = "TESTBucket";
+            const string key = "TESTKey";
+            const string nameOverride = "TESTOverride.txt";
+
+            string expectedContentDisposition = $"attachment: filename={nameOverride}";
+
+            var expectedNow = now.AddMinutes(1);
+
+            _mockS3.Setup(x => x.GetPreSignedURL(It.Is<GetPreSignedUrlRequest>(
+                y => y.BucketName == bucketName &&
+                     y.Key == key &&
+                     y.Expires == expectedNow &&
+                     y.Verb == HttpVerb.GET &&
+                     y.ResponseHeaderOverrides.ContentDisposition == expectedContentDisposition))).Returns(expectedReturn);
+
+            var result = _sut.GetS3SignedFileDownloadUrl(bucketName, key, nameOverride);
+
+            Assert.Equal(expectedReturn, result);
+
+            _mockS3.Verify(x => x.GetPreSignedURL(It.Is<GetPreSignedUrlRequest>(
+                y => y.BucketName == bucketName &&
+                     y.Key == key &&
+                     y.Expires == expectedNow &&
+                     y.Verb == HttpVerb.GET &&
+                     y.ResponseHeaderOverrides.ContentDisposition == expectedContentDisposition)), Times.Once);
+        }
+
         #endregion
 
         #region GetCloudFrontSignedFileUploadUrl

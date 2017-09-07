@@ -37,9 +37,9 @@ namespace Ivy.Amazon.S3.Services
 
         #region Public Methods
 
-        public string GetS3SignedFileDownloadUrl(string bucketName, string objectKey)
+        public string GetS3SignedFileDownloadUrl(string bucketName, string objectKey, string downloadFileNameOverride = null)
         {
-            return PrivateGetFileUrlAsync(bucketName, objectKey, HttpVerb.GET);
+            return PrivateGetFileUrlAsync(bucketName, objectKey, HttpVerb.GET, downloadFileNameOverride);
         }
 
         public string GetS3SignedFileUploadUrl(string bucketName, string objectKey)
@@ -51,7 +51,7 @@ namespace Ivy.Amazon.S3.Services
 
         #region Helper Methods
 
-        private string PrivateGetFileUrlAsync(string bucketName, string fileKey, HttpVerb verb)
+        private string PrivateGetFileUrlAsync(string bucketName, string fileKey, HttpVerb verb, string fileNameContentDisposition = null)
         {
             GetPreSignedUrlRequest request = new GetPreSignedUrlRequest
             {
@@ -65,6 +65,11 @@ namespace Ivy.Amazon.S3.Services
                 // If they really run past 1 minutes, we have much greater issues.
                 Expires = _clock.Now.AddMinutes(1)
             };
+
+            if (fileNameContentDisposition != null)
+            {
+                request.ResponseHeaderOverrides.ContentDisposition = $"attachment: filename={fileNameContentDisposition}";
+            }
 
             return _s3ClientService.GetPreSignedURL(request);
         }
