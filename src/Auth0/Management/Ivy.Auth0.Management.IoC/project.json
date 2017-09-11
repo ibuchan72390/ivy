@@ -1,9 +1,9 @@
 {
-  "version": "1.0.1.6",
+  "version": "1.0.1.7",
 
   "dependencies": {
-    "Ivy.Auth0.Management": "1.0.1.9",
-    "Ivy.Auth0.Management.Core": "1.0.1.005",
+    "Ivy.Auth0.Management": "1.0.1.901",
+    "Ivy.Auth0.Management.Core": "1.0.1.006",
     "Ivy.IoC.Core": "1.0.0.0",
     "NETStandard.Library": "1.6.0"
   },

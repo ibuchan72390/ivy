@@ -1,8 +1,8 @@
 {
-  "version": "1.0.1.006",
+  "version": "1.0.1.007",
 
   "dependencies": {
-    "Ivy.Auth0.Core": "1.0.1.006",
+    "Ivy.Auth0.Core": "1.0.1.007",
     "Ivy.Auth0.Web.Core": "1.0.1.000",
     "Microsoft.Extensions.Logging.Abstractions": "1.0.2",
     "Microsoft.IdentityModel.Protocols": "2.0.0",
