@@ -6,8 +6,8 @@ namespace Ivy.Data.Common.Pagination
     {
         public PaginationRequest()
         {
-            PageCount = 1;
-            PageNumber = 10;
+            PageCount = 10;
+            PageNumber = 1;
         }
 
         public int PageCount { get; set; }
