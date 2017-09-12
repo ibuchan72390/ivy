@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0.95",
+  "version": "1.0.0.96",
 
   "dependencies": {
     "Dapper": "1.50.2",
