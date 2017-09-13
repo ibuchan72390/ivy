@@ -26,7 +26,7 @@ namespace Ivy.Data.Common.Base.Blob
 
         #region Public Methods
 
-        public string ConnectionString { get; private set; }
+        public virtual string ConnectionString { get; private set; }
 
         public virtual void InitializeByConnectionString(string connectionString)
         {

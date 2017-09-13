@@ -45,7 +45,7 @@ namespace Ivy.Data.Common.Base.Entity
             Repo.DeleteById(id, tc);
         }
 
-        public void DeleteByIdList(IEnumerable<int> ids, ITranConn tc = null)
+        public virtual void DeleteByIdList(IEnumerable<int> ids, ITranConn tc = null)
         {
             Repo.DeleteByIdList(ids, tc);
         }

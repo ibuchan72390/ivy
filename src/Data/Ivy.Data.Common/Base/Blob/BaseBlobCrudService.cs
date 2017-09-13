@@ -39,7 +39,7 @@ namespace Ivy.Data.Common.Base.Blob
             return Repo.GetAll(tc);
         }
 
-        public IPaginationResponse<TEntity> GetAll(IPaginationRequest request, ITranConn tc = null)
+        public virtual IPaginationResponse<TEntity> GetAll(IPaginationRequest request, ITranConn tc = null)
         {
             return Repo.GetAll(request, tc);
         }
