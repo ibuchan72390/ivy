@@ -1,9 +1,9 @@
 {
-  "version": "1.0.1.98",
+  "version": "1.0.1.991",
 
   "dependencies": {
-    "Ivy.Auth0.Management.Core": "1.0.1.008",
-    "Ivy.TestHelper": "1.0.1.105",
+    "Ivy.Auth0.Management.Core": "1.0.1.9",
+    "Ivy.TestHelper": "1.0.1.106",
     "Microsoft.AspNetCore.WebUtilities": "1.0.2",
     "Moq": "4.7.10",
     "NETStandard.Library": "1.6.0",
@@ -11,7 +11,7 @@
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
     "Microsoft.Extensions.Logging": "1.0.2",
     "Ivy.Web.IoC": "1.0.0.4",
-    "Ivy.Auth0.Management.IoC": "1.0.1.9"
+    "Ivy.Auth0.Management.IoC": "1.0.1.901"
   },
 
   "testRunner": "xunit",

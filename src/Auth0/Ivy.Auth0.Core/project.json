@@ -1,9 +1,9 @@
 {
-  "version": "1.0.1.009",
+  "version": "1.0.1.901",
 
   "dependencies": {
     "Ivy.Data.Core": "1.0.0.8",
-    "Ivy.Transformer.Core": "1.0.0.95",
+    "Ivy.Transformer.Core": "1.0.0.96",
     "Ivy.Web.Core": "1.0.0.3",
     "Microsoft.AspNetCore.Http.Abstractions": "1.0.2",
     "NETStandard.Library": "1.6.0",
