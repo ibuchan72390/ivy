@@ -1,9 +1,9 @@
 {
-  "version": "1.0.1.106",
+  "version": "1.0.1.107",
 
   "dependencies": {
-    "Ivy.Amazon.S3.IoC": "1.0.1.102",
-    "Ivy.TestHelper": "1.0.1.106",
+    "Ivy.Amazon.S3.IoC": "1.0.1.103",
+    "Ivy.TestHelper": "1.0.1.107",
     "Moq": "4.7.10",
     "NETStandard.Library": "1.6.0",
     "Microsoft.Extensions.Logging": "1.0.2",

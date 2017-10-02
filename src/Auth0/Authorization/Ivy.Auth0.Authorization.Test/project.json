@@ -1,8 +1,8 @@
 {
-  "version": "1.0.1.097",
+  "version": "1.0.1.098",
 
   "dependencies": {
-    "Ivy.TestHelper": "1.0.1.106",
+    "Ivy.TestHelper": "1.0.1.107",
     "NETStandard.Library": "1.6.0",
     "xunit": "2.2.0",
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
