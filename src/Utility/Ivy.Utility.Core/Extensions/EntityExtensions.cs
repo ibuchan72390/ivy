@@ -34,6 +34,18 @@ namespace Ivy.Utility.Core.Extensions
 
         #region Extension Methods
 
+        public static TCast ToEntityWithTypedId<TCast, TId>(this TId entityId)
+            where TCast: IEntityWithTypedId<TId>, new()
+        {
+            return new TCast { Id = entityId };
+        }
+
+        public static TCast ToEntity<TCast>(this int entityId)
+            where TCast : IEntity, new()
+        {
+            return new TCast { Id = entityId };
+        }
+
         // Add the extra flexibility to allow the caller to cast the object appropriately
         // Need this for dynamic mapping of children
         public static TCast GetCastRef<TSource, TProperty, TCast>(this TSource refEntity, Expression<Func<TSource, TProperty>> processFn)

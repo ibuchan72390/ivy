@@ -14,6 +14,34 @@ namespace Ivy.Utility.Test.Extensions
     {
         #region Tests
 
+        #region ToEntity
+
+        [Fact]
+        public void ToEntity_Works_With_Int_Entities()
+        {
+            var id = 123;
+
+            var result = id.ToEntity<ParentEntity>();
+
+            Assert.Equal(id, result.Id);
+        }
+
+        #endregion
+
+        #region ToEntityWithTypedId
+
+        [Fact]
+        public void ToEntityWithTypedId_Works_With_String_Entities()
+        {
+            var id = "TEST";
+
+            var result = id.ToEntityWithTypedId<StringEntity, string>();
+
+            Assert.Equal(id, result.Id);
+        }
+
+        #endregion
+
         #region SafeGetIntRef
 
         [Fact]
