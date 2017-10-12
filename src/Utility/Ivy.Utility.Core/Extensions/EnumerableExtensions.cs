@@ -26,7 +26,7 @@ namespace Ivy.Utility.Core.Extensions
 
         public static bool IsNullOrEmpty<T>(this IEnumerable<T> items)
         {
-            return items != null || !items.Any();
+            return items == null || !items.Any();
         }
     }
 }

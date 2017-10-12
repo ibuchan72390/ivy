@@ -7,6 +7,17 @@ namespace Ivy.Utility.Test.Extensions
 {
     public class EnumerableExtensionsTests
     {
+        #region Variables & Constants
+
+        private class EachTestEntity
+        {
+            public int Integer { get; set; }
+        }
+
+        #endregion
+
+        #region Tests
+
         [Fact]
         public void Each_Appropriately_Affects_Every_Item_In_Collection()
         {
@@ -21,9 +32,27 @@ namespace Ivy.Utility.Test.Extensions
             Assert.Equal(toMake, testCol.Count);
         }
 
-        private class EachTestEntity
+        [Fact]
+        public void IsNullOrEmpty_Returns_True_If_Null()
         {
-            public int Integer { get; set; }
+            IList<int> list = null;
+            Assert.True(list.IsNullOrEmpty());
         }
+
+        [Fact]
+        public void IsNullorEmpty_Returns_True_If_Empty()
+        {
+            IList<int> list = new List<int>();
+            Assert.True(list.IsNullOrEmpty());
+        }
+
+        [Fact]
+        public void IsNullOrEmpty_Returns_False_If_Has_Data()
+        {
+            IList<int> list = new List<int> { 0 };
+            Assert.False(list.IsNullOrEmpty());
+        }
+
+        #endregion
     }
 }
