@@ -1,10 +1,10 @@
 {
-  "version": "1.0.0.96",
+  "version": "1.0.0.961",
 
   "dependencies": {
     "Ivy.IoC.Core": "1.0.0.0",
-    "Ivy.Transformer": "1.0.0.99",
-    "Ivy.Transformer.Core": "1.0.0.96",
+    "Ivy.Transformer": "1.0.0.991",
+    "Ivy.Transformer.Core": "1.0.0.961",
     "NETStandard.Library": "1.6.0"
   },
 
