@@ -315,7 +315,7 @@ namespace Ivy.Data.Common
 
             var idList = entities.Select(x => x.Id);
 
-            DeleteByIdList(idList);
+            DeleteByIdList(idList, tc);
         }
 
         public void DeleteByIdList(IEnumerable<TKey> ids, ITranConn tc = null)
