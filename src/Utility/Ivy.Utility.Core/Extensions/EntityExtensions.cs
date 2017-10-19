@@ -152,6 +152,37 @@ namespace Ivy.Utility.Core.Extensions
             }
         }
 
+        public static void MapEntityParents<TSource, TParent>(this IEnumerable<TSource> sourceEntities, IEnumerable<TParent> parents,
+            Expression<Func<TSource, TParent>> getIdFn, Action<TSource, TParent> assignParentFn)
+            where TSource : IEntity
+            where TParent : IEntity
+        {
+            MapEntityWithTypedIdParents<TSource, int, TParent, int>(sourceEntities, parents, getIdFn, assignParentFn);
+        }
+
+
+        public static void MapEntityWithTypedIdParents<TSource, TSourceKey, TParent, TParentKey>(this IEnumerable<TSource> sourceEntities, IEnumerable<TParent> parents,
+            Expression<Func<TSource, TParent>> getIdFn, Action<TSource, TParent> assignParentFn)
+            where TSource : IEntityWithTypedId<TSourceKey>
+            where TParent : IEntityWithTypedId<TParentKey>
+        {
+            var groupedChildren = sourceEntities.
+                GroupBy(x => x.GetCastRef<TSource, TParent, TParentKey>(getIdFn)).
+                ToDictionary(x => x.Key);
+
+            foreach (var group in groupedChildren)
+            {
+                var childs = group.Value;
+
+                foreach (var child in childs)
+                {
+                    var parent = parents.First(x => x.Id.Equals(group.Key));
+
+                    assignParentFn(child, parent);
+                }
+            }
+        }
+
         #endregion
 
         #region Helper Methods

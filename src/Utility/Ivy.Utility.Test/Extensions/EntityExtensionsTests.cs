@@ -329,6 +329,144 @@ namespace Ivy.Utility.Test.Extensions
 
         #endregion
 
+        #region MapEntityParents
+
+        [Fact]
+        public void MapEntityParents_Assigns_Entities_As_Expected()
+        {
+            // Need to demonstrate that we can bring in an IEnumerable source and children
+            // Children will have references pointing to source objects
+            // Source objects should get child mappings
+            // Dictionary is probably your best bet
+
+            const int entityCount = 4;
+            const int perCount = 2;
+
+            var entities = Enumerable.Range(0, entityCount).
+                Select(x => new CoreEntity { Id = x }.GenerateForTest()).
+                ToList();
+
+            Dictionary<CoreEntity, IEnumerable<ChildEntity>> dict =
+                new Dictionary<CoreEntity, IEnumerable<ChildEntity>>();
+
+            foreach (var entity in entities)
+            {
+                var childs = Enumerable.Range(0, perCount).
+                    Select(x => new ChildEntity { References = new Dictionary<string, object> { { "CoreEntityId", entity.Id } } });
+
+                dict.Add(entity, childs);
+            }
+
+            var children = dict.Values.SelectMany(x => x).ToList();
+
+            children.MapEntityParents<ChildEntity, CoreEntity>(entities,
+                y => y.CoreEntity,
+                (child, core) => child.CoreEntity = core);
+
+
+            foreach (var entity in children)
+            {
+                Assert.NotNull(entity.CoreEntity);
+
+                var refId = entity.SafeGetIntRef<ChildEntity, CoreEntity>(y => y.CoreEntity);
+
+                Assert.Equal(refId, entity.CoreEntity.Id);
+            }
+        }
+
+        #endregion
+
+        #region MapEntityWithTypedIdParents
+
+        [Fact]
+        public void MapEntityWithTypedIdParents_Assigns_Entities_As_Expected_With_Int_Id()
+        {
+            // Need to demonstrate that we can bring in an IEnumerable source and children
+            // Children will have references pointing to source objects
+            // Source objects should get child mappings
+            // Dictionary is probably your best bet
+
+            const int entityCount = 4;
+            const int perCount = 2;
+
+            var entities = Enumerable.Range(0, entityCount).
+                Select(x => new CoreEntity { Id = x }.GenerateForTest()).
+                ToList();
+
+            Dictionary<CoreEntity, IEnumerable<ChildEntity>> dict =
+                new Dictionary<CoreEntity, IEnumerable<ChildEntity>>();
+
+            foreach (var entity in entities)
+            {
+                var childs = Enumerable.Range(0, perCount).
+                    Select(x => new ChildEntity { References = new Dictionary<string, object> { { "CoreEntityId", entity.Id } } });
+
+                dict.Add(entity, childs);
+            }
+
+            var children = dict.Values.SelectMany(x => x).ToList();
+
+            children.MapEntityWithTypedIdParents<ChildEntity, int, CoreEntity, int>(entities,
+                y => y.CoreEntity,
+                (child, core) => child.CoreEntity = core);
+
+
+            foreach (var entity in children)
+            {
+                Assert.NotNull(entity.CoreEntity);
+
+                var refId = entity.SafeGetIntRef<ChildEntity, CoreEntity>(y => y.CoreEntity);
+
+                Assert.Equal(refId, entity.CoreEntity.Id);
+            }
+        }
+
+
+        [Fact]
+        public void MapEntityWithTypedIdParents_Assigns_Entities_As_Expected_With_String_Id()
+        {
+            // Need to demonstrate that we can bring in an IEnumerable source and children
+            // Children will have references pointing to source objects
+            // Source objects should get child mappings
+            // Dictionary is probably your best bet
+
+            const int entityCount = 4;
+            const int perCount = 2;
+
+            var entities = Enumerable.Range(0, entityCount).
+                Select(x => new CoreEntity { Id = x }.GenerateForTest()).
+                ToList();
+
+            Dictionary<CoreEntity, IEnumerable<FlippedStringEntity>> dict =
+                new Dictionary<CoreEntity, IEnumerable<FlippedStringEntity>>();
+
+            foreach (var entity in entities)
+            {
+                var childs = Enumerable.Range(0, perCount).
+                    Select(x => new FlippedStringEntity { References = new Dictionary<string, object> { { "CoreEntityId", entity.Id } } });
+
+                dict.Add(entity, childs);
+            }
+
+            var children = dict.Values.SelectMany(x => x).ToList();
+
+            children.MapEntityWithTypedIdParents<FlippedStringEntity, string, CoreEntity, int>(entities,
+                y => y.CoreEntity,
+                (child, core) => child.CoreEntity = core);
+
+
+            foreach (var entity in children)
+            {
+                Assert.NotNull(entity.CoreEntity);
+
+                var refId = entity.SafeGetIntRef<FlippedStringEntity, CoreEntity>(y => y.CoreEntity);
+
+                Assert.Equal(refId, entity.CoreEntity.Id);
+            }
+        }
+
+        #endregion
+
         #endregion
     }
 }
