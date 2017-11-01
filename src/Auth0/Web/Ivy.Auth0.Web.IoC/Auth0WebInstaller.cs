@@ -8,9 +8,6 @@ namespace Ivy.Auth0.Web.IoC
     {
         public void Install(IContainerGenerator containerGenerator)
         {
-            containerGenerator.RegisterSingleton<IAuth0ContextProcessor, Auth0ContextProcessor>();
-            containerGenerator.RegisterSingleton<IAuthTokenExtractor, AuthTokenExtractor>();
-            containerGenerator.RegisterSingleton<IJwtProcessor, JwtProcessor>();
             containerGenerator.RegisterSingleton<IUserProvider, UserProvider>();
         }
     }
