@@ -1,9 +1,9 @@
 {
-  "version": "1.0.1.810",
+  "version": "1.0.1.811",
 
   "dependencies": {
-    "Ivy.Auth0.Web.Core": "1.0.1.000",
-    "Ivy.Auth0.Web.IoC": "1.0.1.6",
+    "Ivy.Auth0.Web.Core": "1.0.1.100",
+    "Ivy.Auth0.Web.IoC": "1.0.1.601",
     "Ivy.TestHelper": "1.0.1.110",
     "Microsoft.AspNetCore.Http": "1.0.2",
     "Moq": "4.7.10",
