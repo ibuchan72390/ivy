@@ -1,13 +1,13 @@
 {
-  "version": "1.0.1.992",
+  "version": "1.0.1.993",
 
   "dependencies": {
-    "Ivy.TestHelper": "1.0.1.110",
+    "Ivy.TestHelper": "1.0.1.111",
     "NETStandard.Library": "1.6.0",
     "xunit": "2.2.0",
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
-    "Ivy.Auth0.Authorization.IoC": "1.0.1.7",
-    "Ivy.Auth0.Authorization.Core": "1.0.1.902",
+    "Ivy.Auth0.Authorization.IoC": "1.0.1.701",
+    "Ivy.Auth0.Authorization.Core": "1.0.1.903",
     "Moq": "4.7.10",
     "Microsoft.Extensions.Logging": "1.0.2",
     "Ivy.Web.IoC": "1.0.0.4"

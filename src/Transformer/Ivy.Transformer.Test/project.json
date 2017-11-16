@@ -1,15 +1,15 @@
 {
-  "version": "1.0.1.110",
+  "version": "1.0.1.111",
 
   "dependencies": {
-    "Ivy.IoC": "1.0.0.961",
-    "Ivy.TestHelper": "1.0.1.110",
-    "Ivy.Transformer": "1.0.0.991",
-    "Ivy.Transformer.Core": "1.0.0.961",
+    "Ivy.IoC": "1.0.0.962",
+    "Ivy.TestHelper": "1.0.1.111",
+    "Ivy.Transformer": "1.0.0.992",
+    "Ivy.Transformer.Core": "1.0.0.962",
     "NETStandard.Library": "1.6.0",
     "xunit": "2.2.0",
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
-    "Ivy.Transformer.IoC": "1.0.0.961"
+    "Ivy.Transformer.IoC": "1.0.0.962"
   },
 
   "testRunner": "xunit",
