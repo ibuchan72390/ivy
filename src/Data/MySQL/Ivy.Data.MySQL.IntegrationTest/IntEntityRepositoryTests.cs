@@ -122,7 +122,6 @@ namespace Ivy.Data.MySQL.IntegrationTest
         public void GetByIdList_Returns_Empty_On_Null_List()
         {
             Assert.Empty(_sut.GetByIdList(null));
-
         }
 
         #endregion
