@@ -243,3 +243,4 @@ ModelManifest.xml
 
 AppCache
 *.jfm
+NuGet/Publish All Packages.cmd
