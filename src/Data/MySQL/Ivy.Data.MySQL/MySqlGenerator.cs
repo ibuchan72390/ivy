@@ -41,17 +41,21 @@ namespace Ivy.Data.MySQL
 
         public string GenerateDeleteQuery(string sqlWhere = null)
         {
-            if (sqlWhere == null)
-            {
-                // Crazy issue with self-referencing tables, it seems that the standard Delete All does not work...
-                // Delete all on self-referencing tables causes an FK error because it goes bottom up by Id
-                return $"SET FOREIGN_KEY_CHECKS = 0; DELETE FROM {GetTableName()}; SET FOREIGN_KEY_CHECKS = 1;";
-            }
-            else
-            {
-                var sql = AppendIfDefined($"DELETE FROM {GetTableName()}", sqlWhere);
-                return $"{sql};";
-            }
+            // This was a naive mistake....
+            // MySQL has a very hard time with recursive properties, particularly in queries
+            // As MUCH as I fucking hate using OnDeleteCascade triggers, they're seemingly necessary for these deletions
+            // If we use this instead of an OnDeleteCascade trigger, we're still going to run into issues with Delete and DeleteById
+            // All in all, we pretty much have to use the OnDeleteCascade trigger until we're updated to the 8.0 engine
+            // https://www.mysql.com/why-mysql/presentations/mysql-80-common-table-expressions/ - 8.0 specifics for recursive delete
+            //if (sqlWhere == null)
+            //{
+            //    // Crazy issue with self-referencing tables, it seems that the standard Delete All does not work...
+            //    // Delete all on self-referencing tables causes an FK error because it goes bottom up by Id
+            //    return $"SET FOREIGN_KEY_CHECKS = 0; DELETE FROM {GetTableName()}; SET FOREIGN_KEY_CHECKS = 1;";
+            //}
+
+            var sql = AppendIfDefined($"DELETE FROM {GetTableName()}", sqlWhere);
+            return $"{sql};";
         }
 
         public string GenerateGetQuery(string selectPrefix = null, string sqlWhere = null, string sqlJoin = null, 
