@@ -3,7 +3,7 @@
 
   "dependencies": {
     "Ivy.Auth0.Management.Core": "1.0.1.902",
-    "Ivy.TestHelper": "1.0.1.114",
+    "Ivy.TestHelper": "1.0.1.115",
     "Microsoft.AspNetCore.WebUtilities": "1.0.2",
     "Moq": "4.7.1",
     "NETStandard.Library": "1.6.0",

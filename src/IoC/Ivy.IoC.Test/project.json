@@ -6,7 +6,7 @@
     "NETStandard.Library": "1.6.0",
     "xunit": "2.2.0",
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
-    "Ivy.TestHelper": "1.0.1.114",
+    "Ivy.TestHelper": "1.0.1.115",
     "Moq": "4.7.1",
     "Ivy.Data.MySQL": "1.0.0.963"
   },

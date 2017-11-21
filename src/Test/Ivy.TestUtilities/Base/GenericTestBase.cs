@@ -5,13 +5,14 @@ using System;
 
 namespace Ivy.TestUtilities.Base
 {
-    public abstract class GenericTestBase<TTestEntity> : IDisposable
+    public abstract class GenericTestBase<TService> : IDisposable
+        where TService : class
     {
         #region Variables & Constants
 
         // Container for reference to remove bind to static ServiceLocator
         protected readonly IContainer Container;
-        protected readonly TTestEntity Sut;
+        protected readonly TService Sut;
 
         protected abstract void InitializeContainerFn(IContainerGenerator containerGen);
         protected abstract void PostSetupFn();
@@ -33,6 +34,8 @@ namespace Ivy.TestUtilities.Base
             // Setup our Service Locator
             var svcLocator = Container.Resolve<IServiceLocator>();
             svcLocator.Init(Container);
+
+            Sut = Container.Resolve<TService>();
 
             // Complete any remaining setups
             // Some of these may depend on a functional ServiceLocator
