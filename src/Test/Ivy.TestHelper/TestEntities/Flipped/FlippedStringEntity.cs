@@ -1,6 +1,6 @@
 ﻿using Ivy.Data.Common.Attributes;
 using Ivy.TestHelper.TestEntities.Base;
-using Ivy.TestUtilities;
+using Ivy.TestUtilities.Utilities;
 
 namespace Ivy.TestHelper.TestEntities.Flipped
 {

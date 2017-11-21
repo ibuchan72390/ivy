@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0.905",
+  "version": "1.0.0.906",
 
   "dependencies": {
     "Ivy.IoC": "1.0.0.962",
@@ -7,14 +7,14 @@
     "Ivy.PayPal": "1.0.0.0",
     "Ivy.PayPal.Core": "1.0.0.0",
     "Ivy.PayPal.IoC": "1.0.0.0",
-    "Ivy.TestHelper": "1.0.1.111",
+    "Ivy.TestHelper": "1.0.1.112",
     "Microsoft.AspNetCore.Http": "1.0.2",
     "Microsoft.Extensions.Logging": "1.0.2",
     "Microsoft.Extensions.Primitives": "1.0.1",
     "NETStandard.Library": "1.6.0",
     "xunit": "2.2.0",
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
-    "Moq": "4.7.25"
+    "Moq": "4.7.1"
   },
   
   "testRunner": "xunit",

@@ -1,4 +1,4 @@
-﻿namespace Ivy.TestUtilities
+﻿namespace Ivy.TestUtilities.Utilities
 {
     /*
      * Simply returns a new int, string, double, or decimal

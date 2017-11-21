@@ -1,11 +1,11 @@
 {
-  "version": "1.0.1.996",
+  "version": "1.0.1.997",
 
   "dependencies": {
     "Ivy.Auth0.Management.Core": "1.0.1.902",
-    "Ivy.TestHelper": "1.0.1.111",
+    "Ivy.TestHelper": "1.0.1.112",
     "Microsoft.AspNetCore.WebUtilities": "1.0.2",
-    "Moq": "4.7.10",
+    "Moq": "4.7.1",
     "NETStandard.Library": "1.6.0",
     "xunit": "2.2.0",
     "dotnet-test-xunit": "2.2.0-preview2-build1029",

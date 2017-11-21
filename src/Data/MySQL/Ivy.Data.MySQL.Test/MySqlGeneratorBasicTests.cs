@@ -269,7 +269,7 @@ namespace Ivy.Data.MySQL.Test
 
             var result = _sut.GenerateDeleteQuery();
 
-            string expected = $"SET FOREIGN_KEY_CHECKS = 0; DELETE FROM childentity; SET FOREIGN_KEY_CHECKS = 1;";
+            string expected = $"DELETE FROM childentity;";
 
             Assert.Equal(expected, result);
         }

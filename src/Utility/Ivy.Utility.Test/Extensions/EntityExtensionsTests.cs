@@ -2,6 +2,7 @@
 using Ivy.TestHelper.TestEntities;
 using Ivy.TestHelper.TestEntities.Flipped;
 using Ivy.TestUtilities;
+using Ivy.TestUtilities.Utilities;
 using Ivy.Utility.Core.Extensions;
 using System;
 using System.Collections.Generic;

@@ -18,6 +18,7 @@ using Ivy.MySQL.IoC;
 using Ivy.TestUtilities;
 using Ivy.Data.Core.Interfaces.Pagination;
 using Ivy.Data.Common.Pagination;
+using Ivy.TestUtilities.Utilities;
 
 namespace Ivy.Data.MySQL.IntegrationTest
 {

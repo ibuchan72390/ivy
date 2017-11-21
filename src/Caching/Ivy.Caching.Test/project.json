@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0.906",
+  "version": "1.0.0.907",
 
   "dependencies": {
     "Ivy.Caching": "1.0.1.1",
@@ -7,7 +7,7 @@
     "xunit": "2.2.0",
     "Ivy.Caching.Core": "1.0.1.0",
     "Ivy.Caching.IoC": "1.0.1.1",
-    "Ivy.TestHelper": "1.0.1.111",
+    "Ivy.TestHelper": "1.0.1.112",
     "dotnet-test-xunit": "2.2.0-preview2-build1029"
   },
 

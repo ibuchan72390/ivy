@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
-namespace Ivy.TestUtilities
+namespace Ivy.TestUtilities.Utilities
 {
     public static class AssertExtensions
     {
