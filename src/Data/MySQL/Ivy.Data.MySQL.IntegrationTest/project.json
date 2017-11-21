@@ -1,5 +1,5 @@
 {
-  "version": "1.0.1.115",
+  "version": "1.0.1.116",
 
   "dependencies": {
     "NETStandard.Library": "1.6.0",
@@ -9,8 +9,8 @@
     "System.Linq": "4.1.0",
     "Ivy.Utility.Core": "1.0.1.105",
     "Ivy.IoC.Core": "1.0.0.0",
-    "Ivy.TestHelper": "1.0.1.115",
-    "Ivy.TestUtilities": "1.0.0.910",
+    "Ivy.TestHelper": "1.0.1.116",
+    "Ivy.TestUtilities": "1.0.0.911",
     "Ivy.Utility.IoC": "1.0.1.105",
     "Ivy.Data.Common.IoC": "1.0.0.962",
     "Ivy.IoC.IoC": "1.0.0.906",

@@ -15,7 +15,6 @@ namespace Ivy.TestUtilities.Base
         protected readonly TService Sut;
 
         protected abstract void InitializeContainerFn(IContainerGenerator containerGen);
-        protected abstract void PostSetupFn();
         protected abstract void TearDownFn();
 
         #endregion
@@ -37,9 +36,9 @@ namespace Ivy.TestUtilities.Base
 
             Sut = Container.Resolve<TService>();
 
-            // Complete any remaining setups
-            // Some of these may depend on a functional ServiceLocator
-            PostSetupFn();
+            // At this point, we can put any remaining setup in the inherited constructor
+            // Constructor order of operations goes from base classes up
+            // This constructor will hit first, then constructors of inherited classes will hit second.
         }
 
         public void Dispose()
