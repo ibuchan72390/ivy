@@ -1,5 +1,5 @@
 {
-  "version": "1.0.1.111",
+  "version": "1.0.1.112",
 
   "dependencies": {
     "NETStandard.Library": "1.6.0",
@@ -10,7 +10,7 @@
     "Ivy.Web.IoC": "1.0.0.4",
     "Ivy.IoC": "1.0.0.962",
     "Ivy.IoC.Core": "1.0.0.0",
-    "Ivy.TestHelper": "1.0.1.112",
+    "Ivy.TestHelper": "1.0.1.113",
     "Moq": "4.7.1"
   },
 
