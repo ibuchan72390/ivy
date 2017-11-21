@@ -14,6 +14,8 @@ namespace Ivy.TestUtilities.Base
         protected readonly IContainer Container;
         protected readonly TService Sut;
 
+        // Placeholders for custom test setup and teardown
+        // Override the InitailizeContainerFn and invoke base.InitializeContainer(containerGen) to setup Mock tests
         protected abstract void InitializeContainerFn(IContainerGenerator containerGen);
         protected abstract void TearDownFn();
 
@@ -54,15 +56,8 @@ namespace Ivy.TestUtilities.Base
             where T : class
         {
             var mock = new Mock<T>();
-            containerGen.RegisterInstance<T>(mock);
+            containerGen.RegisterInstance<T>(mock.Object);
             return mock;
-        }
-
-        protected IContainerGenerator GetMockingContainerGenerator()
-        {
-            var containerGen = Container.Resolve<IContainerGenerator>();
-            InitializeContainerFn(containerGen);
-            return containerGen;
         }
 
         #endregion
