@@ -4,7 +4,7 @@
   "dependencies": {
     "Ivy.Auth0.Web.Core": "1.0.1.100",
     "Ivy.Auth0.Web.IoC": "1.0.1.602",
-    "Ivy.TestHelper": "1.0.1.113",
+    "Ivy.TestHelper": "1.0.1.114",
     "Microsoft.AspNetCore.Http": "1.0.2",
     "Moq": "4.7.1",
     "NETStandard.Library": "1.6.0",

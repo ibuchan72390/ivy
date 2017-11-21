@@ -48,7 +48,7 @@ namespace Ivy.TestUtilities.Base
 
         #region Helper Methods
 
-        protected IMock<T> InitializeMoq<T>(IContainerGenerator containerGen)
+        protected Mock<T> InitializeMoq<T>(IContainerGenerator containerGen)
             where T : class
         {
             var mock = new Mock<T>();
