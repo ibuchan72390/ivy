@@ -1,5 +1,5 @@
 {
-  "version": "1.0.1.122",
+  "version": "1.0.1.123",
 
   "dependencies": {
     "Ivy.Data.Common.IoC": "1.0.0.962",
@@ -7,8 +7,8 @@
     "Ivy.Data.MySQL.IoC": "1.0.0.963",
     "Ivy.IoC": "1.0.0.962",
     "Ivy.IoC.Core": "1.0.0.0",
-    "Ivy.TestHelper": "1.0.1.122",
-    "Ivy.TestUtilities": "1.0.0.917",
+    "Ivy.TestHelper": "1.0.1.123",
+    "Ivy.TestUtilities": "1.0.0.918",
     "Ivy.Utility.Core": "1.0.1.105",
     "NETStandard.Library": "1.6.0",
     "xunit": "2.2.0",
