@@ -33,9 +33,13 @@ namespace Ivy.TestUtilities.Base
             // Initialize our container
             InitializeContainerFn(_containerGen);
 
+            // Setup our local container for the time being
+            var tempContainer = _containerGen.GenerateContainer();
+
             // Setup our Service Locator for test facilities
-            var svcLocator = Container.Resolve<IServiceLocator>();
-            svcLocator.Init(Container);
+            // This should set up our SvcLocator with the correct items for test without Mocks
+            var svcLocator = tempContainer.Resolve<IServiceLocator>();
+            svcLocator.Init(tempContainer);
         }
 
         public void Dispose()
