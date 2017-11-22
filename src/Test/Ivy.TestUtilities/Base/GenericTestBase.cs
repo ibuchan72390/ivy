@@ -11,7 +11,7 @@ namespace Ivy.TestUtilities.Base
         #region Variables & Constants
 
         // Container for reference to remove bind to static ServiceLocator
-        protected readonly IContainer Container;
+        protected IContainer Container;
         protected TService Sut;
 
         // Placeholders for custom test setup and teardown
@@ -30,17 +30,11 @@ namespace Ivy.TestUtilities.Base
 
             // Initialize our container
             InitializeContainerFn(containerGen);
-            Container = containerGen.GenerateContainer();
+            InitTestContainer(containerGen);
 
-            // Setup our Service Locator
+            // Setup our Service Locator for test facilities
             var svcLocator = Container.Resolve<IServiceLocator>();
             svcLocator.Init(Container);
-
-            Sut = Container.Resolve<TService>();
-
-            // At this point, we can put any remaining setup in the inherited constructor
-            // Constructor order of operations goes from base classes up
-            // This constructor will hit first, then constructors of inherited classes will hit second.
         }
 
         public void Dispose()
@@ -51,6 +45,12 @@ namespace Ivy.TestUtilities.Base
         #endregion
 
         #region Helper Methods
+
+        protected virtual void InitTestContainer(IContainerGenerator containerGen)
+        {
+            Container = containerGen.GenerateContainer();
+            Sut = Container.Resolve<TService>();
+        }
 
         protected Mock<T> InitializeMoq<T>(IContainerGenerator containerGen)
             where T : class
