@@ -10,7 +10,7 @@
     "Ivy.Web.IoC": "1.0.0.4",
     "Ivy.IoC": "1.0.0.962",
     "Ivy.IoC.Core": "1.0.0.0",
-    "Ivy.TestHelper": "1.0.1.119",
+    "Ivy.TestHelper": "1.0.1.120",
     "Moq": "4.7.1"
   },
 
