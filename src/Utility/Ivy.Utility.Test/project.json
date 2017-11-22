@@ -5,7 +5,7 @@
     "Ivy.IoC": "1.0.0.962",
     "NETStandard.Library": "1.6.0",
     "xunit": "2.2.0",
-    "Ivy.TestHelper": "1.0.1.121",
+    "Ivy.TestHelper": "1.0.1.122",
     "Ivy.Utility.Core": "1.0.1.105",
     "Ivy.Utility": "1.0.1.105",
     "dotnet-test-xunit": "2.2.0-preview2-build1029",

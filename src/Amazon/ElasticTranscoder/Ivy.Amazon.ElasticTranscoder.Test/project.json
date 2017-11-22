@@ -7,7 +7,7 @@
     "Ivy.Amazon.ElasticTranscoder.Core": "1.0.0.1",
     "Ivy.Amazon.ElasticTranscoder.IoC": "1.0.1.104",
     "Ivy.IoC": "1.0.0.962",
-    "Ivy.TestHelper": "1.0.1.121",
+    "Ivy.TestHelper": "1.0.1.122",
     "Moq": "4.7.1",
     "NETStandard.Library": "1.6.0",
     "xunit": "2.2.0",
