@@ -65,7 +65,7 @@ namespace Ivy.TestUtilities.Base
 
         #region Helper Methods
 
-        protected virtual void InitMockingContainer(Func<IContainerGenerator, IContainerGenerator> mockSetupFn)
+        protected virtual void InitMockingContainer(Action<IContainerGenerator> mockSetupFn)
         {
             var containerGen = new ContainerGenerator();
             InitializeContainerFn(containerGen);
