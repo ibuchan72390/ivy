@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0.908",
+  "version": "1.0.0.909",
 
   "dependencies": {
     "Ivy.IoC": "1.0.0.962",
@@ -7,7 +7,7 @@
     "Ivy.PayPal": "1.0.0.0",
     "Ivy.PayPal.Core": "1.0.0.0",
     "Ivy.PayPal.IoC": "1.0.0.0",
-    "Ivy.TestHelper": "1.0.1.117",
+    "Ivy.TestHelper": "1.0.1.118",
     "Microsoft.AspNetCore.Http": "1.0.2",
     "Microsoft.Extensions.Logging": "1.0.2",
     "Microsoft.Extensions.Primitives": "1.0.1",
