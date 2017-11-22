@@ -10,6 +10,8 @@ namespace Ivy.TestUtilities.Base
     {
         #region Variables & Constants
 
+        private IContainerGenerator _containerGen;
+
         // Container for reference to remove bind to static ServiceLocator
         protected IContainer Container;
         protected TService Sut;
@@ -26,11 +28,10 @@ namespace Ivy.TestUtilities.Base
         public GenericTestBase()
         {
             // Need to new up our container really quick
-            var containerGen = new ContainerGenerator();
+            _containerGen = new ContainerGenerator();
 
             // Initialize our container
-            InitializeContainerFn(containerGen);
-            InitTestContainer(containerGen);
+            InitializeContainerFn(_containerGen);
 
             // Setup our Service Locator for test facilities
             var svcLocator = Container.Resolve<IServiceLocator>();
@@ -46,8 +47,10 @@ namespace Ivy.TestUtilities.Base
 
         #region Helper Methods
 
-        protected virtual void InitTestContainer(IContainerGenerator containerGen)
+        protected virtual void InitTestContainer(IContainerGenerator containerGen = null)
         {
+            if (containerGen == null) containerGen = _containerGen;
+
             Container = containerGen.GenerateContainer();
             Sut = Container.Resolve<TService>();
         }
