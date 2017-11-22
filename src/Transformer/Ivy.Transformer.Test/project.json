@@ -3,7 +3,7 @@
 
   "dependencies": {
     "Ivy.IoC": "1.0.0.962",
-    "Ivy.TestHelper": "1.0.1.120",
+    "Ivy.TestHelper": "1.0.1.121",
     "Ivy.Transformer": "1.0.0.992",
     "Ivy.Transformer.Core": "1.0.0.962",
     "NETStandard.Library": "1.6.0",
