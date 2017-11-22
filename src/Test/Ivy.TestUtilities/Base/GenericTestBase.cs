@@ -12,7 +12,7 @@ namespace Ivy.TestUtilities.Base
 
         // Container for reference to remove bind to static ServiceLocator
         protected readonly IContainer Container;
-        protected readonly TService Sut;
+        protected TService Sut;
 
         // Placeholders for custom test setup and teardown
         // Override the InitailizeContainerFn and invoke base.InitializeContainer(containerGen) to setup Mock tests
@@ -58,6 +58,13 @@ namespace Ivy.TestUtilities.Base
             var mock = new Mock<T>();
             containerGen.RegisterInstance<T>(mock.Object);
             return mock;
+        }
+
+        protected IContainerGenerator GetMockingContainerGen()
+        {
+            var containerGen = new ContainerGenerator();
+            InitializeContainerFn(containerGen);
+            return containerGen;
         }
 
         #endregion
