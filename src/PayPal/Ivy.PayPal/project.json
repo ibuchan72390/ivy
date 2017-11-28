@@ -1,9 +1,9 @@
 {
-  "version": "1.0.0.0",
+  "version": "1.0.0",
 
   "dependencies": {
-    "Ivy.PayPal.Core": "1.0.0.0",
-    "Ivy.Web.Core": "1.0.0.3",
+    "Ivy.PayPal.Core": "1.*",
+    "Ivy.Web.Core": "1.*",
     "Microsoft.Extensions.Logging.Abstractions": "1.0.2",
     "NETStandard.Library": "1.6.0",
     "System.Net.Requests": "4.0.11"

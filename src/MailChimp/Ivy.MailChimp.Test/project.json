@@ -1,18 +1,18 @@
 {
-  "version": "1.0.1.115",
+  "version": "1.0.2",
 
   "dependencies": {
-    "Ivy.MailChimp": "1.0.1.105",
-    "Ivy.MailChimp.Core": "1.0.0.1",
-    "Ivy.TestHelper": "1.0.1.123",
-    "Ivy.Validation.Core": "1.0.0.1",
+    "dotnet-test-xunit": "2.2.0-preview2-build1029",
+    "Ivy.MailChimp": "1.*",
+    "Ivy.MailChimp.Core": "1.*",
+    "Ivy.MailChimp.IoC": "1.*",
+    "Ivy.TestHelper": "1.*",
+    "Ivy.Validation.Core": "1.*",
+    "Ivy.Web.IoC": "1.*",
     "Microsoft.Extensions.Logging": "1.0.2",
     "Moq": "4.7.1",
     "NETStandard.Library": "1.6.0",
-    "xunit": "2.2.0",
-    "dotnet-test-xunit": "2.2.0-preview2-build1029",
-    "Ivy.Web.IoC": "1.0.0.4",
-    "Ivy.MailChimp.IoC": "1.0.1.104"
+    "xunit": "2.2.0"
   },
 
   "testRunner": "xunit",

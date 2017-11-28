@@ -1,10 +1,10 @@
 {
-  "version": "1.0.1.602",
+  "version": "1.0.2",
 
   "dependencies": {
-    "Ivy.Auth0.Web": "1.0.1.904",
-    "Ivy.Auth0.Web.Core": "1.0.1.100",
-    "Ivy.IoC.Core": "1.0.0.0",
+    "Ivy.Auth0.Web": "1.*",
+    "Ivy.Auth0.Web.Core": "1.*",
+    "Ivy.IoC.Core": "1.*",
     "NETStandard.Library": "1.6.0"
   },
 

@@ -1,17 +1,17 @@
 {
-  "version": "1.0.1.116",
+  "version": "1.0.2",
 
   "dependencies": {
     "AWSSDK.ElasticTranscoder": "3.3.1.14",
-    "Ivy.Amazon.ElasticTranscoder": "1.0.1.105",
-    "Ivy.Amazon.ElasticTranscoder.Core": "1.0.0.1",
-    "Ivy.Amazon.ElasticTranscoder.IoC": "1.0.1.104",
-    "Ivy.IoC": "1.0.0.962",
-    "Ivy.TestHelper": "1.0.1.123",
+    "dotnet-test-xunit": "2.2.0-preview2-build1029",
+    "Ivy.Amazon.ElasticTranscoder": "1.*",
+    "Ivy.Amazon.ElasticTranscoder.Core": "1.*",
+    "Ivy.Amazon.ElasticTranscoder.IoC": "1.*",
+    "Ivy.IoC": "1.*",
+    "Ivy.TestHelper": "1.*",
     "Moq": "4.7.1",
     "NETStandard.Library": "1.6.0",
-    "xunit": "2.2.0",
-    "dotnet-test-xunit": "2.2.0-preview2-build1029"
+    "xunit": "2.2.0"
   },
 
   "testRunner": "xunit",

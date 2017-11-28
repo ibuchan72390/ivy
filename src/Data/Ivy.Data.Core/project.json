@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0.801",
+  "version": "1.0.1",
 
   "dependencies": {
     "Ivy.IoC.Core": "1.0.0.0",

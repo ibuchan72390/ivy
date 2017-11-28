@@ -1,14 +1,14 @@
 {
-  "version": "1.0.0.911",
+  "version": "1.0.1",
 
   "dependencies": {
-    "Ivy.Caching": "1.0.1.1",
+    "dotnet-test-xunit": "2.2.0-preview2-build1029",
+    "Ivy.Caching": "1.*",
+    "Ivy.Caching.Core": "1.*",
+    "Ivy.Caching.IoC": "1.*",
+    "Ivy.TestHelper": "1.*",
     "NETStandard.Library": "1.6.0",
-    "xunit": "2.2.0",
-    "Ivy.Caching.Core": "1.0.1.0",
-    "Ivy.Caching.IoC": "1.0.1.1",
-    "Ivy.TestHelper": "1.0.1.123",
-    "dotnet-test-xunit": "2.2.0-preview2-build1029"
+    "xunit": "2.2.0"
   },
 
   "testRunner": "xunit",
