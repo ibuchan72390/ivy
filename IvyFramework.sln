@@ -1,14 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{CB7D654B-192D-4F21-91C7-98E6D47A6142}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{00007736-389F-498C-92FA-B3EAA5970AD9}"
-	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Auth0", "Auth0", "{EC9AD370-118E-4A57-B2EA-37FCB11933F9}"
 EndProject
@@ -36,37 +33,49 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Amazon", "Amazon", "{FC4A82
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "S3", "S3", "{EE3EEB40-5BBF-4A60-9B34-09E2D274EB63}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Amazon.S3", "src\Amazon\S3\Ivy.Amazon.S3\Ivy.Amazon.S3.xproj", "{348EC3AF-92D3-4F75-A44D-B738D1FF4565}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IoC", "IoC", "{8E4B6F70-3C05-4081-A6A5-722D7109BDC9}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Amazon.S3.Core", "src\Amazon\S3\Ivy.Amazon.S3.Core\Ivy.Amazon.S3.Core.xproj", "{ADC074E6-D09A-4194-99E3-D905983A90D3}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PayPal", "PayPal", "{FA7CBA8C-53A7-42EC-951E-9E3C18EE9954}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Amazon.S3.Test", "src\Amazon\S3\Ivy.Amazon.S3.Test\Ivy.Amazon.S3.Test.xproj", "{BD9D2D22-9D80-40C0-90BF-66B9AA35C570}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ElasticTranscoder", "ElasticTranscoder", "{77A8C715-CC8F-4FBD-AF6D-0568B8B9ECBE}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Amazon.S3.IoC", "src\Amazon\S3\Ivy.Amazon.S3.IoC\Ivy.Amazon.S3.IoC.xproj", "{70EF5047-8745-4EF8-A699-D8D68EBFABCA}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{97C00E47-10CF-4899-BCEE-311A5D37B0A2}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Auth0.Core", "src\Auth0\Ivy.Auth0.Core\Ivy.Auth0.Core.xproj", "{960828F5-79CD-4BB7-BA0A-31F4C879562E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Management", "Management", "{57704D02-49C8-4C78-9D32-2E5945684FD0}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Caching.IoC", "src\Caching\Ivy.Caching.IoC\Ivy.Caching.IoC.xproj", "{E5F90D64-25D0-45A0-9B0B-CDF3DFBA71AF}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Authorization", "Authorization", "{EFBEE26F-57D4-4410-9180-3FE3442682B7}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Caching.Core", "src\Caching\Ivy.Caching.Core\Ivy.Caching.Core.xproj", "{2B9E08C9-2548-4782-9CD7-B5B3DC87947B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Amazon.S3", "src\Amazon\S3\Ivy.Amazon.S3\Ivy.Amazon.S3.csproj", "{348EC3AF-92D3-4F75-A44D-B738D1FF4565}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Caching", "src\Caching\Ivy.Caching\Ivy.Caching.xproj", "{AD9D2A0B-20EC-4874-9A87-8E25EA2A2B26}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Amazon.S3.Core", "src\Amazon\S3\Ivy.Amazon.S3.Core\Ivy.Amazon.S3.Core.csproj", "{ADC074E6-D09A-4194-99E3-D905983A90D3}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Data.Core", "src\Data\Ivy.Data.Core\Ivy.Data.Core.xproj", "{026D0696-6257-484A-B813-707DE4470A26}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Amazon.S3.Test", "src\Amazon\S3\Ivy.Amazon.S3.Test\Ivy.Amazon.S3.Test.csproj", "{BD9D2D22-9D80-40C0-90BF-66B9AA35C570}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Data.Common.Test", "src\Data\Ivy.Data.Common.Test\Ivy.Data.Common.Test.xproj", "{84E8C805-19A2-4972-A9AA-911CA5BF8056}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Amazon.S3.IoC", "src\Amazon\S3\Ivy.Amazon.S3.IoC\Ivy.Amazon.S3.IoC.csproj", "{70EF5047-8745-4EF8-A699-D8D68EBFABCA}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Data.Common.IoC", "src\Data\Ivy.Data.Common.IoC\Ivy.Data.Common.IoC.xproj", "{040C97F4-61AB-4640-B0EB-E060E4518F6C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Auth0.Core", "src\Auth0\Ivy.Auth0.Core\Ivy.Auth0.Core.csproj", "{960828F5-79CD-4BB7-BA0A-31F4C879562E}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Data.Common", "src\Data\Ivy.Data.Common\Ivy.Data.Common.xproj", "{B2B53385-69F5-4DCC-9DAB-5A29D22191C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Caching.IoC", "src\Caching\Ivy.Caching.IoC\Ivy.Caching.IoC.csproj", "{E5F90D64-25D0-45A0-9B0B-CDF3DFBA71AF}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Data.MySQL.Test", "src\Data\MySQL\Ivy.Data.MySQL.Test\Ivy.Data.MySQL.Test.xproj", "{C015F1F4-2541-448B-B024-2AE240B76D02}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Caching.Core", "src\Caching\Ivy.Caching.Core\Ivy.Caching.Core.csproj", "{2B9E08C9-2548-4782-9CD7-B5B3DC87947B}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Data.MySQL.IntegrationTest", "src\Data\MySQL\Ivy.Data.MySQL.IntegrationTest\Ivy.Data.MySQL.IntegrationTest.xproj", "{EAC4DF5B-CC82-4CC4-BDC4-FD9747EB7B80}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Caching", "src\Caching\Ivy.Caching\Ivy.Caching.csproj", "{AD9D2A0B-20EC-4874-9A87-8E25EA2A2B26}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Data.MySQL", "src\Data\MySQL\Ivy.Data.MySQL\Ivy.Data.MySQL.xproj", "{35F1FAD2-8B64-4699-A542-121F942B165C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Data.Core", "src\Data\Ivy.Data.Core\Ivy.Data.Core.csproj", "{026D0696-6257-484A-B813-707DE4470A26}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Data.MySQL.IoC", "src\Data\MySQL\Ivy.Data.MySQL.IoC\Ivy.Data.MySQL.IoC.xproj", "{1B0C48A9-D27B-4953-9AC7-323813E6487A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Data.Common.Test", "src\Data\Ivy.Data.Common.Test\Ivy.Data.Common.Test.csproj", "{84E8C805-19A2-4972-A9AA-911CA5BF8056}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Data.Common.IoC", "src\Data\Ivy.Data.Common.IoC\Ivy.Data.Common.IoC.csproj", "{040C97F4-61AB-4640-B0EB-E060E4518F6C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Data.Common", "src\Data\Ivy.Data.Common\Ivy.Data.Common.csproj", "{B2B53385-69F5-4DCC-9DAB-5A29D22191C2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Data.MySQL.Test", "src\Data\MySQL\Ivy.Data.MySQL.Test\Ivy.Data.MySQL.Test.csproj", "{C015F1F4-2541-448B-B024-2AE240B76D02}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Data.MySQL.IntegrationTest", "src\Data\MySQL\Ivy.Data.MySQL.IntegrationTest\Ivy.Data.MySQL.IntegrationTest.csproj", "{EAC4DF5B-CC82-4CC4-BDC4-FD9747EB7B80}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Data.MySQL", "src\Data\MySQL\Ivy.Data.MySQL\Ivy.Data.MySQL.csproj", "{35F1FAD2-8B64-4699-A542-121F942B165C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Data.MySQL.IoC", "src\Data\MySQL\Ivy.Data.MySQL.IoC\Ivy.Data.MySQL.IoC.csproj", "{1B0C48A9-D27B-4953-9AC7-323813E6487A}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Ivy.Database.Test", "src\Data\MSSSQL\Ivy.Database.Test\Ivy.Database.Test.sqlproj", "{90CCF192-9A63-46B8-BF2B-7E4DC2AAC88D}"
 EndProject
@@ -76,107 +85,95 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "IBFramework.Data.MSSQL.Inte
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "IBFramework.Data.MSSQL.Test", "src\Data\MSSSQL\Ivy.Data.MSSQL.Test\IBFramework.Data.MSSQL.Test.xproj", "{1CCC2DE1-A50B-43C0-B16D-B929816C131B}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.MailChimp.Test", "src\MailChimp\Ivy.MailChimp.Test\Ivy.MailChimp.Test.xproj", "{4F759813-7F83-4B25-91D1-058CEA0A657D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.MailChimp.Test", "src\MailChimp\Ivy.MailChimp.Test\Ivy.MailChimp.Test.csproj", "{4F759813-7F83-4B25-91D1-058CEA0A657D}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.MailChimp.IoC", "src\MailChimp\Ivy.MailChimp.IoC\Ivy.MailChimp.IoC.xproj", "{441C7308-0271-4DC6-9ABC-CEF1132CFF13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.MailChimp.IoC", "src\MailChimp\Ivy.MailChimp.IoC\Ivy.MailChimp.IoC.csproj", "{441C7308-0271-4DC6-9ABC-CEF1132CFF13}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.MailChimp.Core", "src\MailChimp\Ivy.MailChimp.Core\Ivy.MailChimp.Core.xproj", "{05B57001-80A4-438B-9435-C47C3E955D2D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.MailChimp.Core", "src\MailChimp\Ivy.MailChimp.Core\Ivy.MailChimp.Core.csproj", "{05B57001-80A4-438B-9435-C47C3E955D2D}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.MailChimp", "src\MailChimp\Ivy.MailChimp\Ivy.MailChimp.xproj", "{0211AB27-33B3-45C7-8BDC-D546FF913E85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.MailChimp", "src\MailChimp\Ivy.MailChimp\Ivy.MailChimp.csproj", "{0211AB27-33B3-45C7-8BDC-D546FF913E85}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.TestUtilities", "src\Test\Ivy.TestUtilities\Ivy.TestUtilities.xproj", "{0104F636-AE16-44D8-BC88-A930199FA8AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.TestUtilities", "src\Test\Ivy.TestUtilities\Ivy.TestUtilities.csproj", "{0104F636-AE16-44D8-BC88-A930199FA8AC}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.TestHelper", "src\Test\Ivy.TestHelper\Ivy.TestHelper.xproj", "{4FB13BAA-D7D2-4311-B141-9578AE1E5DC0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.TestHelper", "src\Test\Ivy.TestHelper\Ivy.TestHelper.csproj", "{4FB13BAA-D7D2-4311-B141-9578AE1E5DC0}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Transformer.Test", "src\Transformer\Ivy.Transformer.Test\Ivy.Transformer.Test.xproj", "{811E350E-44C6-4B17-9093-DB238329005D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Transformer.Test", "src\Transformer\Ivy.Transformer.Test\Ivy.Transformer.Test.csproj", "{811E350E-44C6-4B17-9093-DB238329005D}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Transformer.IoC", "src\Transformer\Ivy.Transformer.IoC\Ivy.Transformer.IoC.xproj", "{F16B97A4-5E9D-4DA9-8D86-98FAF2D6F98F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Transformer.IoC", "src\Transformer\Ivy.Transformer.IoC\Ivy.Transformer.IoC.csproj", "{F16B97A4-5E9D-4DA9-8D86-98FAF2D6F98F}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Transformer.Core", "src\Transformer\Ivy.Transformer.Core\Ivy.Transformer.Core.xproj", "{C277776C-E805-47A1-9828-0BB288D9CE58}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Transformer.Core", "src\Transformer\Ivy.Transformer.Core\Ivy.Transformer.Core.csproj", "{C277776C-E805-47A1-9828-0BB288D9CE58}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Transformer", "src\Transformer\Ivy.Transformer\Ivy.Transformer.xproj", "{1E8C89D3-F4E6-49E5-9522-641EF98B7A5A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Transformer", "src\Transformer\Ivy.Transformer\Ivy.Transformer.csproj", "{1E8C89D3-F4E6-49E5-9522-641EF98B7A5A}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Utility.Test", "src\Utility\Ivy.Utility.Test\Ivy.Utility.Test.xproj", "{2A3BFE1C-89F3-4954-9B63-6547AAA23815}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Utility.Test", "src\Utility\Ivy.Utility.Test\Ivy.Utility.Test.csproj", "{2A3BFE1C-89F3-4954-9B63-6547AAA23815}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Utility.IoC", "src\Utility\Ivy.Utility.IoC\Ivy.Utility.IoC.xproj", "{7828CF90-728E-4B35-9871-2414F4A38991}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Utility.IoC", "src\Utility\Ivy.Utility.IoC\Ivy.Utility.IoC.csproj", "{7828CF90-728E-4B35-9871-2414F4A38991}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Utility.Core", "src\Utility\Ivy.Utility.Core\Ivy.Utility.Core.xproj", "{526F5C25-F6E3-4670-B9DE-1D229B3E5A68}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Utility.Core", "src\Utility\Ivy.Utility.Core\Ivy.Utility.Core.csproj", "{526F5C25-F6E3-4670-B9DE-1D229B3E5A68}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Utility", "src\Utility\Ivy.Utility\Ivy.Utility.xproj", "{61421D8E-BD29-40FF-87E1-9FA6E126A928}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Utility", "src\Utility\Ivy.Utility\Ivy.Utility.csproj", "{61421D8E-BD29-40FF-87E1-9FA6E126A928}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Web.Test", "src\Web\Ivy.Web.Test\Ivy.Web.Test.xproj", "{F6F47E26-337B-4ECA-A01D-6C5E19844591}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Web.Test", "src\Web\Ivy.Web.Test\Ivy.Web.Test.csproj", "{F6F47E26-337B-4ECA-A01D-6C5E19844591}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Web.IoC", "src\Web\Ivy.Web.IoC\Ivy.Web.IoC.xproj", "{61B81F48-16B6-4726-814C-5A4B3F591080}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Web.IoC", "src\Web\Ivy.Web.IoC\Ivy.Web.IoC.csproj", "{61B81F48-16B6-4726-814C-5A4B3F591080}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Web.Core", "src\Web\Ivy.Web.Core\Ivy.Web.Core.xproj", "{6B5D529C-7822-432E-9833-9DF3F6CE568F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Web.Core", "src\Web\Ivy.Web.Core\Ivy.Web.Core.csproj", "{6B5D529C-7822-432E-9833-9DF3F6CE568F}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Web", "src\Web\Ivy.Web\Ivy.Web.xproj", "{3FA7E049-9EA5-4916-A051-2C9EF141981D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Web", "src\Web\Ivy.Web\Ivy.Web.csproj", "{3FA7E049-9EA5-4916-A051-2C9EF141981D}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Validation.Core", "src\Validation\Ivy.Validation.Core\Ivy.Validation.Core.xproj", "{BA4CB307-7A5F-449A-97EA-0A1E337F3620}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Validation.Core", "src\Validation\Ivy.Validation.Core\Ivy.Validation.Core.csproj", "{BA4CB307-7A5F-449A-97EA-0A1E337F3620}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IoC", "IoC", "{8E4B6F70-3C05-4081-A6A5-722D7109BDC9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.IoC.Test", "src\IoC\Ivy.IoC.Test\Ivy.IoC.Test.csproj", "{F2E4FDA8-BC56-4280-A454-36052BAC4856}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.IoC.Test", "src\IoC\Ivy.IoC.Test\Ivy.IoC.Test.xproj", "{F2E4FDA8-BC56-4280-A454-36052BAC4856}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.IoC.IoC", "src\IoC\Ivy.IoC.IoC\Ivy.IoC.IoC.csproj", "{35EC25B6-78D6-4B2A-B64F-E1E94EB71816}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.IoC.IoC", "src\IoC\Ivy.IoC.IoC\Ivy.IoC.IoC.xproj", "{35EC25B6-78D6-4B2A-B64F-E1E94EB71816}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.IoC.Core", "src\IoC\Ivy.IoC.Core\Ivy.IoC.Core.csproj", "{1FF72500-C093-4684-A873-DE05F9258B24}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.IoC.Core", "src\IoC\Ivy.IoC.Core\Ivy.IoC.Core.xproj", "{1FF72500-C093-4684-A873-DE05F9258B24}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.IoC", "src\IoC\Ivy.IoC\Ivy.IoC.csproj", "{35711AEB-F710-4397-A5B7-85BA637CCB3B}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.IoC", "src\IoC\Ivy.IoC\Ivy.IoC.xproj", "{35711AEB-F710-4397-A5B7-85BA637CCB3B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.PayPal.Core", "src\PayPal\Ivy.PayPal.Core\Ivy.PayPal.Core.csproj", "{923736BC-C16D-4000-B059-D482EB5C60BF}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PayPal", "PayPal", "{FA7CBA8C-53A7-42EC-951E-9E3C18EE9954}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.PayPal.IoC", "src\PayPal\Ivy.PayPal.IoC\Ivy.PayPal.IoC.csproj", "{898C18E8-614A-43D4-8CDD-770BF48E3A79}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.PayPal.Core", "src\PayPal\Ivy.PayPal.Core\Ivy.PayPal.Core.xproj", "{923736BC-C16D-4000-B059-D482EB5C60BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.PayPal", "src\PayPal\Ivy.PayPal\Ivy.PayPal.csproj", "{A19A51D5-EBF5-40C4-829B-01155A4325D4}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.PayPal.IoC", "src\PayPal\Ivy.PayPal.IoC\Ivy.PayPal.IoC.xproj", "{898C18E8-614A-43D4-8CDD-770BF48E3A79}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.PayPal.Test", "src\PayPal\Ivy.PayPal.Test\Ivy.PayPal.Test.csproj", "{9DB7D045-6718-407D-8823-26B212E88564}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.PayPal", "src\PayPal\Ivy.PayPal\Ivy.PayPal.xproj", "{A19A51D5-EBF5-40C4-829B-01155A4325D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Amazon.ElasticTranscoder", "src\Amazon\ElasticTranscoder\Ivy.Amazon.ElasticTranscoder\Ivy.Amazon.ElasticTranscoder.csproj", "{986D22C5-434A-48A3-9068-445E70FB6DEE}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.PayPal.Test", "src\PayPal\Ivy.PayPal.Test\Ivy.PayPal.Test.xproj", "{9DB7D045-6718-407D-8823-26B212E88564}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Amazon.ElasticTranscoder.Core", "src\Amazon\ElasticTranscoder\Ivy.Amazon.ElasticTranscoder.Core\Ivy.Amazon.ElasticTranscoder.Core.csproj", "{2877D410-B554-463A-AC96-0C3A8776E181}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ElasticTranscoder", "ElasticTranscoder", "{77A8C715-CC8F-4FBD-AF6D-0568B8B9ECBE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Amazon.ElasticTranscoder.Test", "src\Amazon\ElasticTranscoder\Ivy.Amazon.ElasticTranscoder.Test\Ivy.Amazon.ElasticTranscoder.Test.csproj", "{903B365F-9EC8-4623-AAAD-5CA4747B8D3D}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Amazon.ElasticTranscoder", "src\Amazon\ElasticTranscoder\Ivy.Amazon.ElasticTranscoder\Ivy.Amazon.ElasticTranscoder.xproj", "{986D22C5-434A-48A3-9068-445E70FB6DEE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Amazon.ElasticTranscoder.IoC", "src\Amazon\ElasticTranscoder\Ivy.Amazon.ElasticTranscoder.IoC\Ivy.Amazon.ElasticTranscoder.IoC.csproj", "{B4EE67F8-3E83-407F-B72C-B99FA987805E}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Amazon.ElasticTranscoder.Core", "src\Amazon\ElasticTranscoder\Ivy.Amazon.ElasticTranscoder.Core\Ivy.Amazon.ElasticTranscoder.Core.xproj", "{2877D410-B554-463A-AC96-0C3A8776E181}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Auth0.Authorization", "src\Auth0\Authorization\Ivy.Auth0.Authorization\Ivy.Auth0.Authorization.csproj", "{F8EE2D2F-319F-4C21-B3D5-399424E5F9F2}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Amazon.ElasticTranscoder.Test", "src\Amazon\ElasticTranscoder\Ivy.Amazon.ElasticTranscoder.Test\Ivy.Amazon.ElasticTranscoder.Test.xproj", "{903B365F-9EC8-4623-AAAD-5CA4747B8D3D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Auth0.Authorization.Core", "src\Auth0\Authorization\Ivy.Auth0.Authorization.Core\Ivy.Auth0.Authorization.Core.csproj", "{E413279A-07FD-4F9D-9B71-6DDE7F8069C5}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Amazon.ElasticTranscoder.IoC", "src\Amazon\ElasticTranscoder\Ivy.Amazon.ElasticTranscoder.IoC\Ivy.Amazon.ElasticTranscoder.IoC.xproj", "{B4EE67F8-3E83-407F-B72C-B99FA987805E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Auth0.Authorization.IoC", "src\Auth0\Authorization\Ivy.Auth0.Authorization.IoC\Ivy.Auth0.Authorization.IoC.csproj", "{1EA332F8-A2EE-4FA9-A654-4E125DD13F81}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{97C00E47-10CF-4899-BCEE-311A5D37B0A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Auth0.Authorization.Test", "src\Auth0\Authorization\Ivy.Auth0.Authorization.Test\Ivy.Auth0.Authorization.Test.csproj", "{E40CBF91-6392-4FA6-98A4-8E53F3E2CAA7}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Management", "Management", "{57704D02-49C8-4C78-9D32-2E5945684FD0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Auth0.Management", "src\Auth0\Management\Ivy.Auth0.Management\Ivy.Auth0.Management.csproj", "{484A8E99-26E0-4A83-82B9-C28FE1E3F03A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Authorization", "Authorization", "{EFBEE26F-57D4-4410-9180-3FE3442682B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Auth0.Management.Core", "src\Auth0\Management\Ivy.Auth0.Management.Core\Ivy.Auth0.Management.Core.csproj", "{9EA0FA5B-828C-45B6-8342-9E252C59EA6D}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Auth0.Authorization", "src\Auth0\Authorization\Ivy.Auth0.Authorization\Ivy.Auth0.Authorization.xproj", "{F8EE2D2F-319F-4C21-B3D5-399424E5F9F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Auth0.Management.IoC", "src\Auth0\Management\Ivy.Auth0.Management.IoC\Ivy.Auth0.Management.IoC.csproj", "{60E41201-249D-4412-84A4-B207021456F1}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Auth0.Authorization.Core", "src\Auth0\Authorization\Ivy.Auth0.Authorization.Core\Ivy.Auth0.Authorization.Core.xproj", "{E413279A-07FD-4F9D-9B71-6DDE7F8069C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Auth0.Management.Test", "src\Auth0\Management\Ivy.Auth0.Management.Test\Ivy.Auth0.Management.Test.csproj", "{8996EE64-FE34-457C-B907-F6AEAE198167}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Auth0.Authorization.IoC", "src\Auth0\Authorization\Ivy.Auth0.Authorization.IoC\Ivy.Auth0.Authorization.IoC.xproj", "{1EA332F8-A2EE-4FA9-A654-4E125DD13F81}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Auth0.Web", "src\Auth0\Web\Ivy.Auth0.Web\Ivy.Auth0.Web.csproj", "{B6CA8A6A-B84B-4288-94C9-5394D098C24C}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Auth0.Authorization.Test", "src\Auth0\Authorization\Ivy.Auth0.Authorization.Test\Ivy.Auth0.Authorization.Test.xproj", "{E40CBF91-6392-4FA6-98A4-8E53F3E2CAA7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Auth0.Web.Core", "src\Auth0\Web\Ivy.Auth0.Web.Core\Ivy.Auth0.Web.Core.csproj", "{1A9F7E4A-6C34-4CB4-B48E-2E724CB4C3ED}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Auth0.Management", "src\Auth0\Management\Ivy.Auth0.Management\Ivy.Auth0.Management.xproj", "{484A8E99-26E0-4A83-82B9-C28FE1E3F03A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Auth0.Web.IoC", "src\Auth0\Web\Ivy.Auth0.Web.IoC\Ivy.Auth0.Web.IoC.csproj", "{4CCF6298-A236-4CCC-AFEF-AC679A8CC314}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Auth0.Management.Core", "src\Auth0\Management\Ivy.Auth0.Management.Core\Ivy.Auth0.Management.Core.xproj", "{9EA0FA5B-828C-45B6-8342-9E252C59EA6D}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Auth0.Management.IoC", "src\Auth0\Management\Ivy.Auth0.Management.IoC\Ivy.Auth0.Management.IoC.xproj", "{60E41201-249D-4412-84A4-B207021456F1}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Auth0.Management.Test", "src\Auth0\Management\Ivy.Auth0.Management.Test\Ivy.Auth0.Management.Test.xproj", "{8996EE64-FE34-457C-B907-F6AEAE198167}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Auth0.Web", "src\Auth0\Web\Ivy.Auth0.Web\Ivy.Auth0.Web.xproj", "{B6CA8A6A-B84B-4288-94C9-5394D098C24C}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Auth0.Web.Core", "src\Auth0\Web\Ivy.Auth0.Web.Core\Ivy.Auth0.Web.Core.xproj", "{1A9F7E4A-6C34-4CB4-B48E-2E724CB4C3ED}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Auth0.Web.IoC", "src\Auth0\Web\Ivy.Auth0.Web.IoC\Ivy.Auth0.Web.IoC.xproj", "{4CCF6298-A236-4CCC-AFEF-AC679A8CC314}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Auth0.Web.Test", "src\Auth0\Web\Ivy.Auth0.Web.Test\Ivy.Auth0.Web.Test.xproj", "{661CBD0A-187D-4C79-81F6-28190AC28303}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Auth0.Web.Test", "src\Auth0\Web\Ivy.Auth0.Web.Test\Ivy.Auth0.Web.Test.csproj", "{661CBD0A-187D-4C79-81F6-28190AC28303}"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Data.Common.Caching", "src\Data\Ivy.Data.Common.Caching\Ivy.Data.Common.Caching.xproj", "{83DB9F58-05A0-4BC8-BE2F-76B97BF474FA}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivy.Caching.Test", "src\Caching\Ivy.Caching.Test\Ivy.Caching.Test.xproj", "{740FF5F4-5FE7-40E0-9C2B-40B671A69B01}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivy.Caching.Test", "src\Caching\Ivy.Caching.Test\Ivy.Caching.Test.csproj", "{740FF5F4-5FE7-40E0-9C2B-40B671A69B01}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -464,6 +461,12 @@ Global
 		{61AA9C41-0878-4F5C-B2AC-075367B36830} = {CB7D654B-192D-4F21-91C7-98E6D47A6142}
 		{FC4A8230-EEA2-492E-85ED-0DD7B457F203} = {CB7D654B-192D-4F21-91C7-98E6D47A6142}
 		{EE3EEB40-5BBF-4A60-9B34-09E2D274EB63} = {FC4A8230-EEA2-492E-85ED-0DD7B457F203}
+		{8E4B6F70-3C05-4081-A6A5-722D7109BDC9} = {CB7D654B-192D-4F21-91C7-98E6D47A6142}
+		{FA7CBA8C-53A7-42EC-951E-9E3C18EE9954} = {CB7D654B-192D-4F21-91C7-98E6D47A6142}
+		{77A8C715-CC8F-4FBD-AF6D-0568B8B9ECBE} = {FC4A8230-EEA2-492E-85ED-0DD7B457F203}
+		{97C00E47-10CF-4899-BCEE-311A5D37B0A2} = {EC9AD370-118E-4A57-B2EA-37FCB11933F9}
+		{57704D02-49C8-4C78-9D32-2E5945684FD0} = {EC9AD370-118E-4A57-B2EA-37FCB11933F9}
+		{EFBEE26F-57D4-4410-9180-3FE3442682B7} = {EC9AD370-118E-4A57-B2EA-37FCB11933F9}
 		{348EC3AF-92D3-4F75-A44D-B738D1FF4565} = {EE3EEB40-5BBF-4A60-9B34-09E2D274EB63}
 		{ADC074E6-D09A-4194-99E3-D905983A90D3} = {EE3EEB40-5BBF-4A60-9B34-09E2D274EB63}
 		{BD9D2D22-9D80-40C0-90BF-66B9AA35C570} = {EE3EEB40-5BBF-4A60-9B34-09E2D274EB63}
@@ -503,24 +506,18 @@ Global
 		{6B5D529C-7822-432E-9833-9DF3F6CE568F} = {B3349262-5769-46E7-A18D-94A24B894992}
 		{3FA7E049-9EA5-4916-A051-2C9EF141981D} = {B3349262-5769-46E7-A18D-94A24B894992}
 		{BA4CB307-7A5F-449A-97EA-0A1E337F3620} = {61AA9C41-0878-4F5C-B2AC-075367B36830}
-		{8E4B6F70-3C05-4081-A6A5-722D7109BDC9} = {CB7D654B-192D-4F21-91C7-98E6D47A6142}
 		{F2E4FDA8-BC56-4280-A454-36052BAC4856} = {8E4B6F70-3C05-4081-A6A5-722D7109BDC9}
 		{35EC25B6-78D6-4B2A-B64F-E1E94EB71816} = {8E4B6F70-3C05-4081-A6A5-722D7109BDC9}
 		{1FF72500-C093-4684-A873-DE05F9258B24} = {8E4B6F70-3C05-4081-A6A5-722D7109BDC9}
 		{35711AEB-F710-4397-A5B7-85BA637CCB3B} = {8E4B6F70-3C05-4081-A6A5-722D7109BDC9}
-		{FA7CBA8C-53A7-42EC-951E-9E3C18EE9954} = {CB7D654B-192D-4F21-91C7-98E6D47A6142}
 		{923736BC-C16D-4000-B059-D482EB5C60BF} = {FA7CBA8C-53A7-42EC-951E-9E3C18EE9954}
 		{898C18E8-614A-43D4-8CDD-770BF48E3A79} = {FA7CBA8C-53A7-42EC-951E-9E3C18EE9954}
 		{A19A51D5-EBF5-40C4-829B-01155A4325D4} = {FA7CBA8C-53A7-42EC-951E-9E3C18EE9954}
 		{9DB7D045-6718-407D-8823-26B212E88564} = {FA7CBA8C-53A7-42EC-951E-9E3C18EE9954}
-		{77A8C715-CC8F-4FBD-AF6D-0568B8B9ECBE} = {FC4A8230-EEA2-492E-85ED-0DD7B457F203}
 		{986D22C5-434A-48A3-9068-445E70FB6DEE} = {77A8C715-CC8F-4FBD-AF6D-0568B8B9ECBE}
 		{2877D410-B554-463A-AC96-0C3A8776E181} = {77A8C715-CC8F-4FBD-AF6D-0568B8B9ECBE}
 		{903B365F-9EC8-4623-AAAD-5CA4747B8D3D} = {77A8C715-CC8F-4FBD-AF6D-0568B8B9ECBE}
 		{B4EE67F8-3E83-407F-B72C-B99FA987805E} = {77A8C715-CC8F-4FBD-AF6D-0568B8B9ECBE}
-		{97C00E47-10CF-4899-BCEE-311A5D37B0A2} = {EC9AD370-118E-4A57-B2EA-37FCB11933F9}
-		{57704D02-49C8-4C78-9D32-2E5945684FD0} = {EC9AD370-118E-4A57-B2EA-37FCB11933F9}
-		{EFBEE26F-57D4-4410-9180-3FE3442682B7} = {EC9AD370-118E-4A57-B2EA-37FCB11933F9}
 		{F8EE2D2F-319F-4C21-B3D5-399424E5F9F2} = {EFBEE26F-57D4-4410-9180-3FE3442682B7}
 		{E413279A-07FD-4F9D-9B71-6DDE7F8069C5} = {EFBEE26F-57D4-4410-9180-3FE3442682B7}
 		{1EA332F8-A2EE-4FA9-A654-4E125DD13F81} = {EFBEE26F-57D4-4410-9180-3FE3442682B7}
@@ -535,5 +532,8 @@ Global
 		{661CBD0A-187D-4C79-81F6-28190AC28303} = {97C00E47-10CF-4899-BCEE-311A5D37B0A2}
 		{83DB9F58-05A0-4BC8-BE2F-76B97BF474FA} = {E179ECE7-5BFE-4B6E-B666-CBA940083744}
 		{740FF5F4-5FE7-40E0-9C2B-40B671A69B01} = {A7DA07A0-C8EC-451C-BD1C-1595EEF36FEB}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EFF316FA-FA1E-4A07-921C-0F2289EE4F0B}
 	EndGlobalSection
 EndGlobal

@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <VersionPrefix>1.0.2</VersionPrefix>
+    <TargetFramework>netstandard1.6</TargetFramework>
+    <AssemblyName>Ivy.TestHelper</AssemblyName>
+    <PackageId>Ivy.TestHelper</PackageId>
+    <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
+    <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Data\Ivy.Data.Common\Ivy.Data.Common.csproj" />
+    <ProjectReference Include="..\..\IoC\Ivy.IoC\Ivy.IoC.csproj" />
+    <ProjectReference Include="..\..\IoC\Ivy.IoC.IoC\Ivy.IoC.IoC.csproj" />
+    <ProjectReference Include="..\Ivy.TestUtilities\Ivy.TestUtilities.csproj" />
+    <ProjectReference Include="..\..\Utility\Ivy.Utility\Ivy.Utility.csproj" />
+    <ProjectReference Include="..\..\Utility\Ivy.Utility.IoC\Ivy.Utility.IoC.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.6</TargetFramework>
+    <AssemblyName>Ivy.PayPal.IoC</AssemblyName>
+    <PackageId>Ivy.PayPal.IoC</PackageId>
+    <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
+    <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\IoC\Ivy.IoC.Core\Ivy.IoC.Core.csproj" />
+    <ProjectReference Include="..\Ivy.PayPal\Ivy.PayPal.csproj" />
+    <ProjectReference Include="..\Ivy.PayPal.Core\Ivy.PayPal.Core.csproj" />
+  </ItemGroup>
+
+</Project>

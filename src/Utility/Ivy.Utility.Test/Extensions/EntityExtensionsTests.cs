@@ -106,7 +106,7 @@ namespace Ivy.Utility.Test.Extensions
 
             var result = entity.SafeGetNullableIntRef<CoreEntity, ParentEntity>(x => x.ParentEntity);
 
-            Assert.Equal(null, result);
+            Assert.Null(result);
         }
 
         #endregion

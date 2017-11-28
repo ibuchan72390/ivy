@@ -10,7 +10,7 @@ namespace Ivy.Auth0.Test.Models
         {
             var entity = new Auth0CreateUserRequest();
 
-            Assert.Equal(true, entity.verify_email);
+            Assert.True(entity.verify_email);
         }
     }
 }

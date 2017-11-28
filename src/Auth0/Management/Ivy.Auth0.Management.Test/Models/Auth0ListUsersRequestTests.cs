@@ -11,9 +11,9 @@ namespace Ivy.Auth0.Test.Models
         {
             var entity = new Auth0ListUsersRequest();
 
-            Assert.Equal(true, entity.IncludeTotals);
+            Assert.True(entity.IncludeTotals);
             Assert.Equal("email:1", entity.Sort);
-            Assert.Equal(true, entity.IncludeFields);
+            Assert.True(entity.IncludeFields);
             Assert.Equal("v2", entity.SearchEngine);
         }
     }
