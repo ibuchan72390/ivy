@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>1.0.2</VersionPrefix>
     <TargetFramework>netcoreapp1.0</TargetFramework>
     <AssemblyName>Ivy.Auth0.Management.Test</AssemblyName>
     <PackageId>Ivy.Auth0.Management.Test</PackageId>
@@ -12,6 +11,7 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <Version>1.0.3</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,7 +24,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
     <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="1.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="1.0.4" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="1.0.2" />
     <PackageReference Include="Moq" Version="4.7.25" />
     <PackageReference Include="xunit" Version="2.3.0-beta2-build3683" />
