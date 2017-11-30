@@ -5,6 +5,7 @@ using Ivy.Amazon.S3.Test.Base;
 using Ivy.IoC;
 using Ivy.IoC.Core;
 using Moq;
+using System;
 using System.Threading;
 using Xunit;
 
@@ -41,6 +42,67 @@ namespace Ivy.Amazon.S3.Test.Services
         #endregion
 
         #region Tests
+
+        #region FileExistsAsync
+
+        [Fact]
+        public async void FileExistsAsync_Passes_As_Expected_For_True()
+        {
+            var response = new GetObjectMetadataResponse();
+
+            _mockS3Client.Setup(x => 
+                x.GetObjectMetadataAsync(It.Is<GetObjectMetadataRequest>(y => y.BucketName == bucketName &&
+                                                                              y.Key == objectKey), default(CancellationToken))).
+                    ReturnsAsync(response);
+
+            Assert.True(await _sut.FileExistsAsync(bucketName, objectKey));
+
+            _mockS3Client.Verify(x =>
+                x.GetObjectMetadataAsync(It.Is<GetObjectMetadataRequest>(y => y.BucketName == bucketName &&
+                                                                              y.Key == objectKey), default(CancellationToken)),
+                    Times.Once);
+        }
+
+        [Fact]
+        public async void FileExistsAsync_Passes_As_Expected_For_False()
+        {
+            var err = new AmazonS3Exception("TEST");
+            err.StatusCode = System.Net.HttpStatusCode.NotFound;
+
+            _mockS3Client.Setup(x =>
+                x.GetObjectMetadataAsync(It.Is<GetObjectMetadataRequest>(y => y.BucketName == bucketName &&
+                                                                              y.Key == objectKey), default(CancellationToken))).
+                    Throws(err);
+
+            Assert.False(await _sut.FileExistsAsync(bucketName, objectKey));
+
+            _mockS3Client.Verify(x =>
+                x.GetObjectMetadataAsync(It.Is<GetObjectMetadataRequest>(y => y.BucketName == bucketName &&
+                                                                              y.Key == objectKey), default(CancellationToken)),
+                    Times.Once);
+        }
+
+        [Fact]
+        public async void FileExistsAsync_Throws_Error_As_Expected()
+        {
+            var err = new Exception();
+
+            _mockS3Client.Setup(x =>
+                x.GetObjectMetadataAsync(It.Is<GetObjectMetadataRequest>(y => y.BucketName == bucketName &&
+                                                                              y.Key == objectKey), default(CancellationToken))).
+                    Throws(err);
+
+            var e = await Assert.ThrowsAsync<Exception>(async () => await _sut.FileExistsAsync(bucketName, objectKey));
+
+            Assert.Same(err, e);
+
+            _mockS3Client.Verify(x =>
+                x.GetObjectMetadataAsync(It.Is<GetObjectMetadataRequest>(y => y.BucketName == bucketName &&
+                                                                              y.Key == objectKey), default(CancellationToken)),
+                    Times.Once);
+        }
+
+        #endregion
 
         #region DeleteFileAsync
 

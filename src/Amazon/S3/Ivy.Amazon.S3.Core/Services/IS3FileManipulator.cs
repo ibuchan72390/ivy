@@ -4,6 +4,8 @@ namespace Ivy.Amazon.S3.Core.Services
 {
     public interface IS3FileManipulator
     {
+        Task<bool> FileExistsAsync(string bucketName, string objectKey);
+
         Task DeleteFileAsync(string bucketName, string objectKey);
 
         Task CopyFileAsync(string bucketName, string originalObjectKey, string newObjectKey);
