@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
     <TargetFramework>netstandard1.6</TargetFramework>
     <AssemblyName>Ivy.Amazon.S3.IoC</AssemblyName>
     <PackageId>Ivy.Amazon.S3.IoC</PackageId>

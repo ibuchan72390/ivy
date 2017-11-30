@@ -10,7 +10,6 @@ namespace Ivy.Amazon.S3.IoC
         {
             containerGenerator.RegisterSingleton<IS3SignedUrlService, S3SignedUrlService>();
             containerGenerator.RegisterSingleton<IS3UrlHelper, S3UrlHelper>();
-            containerGenerator.RegisterSingleton<IS3FileValidator, S3FileValidator>();
             containerGenerator.RegisterSingleton<IS3FileManipulator, S3FileManipulator>();
         }
     }
