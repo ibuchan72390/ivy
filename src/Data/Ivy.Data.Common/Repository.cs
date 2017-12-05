@@ -206,7 +206,7 @@ namespace Ivy.Data.Common
         protected virtual IEnumerable<TReturn> InternalExecuteAlternateTypeQuery<TReturn>(string sql, ITranConn tc = null, object parms = null)
         {
             return _tranHelper.WrapInTransaction(
-                tran => tran.Connection.Query<TReturn>(sql, parms, tran.Transaction));
+                tran => tran.Connection.Query<TReturn>(sql, parms, tran.Transaction), tc);
         }
 
         protected virtual void InternalExecuteNonQuery(string sql, ITranConn tc = null, object parms = null)
