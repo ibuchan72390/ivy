@@ -16,14 +16,22 @@ namespace Ivy.Utility.Core.Util
 {
     public static class EnumUtility
     {
+        #region Variables & Constants
+
+        private static Random _rand;
+
+        #endregion
+
+        #region Public Methods
+
         public static IEnumerable<TEnum> GetValues<TEnum>()
-         where TEnum : struct, IComparable, IFormattable, IConvertible
+            where TEnum : struct, IComparable, IFormattable, IConvertible
         {
             return Enum.GetValues(typeof(TEnum)).Cast<TEnum>();
         }
 
         public static TEnum Parse<TEnum>(string enumText)
-         where TEnum : struct, IComparable, IFormattable, IConvertible
+            where TEnum : struct, IComparable, IFormattable, IConvertible
         {
             TEnum output;
             bool success = Enum.TryParse<TEnum>(enumText, out output);
@@ -35,5 +43,31 @@ namespace Ivy.Utility.Core.Util
 
             return output;
         }
+
+        public static TEnum GetRandomEnum<TEnum>()
+            where TEnum : struct, IComparable, IFormattable, IConvertible
+        {
+            var enumVals = GetValues<TEnum>();
+
+            var rand = GetPrivateRandom();
+
+            return enumVals.ElementAt(rand.Next(enumVals.Count()));
+        }
+
+        #endregion
+
+        #region Helper Methods
+
+        private static Random GetPrivateRandom()
+        {
+            if (_rand == null)
+            {
+                _rand = new Random((int)DateTime.UtcNow.Ticks);
+            }
+
+            return _rand;
+        }
+
+        #endregion
     }
 }
