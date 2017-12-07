@@ -11,7 +11,7 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,7 +26,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
     <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Http" Version="1.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="1.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="1.0.2" />
     <PackageReference Include="Microsoft.Extensions.Primitives" Version="1.0.1" />
     <PackageReference Include="xunit" Version="2.3.0-beta2-build3683" />
