@@ -3,6 +3,7 @@
   <PropertyGroup>
     <Version>1.0.2</Version>
     <TargetFramework>netcoreapp1.0</TargetFramework>
+	<FrameworkVersion>1.0.5</FrameworkVersion>
     <AssemblyName>Ivy.Data.MySQL.Test</AssemblyName>
     <PackageId>Ivy.Data.MySQL.Test</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>

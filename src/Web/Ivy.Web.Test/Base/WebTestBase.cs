@@ -1,5 +1,6 @@
 ﻿using Ivy.TestHelper;
 using Ivy.Web.IoC;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Ivy.Web.Test.Base
 {
@@ -7,7 +8,9 @@ namespace Ivy.Web.Test.Base
     {
         protected override void InitWrapper()
         {
-            base.Init(containerGen => containerGen.InstallIvyWeb());
+            base.Init(
+                containerGen => containerGen.InstallIvyWeb(),
+                svcColl => svcColl.AddLogging());
         }
     }
 }

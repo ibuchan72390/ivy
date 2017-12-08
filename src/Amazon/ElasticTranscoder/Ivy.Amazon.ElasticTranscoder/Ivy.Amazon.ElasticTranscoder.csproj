@@ -1,15 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.6</TargetFramework>
-    <AssemblyName>Ivy.Amazon.ElasticTranscoder</AssemblyName>
+    <TargetFrameworks>netstandard1.6;netcoreapp1.0</TargetFrameworks>
+    <FrameworkVersion>1.0.5</FrameworkVersion>
+	<AssemblyName>Ivy.Amazon.ElasticTranscoder</AssemblyName>
     <PackageId>Ivy.Amazon.ElasticTranscoder</PackageId>
     <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
     <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <Version>1.0.3</Version>
+    <Version>1.0.4</Version>
   </PropertyGroup>
 
   <ItemGroup>
