@@ -1,8 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>1.0.4</Version>
+    <Version>1.0.5</Version>
     <TargetFramework>netcoreapp1.0</TargetFramework>
+	<FrameworkVersion>1.0.5</FrameworkVersion>
     <AssemblyName>Ivy.Amazon.S3.Test</AssemblyName>
     <PackageId>Ivy.Amazon.S3.Test</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
