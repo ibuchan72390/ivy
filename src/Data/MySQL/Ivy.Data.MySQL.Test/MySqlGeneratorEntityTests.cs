@@ -173,7 +173,7 @@ namespace Ivy.Data.MySQL.Test
         {
             ISqlGenerator<ChildEntity, int> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity, int>>();
 
-            var childEntity = new ChildEntity().SaveForTest();
+            var childEntity = new ChildEntity { Id = 1 }.GenerateForTest();
 
             var parms = new Dictionary<string, object>();
             var result = _sut.GenerateSaveOrUpdateQuery(childEntity, ref parms);
