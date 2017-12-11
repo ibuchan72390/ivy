@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp1.0</TargetFramework>
     <AssemblyName>Ivy.Amazon.ElasticTranscoder.Test</AssemblyName>
-	<FrameworkVersion>1.0.5</FrameworkVersion>
     <PackageId>Ivy.Amazon.ElasticTranscoder.Test</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <RuntimeIdentifiers>win10-x86;win10-x64;osx.10.10-x64;ubuntu.16.04-x64</RuntimeIdentifiers>
@@ -15,7 +14,7 @@
     <ApplicationIcon />
     <OutputType>Library</OutputType>
     <StartupObject />
-    <Version>1.0.4</Version>
+    <Version>1.0.5</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+  	<PackageReference Include="Microsoft.NETCore.App" Version="[1.0.1]" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
     <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.1.0" />
     <PackageReference Include="AWSSDK.ElasticTranscoder" Version="3.3.1.20" />

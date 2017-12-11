@@ -1,9 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>1.0.4</Version>
+    <Version>1.0.5</Version>
     <TargetFrameworks>netstandard1.6;netcoreapp1.0</TargetFrameworks>
-	<FrameworkVersion>1.0.5</FrameworkVersion>
+	<RuntimeFrameworkVersion>1.0.1</RuntimeFrameworkVersion>
     <AssemblyName>Ivy.Web</AssemblyName>
     <PackageId>Ivy.Web</PackageId>
     <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="1.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="1.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
   </ItemGroup>
 

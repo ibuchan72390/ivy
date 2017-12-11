@@ -1,9 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>1.0.3</Version>
+    <Version>1.0.4</Version>
     <TargetFrameworks>netstandard1.6;netcoreapp1.0</TargetFrameworks>
-	<FrameworkVersion>1.0.5</FrameworkVersion>
+	<RuntimeFrameworkVersion>1.0.1</RuntimeFrameworkVersion>
     <AssemblyName>Ivy.Web.Core</AssemblyName>
     <PackageId>Ivy.Web.Core</PackageId>
     <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>

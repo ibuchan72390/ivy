@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard1.6;netcoreapp1.0</TargetFrameworks>
-	<FrameworkVersion>1.0.5</FrameworkVersion>
+	<RuntimeFrameworkVersion>1.0.1</RuntimeFrameworkVersion>
     <AssemblyName>Ivy.Auth0.Management</AssemblyName>
     <PackageId>Ivy.Auth0.Management</PackageId>
     <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
@@ -10,7 +10,7 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <Version>1.0.7</Version>
+    <Version>1.0.8</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,8 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="1.0.4" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="1.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="1.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="1.0.1" />
   </ItemGroup>
 
 </Project>
