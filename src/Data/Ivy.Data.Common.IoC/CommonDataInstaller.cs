@@ -12,8 +12,8 @@ namespace Ivy.Data.Common.IoC
         {
             containerGenerator.RegisterSingleton<IDatabaseKeyManager, DatabaseKeyManager>();
 
-            containerGenerator.RegisterScoped<ITranConn, TranConn>();
-            containerGenerator.RegisterScoped<ITransactionHelper, TransactionHelper>();
+            containerGenerator.RegisterTransient<ITranConn, TranConn>();
+            containerGenerator.RegisterTransient<ITransactionHelper, TransactionHelper>();
 
             containerGenerator.RegisterScoped<ISqlPropertyGenerator, SqlPropertyGenerator>();
 

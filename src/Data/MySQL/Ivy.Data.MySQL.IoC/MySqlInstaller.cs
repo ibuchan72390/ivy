@@ -9,7 +9,8 @@ namespace Ivy.MySQL.IoC
     {
         public void Install(IContainerGenerator containerGenerator)
         {
-            containerGenerator.RegisterScoped<ITranConnGenerator, MySqlTranConnGenerator>();
+            containerGenerator.RegisterTransient<ITranConnGenerator, MySqlTranConnGenerator>();
+
             containerGenerator.RegisterScoped(typeof(ISqlGenerator<>), typeof(MySqlGenerator<>));
             containerGenerator.RegisterScoped(typeof(ISqlGenerator<,>), typeof(MySqlGenerator<,>));
         }
