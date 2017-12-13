@@ -6,9 +6,9 @@ namespace Ivy.IoC.IoC
     {
         public void Install(IContainerGenerator container)
         {
-            container.RegisterTransient<IContainer, Container>();
             container.RegisterTransient<IContainerGenerator, ContainerGenerator>();
 
+            container.RegisterSingleton<IContainer, Container>();
             container.RegisterSingleton<IServiceLocator, ServiceLocator>();
         }
     }

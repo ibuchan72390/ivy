@@ -12,15 +12,15 @@ namespace Ivy.Data.Common.IoC
         {
             containerGenerator.RegisterSingleton<IDatabaseKeyManager, DatabaseKeyManager>();
 
-            containerGenerator.RegisterTransient<ITranConn, TranConn>();
-            containerGenerator.RegisterTransient<ITransactionHelper, TransactionHelper>();
+            containerGenerator.RegisterScoped<ITranConn, TranConn>();
+            containerGenerator.RegisterScoped<ITransactionHelper, TransactionHelper>();
 
-            containerGenerator.RegisterTransient<ISqlPropertyGenerator, SqlPropertyGenerator>();
+            containerGenerator.RegisterScoped<ISqlPropertyGenerator, SqlPropertyGenerator>();
 
-            containerGenerator.RegisterTransient(typeof(IBlobRepository<>), typeof(BlobRepository<>));
-            containerGenerator.RegisterTransient(typeof(IEntityRepository<>), typeof(EntityRepository<>));
-            containerGenerator.RegisterTransient(typeof(IEntityRepository<,>), typeof(EntityRepository<,>));
-            containerGenerator.RegisterTransient(typeof(IEnumEntityRepository<,>), typeof(EnumEntityRepository<,>));
+            containerGenerator.RegisterScoped(typeof(IBlobRepository<>), typeof(BlobRepository<>));
+            containerGenerator.RegisterScoped(typeof(IEntityRepository<>), typeof(EntityRepository<>));
+            containerGenerator.RegisterScoped(typeof(IEntityRepository<,>), typeof(EntityRepository<,>));
+            containerGenerator.RegisterScoped(typeof(IEnumEntityRepository<,>), typeof(EnumEntityRepository<,>));
         }
     }
 
