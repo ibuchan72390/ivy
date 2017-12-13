@@ -22,15 +22,6 @@ namespace Ivy.IoC
             _container = container;
         }
 
-        public Container(
-            IServiceProvider container,
-            ILogger<IContainer> logger)
-        {
-            _container = container;
-
-            _logger = logger;
-        }
-
         #endregion
 
         #region Initialization & Disposal
@@ -65,6 +56,11 @@ namespace Ivy.IoC
         {
             var resolveType = typeof(T);
             return GetService<T>(resolveType);
+        }
+
+        public void InitializeLogger(ILogger<IContainer> logger)
+        {
+            _logger = logger;
         }
 
         #endregion

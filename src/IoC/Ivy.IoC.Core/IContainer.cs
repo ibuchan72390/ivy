@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Extensions.Logging;
 
 namespace Ivy.IoC.Core
 {
@@ -7,5 +8,7 @@ namespace Ivy.IoC.Core
         T GetService<T>() where T : class;
 
         T GetService<T>(Type interfaceType);
+
+        void InitializeLogger(ILogger<IContainer> logger);
     }
 }
