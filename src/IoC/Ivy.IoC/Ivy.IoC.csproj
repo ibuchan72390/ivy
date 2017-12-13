@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>1.0.4</Version>
+    <Version>1.0.5</Version>
     <TargetFrameworks>netstandard1.6;netcoreapp1.0</TargetFrameworks>
 	<RuntimeFrameworkVersion>1.0.1</RuntimeFrameworkVersion>
     <AssemblyName>Ivy.IoC</AssemblyName>
@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="1.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="1.0.0" />
   </ItemGroup>
 
 </Project>
