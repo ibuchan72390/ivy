@@ -19,7 +19,7 @@ namespace Ivy.Utility.Test.Helpers
 
         public RandomizationHelperTests()
         {
-            _sut = ServiceLocator.Instance.Resolve<IRandomizationHelper>();
+            _sut = ServiceLocator.Instance.GetService<IRandomizationHelper>();
         }
 
         #endregion

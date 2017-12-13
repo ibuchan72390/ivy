@@ -14,7 +14,7 @@ namespace Ivy.Transformer.Test.Base
         [Fact]
         public void BaseTransformer_Converts_EntityWithTypedId_To_Model_As_Expected()
         {
-            var _sut = ServiceLocator.Instance.Resolve<IEntityToViewModelTransformer<TestEntity, TestEntityModel>>();
+            var _sut = ServiceLocator.Instance.GetService<IEntityToViewModelTransformer<TestEntity, TestEntityModel>>();
 
             var entity = new TestEntity { Id = 1 };
 
@@ -26,7 +26,7 @@ namespace Ivy.Transformer.Test.Base
         [Fact]
         public void BaseTransformer_Converts_EntityWithTypedId_To_Model_List_As_Expected()
         {
-            var _sut = ServiceLocator.Instance.Resolve<IEntityToViewModelListTransformer<TestEntity, TestEntityModel>>();
+            var _sut = ServiceLocator.Instance.GetService<IEntityToViewModelListTransformer<TestEntity, TestEntityModel>>();
 
             var entities = Enumerable.Range(0, 4).Select(x => new TestEntity { Id = x });
 
@@ -42,7 +42,7 @@ namespace Ivy.Transformer.Test.Base
         [Fact]
         public void BaseTransformer_Converts_EntityWithTypedId_To_Entity_As_Expected()
         {
-            var _sut = ServiceLocator.Instance.Resolve<IViewModelToEntityTransformer<TestEntity, TestEntityModel>>();
+            var _sut = ServiceLocator.Instance.GetService<IViewModelToEntityTransformer<TestEntity, TestEntityModel>>();
 
             var model = new TestEntityModel { Id = 1 };
 
@@ -54,7 +54,7 @@ namespace Ivy.Transformer.Test.Base
         [Fact]
         public void BaseTransformer_Converts_EntityWithTypedId_To_Entity_List_As_Expected()
         {
-            var _sut = ServiceLocator.Instance.Resolve<IViewModelToEntityListTransformer<TestEntity, TestEntityModel>>();
+            var _sut = ServiceLocator.Instance.GetService<IViewModelToEntityListTransformer<TestEntity, TestEntityModel>>();
 
             var models = Enumerable.Range(0, 4).Select(x => new TestEntityModel { Id = x });
 

@@ -29,14 +29,14 @@ namespace Ivy.Amazon.S3.Test.Services
 
         public S3FileManipulatorTests()
         {
-            var containerGen = ServiceLocator.Instance.Resolve<IContainerGenerator>();
+            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
 
             base.ConfigureContainer(containerGen);
 
             _mockS3Client = new Mock<IAmazonS3>();
             containerGen.RegisterInstance<IAmazonS3>(_mockS3Client.Object);
 
-            _sut = containerGen.GenerateContainer().Resolve<IS3FileManipulator>();
+            _sut = containerGen.GenerateContainer().GetService<IS3FileManipulator>();
         }
 
         #endregion

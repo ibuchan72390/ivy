@@ -19,7 +19,7 @@ namespace Ivy.Web.Test.Json
 
         public JsonManipulationServiceTests()
         {
-            _sut = ServiceLocator.Instance.Resolve<IJsonManipulationService>();
+            _sut = ServiceLocator.Instance.GetService<IJsonManipulationService>();
         }
 
         #endregion

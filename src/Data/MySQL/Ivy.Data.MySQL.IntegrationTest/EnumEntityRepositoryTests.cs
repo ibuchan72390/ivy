@@ -24,7 +24,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
         public EnumEntityRepositoryTests()
         {
-            _sut = ServiceLocator.Instance.Resolve<IEnumEntityRepository<TestEnumEntity, TestEnum>>();
+            _sut = ServiceLocator.Instance.GetService<IEnumEntityRepository<TestEnumEntity, TestEnum>>();
             _sut.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
         }
 
@@ -91,7 +91,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
         [Fact]
         public void GetByNames_Returns_As_Expected_With_Results_And_TranConn()
         {
-            var tranConnGen = ServiceLocator.Instance.Resolve<ITranConnGenerator>();
+            var tranConnGen = ServiceLocator.Instance.GetService<ITranConnGenerator>();
 
             IList<TestEnum> enums = new List<TestEnum> { TestEnum.Test1, TestEnum.Test2 };
 

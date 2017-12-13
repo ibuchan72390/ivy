@@ -46,9 +46,9 @@ namespace Ivy.Auth0.Management.Test.Services
 
         public Auth0ManagementRequestGeneratorTests()
         {
-            _queryStringGenerator = ServiceLocator.Instance.Resolve<IAuth0QueryStringUriGenerator>();
+            _queryStringGenerator = ServiceLocator.Instance.GetService<IAuth0QueryStringUriGenerator>();
 
-            var containerGen = ServiceLocator.Instance.Resolve<IContainerGenerator>();
+            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
 
             base.ConfigureContainer(containerGen);
 
@@ -72,7 +72,7 @@ namespace Ivy.Auth0.Management.Test.Services
 
             var container = containerGen.GenerateContainer();
 
-            _sut = container.Resolve<IAuth0ManagementRequestGenerator>();
+            _sut = container.GetService<IAuth0ManagementRequestGenerator>();
         }
 
         #endregion

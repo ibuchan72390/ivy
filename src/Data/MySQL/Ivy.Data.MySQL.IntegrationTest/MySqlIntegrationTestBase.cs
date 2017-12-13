@@ -26,7 +26,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
         }
 
         public ITranConn TestTranConn =>
-            ServiceLocator.Instance.Resolve<ITranConnGenerator>()
+            ServiceLocator.Instance.GetService<ITranConnGenerator>()
                 .GenerateTranConn(connectionString);
 
     }

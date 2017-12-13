@@ -41,20 +41,20 @@ namespace Ivy.IoC.Test
             Assert.Null(_sut.Container);
         }
 
-        [Fact]
-        public void ServiceLocator_Can_Resolve_From_Initialized_Container()
-        {
-            var containerGen = new ContainerGenerator();
+        //[Fact]
+        //public void ServiceLocator_Can_Resolve_From_Initialized_Container()
+        //{
+        //    var containerGen = new ContainerGenerator();
 
-            containerGen.RegisterInstance<TestClass>(new TestClass());
+        //    containerGen.RegisterInstance<TestClass>(new TestClass());
 
-            var container = containerGen.GenerateContainer();
+        //    var container = containerGen.GenerateContainer();
 
-            _sut.Init(container);
+        //    _sut.Init(container);
 
-            var resolved = _sut.GetService(typeof(TestClass));
+        //    var resolved = _sut.GetService(typeof(TestClass));
 
-            Assert.IsType(typeof(TestClass), resolved);
-        }
+        //    Assert.IsType(typeof(TestClass), resolved);
+        //}
     }
 }

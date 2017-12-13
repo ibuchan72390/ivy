@@ -31,7 +31,7 @@ namespace Ivy.MailChimp.Test
         {
             _mockApiHelper = new Mock<IMailChimpApiHelper>();
 
-            var containerGen = ServiceLocator.Instance.Resolve<IContainerGenerator>();
+            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
 
             base.ConfigureContainer(containerGen);
 
@@ -39,7 +39,7 @@ namespace Ivy.MailChimp.Test
 
             var container = containerGen.GenerateContainer();
 
-            _sut = container.Resolve<IMailChimpService>();
+            _sut = container.GetService<IMailChimpService>();
         }
 
         #endregion

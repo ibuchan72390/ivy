@@ -20,7 +20,7 @@ namespace Ivy.Data.MySQL.Test
 
         public MySqlGeneratorEntityTests()
         {
-            _propertyGenerator = ServiceLocator.Instance.Resolve<ISqlPropertyGenerator>();
+            _propertyGenerator = ServiceLocator.Instance.GetService<ISqlPropertyGenerator>();
         }
 
         #endregion
@@ -32,7 +32,7 @@ namespace Ivy.Data.MySQL.Test
         [Fact]
         public void GenerateDeleteQuery_Generates_As_Expected_For_Single_Id()
         {
-            ISqlGenerator<ChildEntity, int> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity, int>>();
+            ISqlGenerator<ChildEntity, int> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<ChildEntity, int>>();
 
             const int idVal = 1;
             var parms = new Dictionary<string, object>();
@@ -50,7 +50,7 @@ namespace Ivy.Data.MySQL.Test
         {
             const int count = 3;
 
-            ISqlGenerator<ChildEntity, int> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity, int>>();
+            ISqlGenerator<ChildEntity, int> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<ChildEntity, int>>();
 
             var idVals = Enumerable.Range(0, count).ToList();
             var parms = new Dictionary<string, object>();
@@ -83,7 +83,7 @@ namespace Ivy.Data.MySQL.Test
         [Fact]
         public void GenerateGetQuery_Generates_As_Expected_For_Entity()
         {
-            ISqlGenerator<ChildEntity, int> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity, int>>();
+            ISqlGenerator<ChildEntity, int> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<ChildEntity, int>>();
 
             const int idVal = 1;
             var parms = new Dictionary<string, object>();
@@ -111,7 +111,7 @@ namespace Ivy.Data.MySQL.Test
         {
             const int count = 3;
 
-            ISqlGenerator<ChildEntity, int> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity, int>>();
+            ISqlGenerator<ChildEntity, int> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<ChildEntity, int>>();
 
             var ids = Enumerable.Range(0, count).ToList();
             var parms = new Dictionary<string, object>();
@@ -149,7 +149,7 @@ namespace Ivy.Data.MySQL.Test
         [Fact]
         public void GenerateSaveOrUpdateQuery_Generates_As_Expected_For_Save()
         {
-            ISqlGenerator<ChildEntity, int> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity, int>>();
+            ISqlGenerator<ChildEntity, int> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<ChildEntity, int>>();
 
             var childEntity = new ChildEntity().GenerateForTest();
 
@@ -171,7 +171,7 @@ namespace Ivy.Data.MySQL.Test
         [Fact]
         public void GenerateSaveOrUpdateQuery_Generates_As_Expected_For_Update()
         {
-            ISqlGenerator<ChildEntity, int> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity, int>>();
+            ISqlGenerator<ChildEntity, int> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<ChildEntity, int>>();
 
             var childEntity = new ChildEntity { Id = 1 }.GenerateForTest();
 

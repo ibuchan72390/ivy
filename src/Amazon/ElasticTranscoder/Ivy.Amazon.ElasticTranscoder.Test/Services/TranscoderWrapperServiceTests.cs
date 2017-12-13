@@ -35,7 +35,7 @@ namespace Ivy.Amazon.ElasticTranscoder.Test.Services
 
         public TranscoderWrapperServiceTests()
         {
-            var containerGen = ServiceLocator.Instance.Resolve<IContainerGenerator>();
+            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
 
             base.ConfigureContainer(containerGen);
 
@@ -45,7 +45,7 @@ namespace Ivy.Amazon.ElasticTranscoder.Test.Services
             _mockConfig = new Mock<ITranscoderConfigProvider>();
             containerGen.RegisterInstance<ITranscoderConfigProvider>(_mockConfig.Object);
 
-            _sut = containerGen.GenerateContainer().Resolve<ITranscoderWrapperService>();
+            _sut = containerGen.GenerateContainer().GetService<ITranscoderWrapperService>();
 
 
             _mockConfig.Setup(x => x.PipelineId).Returns(pipelineId);

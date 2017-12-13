@@ -41,7 +41,7 @@
 
 //        public GuidEntityRepositoryTests()
 //        {
-//            _sut = ServiceLocator.Instance.Resolve<IEntityRepository<GuidIdEntity, Guid>>();
+//            _sut = ServiceLocator.Instance.GetService<IEntityRepository<GuidIdEntity, Guid>>();
 //            _sut.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
 //        }
 
@@ -75,7 +75,7 @@
 //        [Fact]
 //        public void GetById_Can_Take_TranConn()
 //        {
-//            var tranGen = ServiceLocator.Instance.Resolve<ITranConnGenerator>();
+//            var tranGen = ServiceLocator.Instance.GetService<ITranConnGenerator>();
 
 //            var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
@@ -122,7 +122,7 @@
 //        [Fact]
 //        public void GetByIdList_Can_Take_TranConn()
 //        {
-//            var tranGen = ServiceLocator.Instance.Resolve<ITranConnGenerator>();
+//            var tranGen = ServiceLocator.Instance.GetService<ITranConnGenerator>();
 
 //            var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
@@ -168,7 +168,7 @@
 //        [Fact]
 //        public void SaveOrUpdate_Can_Take_TranConn()
 //        {
-//            var tranGen = ServiceLocator.Instance.Resolve<ITranConnGenerator>();
+//            var tranGen = ServiceLocator.Instance.GetService<ITranConnGenerator>();
 
 //            var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
@@ -198,7 +198,7 @@
 //        [Fact]
 //        public void Delete_Can_Take_TranConn()
 //        {
-//            var tranGen = ServiceLocator.Instance.Resolve<ITranConnGenerator>();
+//            var tranGen = ServiceLocator.Instance.GetService<ITranConnGenerator>();
 
 //            var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
@@ -228,7 +228,7 @@
 //        [Fact]
 //        public void DeleteById_Can_Take_TranConn()
 //        {
-//            var tranGen = ServiceLocator.Instance.Resolve<ITranConnGenerator>();
+//            var tranGen = ServiceLocator.Instance.GetService<ITranConnGenerator>();
 
 //            var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 

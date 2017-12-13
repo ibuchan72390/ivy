@@ -45,7 +45,7 @@ namespace Ivy.TestUtilities.Base
 
             // Setup our Service Locator for test facilities
             // This should set up our SvcLocator with the correct items for test without Mocks
-            var svcLocator = tempContainer.Resolve<IServiceLocator>();
+            var svcLocator = tempContainer.GetService<IServiceLocator>();
             svcLocator.Init(tempContainer);
         }
 
@@ -80,7 +80,7 @@ namespace Ivy.TestUtilities.Base
             if (containerGen == null) containerGen = _containerGen;
 
             Container = containerGen.GenerateContainer();
-            Sut = Container.Resolve<TService>();
+            Sut = Container.GetService<TService>();
         }
 
         protected Mock<T> InitializeMoq<T>(IContainerGenerator containerGen)

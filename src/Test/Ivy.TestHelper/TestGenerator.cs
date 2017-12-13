@@ -14,7 +14,7 @@ namespace Ivy.TestHelper
         #region Variables & Constants
 
         private static IRandomizationHelper _rand =>
-            ServiceLocator.Instance.Resolve<IRandomizationHelper>();
+            ServiceLocator.Instance.GetService<IRandomizationHelper>();
 
         private static string connString = null;
         public static void Init(string connectionString)
@@ -209,7 +209,7 @@ namespace Ivy.TestHelper
         {
             ValidateConnectionString();
 
-            var repo = ServiceLocator.Instance.Resolve<IEntityRepository<TEntity, TKey>>();
+            var repo = ServiceLocator.Instance.GetService<IEntityRepository<TEntity, TKey>>();
             repo.InitializeByConnectionString(connString);
             return repo.SaveOrUpdate(entity, tc);
         }
@@ -219,7 +219,7 @@ namespace Ivy.TestHelper
         {
             ValidateConnectionString();
 
-            var repo = ServiceLocator.Instance.Resolve<IBlobRepository<TEntity>>();
+            var repo = ServiceLocator.Instance.GetService<IBlobRepository<TEntity>>();
             repo.InitializeByConnectionString(connString);
             repo.Insert(entity, tc);
 

@@ -22,7 +22,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
         public BasicRepositoryTests()
         {
-            _sut = ServiceLocator.Instance.Resolve<IBlobRepository<BlobEntity>>();
+            _sut = ServiceLocator.Instance.GetService<IBlobRepository<BlobEntity>>();
 
             _sut.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
         }
@@ -59,7 +59,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
         {
             var entity = new BlobEntity().GenerateForTest();
 
-            var tranGenerator = ServiceLocator.Instance.Resolve<ITranConnGenerator>();
+            var tranGenerator = ServiceLocator.Instance.GetService<ITranConnGenerator>();
             var tran = tranGenerator.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
             _sut.Insert(entity, tran);
@@ -112,7 +112,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
         {
             var entities = Enumerable.Range(0, 5).Select(x => new BlobEntity().GenerateForTest()).ToList();
 
-            var tranGenerator = ServiceLocator.Instance.Resolve<ITranConnGenerator>();
+            var tranGenerator = ServiceLocator.Instance.GetService<ITranConnGenerator>();
             var tc = tranGenerator.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
             _sut.BulkInsert(entities, tc);

@@ -22,7 +22,7 @@ namespace Ivy.IoC.Tests
 
             var container = _sut.GenerateContainer();
 
-            var result = container.Resolve<ITestInterface>();
+            var result = container.GetService<ITestInterface>();
 
             Assert.IsType<TestClass>(result);
         }
@@ -35,7 +35,7 @@ namespace Ivy.IoC.Tests
 
             var container = _sut.GenerateContainer();
 
-            var result = container.Resolve<ITestInterface>();
+            var result = container.GetService<ITestInterface>();
 
             Assert.IsType<TestClass>(result);
         }
@@ -48,7 +48,7 @@ namespace Ivy.IoC.Tests
 
             var container = _sut.GenerateContainer();
 
-            var result = container.Resolve<ITestGenericInterface<int>>();
+            var result = container.GetService<ITestGenericInterface<int>>();
 
             Assert.IsType(typeof(TestGenericClass<int>), result);
         }
@@ -61,7 +61,7 @@ namespace Ivy.IoC.Tests
 
             var container = _sut.GenerateContainer();
 
-            var result = container.Resolve<ITestComplexGenericInterface<int,string>>();
+            var result = container.GetService<ITestComplexGenericInterface<int,string>>();
 
             Assert.IsType(typeof(TestComplexGenericClass<int,string>), result);
         }
@@ -75,7 +75,7 @@ namespace Ivy.IoC.Tests
 
             var container = _sut.GenerateContainer();
 
-            var result = container.Resolve<TestClass>();
+            var result = container.GetService<TestClass>();
 
             Assert.Same(myClass, result);
         }
@@ -89,7 +89,7 @@ namespace Ivy.IoC.Tests
 
             var container = _sut.GenerateContainer();
 
-            var result = container.Resolve<ITestInterface>();
+            var result = container.GetService<ITestInterface>();
 
             Assert.IsType<TestClass>(result);
             Assert.Equal(testClassInstance.Integer, result.Integer);
@@ -107,7 +107,7 @@ namespace Ivy.IoC.Tests
 
             var container = _sut.GenerateContainer();
 
-            var result = container.Resolve<ITestInterface>();
+            var result = container.GetService<ITestInterface>();
 
             Assert.Equal(intReturn, result.Integer);
 

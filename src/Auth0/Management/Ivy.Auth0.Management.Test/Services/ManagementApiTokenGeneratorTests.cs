@@ -32,7 +32,7 @@ namespace Ivy.Auth0.Management.Test.Services
 
         public ManagementApiTokenGeneratorTests()
         {
-            var containerGen = ServiceLocator.Instance.Resolve<IContainerGenerator>();
+            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
 
             base.ConfigureContainer(containerGen);
 
@@ -44,7 +44,7 @@ namespace Ivy.Auth0.Management.Test.Services
 
 
             var container = containerGen.GenerateContainer();
-            _sut = container.Resolve<IManagementApiTokenGenerator>();
+            _sut = container.GetService<IManagementApiTokenGenerator>();
 
 
             request = new HttpRequestMessage();

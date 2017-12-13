@@ -18,7 +18,7 @@ namespace Ivy.Web.Test.Json
 
         public JsonSerializationServiceTests()
         {
-            _sut = ServiceLocator.Instance.Resolve<IJsonSerializationService>();
+            _sut = ServiceLocator.Instance.GetService<IJsonSerializationService>();
         }
 
         #endregion

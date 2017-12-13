@@ -28,11 +28,6 @@ namespace Ivy.IoC
 
         #region Public Methods
 
-        public object GetService(Type serviceType)
-        {
-            return _container.Resolve(serviceType);
-        }
-
         public virtual void Reset()
         {
             _container = null;

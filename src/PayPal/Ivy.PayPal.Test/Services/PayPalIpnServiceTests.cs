@@ -26,7 +26,7 @@ namespace Ivy.PayPal.Test.Services
 
         public PayPalIpnServiceTests()
         {
-            var containerGen = ServiceLocator.Instance.Resolve<IContainerGenerator>();
+            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
 
             base.ConfigureContainer(containerGen);
 
@@ -36,7 +36,7 @@ namespace Ivy.PayPal.Test.Services
             _mockValidator = new Mock<IPayPalIpnValidator>();
             containerGen.RegisterInstance<IPayPalIpnValidator>(_mockValidator.Object);
 
-            _sut = containerGen.GenerateContainer().Resolve<IPayPalIpnService>();
+            _sut = containerGen.GenerateContainer().GetService<IPayPalIpnService>();
         }
 
         #endregion

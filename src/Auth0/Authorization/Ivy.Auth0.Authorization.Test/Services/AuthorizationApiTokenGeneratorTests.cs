@@ -32,7 +32,7 @@ namespace Ivy.Auth0.Authorization.Test.Services
 
         public AuthorizationApiTokenGeneratorTests()
         {
-            var containerGen = ServiceLocator.Instance.Resolve<IContainerGenerator>();
+            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
 
             base.ConfigureContainer(containerGen);
 
@@ -44,7 +44,7 @@ namespace Ivy.Auth0.Authorization.Test.Services
 
 
             var container = containerGen.GenerateContainer();
-            _sut = container.Resolve<IAuthorizationApiTokenGenerator>();
+            _sut = container.GetService<IAuthorizationApiTokenGenerator>();
 
 
             request = new HttpRequestMessage();

@@ -21,7 +21,7 @@
 
 //        public MySqlGeneratorGuidEntityTests()
 //        {
-//            _propertyGenerator = ServiceLocator.Instance.Resolve<ISqlPropertyGenerator>();
+//            _propertyGenerator = ServiceLocator.Instance.GetService<ISqlPropertyGenerator>();
 //        }
 
 //        #endregion
@@ -33,7 +33,7 @@
 //        [Fact]
 //        public void GenerateDeleteQuery_Generates_As_Expected()
 //        {
-//            ISqlGenerator<GuidEntity, Guid> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<GuidEntity, Guid>>();
+//            ISqlGenerator<GuidEntity, Guid> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<GuidEntity, Guid>>();
 
 //            Guid idVal = Guid.NewGuid();
 //            var parms = new Dictionary<string, object>();
@@ -57,7 +57,7 @@
 //        [Fact]
 //        public void GenerateGetQuery_Generates_As_Expected()
 //        {
-//            ISqlGenerator<GuidEntity, Guid> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<GuidEntity, Guid>>();
+//            ISqlGenerator<GuidEntity, Guid> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<GuidEntity, Guid>>();
 
 //            Guid idVal = Guid.NewGuid();
 //            var parms = new Dictionary<string, object>();
@@ -83,7 +83,7 @@
 //        [Fact]
 //        public void GenerateSaveOrUpdateQuery_Generates_As_Expected_For_Save()
 //        {
-//            ISqlGenerator<GuidEntity, Guid> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<GuidEntity, Guid>>();
+//            ISqlGenerator<GuidEntity, Guid> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<GuidEntity, Guid>>();
 
 //            var GuidIdEntity = new GuidEntity().GenerateForTest();
 

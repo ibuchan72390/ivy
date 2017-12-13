@@ -23,9 +23,9 @@ namespace Ivy.Data.MySQL.Test
 
         public MySqlGeneratorStringEntityTests()
         {
-            _propertyGenerator = ServiceLocator.Instance.Resolve<ISqlPropertyGenerator>();
+            _propertyGenerator = ServiceLocator.Instance.GetService<ISqlPropertyGenerator>();
 
-            _randomizationHelper = ServiceLocator.Instance.Resolve<IRandomizationHelper>();
+            _randomizationHelper = ServiceLocator.Instance.GetService<IRandomizationHelper>();
         }
 
         #endregion
@@ -37,7 +37,7 @@ namespace Ivy.Data.MySQL.Test
         [Fact]
         public void GenerateDeleteQuery_Generates_As_Expected()
         {
-            ISqlGenerator<StringEntity, string> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<StringEntity, string>>();
+            ISqlGenerator<StringEntity, string> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<StringEntity, string>>();
 
             string idVal = _randomizationHelper.RandomString();
             var parms = new Dictionary<string, object>();
@@ -61,7 +61,7 @@ namespace Ivy.Data.MySQL.Test
         [Fact]
         public void GenerateGetQuery_Generates_As_Expected()
         {
-            ISqlGenerator<StringEntity, string> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<StringEntity, string>>();
+            ISqlGenerator<StringEntity, string> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<StringEntity, string>>();
 
             string idVal = _randomizationHelper.RandomString();
             var parms = new Dictionary<string, object>();
@@ -87,7 +87,7 @@ namespace Ivy.Data.MySQL.Test
         [Fact]
         public void GenerateSaveOrUpdateQuery_Generates_As_Expected_For_Save()
         {
-            ISqlGenerator<StringEntity, string> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<StringEntity, string>>();
+            ISqlGenerator<StringEntity, string> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<StringEntity, string>>();
 
             var StringIdEntity = new StringEntity().GenerateForTest();
 

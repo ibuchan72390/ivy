@@ -27,13 +27,13 @@ namespace Ivy.Utility.Test.Helpers
             _mockClock = new Mock<IClock>();
             _mockClock.Setup(x => x.UtcNow).Returns(_mockNow);
 
-            var containerGen = ServiceLocator.Instance.Resolve<IContainerGenerator>();
+            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
 
             base.ConfigureContainer(containerGen);
 
             containerGen.RegisterInstance<IClock>(_mockClock.Object);
 
-            _sut = containerGen.GenerateContainer().Resolve<IRandomGenerator>();
+            _sut = containerGen.GenerateContainer().GetService<IRandomGenerator>();
         }
 
         #endregion

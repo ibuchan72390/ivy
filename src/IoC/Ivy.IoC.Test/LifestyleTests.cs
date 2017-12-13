@@ -21,9 +21,9 @@ namespace Ivy.IoC.Test
 
             var container = _sut.GenerateContainer();
 
-            var v1 = container.Resolve<ITestInterface>();
-            var v2 = container.Resolve<ITestInterface>();
-            var v3 = container.Resolve<ITestInterface>();
+            var v1 = container.GetService<ITestInterface>();
+            var v2 = container.GetService<ITestInterface>();
+            var v3 = container.GetService<ITestInterface>();
 
             Assert.Same(v1, v2);
             Assert.Same(v2, v3);
@@ -38,9 +38,9 @@ namespace Ivy.IoC.Test
 
             var container = _sut.GenerateContainer();
 
-            var v1 = container.Resolve<ITestInterface>();
-            var v2 = container.Resolve<ITestInterface>();
-            var v3 = container.Resolve<ITestInterface>();
+            var v1 = container.GetService<ITestInterface>();
+            var v2 = container.GetService<ITestInterface>();
+            var v3 = container.GetService<ITestInterface>();
 
             Assert.NotSame(v1, v2);
             Assert.NotSame(v2, v3);

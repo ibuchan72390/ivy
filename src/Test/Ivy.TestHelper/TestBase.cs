@@ -45,7 +45,7 @@ namespace Ivy.TestHelper
             var container = containerGen.GenerateContainer();
 
             // Resolve and initialize singleton ServiceLocator instance
-            var svcLocator = container.Resolve<IServiceLocator>();
+            var svcLocator = container.GetService<IServiceLocator>();
 
             svcLocator.Init(container);
         }

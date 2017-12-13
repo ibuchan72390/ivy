@@ -13,7 +13,7 @@ namespace Ivy.Utility.Test.Helpers
 
         public ClockTests()
         {
-            _sut = ServiceLocator.Instance.Resolve<IClock>();
+            _sut = ServiceLocator.Instance.GetService<IClock>();
         }
 
         [Fact]

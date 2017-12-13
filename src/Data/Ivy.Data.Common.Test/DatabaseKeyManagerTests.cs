@@ -20,7 +20,7 @@ namespace Ivy.Data.Common.Test
         {
             // Create a new test container each time so we can resolve a fresh singleton instance for each
 
-            var localContainerGen = ServiceLocator.Instance.Resolve<IContainerGenerator>();
+            var localContainerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
             localContainerGen.InstallIvyCommonData();
             _testContainer = localContainerGen.GenerateContainer();
 
@@ -37,7 +37,7 @@ namespace Ivy.Data.Common.Test
         [Fact]
         public void Initializing_DatabaseKeyManager_Twice_Throws_Exception()
         {
-            var keyManager = _testContainer.Resolve<IDatabaseKeyManager>();
+            var keyManager = _testContainer.GetService<IDatabaseKeyManager>();
 
             keyManager.Init(new Dictionary<string, string>());
 
@@ -49,7 +49,7 @@ namespace Ivy.Data.Common.Test
         [Fact]
         public void GetConnectionString_Throws_Error_When_Not_Initialized()
         {
-            var keyManager = _testContainer.Resolve<IDatabaseKeyManager>();
+            var keyManager = _testContainer.GetService<IDatabaseKeyManager>();
 
             var e = Assert.Throws<Exception>(() => keyManager.GetConnectionString(""));
 
@@ -62,7 +62,7 @@ namespace Ivy.Data.Common.Test
         {
             const string databaseKey = "test";
 
-            var keyManager = _testContainer.Resolve<IDatabaseKeyManager>();
+            var keyManager = _testContainer.GetService<IDatabaseKeyManager>();
 
             keyManager.Init(new Dictionary<string, string>());
 
@@ -75,7 +75,7 @@ namespace Ivy.Data.Common.Test
         [Fact]
         public void GetConnectionString_Returns_Connection_String_When_Found_From_Init_Collection()
         {
-            var keyManager = _testContainer.Resolve<IDatabaseKeyManager>();
+            var keyManager = _testContainer.GetService<IDatabaseKeyManager>();
 
             keyManager.Init(_sampleKeyDictionary);
 
@@ -88,7 +88,7 @@ namespace Ivy.Data.Common.Test
         [Fact]
         public void DatabaseKeyManager_Maintains_Initialization_Through_Mutliple_Resolutions()
         {
-            var keyManager = _testContainer.Resolve<IDatabaseKeyManager>();
+            var keyManager = _testContainer.GetService<IDatabaseKeyManager>();
 
             keyManager.Init(_sampleKeyDictionary);
 

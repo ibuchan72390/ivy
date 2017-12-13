@@ -17,7 +17,7 @@ namespace Ivy.Amazon.S3.Test.Services
 
         public S3UrlHelperTests()
         {
-            _sut = ServiceLocator.Instance.Resolve<IS3UrlHelper>();
+            _sut = ServiceLocator.Instance.GetService<IS3UrlHelper>();
         }
 
         #endregion

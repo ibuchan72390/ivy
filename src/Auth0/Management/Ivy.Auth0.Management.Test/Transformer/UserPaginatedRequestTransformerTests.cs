@@ -22,7 +22,7 @@ namespace Ivy.Auth0.Management.Test.Transformers
 
         public UserPaginatedRequestTransformerTests()
         {
-            _sut = ServiceLocator.Instance.Resolve<IUserPaginatedRequestTransformer>();
+            _sut = ServiceLocator.Instance.GetService<IUserPaginatedRequestTransformer>();
         }
 
         #endregion

@@ -28,14 +28,14 @@ namespace Ivy.Amazon.ElasticTranscoder.Test.Services
 
         public TranscoderStatusServiceTests()
         {
-            var containerGen = ServiceLocator.Instance.Resolve<IContainerGenerator>();
+            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
 
             base.ConfigureContainer(containerGen);
 
             _mockTranscoder = new Mock<IAmazonElasticTranscoder>();
             containerGen.RegisterInstance<IAmazonElasticTranscoder>(_mockTranscoder.Object);
 
-            _sut = containerGen.GenerateContainer().Resolve<ITranscoderStatusService>();
+            _sut = containerGen.GenerateContainer().GetService<ITranscoderStatusService>();
         }
 
         #endregion

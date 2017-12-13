@@ -2,10 +2,10 @@
 
 namespace Ivy.IoC.Core
 {
-    public interface IContainer : IDisposable
+    public interface IContainer : IDisposable, IServiceProvider
     {
-        T Resolve<T>() where T : class;
+        T GetService<T>() where T : class;
 
-        object Resolve(Type interfaceType);
+        T GetService<T>(Type interfaceType);
     }
 }

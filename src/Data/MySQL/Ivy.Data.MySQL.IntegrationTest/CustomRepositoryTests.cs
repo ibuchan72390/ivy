@@ -202,7 +202,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
         public CustomRepositoryTests()
         {
-            var containerGen = ServiceLocator.Instance.Resolve<IContainerGenerator>();
+            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
 
             containerGen.InstallIvyIoC();
             containerGen.InstallIvyUtility();
@@ -214,7 +214,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
             var _container = containerGen.GenerateContainer();
 
-            _sut = _container.Resolve<ICustomParentEntityRepository>();
+            _sut = _container.GetService<ICustomParentEntityRepository>();
 
             _sut.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
         }

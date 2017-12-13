@@ -8,7 +8,6 @@ namespace Ivy.IoC
     {
         #region Variables & Constants
 
-        //private Autofac.Core.Container _container;
         private IServiceProvider _container;
 
         private ILogger<IContainer> _logger;
@@ -44,38 +43,28 @@ namespace Ivy.IoC
         #endregion
 
         #region Public Methods
-
-        public object Resolve(Type interfaceType)
+        
+        public object GetService(Type serviceType)
         {
             ValidateContainerInitialized();
 
-            LogContainerResolve(interfaceType);
+            LogContainerResolve(serviceType);
 
-            var result = _container.GetService(interfaceType);
+            var result = _container.GetService(serviceType);
 
             return result;
         }
 
-        public T Resolve<T>()
-            where T : class
+        public T GetService<T>(Type interfaceType)
         {
-            ValidateContainerInitialized();
-
-            var resolveType = typeof(T);
-
-            LogContainerResolve(resolveType);
-
-            return (T)Resolve(resolveType);
+            var result = GetService(interfaceType);
+            return (T)result;
         }
 
-        public T Resolve<T>(Type interfaceType)
+        public T GetService<T>() where T : class
         {
-            ValidateContainerInitialized();
-
-            LogContainerResolve(interfaceType);
-
-            var result = _container.GetService(interfaceType);
-            return (T)result;
+            var resolveType = typeof(T);
+            return GetService<T>(resolveType);
         }
 
         #endregion

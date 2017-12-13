@@ -22,7 +22,7 @@ namespace Ivy.Data.MySQL.Test
         {
             var dbKey = new DatabaseKey { Key = "Test Key", ConnectionString = "Test ConnString" };
 
-            var _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<DatabaseKey, int>>();
+            var _sut = ServiceLocator.Instance.GetService<ISqlGenerator<DatabaseKey, int>>();
 
             var parms = new Dictionary<string, object>();
 

@@ -22,7 +22,7 @@ namespace Ivy.Data.MySQL.Test
 
         public MySqlGeneratorBasicTests()
         {
-            _propertyGenerator = ServiceLocator.Instance.Resolve<ISqlPropertyGenerator>();
+            _propertyGenerator = ServiceLocator.Instance.GetService<ISqlPropertyGenerator>();
         }
 
         #endregion
@@ -34,7 +34,7 @@ namespace Ivy.Data.MySQL.Test
         [Fact]
         public void GenerateGetCountQuery_Returns_As_Expected()
         {
-            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<ChildEntity>>();
 
             var result = _sut.GenerateGetCountQuery();
 
@@ -44,7 +44,7 @@ namespace Ivy.Data.MySQL.Test
         [Fact]
         public void GenerateGetCountQuery_Returns_As_Expected_With_SqlJoin()
         {
-            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<ChildEntity>>();
 
             const string sqlJoin = "JOIN CoreEntity CE ON (`THIS`.`CoreEntityId` = `CE`.`Id`)";
 
@@ -56,7 +56,7 @@ namespace Ivy.Data.MySQL.Test
         [Fact]
         public void GenerateGetCountQuery_Returns_As_Expected_With_SqlWhere()
         {
-            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<ChildEntity>>();
 
             const string sqlWhere = "WHERE `THIS`.`CoreEntityId` = @coreEntityId";
 
@@ -68,7 +68,7 @@ namespace Ivy.Data.MySQL.Test
         [Fact]
         public void GenerateGetCountQuery_Returns_As_Expected_With_SqlJoin_And_SqlWhere()
         {
-            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<ChildEntity>>();
 
             const string sqlJoin = "JOIN CoreEntity CE ON (`THIS`.`CoreEntityId` = `CE`.`Id`)";
             const string sqlWhere = "WHERE `THIS`.`CoreEntityId` = @coreEntityId";
@@ -87,7 +87,7 @@ namespace Ivy.Data.MySQL.Test
         [Fact]
         public void GenerateGetQuery_Works_As_Expected()
         {
-            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<ChildEntity>>();
 
             var result = _sut.GenerateGetQuery();
 
@@ -105,7 +105,7 @@ namespace Ivy.Data.MySQL.Test
         [Fact]
         public void GenerateGetQuery_Works_As_Expected_With_Select_Prefix()
         {
-            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<ChildEntity>>();
 
             var result = _sut.GenerateGetQuery("DISTINCT");
 
@@ -125,7 +125,7 @@ namespace Ivy.Data.MySQL.Test
         {
             const string where = "WHERE Id = @id";
 
-            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<ChildEntity>>();
 
             var result = _sut.GenerateGetQuery(null, null, where);
 
@@ -145,7 +145,7 @@ namespace Ivy.Data.MySQL.Test
         {
             const string orderBy = "ORDER BY `Id` DESC";
 
-            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<ChildEntity>>();
 
             var result = _sut.GenerateGetQuery(null, null, null, orderBy);
 
@@ -165,7 +165,7 @@ namespace Ivy.Data.MySQL.Test
         {
             const int limit = 5;
 
-            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<ChildEntity>>();
 
             var result = _sut.GenerateGetQuery(null, null, null, null, limit);
 
@@ -187,7 +187,7 @@ namespace Ivy.Data.MySQL.Test
             const int limit = 5;
             const int offset = 10;
 
-            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<ChildEntity>>();
 
             var result = _sut.GenerateGetQuery(null, null, null, null, limit, offset);
 
@@ -207,7 +207,7 @@ namespace Ivy.Data.MySQL.Test
         {
             const int offset = 10;
 
-            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<ChildEntity>>();
 
             var e = Assert.Throws<Exception>(() => _sut.GenerateGetQuery(null, null, null, null, null, offset));
 
@@ -219,7 +219,7 @@ namespace Ivy.Data.MySQL.Test
         {
             const string joinClause = "JOIN CoreEntity ON CoreEntity.Id = ChildEntity.CoreEntityId";
 
-            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<ChildEntity>>();
 
             var result = _sut.GenerateGetQuery(null, null, joinClause);
 
@@ -243,7 +243,7 @@ namespace Ivy.Data.MySQL.Test
             const int limit = 5;
             const int offset = 10;
 
-            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<ChildEntity>>();
 
             var result = _sut.GenerateGetQuery(null, whereClause, joinClause, orderClause, limit, offset);
 
@@ -265,7 +265,7 @@ namespace Ivy.Data.MySQL.Test
         [Fact]
         public void GenerateDeleteAllQuery_Works_As_Expected()
         {
-            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<ChildEntity>>();
 
             var result = _sut.GenerateDeleteQuery();
 
@@ -277,7 +277,7 @@ namespace Ivy.Data.MySQL.Test
         [Fact]
         public void GenerateDeleteAllQuery_Works_As_Expected_With_Where_Clause()
         {
-            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<ChildEntity>>();
 
             var result = _sut.GenerateDeleteQuery("WHERE `Id` = @id");
 
@@ -293,7 +293,7 @@ namespace Ivy.Data.MySQL.Test
         [Fact]
         public void GenerateInsertQuery_Generates_Query_As_Expected()
         {
-            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<ChildEntity>>();
 
             var result = _sut.GenerateInsertQuery("(`Name`)", "('test')");
 
@@ -305,7 +305,7 @@ namespace Ivy.Data.MySQL.Test
         [Fact]
         public void GenerateInsertQuery_Prepends_Parenthesis_Sql_Value_If_Necessary()
         {
-            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<ChildEntity>>();
 
             var result = _sut.GenerateInsertQuery("`Name`)", "('test')");
 
@@ -317,7 +317,7 @@ namespace Ivy.Data.MySQL.Test
         [Fact]
         public void GenerateInsertQuery_Appends_Parenthesis_To_Sql_Value_If_Necessary()
         {
-            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<ChildEntity>>();
 
             var result = _sut.GenerateInsertQuery("(`Name`", "('test')");
 
@@ -329,7 +329,7 @@ namespace Ivy.Data.MySQL.Test
         [Fact]
         public void GenerateInsertQuery_Prepends_Parenthesis_To_InsertClause_As_Necessary()
         {
-            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<ChildEntity>>();
 
             var result = _sut.GenerateInsertQuery("(`Name`)", "'test')");
 
@@ -341,7 +341,7 @@ namespace Ivy.Data.MySQL.Test
         [Fact]
         public void GenerateInsertQuery_Apppends_Parenthesis_To_InsertClause_As_Necessary()
         {
-            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<ChildEntity>>();
 
             var result = _sut.GenerateInsertQuery("(`Name`)", "('test'");
 
@@ -357,7 +357,7 @@ namespace Ivy.Data.MySQL.Test
         [Fact]
         public void GenerateInsertQuery_Generates_Query_As_Expected_For_Entity()
         {
-            ISqlGenerator<BlobEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<BlobEntity>>();
+            ISqlGenerator<BlobEntity> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<BlobEntity>>();
 
             var entity = new BlobEntity().GenerateForTest();
 
@@ -373,7 +373,7 @@ namespace Ivy.Data.MySQL.Test
         [Fact]
         public void GenerateInsertQuery_Configures_Params_Appropriately()
         {
-            ISqlGenerator<BlobEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<BlobEntity>>();
+            ISqlGenerator<BlobEntity> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<BlobEntity>>();
 
             var entity = new BlobEntity().GenerateForTest();
 
@@ -399,7 +399,7 @@ namespace Ivy.Data.MySQL.Test
         [Fact]
         public void GenerateInsertQuery_With_Generic_Enumerable_Generates_Query_As_Expected_For_Entity()
         {
-            ISqlGenerator<BlobEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<BlobEntity>>();
+            ISqlGenerator<BlobEntity> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<BlobEntity>>();
 
             var entities = Enumerable.Range(0, 3)
                 .Select(x => new BlobEntity().GenerateForTest());
@@ -416,7 +416,7 @@ namespace Ivy.Data.MySQL.Test
         [Fact]
         public void GenerateInsertQuery_With_Generic_Enumerable_Configures_Params_Appropriately()
         {
-            ISqlGenerator<BlobEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<BlobEntity>>();
+            ISqlGenerator<BlobEntity> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<BlobEntity>>();
 
             var entities = Enumerable.Range(0, 3)
                 .Select(x => new BlobEntity().GenerateForTest())
@@ -447,7 +447,7 @@ namespace Ivy.Data.MySQL.Test
         [Fact]
         public void GenerateUpdateQuery_Formats_Query_As_Expected()
         {
-            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<ChildEntity>>();
 
             var result = _sut.GenerateUpdateQuery("SET `Name` = 'test'");
 
@@ -459,7 +459,7 @@ namespace Ivy.Data.MySQL.Test
         [Fact]
         public void GenerateUpdateQuery_Appends_Where_If_Provided()
         {
-            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.Resolve<ISqlGenerator<ChildEntity>>();
+            ISqlGenerator<ChildEntity> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<ChildEntity>>();
 
             var result = _sut.GenerateUpdateQuery("SET `Name` = 'test'", "WHERE `Id` = @id");
 

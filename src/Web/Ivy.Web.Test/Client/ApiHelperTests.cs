@@ -33,7 +33,7 @@ namespace Ivy.Web.Test.Client
             request = new HttpRequestMessage { RequestUri = new Uri("http://google.com") };
             response = new HttpResponseMessage { RequestMessage = request };
 
-            var containerGen = ServiceLocator.Instance.Resolve<IContainerGenerator>();
+            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
 
             base.ConfigureContainer(containerGen);
 
@@ -45,7 +45,7 @@ namespace Ivy.Web.Test.Client
 
             var container = containerGen.GenerateContainer();
 
-            _sut = container.Resolve<IApiHelper>();
+            _sut = container.GetService<IApiHelper>();
         }
 
         #endregion

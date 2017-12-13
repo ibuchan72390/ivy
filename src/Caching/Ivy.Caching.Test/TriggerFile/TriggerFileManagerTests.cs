@@ -22,7 +22,7 @@ namespace Ivy.Caching.Test
 
         public TriggerFileManagerTests()
         {
-            _sut = ServiceLocator.Instance.Resolve<ITriggerFileManager>();
+            _sut = ServiceLocator.Instance.GetService<ITriggerFileManager>();
         }
 
         public void Dispose()

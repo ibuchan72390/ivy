@@ -23,7 +23,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
         public BaseRepositoryTests()
         {
-            _sut = ServiceLocator.Instance.Resolve<IBlobRepository<BlobEntity>>();
+            _sut = ServiceLocator.Instance.GetService<IBlobRepository<BlobEntity>>();
             _sut.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
         }
 

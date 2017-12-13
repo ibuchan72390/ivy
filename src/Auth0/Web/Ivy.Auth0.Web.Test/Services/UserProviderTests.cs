@@ -25,14 +25,14 @@ namespace Ivy.Auth0.Web.Test.Services
 
         public UserProviderTests()
         {
-            var containerGen = ServiceLocator.Instance.Resolve<IContainerGenerator>();
+            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
 
             base.ConfigureContainer(containerGen);
 
             _mockContext = new Mock<IHttpContextAccessor>();
             containerGen.RegisterInstance<IHttpContextAccessor>(_mockContext.Object);
 
-            _sut = containerGen.GenerateContainer().Resolve<IUserProvider>();
+            _sut = containerGen.GenerateContainer().GetService<IUserProvider>();
         }
 
         #endregion

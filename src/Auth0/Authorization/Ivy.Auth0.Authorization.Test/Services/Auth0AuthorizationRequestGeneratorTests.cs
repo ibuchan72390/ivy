@@ -51,9 +51,9 @@ namespace Ivy.Auth0.Authorization.Test.Services
 
         public Auth0AuthorizationRequestGeneratorTests()
         {
-            _serializationService = ServiceLocator.Instance.Resolve<IJsonSerializationService>();
+            _serializationService = ServiceLocator.Instance.GetService<IJsonSerializationService>();
 
-            var containerGen = ServiceLocator.Instance.Resolve<IContainerGenerator>();
+            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
 
             base.ConfigureContainer(containerGen);
 
@@ -79,7 +79,7 @@ namespace Ivy.Auth0.Authorization.Test.Services
 
             var container = containerGen.GenerateContainer();
 
-            _sut = container.Resolve<IAuth0AuthorizationRequestGenerator>();
+            _sut = container.GetService<IAuth0AuthorizationRequestGenerator>();
         }
 
         #endregion

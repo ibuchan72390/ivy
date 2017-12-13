@@ -2,7 +2,7 @@
 
 namespace Ivy.IoC.Core
 {
-    public interface IServiceLocator : IServiceProvider
+    public interface IServiceLocator
     {
         IContainer Container { get; }
 

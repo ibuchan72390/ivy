@@ -24,17 +24,17 @@ namespace Ivy.Auth0.Management.Test.Services
 
         public Auth0JsonGeneratorTests()
         {
-            _serializationService = ServiceLocator.Instance.Resolve<IJsonSerializationService>();
+            _serializationService = ServiceLocator.Instance.GetService<IJsonSerializationService>();
 
             _mockJsonManipulator = new Mock<IAuth0JsonManipulator>();
 
-            var containerGen = ServiceLocator.Instance.Resolve<IContainerGenerator>();
+            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
 
             base.ConfigureContainer(containerGen);
 
             containerGen.RegisterInstance<IAuth0JsonManipulator>(_mockJsonManipulator.Object);
 
-            _sut = containerGen.GenerateContainer().Resolve<IAuth0JsonGenerator>();
+            _sut = containerGen.GenerateContainer().GetService<IAuth0JsonGenerator>();
         }
 
         #endregion

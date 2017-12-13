@@ -23,7 +23,7 @@ namespace Ivy.Auth0.Management.Test.Services
 
         public Auth0QueryStringUriGeneratorTests()
         {
-            _sut = ServiceLocator.Instance.Resolve<IAuth0QueryStringUriGenerator>();
+            _sut = ServiceLocator.Instance.GetService<IAuth0QueryStringUriGenerator>();
         }
 
         #endregion

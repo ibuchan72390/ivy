@@ -28,7 +28,7 @@ namespace Ivy.Amazon.S3.Test.Services
 
         public S3SignedUrlServiceTests()
         {
-            var containerGen = ServiceLocator.Instance.Resolve<IContainerGenerator>();
+            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
 
             base.ConfigureContainer(containerGen);
 
@@ -42,7 +42,7 @@ namespace Ivy.Amazon.S3.Test.Services
 
             var container = containerGen.GenerateContainer();
 
-            _sut = container.Resolve<IS3SignedUrlService>();
+            _sut = container.GetService<IS3SignedUrlService>();
         }
 
         #endregion

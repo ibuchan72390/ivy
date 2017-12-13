@@ -32,7 +32,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
             var coreEntity = new CoreEntity().SaveForTest();
             var childEntity = new ChildEntity { CoreEntity = coreEntity }.SaveForTest();
 
-            var repo = ServiceLocator.Instance.Resolve<IEntityRepository<ChildEntity>>();
+            var repo = ServiceLocator.Instance.GetService<IEntityRepository<ChildEntity>>();
             repo.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
 
             var result = repo.GetById(childEntity.Id);
@@ -51,7 +51,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
             var coreEntity = new CoreEntity().SaveForTest();
             var fbEntity = new FlippedBlobEntity { CoreEntity = coreEntity }.SaveForTest();
 
-            var repo = ServiceLocator.Instance.Resolve<IBlobRepository<FlippedBlobEntity>>();
+            var repo = ServiceLocator.Instance.GetService<IBlobRepository<FlippedBlobEntity>>();
             repo.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
 
             var items = repo.GetAll();
@@ -75,7 +75,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
             var coreEntity = new CoreEntity().SaveForTest();
             var childEntity = new ChildEntity { CoreEntity = coreEntity }.SaveForTest();
 
-            var repo = ServiceLocator.Instance.Resolve<IEntityRepository<ChildEntity>>();
+            var repo = ServiceLocator.Instance.GetService<IEntityRepository<ChildEntity>>();
             repo.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
 
             var result = repo.GetById(childEntity.Id);
@@ -95,7 +95,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
             var fsEntity = new FlippedStringEntity().SaveForTest();
             var coreEntity = new CoreEntity { FlippedStringEntity = fsEntity }.SaveForTest();
 
-            var repo = ServiceLocator.Instance.Resolve<IEntityRepository<CoreEntity>>();
+            var repo = ServiceLocator.Instance.GetService<IEntityRepository<CoreEntity>>();
             repo.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
 
             var result = repo.GetById(coreEntity.Id);

@@ -20,7 +20,7 @@ namespace Ivy.PayPal.Test.Transformers
 
         public PayPalIpnResponseTransformerTests()
         {
-            _sut = ServiceLocator.Instance.Resolve<IPayPalIpnResponseTransformer>();
+            _sut = ServiceLocator.Instance.GetService<IPayPalIpnResponseTransformer>();
         }
 
         #endregion

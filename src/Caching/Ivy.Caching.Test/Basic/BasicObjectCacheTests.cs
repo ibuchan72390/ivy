@@ -20,7 +20,7 @@ namespace Ivy.Caching.Test.Basic
             Func<TestClass> init1 = () => init1Class;
             Func<TestClass> init2 = () => init2Class;
 
-            var myCache = ServiceLocator.Instance.Resolve<IObjectCache<TestClass>>();
+            var myCache = ServiceLocator.Instance.GetService<IObjectCache<TestClass>>();
             myCache.Init(init1);
 
             Assert.Same(init1Class, myCache.GetCache());
@@ -40,7 +40,7 @@ namespace Ivy.Caching.Test.Basic
             Func<TestClass> init1 = () => init1Class;
             Func<TestClass> init2 = () => init2Class;
 
-            var myCache = ServiceLocator.Instance.Resolve<IObjectCache<TestClass>>();
+            var myCache = ServiceLocator.Instance.GetService<IObjectCache<TestClass>>();
             myCache.Init(init1);
 
             Assert.Same(init1Class, myCache.GetCache());
@@ -59,10 +59,10 @@ namespace Ivy.Caching.Test.Basic
             var testClassCache = new TestClass();
             var testClassCollectionCache = Enumerable.Range(0, 4).Select(x => new TestClass());
 
-            var entityCache = ServiceLocator.Instance.Resolve<IObjectCache<TestClass>>();
+            var entityCache = ServiceLocator.Instance.GetService<IObjectCache<TestClass>>();
             entityCache.Init(() => testClassCache);
 
-            var collectionCache = ServiceLocator.Instance.Resolve<IObjectCache<IEnumerable<TestClass>>>();
+            var collectionCache = ServiceLocator.Instance.GetService<IObjectCache<IEnumerable<TestClass>>>();
             collectionCache.Init(() => testClassCollectionCache);
 
             var resultEntityCache = entityCache.GetCache();
@@ -77,8 +77,8 @@ namespace Ivy.Caching.Test.Basic
         {
             var myClasses = Enumerable.Range(1, 5).Select(x => new TestClass { Integer = x }).ToList();
 
-            //var myCache = TestServiceLocator.StaticContainer.Resolve<IObjectCache<IList<TestClass>>>(typeof(IObjectCache<IList<TestClass>>));
-            var myCache = ServiceLocator.Instance.Resolve<IObjectCache<IList<TestClass>>>();
+            //var myCache = TestServiceLocator.StaticContainer.GetService<IObjectCache<IList<TestClass>>>(typeof(IObjectCache<IList<TestClass>>));
+            var myCache = ServiceLocator.Instance.GetService<IObjectCache<IList<TestClass>>>();
 
             myCache.Init(() => myClasses);
 
@@ -96,11 +96,11 @@ namespace Ivy.Caching.Test.Basic
         {
             var myClasses = Enumerable.Range(1, 5).Select(x => new TestClass { Integer = x }).ToList();
 
-            var myCache = ServiceLocator.Instance.Resolve<IObjectCache<IList<TestClass>>>();
+            var myCache = ServiceLocator.Instance.GetService<IObjectCache<IList<TestClass>>>();
 
             myCache.Init(() => myClasses);
 
-            var myResolvedCache = ServiceLocator.Instance.Resolve<IObjectCache<IList<TestClass>>>();
+            var myResolvedCache = ServiceLocator.Instance.GetService<IObjectCache<IList<TestClass>>>();
 
             var obtainedCache = myResolvedCache.GetCache();
 
@@ -114,7 +114,7 @@ namespace Ivy.Caching.Test.Basic
         [Fact]
         public void ObjectCache_Can_Properly_Refresh_Itself()
         {
-            var objectCache = ServiceLocator.Instance.Resolve<IObjectCache<TestClass>>();
+            var objectCache = ServiceLocator.Instance.GetService<IObjectCache<TestClass>>();
 
             objectCache.Init(() => new TestClass());
 

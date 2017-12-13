@@ -24,12 +24,12 @@ namespace Ivy.PayPal.Test.Services
 
         public PayPalRequestGeneratorTests()
         {
-            var randHelper = ServiceLocator.Instance.Resolve<IRandomizationHelper>();
+            var randHelper = ServiceLocator.Instance.GetService<IRandomizationHelper>();
 
             dataStr = randHelper.RandomString(1000);
             dataStrArr = Encoding.UTF8.GetBytes(dataStr);
 
-            _sut = ServiceLocator.Instance.Resolve<IPayPalRequestGenerator>();
+            _sut = ServiceLocator.Instance.GetService<IPayPalRequestGenerator>();
         }
 
         #endregion

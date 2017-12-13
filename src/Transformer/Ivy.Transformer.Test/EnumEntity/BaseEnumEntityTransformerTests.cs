@@ -16,7 +16,7 @@ namespace Ivy.Transformer.Test.Base
         [Fact]
         public void BaseTransformer_Converts_EnumEntity_To_Model_As_Expected()
         {
-            var _sut = ServiceLocator.Instance.Resolve<IEnumEntityTransformer<TestEnumEntity, TestEnumEntityModel>>();
+            var _sut = ServiceLocator.Instance.GetService<IEnumEntityTransformer<TestEnumEntity, TestEnumEntityModel>>();
 
             var entity = new TestEnumEntity { Id = 1, Name = "Name", FriendlyName = "FriendlyName", SortOrder = 1 };
 
@@ -28,7 +28,7 @@ namespace Ivy.Transformer.Test.Base
         [Fact]
         public void BaseTransformer_Converts_EnumEntity_To_Model_List_As_Expected()
         {
-            var _sut = ServiceLocator.Instance.Resolve<IEnumEntityTransformer<TestEnumEntity, TestEnumEntityModel>>();
+            var _sut = ServiceLocator.Instance.GetService<IEnumEntityTransformer<TestEnumEntity, TestEnumEntityModel>>();
 
             var entities = Enumerable.Range(0, 4).Select(x => new TestEnumEntity { Id = x, Name = $"Name{x}", FriendlyName = $"FriendlyName{x}", SortOrder = x });
 
@@ -54,7 +54,7 @@ namespace Ivy.Transformer.Test.Base
         [Fact]
         public void BaseTransformer_Converts_Model_To_EnumEntity_As_Expected()
         {
-            var _sut = ServiceLocator.Instance.Resolve<IEnumEntityTransformer<TestEnumEntity, TestEnumEntityModel>>();
+            var _sut = ServiceLocator.Instance.GetService<IEnumEntityTransformer<TestEnumEntity, TestEnumEntityModel>>();
 
             var model = new TestEnumEntityModel { Id = 1, Name = "Name", FriendlyName = "FriendlyName", SortOrder = 1 };
 
@@ -66,7 +66,7 @@ namespace Ivy.Transformer.Test.Base
         [Fact]
         public void BaseTransformer_Converts_Model_To_EnumEntity_List_As_Expected()
         {
-            var _sut = ServiceLocator.Instance.Resolve<IEnumEntityTransformer<TestEnumEntity, TestEnumEntityModel>>();
+            var _sut = ServiceLocator.Instance.GetService<IEnumEntityTransformer<TestEnumEntity, TestEnumEntityModel>>();
 
             var models = Enumerable.Range(0, 4).Select(x => new TestEnumEntityModel { Id = x, Name = $"Name{x}", FriendlyName = $"FriendlyName{x}", SortOrder = x });
 

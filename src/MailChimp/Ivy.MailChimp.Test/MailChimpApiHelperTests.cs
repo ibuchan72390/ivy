@@ -30,10 +30,10 @@ namespace Ivy.MailChimp.Test
 
         public MailChimpApiHelperTests()
         {
-            _serializationService = ServiceLocator.Instance.Resolve<IJsonSerializationService>();
+            _serializationService = ServiceLocator.Instance.GetService<IJsonSerializationService>();
 
             // Configure Test Container
-            var containerGen = ServiceLocator.Instance.Resolve<IContainerGenerator>();
+            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
 
             base.ConfigureContainer(containerGen);
 
@@ -51,7 +51,7 @@ namespace Ivy.MailChimp.Test
 
             var container = containerGen.GenerateContainer();
 
-            _sut = container.Resolve<IMailChimpApiHelper>();
+            _sut = container.GetService<IMailChimpApiHelper>();
         }
 
         #endregion

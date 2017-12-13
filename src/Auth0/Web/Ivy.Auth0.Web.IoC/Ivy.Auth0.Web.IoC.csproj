@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>1.0.5</Version>
+    <Version>1.0.7</Version>
     <TargetFrameworks>netstandard1.6;netcoreapp1.0</TargetFrameworks>
 	<RuntimeFrameworkVersion>1.0.1</RuntimeFrameworkVersion>
     <AssemblyName>Ivy.Auth0.Web.IoC</AssemblyName>

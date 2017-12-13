@@ -12,7 +12,7 @@ namespace Ivy.Data.MySQL.Test
 
         public MySqlTranConnGeneratorTests()
         {
-            _sut = ServiceLocator.Instance.Resolve<ITranConnGenerator>();
+            _sut = ServiceLocator.Instance.GetService<ITranConnGenerator>();
         }
 
         [Fact]

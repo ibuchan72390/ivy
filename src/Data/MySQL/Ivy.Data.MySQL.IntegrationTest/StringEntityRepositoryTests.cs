@@ -28,7 +28,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
         public StringEntityRepositoryTests()
         {
-            _sut = ServiceLocator.Instance.Resolve<IEntityRepository<StringEntity, string>>();
+            _sut = ServiceLocator.Instance.GetService<IEntityRepository<StringEntity, string>>();
             _sut.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
         }
 
@@ -62,7 +62,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
         [Fact]
         public void GetById_Can_Take_TranConn()
         {
-            var tranGen = ServiceLocator.Instance.Resolve<ITranConnGenerator>();
+            var tranGen = ServiceLocator.Instance.GetService<ITranConnGenerator>();
 
             var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
@@ -109,7 +109,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
         [Fact]
         public void GetByIdList_Can_Take_TranConn()
         {
-            var tranGen = ServiceLocator.Instance.Resolve<ITranConnGenerator>();
+            var tranGen = ServiceLocator.Instance.GetService<ITranConnGenerator>();
 
             var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
@@ -155,7 +155,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
         [Fact]
         public void SaveOrUpdate_Can_Take_TranConn()
         {
-            var tranGen = ServiceLocator.Instance.Resolve<ITranConnGenerator>();
+            var tranGen = ServiceLocator.Instance.GetService<ITranConnGenerator>();
 
             var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
@@ -185,7 +185,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
         [Fact]
         public void Delete_Can_Take_TranConn()
         {
-            var tranGen = ServiceLocator.Instance.Resolve<ITranConnGenerator>();
+            var tranGen = ServiceLocator.Instance.GetService<ITranConnGenerator>();
 
             var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
@@ -219,7 +219,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
         [Fact]
         public void Delete_Entities_Can_Commit_With_TranConn()
         {
-            var tranGen = ServiceLocator.Instance.Resolve<ITranConnGenerator>();
+            var tranGen = ServiceLocator.Instance.GetService<ITranConnGenerator>();
 
             var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
@@ -259,7 +259,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
         [Fact]
         public void DeleteById_Can_Take_TranConn()
         {
-            var tranGen = ServiceLocator.Instance.Resolve<ITranConnGenerator>();
+            var tranGen = ServiceLocator.Instance.GetService<ITranConnGenerator>();
 
             var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 

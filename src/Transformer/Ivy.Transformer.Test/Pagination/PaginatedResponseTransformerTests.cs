@@ -24,7 +24,7 @@ namespace Ivy.Transformer.Test.Pagination
 
         public PaginatedResponseTransformerTests()
         {
-            _sut = ServiceLocator.Instance.Resolve<IPaginatedResponseTransformer<TestEntity, TestEntityModel, IEntityToViewModelListTransformer<TestEntity, TestEntityModel>>>();
+            _sut = ServiceLocator.Instance.GetService<IPaginatedResponseTransformer<TestEntity, TestEntityModel, IEntityToViewModelListTransformer<TestEntity, TestEntityModel>>>();
         }
 
         #endregion

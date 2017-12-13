@@ -23,7 +23,7 @@ namespace Ivy.TestHelper
         public static void CleanTable<T>()
             where T : class
         {
-            var repo = ServiceLocator.Instance.Resolve<IBlobRepository<T>>();
+            var repo = ServiceLocator.Instance.GetService<IBlobRepository<T>>();
             repo.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
             repo.DeleteAll();
         }

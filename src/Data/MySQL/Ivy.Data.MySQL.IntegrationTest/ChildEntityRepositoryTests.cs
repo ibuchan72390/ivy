@@ -25,7 +25,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
         public ChildEntityRepositoryTests()
         {
-            _sut = ServiceLocator.Instance.Resolve<IEntityRepository<ChildEntity, int>>();
+            _sut = ServiceLocator.Instance.GetService<IEntityRepository<ChildEntity, int>>();
 
             _sut.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
         }
@@ -50,7 +50,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
             _sut.SaveOrUpdate(childEntity);
 
-            var tranGenerator = ServiceLocator.Instance.Resolve<ITranConnGenerator>();
+            var tranGenerator = ServiceLocator.Instance.GetService<ITranConnGenerator>();
             var tran = tranGenerator.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
             var cmd = tran.Connection.CreateCommand();

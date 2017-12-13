@@ -13,7 +13,7 @@ namespace Ivy.Data.Common.Test
 
         public SqlPropertyGeneratorTests()
         {
-            _sut = ServiceLocator.Instance.Resolve<ISqlPropertyGenerator>();
+            _sut = ServiceLocator.Instance.GetService<ISqlPropertyGenerator>();
         }
         
         #endregion
@@ -51,7 +51,7 @@ namespace Ivy.Data.Common.Test
         [Fact]
         public void GetSqlPropertyNames_Properly_Handles_Ignored_Fk_Ids_And_Doesnt_Log_Collections_On_Complex_Objects()
         {
-            var sut = ServiceLocator.Instance.Resolve<ISqlGenerator<CoreEntity>>();
+            var sut = ServiceLocator.Instance.GetService<ISqlGenerator<CoreEntity>>();
 
             var localExpected = baseExpectedAttrs.Concat(new List<string> { "ParentEntityId", "FlippedStringEntityId", "WeirdAlternateIntegerId", "WeirdAlternateStringId" });
 

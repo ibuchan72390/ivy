@@ -8,13 +8,13 @@
 //    {
 //        public static void ResetCache<T>()
 //        {
-//            var fileManager = ServiceLocator.Instance.Resolve<ITriggerFileManager>();
+//            var fileManager = ServiceLocator.Instance.GetService<ITriggerFileManager>();
 //            fileManager.TriggerCache<T>();
 //        }
 
 //        public static void ResetAllCache()
 //        {
-//            var fileManager = ServiceLocator.Instance.Resolve<ITriggerFileManager>();
+//            var fileManager = ServiceLocator.Instance.GetService<ITriggerFileManager>();
             
 //            foreach (var file in Directory.GetFiles(fileManager.TriggerFileFolder))
 //            {
