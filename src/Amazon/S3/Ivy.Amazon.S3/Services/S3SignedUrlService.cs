@@ -53,6 +53,8 @@ namespace Ivy.Amazon.S3.Services
 
         private string PrivateGetFileUrlAsync(string bucketName, string fileKey, HttpVerb verb, string fileNameContentDisposition = null)
         {
+            var expiration = _clock.UtcNow.AddMinutes(1);
+
             GetPreSignedUrlRequest request = new GetPreSignedUrlRequest
             {
                 BucketName = bucketName,
@@ -63,8 +65,10 @@ namespace Ivy.Amazon.S3.Services
                 // It seems to indicate that once the connection is established, the download should complete.
                 // The user will only run into issues if the download fails and they attempt to re-initiate
                 // If they really run past 1 minutes, we have much greater issues.
-                Expires = _clock.Now.AddMinutes(1)
+                Expires = expiration
             };
+
+            _logger.LogDebug($"Creating pre-signed URL.  Method: {verb} / Bucket: {bucketName} / Key: {fileKey} / Expiration: {expiration}");
 
             if (fileNameContentDisposition != null)
             {
