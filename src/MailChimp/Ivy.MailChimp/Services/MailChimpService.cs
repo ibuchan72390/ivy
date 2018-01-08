@@ -46,11 +46,7 @@ namespace Ivy.MailChimp.Services
             else
             {
                 // Update mailchimp accordingly
-                bool alreadyPending = false;
                 if (member.status == MailChimpStatusName.pending.ToString())
-                    alreadyPending = true;
-
-                if (alreadyPending)
                 {
                     return new ValidationResult(true, "We have already received your email, " +
                         "but it does not appear that you have validated the acceptance email. " +
