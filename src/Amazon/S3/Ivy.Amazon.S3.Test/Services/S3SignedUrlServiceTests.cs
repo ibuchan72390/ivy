@@ -38,7 +38,7 @@ namespace Ivy.Amazon.S3.Test.Services
             _mockClock = new Mock<IClock>();
             containerGen.RegisterInstance<IClock>(_mockClock.Object);
 
-            _mockClock.SetupGet(x => x.Now).Returns(now);
+            _mockClock.SetupGet(x => x.UtcNow).Returns(now);
 
             var container = containerGen.GenerateContainer();
 
