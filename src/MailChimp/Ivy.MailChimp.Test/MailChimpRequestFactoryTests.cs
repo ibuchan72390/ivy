@@ -74,7 +74,7 @@ namespace Ivy.MailChimp.Test
             var submitRequest = new MailChimpContactInfo
             {
                 email_address = "TEST@gmail.com",
-                merge_fields = new MailChimpMergeFields { NAME = "TEST" }
+                merge_fields = new { NAME = "TEST" }
             };
 
             var memberRequest = _sut.GenerateSubmitMemberRequest(submitRequest);
@@ -94,7 +94,7 @@ namespace Ivy.MailChimp.Test
             var submitRequest = new MailChimpMember
             {
                 email_address = "TEST@gmail.com",
-                merge_fields = new MailChimpMergeFields { NAME = "TEST" }
+                merge_fields = new { NAME = "TEST" }
             };
 
             var memberRequest = _sut.GenerateEditMemberRequest(submitRequest);

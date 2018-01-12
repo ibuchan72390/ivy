@@ -26,7 +26,10 @@ namespace Ivy.MailChimp.Core.Models
 
         public string status { get; private set; }
 
-        public MailChimpMergeFields merge_fields { get; set; }
+        // Statically typing this guy causes way too updates to this library
+        // This is also very specific to my uses, we want this for any application to use
+        //public MailChimpMergeFields merge_fields { get; set; }
+        public object merge_fields { get; set; }
 
         #endregion
 

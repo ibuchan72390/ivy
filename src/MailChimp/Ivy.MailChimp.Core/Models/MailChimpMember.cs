@@ -10,7 +10,7 @@
         public string status { get; set; }
         public string unsubscribe_reason { get; set; }
 
-        public MailChimpMergeFields merge_fields { get; set; }
+        public object merge_fields { get; set; }
 
         public string ip_signup { get; set; }
         public string timestamp_signup { get; set; }
