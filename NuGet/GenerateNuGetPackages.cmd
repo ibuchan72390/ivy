@@ -113,7 +113,7 @@ EXIT /b
 	:: Pack and relocate the nupkg file
 	CD %ProjectName%
 
-	dotnet pack --include-symbols
+	dotnet pack --include-source
 		
 	CD Bin\Debug
 
