@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>1.0.9</Version>
+    <Version>2.0.0</Version>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <AssemblyName>Ivy.Utility.Core</AssemblyName>
     <PackageId>Ivy.Utility.Core</PackageId>
