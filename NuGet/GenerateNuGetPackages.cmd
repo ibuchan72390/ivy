@@ -47,7 +47,7 @@ CALL :CreateProjectPackage MailChimp\Ivy.MailChimp
 CALL :CreateProjectPackage PayPal\Ivy.PayPal
 
 :: Build TestUtilities
-CALL :CreateProjectPackage Test\Ivy.TestUtilities
+CALL :PackageProject Test\Ivy.TestUtilities
 
 :: Build Transformer
 CALL :CreateProjectPackage Transformer\Ivy.Transformer
