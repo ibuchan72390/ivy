@@ -2,12 +2,10 @@
 
   <PropertyGroup>
     <Version>1.0.6</Version>
-    <TargetFrameworks>netstandard1.6;netcoreapp1.0</TargetFrameworks>
-	<RuntimeFrameworkVersion>1.0.1</RuntimeFrameworkVersion>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
     <AssemblyName>Ivy.Data.MySQL</AssemblyName>
     <PackageId>Ivy.Data.MySQL</PackageId>
     <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
-    <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
@@ -18,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MySql.Data" Version="7.0.7-m61" />
+    <PackageReference Include="MySql.Data" Version="8.0.9-dmr" />
   </ItemGroup>
 
 </Project>

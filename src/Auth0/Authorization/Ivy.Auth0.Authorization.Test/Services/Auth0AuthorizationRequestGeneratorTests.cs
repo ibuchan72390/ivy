@@ -150,7 +150,7 @@ namespace Ivy.Auth0.Authorization.Test.Services
 
             var result = _serializationService.Deserialize<string[]>(body);
 
-            Assert.Equal(1, result.Length);
+            Assert.Single(result);
             Assert.Equal(testRoleId, result[0]);
         }
 
@@ -171,7 +171,7 @@ namespace Ivy.Auth0.Authorization.Test.Services
 
             var result = _serializationService.Deserialize<string[]>(body);
 
-            Assert.Equal(1, result.Length);
+            Assert.Single(result);
             Assert.Equal(testRoleId, result[0]);
         }
 

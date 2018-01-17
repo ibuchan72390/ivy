@@ -15,10 +15,10 @@ namespace Ivy.Utility.Test.Util
             var results = EnumUtility.GetValues<TestEnum>();
 
             Assert.Equal(4, results.Count());
-            Assert.True(results.Contains(TestEnum.Test1));
-            Assert.True(results.Contains(TestEnum.Test2));
-            Assert.True(results.Contains(TestEnum.Test3));
-            Assert.True(results.Contains(TestEnum.Test4));
+            Assert.Contains(TestEnum.Test1, results);
+            Assert.Contains(TestEnum.Test2, results);
+            Assert.Contains(TestEnum.Test3, results);
+            Assert.Contains(TestEnum.Test4, results);
         }
 
         #endregion
@@ -48,7 +48,7 @@ namespace Ivy.Utility.Test.Util
             {
                 var result = EnumUtility.GetRandomEnum<TestEnum>();
                 Assert.Equal(typeof(TestEnum), result.GetType());
-                Assert.True(allVals.Contains(result));
+                Assert.Contains(result, allVals);
             }
         }
 

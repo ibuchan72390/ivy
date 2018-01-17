@@ -87,7 +87,7 @@ namespace Ivy.Caching.Test
 
             var resultFile = _sut.GenerateTriggerFile<TestClass>(cacheKey);
 
-            Assert.True(resultFile.Contains(targetFolder));
+            Assert.Contains(targetFolder, resultFile);
 
             Assert.True(File.Exists(resultFile));
 

@@ -66,7 +66,7 @@ namespace Ivy.Auth0.Management.Test.Transformers
             var result = _sut.Transform(resp);
 
             Assert.Equal(resp.total, result.TotalCount);
-            Assert.Equal(1, resp.users.Count());
+            Assert.Single(resp.users);
             Assert.Same(user, resp.users.First());
         }
 

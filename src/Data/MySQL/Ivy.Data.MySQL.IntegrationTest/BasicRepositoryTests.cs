@@ -47,7 +47,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
             var results = _sut.GetAll().ToList();
 
-            Assert.Equal(1, results.Count());
+            Assert.Single(results);
 
             var result = results[0];
 

@@ -1,12 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.6;netcoreapp1.0</TargetFrameworks>
-	<RuntimeFrameworkVersion>1.0.1</RuntimeFrameworkVersion>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
     <AssemblyName>Ivy.Amazon.S3</AssemblyName>
     <PackageId>Ivy.Amazon.S3</PackageId>
     <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
-    <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
@@ -19,8 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.S3" Version="3.3.15" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="1.0.1" />
+    <PackageReference Include="AWSSDK.S3" Version="3.3.16.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.0.0" />
   </ItemGroup>
 
 </Project>

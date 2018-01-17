@@ -55,13 +55,13 @@ namespace Ivy.Auth0.Management.Test.Services
 
             var json = _serializationService.Serialize(phoneReq);
 
-            Assert.True(json.Contains("phone_verified"));
-            Assert.True(json.Contains("phone_number"));
+            Assert.Contains("phone_verified", json);
+            Assert.Contains("phone_number", json);
 
             json = _sut.EditPhoneJson(json, phoneReq);
 
-            Assert.False(json.Contains("phone_verified"));
-            Assert.False(json.Contains("phone_number"));
+            Assert.DoesNotContain("phone_verified", json);
+            Assert.DoesNotContain("phone_number", json);
         }
 
         [Fact]
@@ -73,13 +73,13 @@ namespace Ivy.Auth0.Management.Test.Services
 
             var json = _serializationService.Serialize(phoneReq);
 
-            Assert.True(json.Contains("phone_verified"));
-            Assert.True(json.Contains("phone_number"));
+            Assert.Contains("phone_verified", json);
+            Assert.Contains("phone_number", json);
 
             json = _sut.EditPhoneJson(json, phoneReq);
 
-            Assert.False(json.Contains("phone_verified"));
-            Assert.False(json.Contains("phone_number"));
+            Assert.DoesNotContain("phone_verified", json);
+            Assert.DoesNotContain("phone_number", json);
         }
 
         [Fact]
@@ -108,13 +108,13 @@ namespace Ivy.Auth0.Management.Test.Services
 
             var json = _serializationService.Serialize(phoneReq);
 
-            Assert.True(json.Contains("phone_verified"));
-            Assert.True(json.Contains("phone_number"));
+            Assert.Contains("phone_verified", json);
+            Assert.Contains("phone_number", json);
 
             json = _sut.EditPhoneJson(json, phoneReq);
 
-            Assert.True(json.Contains("phone_verified"));
-            Assert.True(json.Contains("phone_number"));
+            Assert.Contains("phone_verified", json);
+            Assert.Contains("phone_number", json);
         }
 
         #endregion
@@ -132,11 +132,11 @@ namespace Ivy.Auth0.Management.Test.Services
 
             var json = _serializationService.Serialize(model);
 
-            Assert.True(json.Contains("username"));
+            Assert.Contains("username", json);
 
             json = _sut.EditUsernameJson(json, model);
 
-            Assert.False(json.Contains("username"));
+            Assert.DoesNotContain("username", json);
         }
 
         [Fact]
@@ -150,11 +150,11 @@ namespace Ivy.Auth0.Management.Test.Services
 
             var json = _serializationService.Serialize(model);
 
-            Assert.True(json.Contains("username"));
+            Assert.Contains("username", json);
 
             json = _sut.EditUsernameJson(json, model);
 
-            Assert.False(json.Contains("username"));
+            Assert.DoesNotContain("username", json);
         }
 
         [Fact]
@@ -168,11 +168,11 @@ namespace Ivy.Auth0.Management.Test.Services
 
             var json = _serializationService.Serialize(model);
 
-            Assert.True(json.Contains("username"));
+            Assert.Contains("username", json);
 
             json = _sut.EditUsernameJson(json, model);
 
-            Assert.False(json.Contains("username"));
+            Assert.DoesNotContain("username", json);
         }
 
         [Fact]
@@ -186,11 +186,11 @@ namespace Ivy.Auth0.Management.Test.Services
 
             var json = _serializationService.Serialize(model);
 
-            Assert.True(json.Contains("username"));
+            Assert.Contains("username", json);
 
             json = _sut.EditUsernameJson(json, model);
 
-            Assert.True(json.Contains("username"));
+            Assert.Contains("username", json);
         }
 
         #endregion

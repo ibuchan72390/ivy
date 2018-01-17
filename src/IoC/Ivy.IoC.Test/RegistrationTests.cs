@@ -17,7 +17,6 @@ namespace Ivy.IoC.Tests
         [Fact]
         public void Can_Register_To_Container_By_Type_With_Generic_Method_Generate_Container_And_Resolve()
         {
-            //_sut.Register<TestClass>().As<ITestInterface>();
             _sut.RegisterSingleton<ITestInterface, TestClass>();
 
             var container = _sut.GenerateContainer();
@@ -30,7 +29,6 @@ namespace Ivy.IoC.Tests
         [Fact]
         public void Can_Register_To_Container_By_Type_Generate_Container_And_Resolve()
         {
-            //_sut.Register(typeof(TestClass)).As(typeof(ITestInterface));
             _sut.RegisterSingleton(typeof(ITestInterface), typeof(TestClass));
 
             var container = _sut.GenerateContainer();
@@ -43,27 +41,25 @@ namespace Ivy.IoC.Tests
         [Fact]
         public void Can_Register_To_Container_By_Generic_Type_Generate_Container_And_Resolve()
         {
-            //_sut.Register(typeof(TestGenericClass<>)).As(typeof(ITestGenericInterface<>));
             _sut.RegisterSingleton(typeof(ITestGenericInterface<>), typeof(TestGenericClass<>));
 
             var container = _sut.GenerateContainer();
 
             var result = container.GetService<ITestGenericInterface<int>>();
 
-            Assert.IsType(typeof(TestGenericClass<int>), result);
+            Assert.IsType<TestGenericClass<int>>(result);
         }
 
         [Fact]
         public void Can_Register_To_Container_By_Complex_Generic_Type_Generate_Container_And_Resolve()
         {
-            //_sut.Register(typeof(TestComplexGenericClass<,>)).As(typeof(ITestComplexGenericInterface<,>));
             _sut.RegisterSingleton(typeof(ITestComplexGenericInterface<,>), typeof(TestComplexGenericClass<,>));
 
             var container = _sut.GenerateContainer();
 
             var result = container.GetService<ITestComplexGenericInterface<int,string>>();
 
-            Assert.IsType(typeof(TestComplexGenericClass<int,string>), result);
+            Assert.IsType<TestComplexGenericClass<int, string>>(result);
         }
 
         [Fact]

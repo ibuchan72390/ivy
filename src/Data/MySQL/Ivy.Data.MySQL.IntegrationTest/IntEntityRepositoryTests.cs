@@ -269,13 +269,15 @@ namespace Ivy.Data.MySQL.IntegrationTest
         public void Delete_Can_Rollback_With_TranConn()
         {
             var tranGen = ServiceLocator.Instance.GetService<ITranConnGenerator>();
-            var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
-            var testEntity = new ParentEntity().SaveForTest(tc);
+            ParentEntity testEntity = new ParentEntity().SaveForTest();
 
-            _sut.Delete(testEntity, tc);
+            using (var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString))
+            {
+                _sut.Delete(testEntity, tc);
 
-            tc.Transaction.Rollback();
+                tc.Transaction.Rollback();
+            }
 
             var result = _sut.GetById(testEntity.Id);
 

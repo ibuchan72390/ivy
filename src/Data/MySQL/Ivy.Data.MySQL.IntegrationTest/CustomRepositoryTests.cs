@@ -305,7 +305,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
             var results = _sut.GetByName(targetEntity.Name);
 
-            Assert.Equal(1, results.Count());
+            Assert.Single(results);
         }
 
         [Fact]
@@ -337,7 +337,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
             var results = _sut.GetByCoreEntityId(coreEntity.Id);
 
-            Assert.Equal(1, results.Count());
+            Assert.Single(results);
 
             var result = results.First();
 

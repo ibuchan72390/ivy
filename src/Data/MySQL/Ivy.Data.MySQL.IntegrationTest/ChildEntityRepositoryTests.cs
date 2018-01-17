@@ -51,20 +51,24 @@ namespace Ivy.Data.MySQL.IntegrationTest
             _sut.SaveOrUpdate(childEntity);
 
             var tranGenerator = ServiceLocator.Instance.GetService<ITranConnGenerator>();
-            var tran = tranGenerator.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
-            var cmd = tran.Connection.CreateCommand();
-            cmd.CommandText = $"SELECT CoreEntityId FROM ChildEntity WHERE Id = {childEntity.Id}";
-
-            var results = cmd.ExecuteReader();
-
-            while (results.Read())
+            // Make sure to wrap in "using", failure to dispose transaction is dangerous
+            using (var tran = tranGenerator.GenerateTranConn(MySqlTestValues.TestDbConnectionString))
             {
-                var resultId = results.GetValue(0);
-                Assert.Equal(coreEntity.Id, resultId);
-            }
+                var cmd = tran.Connection.CreateCommand();
+                cmd.CommandText = $"SELECT CoreEntityId FROM ChildEntity WHERE Id = {childEntity.Id}";
 
-            results.Close();
+                using (var results = cmd.ExecuteReader())
+                {
+                    while (results.Read())
+                    {
+                        var resultId = results.GetValue(0);
+                        Assert.Equal(coreEntity.Id, resultId);
+                    }
+
+                    results.Close();
+                }
+            }
         }
 
         #endregion

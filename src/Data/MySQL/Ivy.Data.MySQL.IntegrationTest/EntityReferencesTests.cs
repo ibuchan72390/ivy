@@ -56,7 +56,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
             var items = repo.GetAll();
 
-            Assert.Equal(1, items.Count());
+            Assert.Single(items);
 
             var item = items.First();
 

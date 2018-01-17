@@ -120,7 +120,7 @@ namespace Ivy.Amazon.ElasticTranscoder.Test.Services
             foreach (var output in results)
             {
                 Assert.Equal(response.Job.Id, output.ParentJobId);
-                Assert.True(outputPresets.Contains(output.PresetId));
+                Assert.Contains(output.PresetId, outputPresets);
                 Assert.Equal(resultStatus, output.Status);
             }
 

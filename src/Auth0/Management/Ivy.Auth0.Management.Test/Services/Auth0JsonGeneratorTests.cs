@@ -70,7 +70,7 @@ namespace Ivy.Auth0.Management.Test.Services
 
             var json = _serializationService.Serialize(req);
 
-            Assert.True(json.Contains("user_id"));
+            Assert.Contains("user_id", json);
 
             _mockJsonManipulator.Setup(x => x.EditPhoneJson(json, req)).Returns(json);
             _mockJsonManipulator.Setup(x => x.EditUsernameJson(json, req)).Returns(json);
@@ -80,7 +80,7 @@ namespace Ivy.Auth0.Management.Test.Services
             _mockJsonManipulator.Verify(x => x.EditPhoneJson(It.IsAny<string>(), req), Times.Once);
             _mockJsonManipulator.Verify(x => x.EditUsernameJson(It.IsAny<string>(), req), Times.Once);
 
-            Assert.False(result.Contains("user_id"));
+            Assert.DoesNotContain("user_id", result);
         }
 
         [Fact]
@@ -95,7 +95,7 @@ namespace Ivy.Auth0.Management.Test.Services
 
             var result = _sut.ConfigureUpdateUserJson(req);
 
-            Assert.False(result.Contains("verify_phone_number"));
+            Assert.DoesNotContain("verify_phone_number", result);
         }
 
         [Fact]
@@ -110,7 +110,7 @@ namespace Ivy.Auth0.Management.Test.Services
 
             var result = _sut.ConfigureUpdateUserJson(req);
 
-            Assert.False(result.Contains("verify_phone_number"));
+            Assert.DoesNotContain("verify_phone_number", result);
         }
 
         [Fact]
@@ -125,7 +125,7 @@ namespace Ivy.Auth0.Management.Test.Services
 
             var result = _sut.ConfigureUpdateUserJson(req);
 
-            Assert.True(result.Contains("verify_phone_number"));
+            Assert.Contains("verify_phone_number", result);
         }
 
         [Fact]
@@ -140,9 +140,9 @@ namespace Ivy.Auth0.Management.Test.Services
 
             var result = _sut.ConfigureUpdateUserJson(req);
 
-            Assert.False(result.Contains("email"));
-            Assert.False(result.Contains("email_verified"));
-            Assert.False(result.Contains("verify_email"));
+            Assert.DoesNotContain("email", result);
+            Assert.DoesNotContain("email_verified", result);
+            Assert.DoesNotContain("verify_email", result);
         }
 
         [Fact]
@@ -157,9 +157,9 @@ namespace Ivy.Auth0.Management.Test.Services
 
             var result = _sut.ConfigureUpdateUserJson(req);
 
-            Assert.False(result.Contains("email"));
-            Assert.False(result.Contains("email_verified"));
-            Assert.False(result.Contains("verify_email"));
+            Assert.DoesNotContain("email", result);
+            Assert.DoesNotContain("email_verified", result);
+            Assert.DoesNotContain("verify_email", result);
         }
 
         [Fact]
@@ -174,9 +174,9 @@ namespace Ivy.Auth0.Management.Test.Services
 
             var result = _sut.ConfigureUpdateUserJson(req);
 
-            Assert.True(result.Contains("email"));
-            Assert.True(result.Contains("email_verified"));
-            Assert.True(result.Contains("verify_email"));
+            Assert.Contains("email", result);
+            Assert.Contains("email_verified", result);
+            Assert.Contains("verify_email", result);
         }
 
         [Fact]
@@ -191,8 +191,8 @@ namespace Ivy.Auth0.Management.Test.Services
 
             var result = _sut.ConfigureUpdateUserJson(req);
 
-            Assert.False(result.Contains("password"));
-            Assert.False(result.Contains("verify_password"));
+            Assert.DoesNotContain("password", result);
+            Assert.DoesNotContain("verify_password", result);
         }
 
         [Fact]
@@ -207,8 +207,8 @@ namespace Ivy.Auth0.Management.Test.Services
 
             var result = _sut.ConfigureUpdateUserJson(req);
 
-            Assert.False(result.Contains("password"));
-            Assert.False(result.Contains("verify_password"));
+            Assert.DoesNotContain("password", result);
+            Assert.DoesNotContain("verify_password", result);
         }
 
         [Fact]
@@ -223,8 +223,8 @@ namespace Ivy.Auth0.Management.Test.Services
 
             var result = _sut.ConfigureUpdateUserJson(req);
 
-            Assert.True(result.Contains("password"));
-            Assert.True(result.Contains("verify_password"));
+            Assert.Contains("password", result);
+            Assert.Contains("verify_password", result);
         }
 
         #endregion

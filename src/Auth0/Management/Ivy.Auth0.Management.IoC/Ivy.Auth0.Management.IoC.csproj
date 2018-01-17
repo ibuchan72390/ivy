@@ -2,12 +2,10 @@
 
   <PropertyGroup>
     <Version>1.0.7</Version>
-    <TargetFrameworks>netstandard1.6;netcoreapp1.0</TargetFrameworks>
-	<RuntimeFrameworkVersion>1.0.1</RuntimeFrameworkVersion>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
     <AssemblyName>Ivy.Auth0.Management.IoC</AssemblyName>
     <PackageId>Ivy.Auth0.Management.IoC</PackageId>
     <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
-    <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
