@@ -80,7 +80,7 @@ namespace Ivy.Data.Common
             return InternalExecuteQuery(query);
         }
 
-        public IPaginationResponse<T> GetAll(IPaginationRequest request, ITranConn tc = null)
+        public virtual IPaginationResponse<T> GetAll(IPaginationRequest request, ITranConn tc = null)
         {
             return InternalSelectPaginated(pagingRequest: request, tc: tc);
         }
