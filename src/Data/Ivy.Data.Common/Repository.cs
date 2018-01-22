@@ -309,7 +309,7 @@ namespace Ivy.Data.Common
             InternalExecuteNonQuery(query, tc, parms);
         }
 
-        public void Delete(IEnumerable<T> entities, ITranConn tc = null)
+        public virtual void Delete(IEnumerable<T> entities, ITranConn tc = null)
         {
             if (entities == null || !entities.Any()) return;
 
@@ -318,7 +318,7 @@ namespace Ivy.Data.Common
             DeleteByIdList(idList, tc);
         }
 
-        public void DeleteByIdList(IEnumerable<TKey> ids, ITranConn tc = null)
+        public virtual void DeleteByIdList(IEnumerable<TKey> ids, ITranConn tc = null)
         {
             if (ids == null || !ids.Any()) return;
 
@@ -536,7 +536,7 @@ namespace Ivy.Data.Common
 
         #region
 
-        public T GetByName(TEnum enumVal, ITranConn tc = null)
+        public virtual T GetByName(TEnum enumVal, ITranConn tc = null)
         {
             const string sqlWhere = "WHERE `THIS`.`Name` = @enumVal";
 
@@ -553,7 +553,7 @@ namespace Ivy.Data.Common
             return results.FirstOrDefault();
         }
 
-        public IEnumerable<T> GetByNames(IEnumerable<TEnum> enumVals, ITranConn tc = null)
+        public virtual IEnumerable<T> GetByNames(IEnumerable<TEnum> enumVals, ITranConn tc = null)
         {
             if (enumVals == null || !enumVals.Any())
             {
