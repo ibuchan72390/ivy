@@ -40,8 +40,14 @@ CALL :CreateProjectPackage Caching\Ivy.Caching
 :: Build IoC
 CALL :CreateProjectPackage IoC\Ivy.IoC
 
+:: Build Mailing.Core
+CALL :PackageProject Mailing\Ivy.Mailing.Core
+
 :: Build MailChimp
-CALL :CreateProjectPackage MailChimp\Ivy.MailChimp
+CALL :CreateProjectPackage Mailing\MailChimp\Ivy.Mailing.MailChimp
+
+:: Build ActiveCampaign
+CALL :CreateProjectPackage Mailing\ActiveCampaign\Ivy.Mailing.ActiveCampaign
 
 :: Build PayPal
 CALL :CreateProjectPackage PayPal\Ivy.PayPal

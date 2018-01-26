@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\IoC\Ivy.IoC.Core\Ivy.IoC.Core.csproj" />
+    <ProjectReference Include="..\..\Ivy.Mailing.Core\Ivy.Mailing.Core.csproj" />
+    <ProjectReference Include="..\Ivy.Mailing.ActiveCampaign.Core\Ivy.Mailing.ActiveCampaign.Core.csproj" />
+    <ProjectReference Include="..\Ivy.Mailing.ActiveCampaign\Ivy.Mailing.ActiveCampaign.csproj" />
+  </ItemGroup>
+
+</Project>

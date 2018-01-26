@@ -25,7 +25,67 @@ namespace Ivy.Web.Test.Json
         #endregion
 
         #region Tests
-        
+
+        #region ExtractJsonAttribute
+
+        [Fact]
+        public void ExtractJsonAttribute_Works_As_Expected_For_String()
+        {
+            const string attrName = "Name";
+            const string name = "TEST";
+
+            var entity = new CoreEntity { Name = name };
+
+            var json = JsonConvert.SerializeObject(entity);
+
+            var attr = _sut.ExtractJsonAttribute<string>(json, attrName);
+
+            Assert.Equal(name, attr);
+        }
+
+        [Fact]
+        public void ExtractJsonAttribute_Works_As_Expected_For_Int()
+        {
+            const string attrName = "Integer";
+            const int integer = 123;
+
+            var entity = new CoreEntity { Integer = integer };
+
+            var json = JsonConvert.SerializeObject(entity);
+
+            var attr = _sut.ExtractJsonAttribute<int>(json, attrName);
+
+            Assert.Equal(integer, attr);
+        }
+
+        [Fact]
+        public void ExtractJsonAttribute_Works_As_Expected_For_Object()
+        {
+            const string attrName = "ParentEntity";
+            var parent = new ParentEntity
+            {
+                Id = 123,
+                Double = 23.45,
+                Integer = 234,
+                Name = "TEST"
+            };
+
+            var entity = new CoreEntity { ParentEntity = parent };
+
+            var json = JsonConvert.SerializeObject(entity);
+
+            var attr = _sut.ExtractJsonAttribute<ParentEntity>(json, attrName);
+
+            Assert.Equal(parent.Id, attr.Id);
+            Assert.Equal(parent.Double, attr.Double);
+            Assert.Equal(parent.Integer, attr.Integer);
+            Assert.Equal(parent.Name, attr.Name);
+        }
+
+        #endregion
+
+        #region RemoveJsonAttribute
+
         [Fact]
         public void RemoveJsonAttribute_Works_As_Expected()
         {
@@ -43,6 +103,8 @@ namespace Ivy.Web.Test.Json
 
             Assert.Null(result.Name);
         }
+
+        #endregion
 
         #endregion
     }

@@ -1,0 +1,144 @@
+﻿using Ivy.IoC;
+using Ivy.IoC.Core;
+using Ivy.Mailing.MailChimp.Test.Base;
+using Ivy.Mailing.Core.Interfaces.Services;
+using Ivy.Mailing.Core.Models;
+using Moq;
+using Xunit;
+using Ivy.Mailing.Core.Enums;
+
+namespace Ivy.Mailing.MailChimp.Test
+{
+    public class MailChimpServiceTests : MailChimpTestBase
+    {
+        #region Variables & Constants
+
+        private readonly IMailingService _sut;
+
+        private readonly Mock<IMailingApiHelper> _mockApiHelper;
+
+        private const string testEmail = "test@gmail.com";
+
+        private const string successValidation = "We have successfully received your contact information.  " +
+            "You should receive an email in your inbox shortly requesting you to confirm our mailing list. " +
+            "Please confirm the email or you may not receive our newsletter.";
+
+        #endregion
+
+        #region SetUp & TearDown
+
+        public MailChimpServiceTests()
+        {
+            _mockApiHelper = new Mock<IMailingApiHelper>();
+
+            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
+
+            base.ConfigureContainer(containerGen);
+
+            containerGen.RegisterInstance<IMailingApiHelper>(_mockApiHelper.Object);
+
+            var container = containerGen.GenerateContainer();
+
+            _sut = container.GetService<IMailingService>();
+        }
+
+        #endregion
+
+        #region Tests
+
+        #region ProcessContactInfoAsync
+
+        [Fact]
+        public async void ProcessContactInfoAsync_Returns_As_Expected_For_Existing_Subscribed_User()
+        {
+            var contactInfo = new MailingMember { Email = testEmail };
+
+            var returnedMember = new MailingMember { Status = MailingStatusName.Subscribed };
+
+            _mockApiHelper.Setup(x => x.GetMemberAsync(testEmail)).ReturnsAsync(returnedMember);
+
+            var result = await _sut.ProcessContactInfoAsync(contactInfo);
+
+            _mockApiHelper.Verify(x => x.GetMemberAsync(testEmail), Times.Once);
+
+            Assert.True(result.IsValid);
+            Assert.Equal("You have already signed up for our mailing list!", result.Message);
+        }
+
+        [Fact]
+        public async void ProcessContactInfoAsync_Saves_New_Contact_Info_If_Member_Is_Null()
+        {
+            var contactInfo = new MailingMember { Email = testEmail };
+
+            MailingMember returnedMember = null;
+
+            _mockApiHelper.Setup(x => x.GetMemberAsync(testEmail)).ReturnsAsync(returnedMember);
+
+            _mockApiHelper.Setup(x => x.AddMemberAsync(It.IsAny<MailingMember>()))
+                .ReturnsAsync(returnedMember);
+
+            var result = await _sut.ProcessContactInfoAsync(contactInfo);
+
+            _mockApiHelper.Verify(x => x.GetMemberAsync(testEmail), Times.Once);
+
+            _mockApiHelper.Verify(x => x.AddMemberAsync(It.IsAny<MailingMember>()), Times.Once);
+
+            Assert.True(result.IsValid);
+            Assert.Equal(successValidation, result.Message);
+        }
+
+        [Fact]
+        public async void ProcessContactInfoAsync_Updates_Pending_Status_If_Member_Exists()
+        {
+            var contactInfo = new MailingMember { Email = testEmail };
+
+            MailingMember returnedMember = new MailingMember { Status = MailingStatusName.Unsubscribed };
+
+            _mockApiHelper.Setup(x => x.GetMemberAsync(testEmail)).ReturnsAsync(returnedMember);
+
+            _mockApiHelper.Setup(x => x.EditMemberAsync(returnedMember)).ReturnsAsync(returnedMember);
+
+            var result = await _sut.ProcessContactInfoAsync(contactInfo);
+
+            _mockApiHelper.Verify(x => x.GetMemberAsync(testEmail), Times.Once);
+
+            _mockApiHelper.Verify(x => x.EditMemberAsync(returnedMember), Times.Once);
+
+            // Gets set during the process...
+            Assert.Equal(MailingStatusName.Pending, returnedMember.Status);
+
+            Assert.True(result.IsValid);
+            Assert.Equal(successValidation, result.Message);
+        }
+
+        [Fact]
+        public async void ProcessContactInfoAsync_Returns_Custom_Message_If_New_Submission_Received_While_Pending_Status()
+        {
+            var contactInfo = new MailingMember { Email = testEmail };
+
+            MailingMember returnedMember = new MailingMember { Status = MailingStatusName.Pending };
+
+            _mockApiHelper.Setup(x => x.GetMemberAsync(testEmail)).ReturnsAsync(returnedMember);
+
+            _mockApiHelper.Setup(x => x.EditMemberAsync(returnedMember)).ReturnsAsync(returnedMember);
+
+            var result = await _sut.ProcessContactInfoAsync(contactInfo);
+
+            _mockApiHelper.Verify(x => x.GetMemberAsync(testEmail), Times.Once);
+
+            _mockApiHelper.Verify(x => x.EditMemberAsync(returnedMember), Times.Never);
+
+            // Gets set during the process...
+            Assert.Equal(MailingStatusName.Pending, returnedMember.Status);
+
+            Assert.True(result.IsValid);
+            Assert.Equal("We have already received your email, " +
+                        "but it does not appear that you have validated the acceptance email. " +
+                        "Please check your inbox for a confirmation email.", result.Message);
+        }
+
+        #endregion
+
+        #endregion
+    }
+}

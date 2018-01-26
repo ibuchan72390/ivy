@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Version>1.0.0-DNE</Version>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <AssemblyName>Ivy.Mailing.MailChimp.Test</AssemblyName>
+    <PackageId>Ivy.Mailing.MailChimp.Test</PackageId>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <RuntimeIdentifiers>win10-x86;win10-x64;osx.10.10-x64;ubuntu.16.04-x64</RuntimeIdentifiers>
+    <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.6.0-preview-20180109-01" />
+    <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.0.0" />
+    <PackageReference Include="Moq" Version="4.8.1" />
+    <PackageReference Include="xunit" Version="2.3.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+	<DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\IoC\Ivy.IoC.Core\Ivy.IoC.Core.csproj" />
+    <ProjectReference Include="..\..\..\IoC\Ivy.IoC\Ivy.IoC.csproj" />
+    <ProjectReference Include="..\..\..\Test\Ivy.TestHelper\Ivy.TestHelper.csproj" />
+    <ProjectReference Include="..\..\..\Utility\Ivy.Utility.Core\Ivy.Utility.Core.csproj" />
+    <ProjectReference Include="..\..\..\Validation\Ivy.Validation.Core\Ivy.Validation.Core.csproj" />
+    <ProjectReference Include="..\..\..\Web\Ivy.Web.Core\Ivy.Web.Core.csproj" />
+    <ProjectReference Include="..\..\..\Web\Ivy.Web.IoC\Ivy.Web.IoC.csproj" />
+    <ProjectReference Include="..\..\Ivy.Mailing.Core\Ivy.Mailing.Core.csproj" />
+    <ProjectReference Include="..\Ivy.Mailing.MailChimp.Core\Ivy.Mailing.MailChimp.Core.csproj" />
+    <ProjectReference Include="..\Ivy.Mailing.MailChimp.IoC\Ivy.Mailing.MailChimp.IoC.csproj" />
+  </ItemGroup>
+
+</Project>
