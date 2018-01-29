@@ -7,6 +7,7 @@ using Ivy.Web.Core.Json;
 using Ivy.Utility.Core.Extensions;
 using Ivy.Mailing.Core.Interfaces.Services;
 using Ivy.Mailing.Core.Models;
+using Ivy.Mailing.MailChimp.Core.Interfaces.Transformers;
 
 namespace Ivy.Mailing.MailChimp.Services
 {
@@ -16,6 +17,7 @@ namespace Ivy.Mailing.MailChimp.Services
 
         private readonly IMailChimpConfigurationProvider _configProvider;
         private readonly IJsonSerializationService _serializationService;
+        private readonly IMailChimpContactTransformer _contactTransformer;
 
         private readonly string baseApiUrl;
 
@@ -25,10 +27,12 @@ namespace Ivy.Mailing.MailChimp.Services
 
         public MailChimpRequestFactory(
             IMailChimpConfigurationProvider configProvider,
-            IJsonSerializationService serializationService)
+            IJsonSerializationService serializationService,
+            IMailChimpContactTransformer contactTransformer)
         {
             _configProvider = configProvider;
             _serializationService = serializationService;
+            _contactTransformer = contactTransformer;
 
             baseApiUrl = $"https://{_configProvider.DataCenter}.api.mailchimp.com/3.0/";
         }
@@ -46,7 +50,8 @@ namespace Ivy.Mailing.MailChimp.Services
         {
             var req = GetBaseRequest(HttpMethod.Post, $"lists/{_configProvider.ListId}/members");
 
-            req.Content = GetStringContent(member);
+            var mailChimpMember = _contactTransformer.Transform(member);
+            req.Content = GetStringContent(mailChimpMember);
 
             return req;
         }
@@ -55,7 +60,8 @@ namespace Ivy.Mailing.MailChimp.Services
         {
             var req = GetBaseRequest(HttpMethod.Put, $"lists/{_configProvider.ListId}/members/{member.Email.ToMD5Hash()}");
 
-            req.Content = GetStringContent(member);
+            var mailChimpMember = _contactTransformer.Transform(member);
+            req.Content = GetStringContent(mailChimpMember);
 
             return req;
         }
