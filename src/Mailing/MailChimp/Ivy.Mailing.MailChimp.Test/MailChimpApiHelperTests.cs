@@ -26,7 +26,7 @@ namespace Ivy.Mailing.MailChimp.Test
         private Mock<IHttpClientHelper> _mockClientHelper;
         private Mock<ILogger<IMailingApiHelper>> _mockLogger;
 
-        private Mock<IExtraDataContactModelTransformer<MailChimpMember>> _mockContactModelTransformer;
+        private Mock<IExtraDataContactModelTransformer<MailChimpContactInfo>> _mockContactModelTransformer;
         private Mock<IExtraDataMailingMemberTransformer<MailChimpMember>> _mockMailingMemberTransformer;
 
         #endregion
@@ -55,8 +55,8 @@ namespace Ivy.Mailing.MailChimp.Test
             containerGen.RegisterInstance<IMailingRequestFactory>(_mockRequestFactory.Object);
 
             // Setup MailChimpContactTransformer Mock
-            _mockContactModelTransformer = new Mock<IExtraDataContactModelTransformer<MailChimpMember>>();
-            containerGen.RegisterInstance<IExtraDataContactModelTransformer<MailChimpMember>>(_mockContactModelTransformer.Object);
+            _mockContactModelTransformer = new Mock<IExtraDataContactModelTransformer<MailChimpContactInfo>>();
+            containerGen.RegisterInstance<IExtraDataContactModelTransformer<MailChimpContactInfo>>(_mockContactModelTransformer.Object);
 
             _mockMailingMemberTransformer = new Mock<IExtraDataMailingMemberTransformer<MailChimpMember>>();
             containerGen.RegisterInstance<IExtraDataMailingMemberTransformer<MailChimpMember>>(_mockMailingMemberTransformer.Object);

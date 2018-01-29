@@ -7,6 +7,6 @@ namespace Ivy.Mailing.MailChimp.Core.Interfaces.Transformers
     {
         MailingMember Transform(MailChimpMember member);
 
-        MailChimpMember Transform(MailingMember member);
+        MailChimpContactInfo Transform(MailingMember member);
     }
 }

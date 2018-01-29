@@ -13,7 +13,7 @@ namespace Ivy.Mailing.MailChimp.Transformers
 
         private readonly IExtraDataMailingMemberTransformer<MailChimpMember> _mailingMemberTransformer;
 
-        private readonly IExtraDataContactModelTransformer<MailChimpMember> _contactModelTransformer;
+        private readonly IExtraDataContactModelTransformer<MailChimpContactInfo> _contactModelTransformer;
 
         #endregion
 
@@ -21,7 +21,7 @@ namespace Ivy.Mailing.MailChimp.Transformers
 
         public MailChimpContactTransformer(
             IExtraDataMailingMemberTransformer<MailChimpMember> extraDataTransformer,
-            IExtraDataContactModelTransformer<MailChimpMember> contactModelTransformer)
+            IExtraDataContactModelTransformer<MailChimpContactInfo> contactModelTransformer)
         {
             _mailingMemberTransformer = extraDataTransformer;
             _contactModelTransformer = contactModelTransformer;
@@ -57,12 +57,14 @@ namespace Ivy.Mailing.MailChimp.Transformers
             return _mailingMemberTransformer.Transform(mailingMember, member);
         }
 
-        public MailChimpMember Transform(MailingMember member)
+        public MailChimpContactInfo Transform(MailingMember member)
         {
-            var mailChimpMember = new MailChimpMember
+            var mailChimpMember = new MailChimpContactInfo
             {
                 email_address = member.Email,
             };
+
+            mailChimpMember.SetStatus(member.Status);
 
             return _contactModelTransformer.Transform(mailChimpMember, member);
         }

@@ -90,7 +90,7 @@ namespace Ivy.Mailing.MailChimp.Test
                 }
             };
 
-            var resultMember = new MailChimpMember { email_address = submitRequest.Email };
+            var resultMember = new MailChimpContactInfo { email_address = submitRequest.Email };
 
             _mockTransformer.Setup(x => x.Transform(submitRequest)).Returns(resultMember);
 
@@ -126,7 +126,7 @@ namespace Ivy.Mailing.MailChimp.Test
                 }
             };
 
-            var resultMember = new MailChimpMember { email_address = submitRequest.Email };
+            var resultMember = new MailChimpContactInfo { email_address = submitRequest.Email };
 
             _mockTransformer.Setup(x => x.Transform(submitRequest)).Returns(resultMember);
 
