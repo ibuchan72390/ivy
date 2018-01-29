@@ -17,7 +17,7 @@ namespace Ivy.Mailing.ActiveCampaign.Test.Transformers
 
         private readonly IActiveCampaignContactTransformer _sut;
 
-        private readonly Mock<IExtraDataTransformer<ActiveCampaignContact>> _mockExtraDataTransformer;
+        private readonly Mock<IExtraDataMailingMemberTransformer<ActiveCampaignContact>> _mockExtraDataTransformer;
 
         #endregion
 
@@ -29,9 +29,9 @@ namespace Ivy.Mailing.ActiveCampaign.Test.Transformers
 
             base.ConfigureContainer(containerGen);
 
-            _mockExtraDataTransformer = new Mock<IExtraDataTransformer<ActiveCampaignContact>>();
+            _mockExtraDataTransformer = new Mock<IExtraDataMailingMemberTransformer<ActiveCampaignContact>>();
 
-            containerGen.RegisterInstance<IExtraDataTransformer<ActiveCampaignContact>>(_mockExtraDataTransformer.Object);
+            containerGen.RegisterInstance<IExtraDataMailingMemberTransformer<ActiveCampaignContact>>(_mockExtraDataTransformer.Object);
 
             var container = containerGen.GenerateContainer();
 

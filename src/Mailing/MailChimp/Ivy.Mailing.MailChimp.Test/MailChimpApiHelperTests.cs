@@ -25,7 +25,9 @@ namespace Ivy.Mailing.MailChimp.Test
         private Mock<IMailingRequestFactory> _mockRequestFactory;
         private Mock<IHttpClientHelper> _mockClientHelper;
         private Mock<ILogger<IMailingApiHelper>> _mockLogger;
-        private Mock<IExtraDataTransformer<MailChimpMember>> _mockTransformer;
+
+        private Mock<IExtraDataContactModelTransformer<MailChimpMember>> _mockContactModelTransformer;
+        private Mock<IExtraDataMailingMemberTransformer<MailChimpMember>> _mockMailingMemberTransformer;
 
         #endregion
 
@@ -53,8 +55,11 @@ namespace Ivy.Mailing.MailChimp.Test
             containerGen.RegisterInstance<IMailingRequestFactory>(_mockRequestFactory.Object);
 
             // Setup MailChimpContactTransformer Mock
-            _mockTransformer = new Mock<IExtraDataTransformer<MailChimpMember>>();
-            containerGen.RegisterInstance<IExtraDataTransformer<MailChimpMember>>(_mockTransformer.Object);
+            _mockContactModelTransformer = new Mock<IExtraDataContactModelTransformer<MailChimpMember>>();
+            containerGen.RegisterInstance<IExtraDataContactModelTransformer<MailChimpMember>>(_mockContactModelTransformer.Object);
+
+            _mockMailingMemberTransformer = new Mock<IExtraDataMailingMemberTransformer<MailChimpMember>>();
+            containerGen.RegisterInstance<IExtraDataMailingMemberTransformer<MailChimpMember>>(_mockMailingMemberTransformer.Object);
 
             var container = containerGen.GenerateContainer();
 
@@ -84,7 +89,7 @@ namespace Ivy.Mailing.MailChimp.Test
 
             _mockClientHelper.Setup(x => x.SendAsync(req)).Returns(Task.FromResult(response));
 
-            _mockTransformer.Setup(x => x.Transform(It.IsAny<MailingMember>(), It.IsAny<MailChimpMember>())).
+            _mockMailingMemberTransformer.Setup(x => x.Transform(It.IsAny<MailingMember>(), It.IsAny<MailChimpMember>())).
                 Returns((MailingMember mem, MailChimpMember mailMem) => mem);
 
             var result = await _sut.EditMemberAsync(member);
@@ -95,7 +100,7 @@ namespace Ivy.Mailing.MailChimp.Test
 
             _mockClientHelper.Verify(x => x.SendAsync(req), Times.Once);
 
-            _mockTransformer.Verify(x => x.Transform(It.IsAny<MailingMember>(), It.IsAny<MailChimpMember>()), 
+            _mockMailingMemberTransformer.Verify(x => x.Transform(It.IsAny<MailingMember>(), It.IsAny<MailChimpMember>()), 
                 Times.Once);
         }
 
@@ -121,7 +126,7 @@ namespace Ivy.Mailing.MailChimp.Test
 
             _mockClientHelper.Setup(x => x.SendAsync(req)).Returns(Task.FromResult(response));
 
-            _mockTransformer.Setup(x => x.Transform(It.IsAny<MailingMember>(), It.IsAny<MailChimpMember>())).
+            _mockMailingMemberTransformer.Setup(x => x.Transform(It.IsAny<MailingMember>(), It.IsAny<MailChimpMember>())).
                 Returns((MailingMember mem, MailChimpMember mailMem) => mem);
 
             var result = await _sut.GetMemberAsync(testEmail);
@@ -132,7 +137,7 @@ namespace Ivy.Mailing.MailChimp.Test
 
             _mockClientHelper.Verify(x => x.SendAsync(req), Times.Once);
 
-            _mockTransformer.Verify(x => x.Transform(It.IsAny<MailingMember>(), It.IsAny<MailChimpMember>()),
+            _mockMailingMemberTransformer.Verify(x => x.Transform(It.IsAny<MailingMember>(), It.IsAny<MailChimpMember>()),
                 Times.Once);
         }
 
@@ -159,7 +164,7 @@ namespace Ivy.Mailing.MailChimp.Test
 
             _mockClientHelper.Setup(x => x.SendAsync(req)).Returns(Task.FromResult(response));
 
-            _mockTransformer.Setup(x => x.Transform(It.IsAny<MailingMember>(), It.IsAny<MailChimpMember>())).
+            _mockMailingMemberTransformer.Setup(x => x.Transform(It.IsAny<MailingMember>(), It.IsAny<MailChimpMember>())).
                 Returns((MailingMember mem, MailChimpMember mailMem) => mem);
 
             var result = await _sut.AddMemberAsync(contactInfo);
@@ -170,7 +175,7 @@ namespace Ivy.Mailing.MailChimp.Test
 
             _mockClientHelper.Verify(x => x.SendAsync(req), Times.Once);
 
-            _mockTransformer.Verify(x => x.Transform(It.IsAny<MailingMember>(), It.IsAny<MailChimpMember>()),
+            _mockMailingMemberTransformer.Verify(x => x.Transform(It.IsAny<MailingMember>(), It.IsAny<MailChimpMember>()),
                 Times.Once);
         }
 

@@ -11,14 +11,14 @@ namespace Ivy.Mailing.ActiveCampaign.Transformers
     {
         #region Variables & Constants
 
-        private readonly IExtraDataTransformer<ActiveCampaignContact> _extraDataTransformer;
+        private readonly IExtraDataMailingMemberTransformer<ActiveCampaignContact> _extraDataTransformer;
 
         #endregion
 
         #region Constructor
 
         public ActiveCampaignContactTransformer(
-            IExtraDataTransformer<ActiveCampaignContact> extraDataTransformer)
+            IExtraDataMailingMemberTransformer<ActiveCampaignContact> extraDataTransformer)
         {
             _extraDataTransformer = extraDataTransformer;
         }

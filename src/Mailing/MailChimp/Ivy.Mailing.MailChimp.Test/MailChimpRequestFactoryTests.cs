@@ -12,6 +12,8 @@ using Ivy.Mailing.MailChimp.Core.Models;
 using Ivy.Mailing.Core.Interfaces.Services;
 using Ivy.Mailing.Core.Models;
 using System.Collections.Generic;
+using Ivy.Mailing.MailChimp.Core.Interfaces.Transformers;
+using Newtonsoft.Json;
 
 namespace Ivy.Mailing.MailChimp.Test
 {
@@ -25,6 +27,8 @@ namespace Ivy.Mailing.MailChimp.Test
         private const string testListId = "TESTListId";
         private const string testApiKey = "TESTApiKey";
 
+        private readonly Mock<IMailChimpContactTransformer> _mockTransformer;
+
         #endregion
 
         #region SetUp & TearDown
@@ -37,11 +41,14 @@ namespace Ivy.Mailing.MailChimp.Test
             _mockConfigProvider.Setup(x => x.ListId).Returns(testListId);
             _mockConfigProvider.Setup(x => x.ApiKey).Returns(testApiKey);
 
+            _mockTransformer = new Mock<IMailChimpContactTransformer>();
+
             var containerGenerator = ServiceLocator.Instance.GetService<IContainerGenerator>();
 
             base.ConfigureContainer(containerGenerator);
 
             containerGenerator.RegisterInstance<IMailChimpConfigurationProvider>(_mockConfigProvider.Object);
+            containerGenerator.RegisterInstance<IMailChimpContactTransformer>(_mockTransformer.Object);
 
             var container = containerGenerator.GenerateContainer();
 
@@ -71,7 +78,7 @@ namespace Ivy.Mailing.MailChimp.Test
         #region GenerateAddMemberRequest
 
         [Fact]
-        public void GenerateSubmitMemberRequest_Formats_Request_As_Expected()
+        public async void GenerateSubmitMemberRequest_Formats_Request_As_Expected()
         {
             var submitRequest = new MailingMember
             {
@@ -83,11 +90,23 @@ namespace Ivy.Mailing.MailChimp.Test
                 }
             };
 
+            var resultMember = new MailChimpMember { email_address = submitRequest.Email };
+
+            _mockTransformer.Setup(x => x.Transform(submitRequest)).Returns(resultMember);
+
             var memberRequest = _sut.GenerateAddMemberRequest(submitRequest);
 
             string expectedRef = $"lists/{testListId}/members";
 
             BaseAssert(memberRequest, HttpMethod.Post, GetExpectedUrl(expectedRef));
+
+            _mockTransformer.Verify(x => x.Transform(submitRequest), Times.Once);
+
+            var resultContent = await memberRequest.Content.ReadAsStringAsync();
+
+            var result = JsonConvert.DeserializeObject<MailChimpMember>(resultContent);
+
+            Assert.Equal(resultMember.email_address, result.email_address);
         }
 
         #endregion
@@ -95,7 +114,7 @@ namespace Ivy.Mailing.MailChimp.Test
         #region GenerateEditMemberRequest
 
         [Fact]
-        public void GenerateEditMemberRequest_Formats_Request_As_Expected()
+        public async void GenerateEditMemberRequest_Formats_Request_As_Expected()
         {
             var submitRequest = new MailingMember
             {
@@ -107,11 +126,23 @@ namespace Ivy.Mailing.MailChimp.Test
                 }
             };
 
+            var resultMember = new MailChimpMember { email_address = submitRequest.Email };
+
+            _mockTransformer.Setup(x => x.Transform(submitRequest)).Returns(resultMember);
+
             var memberRequest = _sut.GenerateEditMemberRequest(submitRequest);
 
             string expectedRef = $"lists/{testListId}/members/{submitRequest.Email.ToMD5Hash()}";
 
             BaseAssert(memberRequest, HttpMethod.Put, GetExpectedUrl(expectedRef));
+
+            _mockTransformer.Verify(x => x.Transform(submitRequest), Times.Once);
+
+            var resultContent = await memberRequest.Content.ReadAsStringAsync();
+
+            var result = JsonConvert.DeserializeObject<MailChimpMember>(resultContent);
+
+            Assert.Equal(resultMember.email_address, result.email_address);
         }
 
         #endregion
