@@ -37,7 +37,8 @@ namespace Ivy.Mailing.MailChimp.Core.Models
 
         public void SetStatus(MailingStatusName newStatus)
         {
-            status = newStatus.ToString();
+            // Seems attempting to use anything but the lower case versions causes an error
+            status = newStatus.ToString().ToLower();
         }
 
         #endregion
