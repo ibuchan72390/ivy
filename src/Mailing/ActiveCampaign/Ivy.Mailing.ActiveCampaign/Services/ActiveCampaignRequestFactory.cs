@@ -35,7 +35,7 @@ namespace Ivy.Mailing.ActiveCampaign.Services
             req.Method = HttpMethod.Get;
 
             string url = GenerateBaseUrl("contact_list", true);
-            url += $"&filter[email]={email}";
+            url += $"&filters[email]={email}";
             req.RequestUri = new Uri(url);
 
             return req;
