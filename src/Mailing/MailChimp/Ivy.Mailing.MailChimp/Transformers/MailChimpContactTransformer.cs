@@ -1,7 +1,6 @@
 ﻿using Ivy.Mailing.MailChimp.Core.Interfaces.Transformers;
 using Ivy.Mailing.MailChimp.Core.Models;
 using Ivy.Mailing.Core.Models;
-using Ivy.Mailing.Core.Interfaces.Transformers;
 using System;
 using Ivy.Mailing.Core.Enums;
 
@@ -11,20 +10,16 @@ namespace Ivy.Mailing.MailChimp.Transformers
     {
         #region Variables & Constants
 
-        private readonly IExtraDataMailingMemberTransformer<MailChimpMember> _mailingMemberTransformer;
-
-        private readonly IExtraDataContactModelTransformer<MailChimpContactInfo> _contactModelTransformer;
+        private readonly IMailChimpExtraDataTransformer _extraDataTransformer;
 
         #endregion
 
         #region Constructor
 
         public MailChimpContactTransformer(
-            IExtraDataMailingMemberTransformer<MailChimpMember> extraDataTransformer,
-            IExtraDataContactModelTransformer<MailChimpContactInfo> contactModelTransformer)
+            IMailChimpExtraDataTransformer extraDataTransformer)
         {
-            _mailingMemberTransformer = extraDataTransformer;
-            _contactModelTransformer = contactModelTransformer;
+            _extraDataTransformer = extraDataTransformer;
         }
 
         #endregion
@@ -54,7 +49,7 @@ namespace Ivy.Mailing.MailChimp.Transformers
                     throw new Exception($"Unknown MailChimp member status received! Status: {member.status}");
             }
 
-            return _mailingMemberTransformer.Transform(mailingMember, member);
+            return _extraDataTransformer.Transform(mailingMember, member);
         }
 
         public MailChimpContactInfo Transform(MailingMember member)
@@ -66,7 +61,7 @@ namespace Ivy.Mailing.MailChimp.Transformers
 
             mailChimpMember.SetStatus(member.Status);
 
-            return _contactModelTransformer.Transform(mailChimpMember, member);
+            return _extraDataTransformer.Transform(mailChimpMember, member);
         }
 
         #endregion
