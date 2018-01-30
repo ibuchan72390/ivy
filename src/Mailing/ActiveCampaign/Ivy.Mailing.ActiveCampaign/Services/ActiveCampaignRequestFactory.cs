@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using Ivy.Mailing.ActiveCampaign.Core.Interfaces.Providers;
 using Ivy.Mailing.Core.Interfaces.Services;
 using Ivy.Mailing.Core.Models;
-using Newtonsoft.Json.Linq;
 
 namespace Ivy.Mailing.ActiveCampaign.Services
 {
@@ -57,14 +57,7 @@ namespace Ivy.Mailing.ActiveCampaign.Services
 
         private string GenerateBaseUrl(string action, bool isGet)
         {
-            var baseUrl = $"{_configProvider.ApiUrl}/admin/api.php?api_action={action}";
-
-            if (isGet)
-            {
-                baseUrl += $"&api_key={_configProvider.ApiKey}&api_output={output}";
-            }
-
-            return baseUrl;
+            return $"{_configProvider.ApiUrl}/admin/api.php?api_action={action}&api_key={_configProvider.ApiKey}&api_output={output}";
         }
 
         private HttpRequestMessage InternetalGenerateEditMember(MailingMember member, bool isEdit)
@@ -75,31 +68,30 @@ namespace Ivy.Mailing.ActiveCampaign.Services
             string url = GenerateBaseUrl(isEdit ? "contact_edit" : "contact_add", false);
             req.RequestUri = new Uri(url);
 
-            var postObj = new JObject();
-
-            // Missing from URL
-            postObj.Add("api_key", _configProvider.ApiKey);
-            postObj.Add("api_output", output);
+            var postDict = new Dictionary<string, string>();
 
             // Contact Parameters
             if (isEdit)
             {
-                postObj.Add("id", member.Id);
+                postDict.Add("id", member.Id);
             }
 
-            postObj.Add("email", member.Email);
-            postObj.Add("first_name", member.FirstName);
-            postObj.Add("last_name", member.LastName);
-            postObj.Add("phone", member.Phone);
-            postObj.Add($"p[{_configProvider.ListId}]", _configProvider.ListId);
+            postDict.Add("email", member.Email);
+            postDict.Add("first_name", member.FirstName);
+            postDict.Add("last_name", member.LastName);
+            postDict.Add("phone", member.Phone);
+            postDict.Add($"p[{_configProvider.ListId}]", _configProvider.ListId);
 
             foreach (var item in member.ExtraData)
             {
-                postObj.Add($"field[{item.Key}]", item.Value);
+                postDict.Add($"field[{item.Key}]", item.Value);
             }
 
-            req.Content = new StringContent(postObj.ToString(), System.Text.Encoding.Default,
-                "application/x-www-form-urlencoded");
+            // https://www.activecampaign.com/api/example.php?call=contact_add
+            // We must use content of type application/x-www-form-urlencoded
+            // Do NOT use JSON and StringContent, it does NOT convert correctly
+            // FormUrlEncodedContent is the proper way to perform this assignment.
+            req.Content = new FormUrlEncodedContent(postDict);
 
             return req;
         }
