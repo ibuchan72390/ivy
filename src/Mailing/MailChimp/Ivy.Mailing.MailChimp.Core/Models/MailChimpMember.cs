@@ -1,6 +1,8 @@
-﻿namespace Ivy.Mailing.MailChimp.Core.Models
+﻿using Ivy.Mailing.MailChimp.Core.Interfaces.Models;
+
+namespace Ivy.Mailing.MailChimp.Core.Models
 {
-    public class MailChimpMember
+    public class MailChimpMember : IMailChimpContact
     {
         public string id { get; set; }
 

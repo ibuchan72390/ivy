@@ -1,4 +1,5 @@
 ﻿using Ivy.Mailing.Core.Enums;
+using Ivy.Mailing.MailChimp.Core.Interfaces.Models;
 
 namespace Ivy.Mailing.MailChimp.Core.Models
 {
@@ -9,13 +10,13 @@ namespace Ivy.Mailing.MailChimp.Core.Models
      * requirements, these attribute names need to be lower case.
      */
 
-    public class MailChimpContactInfo
+    public class MailChimpContactInfo : IMailChimpContact
     {
         #region Constructor
 
         public MailChimpContactInfo()
         {
-            status = MailingStatusName.Pending.ToString();
+            SetStatus(MailingStatusName.Pending);
         }
 
         #endregion
@@ -24,6 +25,8 @@ namespace Ivy.Mailing.MailChimp.Core.Models
 
         public string email_address { get; set; }
 
+        // We're making this private set because this is the submission model and we MUST set it lowercase
+        // This is { get; set; } on MailChimpMember because it needs to be injected to the POCO class from the JSON string
         public string status { get; private set; }
 
         // Statically typing this guy causes way too updates to this library
