@@ -1,7 +1,6 @@
 ﻿using Ivy.Mailing.ActiveCampaign.Core.Interfaces.Transformers;
 using Ivy.Mailing.ActiveCampaign.Core.Models;
 using Ivy.Mailing.Core.Enums;
-using Ivy.Mailing.Core.Interfaces.Transformers;
 using Ivy.Mailing.Core.Models;
 using System;
 
@@ -11,14 +10,14 @@ namespace Ivy.Mailing.ActiveCampaign.Transformers
     {
         #region Variables & Constants
 
-        private readonly IExtraDataMailingMemberTransformer<ActiveCampaignContact> _extraDataTransformer;
+        private readonly IActiveCampaignExtraDataTransformer _extraDataTransformer;
 
         #endregion
 
         #region Constructor
 
         public ActiveCampaignContactTransformer(
-            IExtraDataMailingMemberTransformer<ActiveCampaignContact> extraDataTransformer)
+            IActiveCampaignExtraDataTransformer extraDataTransformer)
         {
             _extraDataTransformer = extraDataTransformer;
         }
