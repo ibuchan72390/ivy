@@ -12,6 +12,7 @@ namespace Ivy.Mailing.ActiveCampaign.IoC
         public void Install(IContainerGenerator containerGenerator)
         {
             // Mailing Interfaces
+            containerGenerator.RegisterSingleton<IMailingService, ActiveCampaignService>();
             containerGenerator.RegisterSingleton<IMailingApiHelper, ActiveCampaignApiHelper>();
             containerGenerator.RegisterSingleton<IMailingRequestFactory, ActiveCampaignRequestFactory>();
 

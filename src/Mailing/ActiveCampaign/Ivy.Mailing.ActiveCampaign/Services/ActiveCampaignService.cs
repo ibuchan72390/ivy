@@ -3,12 +3,11 @@ using Ivy.Mailing.Core.Interfaces.Services;
 using Ivy.Mailing.Core.Models;
 using Ivy.Validation.Core.DomainModel;
 using Ivy.Validation.Core.Interfaces;
-using System;
 using System.Threading.Tasks;
 
 namespace Ivy.Mailing.ActiveCampaign.Services
 {
-    class ActiveCampaignService : IMailingService
+    public class ActiveCampaignService : IMailingService
     {
         #region Variables & Constants
 
