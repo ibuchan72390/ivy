@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Ivy.Mailing.ActiveCampaign.Core.Interfaces.Services;
 using Ivy.Mailing.ActiveCampaign.Core.Interfaces.Transformers;
+using Ivy.Mailing.ActiveCampaign.Core.Models;
 using Ivy.Mailing.Core.Interfaces.Services;
 using Ivy.Mailing.Core.Models;
 using Ivy.Web.Core.Client;
+using Ivy.Web.Core.Json;
 
 namespace Ivy.Mailing.ActiveCampaign.Services
 {
@@ -14,6 +17,7 @@ namespace Ivy.Mailing.ActiveCampaign.Services
         #region Variables & Constnats
 
         private readonly IApiHelper _apiHelper;
+        private readonly IJsonSerializationService _jsonSerializer;
 
         private readonly IMailingRequestFactory _requestFactory;
 
@@ -27,11 +31,13 @@ namespace Ivy.Mailing.ActiveCampaign.Services
 
         public ActiveCampaignApiHelper(
             IApiHelper apiHelper,
+            IJsonSerializationService jsonSerializer,
             IMailingRequestFactory requestFactory,
             IActiveCampaignContactListDeserializer contactListDeserializer,
             IActiveCampaignContactTransformer contactTransformer)
         {
             _apiHelper = apiHelper;
+            _jsonSerializer = jsonSerializer;
             _requestFactory = requestFactory;
             _contactListDeserializer = contactListDeserializer;
             _contactTransformer = contactTransformer;
@@ -69,7 +75,8 @@ namespace Ivy.Mailing.ActiveCampaign.Services
         {
             var req = _requestFactory.GenerateAddMemberRequest(member);
 
-            await _apiHelper.SendApiDataAsync(req);
+            var response = await _apiHelper.SendApiDataAsync(req);
+            await ValidateActiveCampaignEdit(response);
 
             return member;
         }
@@ -78,9 +85,26 @@ namespace Ivy.Mailing.ActiveCampaign.Services
         {
             var req = _requestFactory.GenerateEditMemberRequest(member);
 
-            await _apiHelper.SendApiDataAsync(req);
+            var response = await _apiHelper.SendApiDataAsync(req);
+            await ValidateActiveCampaignEdit(response);
 
             return member;
+        }
+
+        #endregion
+
+        #region Helper Methods
+
+        private async Task ValidateActiveCampaignEdit(HttpResponseMessage response)
+        {
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            var responseModel = _jsonSerializer.Deserialize<ActiveCampaignResponse>(responseContent);
+
+            if (responseModel.result_code != 1)
+            {
+                throw new Exception($"ActiveCampaign member edit was not successful! Message: {responseModel.result_message}");
+            }
         }
 
         #endregion

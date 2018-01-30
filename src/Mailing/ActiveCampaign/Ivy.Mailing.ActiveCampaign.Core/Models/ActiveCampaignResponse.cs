@@ -2,7 +2,7 @@
 
 namespace Ivy.Mailing.ActiveCampaign.Core.Models
 {
-    public class ActiveCampaignError : IActiveCampaignModel
+    public class ActiveCampaignResponse : IActiveCampaignModel
     {
         public int result_code { get; set; }
         public string result_message { get; set; }

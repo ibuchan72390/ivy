@@ -4,7 +4,8 @@ using Xunit;
 
 namespace Ivy.Mailing.ActiveCampaign.Core.Test.Models
 {
-    public class ActiveCampaignErrorTests : BaseActiveCampaignModelTest<ActiveCampaignError>
+    public class ActiveCampaignErrorTests : 
+        BaseActiveCampaignModelTest<ActiveCampaignResponse>
     {
         const string errJson = @"{
             ""result_code"": 0,
