@@ -21,9 +21,11 @@ namespace Ivy.Mailing.MailChimp.Transformers
         #region Constructor
 
         public MailChimpContactTransformer(
-            IMailChimpExtraDataTransformer extraDataTransformer)
+            IMailChimpExtraDataTransformer extraDataTransformer,
+            IMailChimpConfigurationProvider configProvider)
         {
             _extraDataTransformer = extraDataTransformer;
+            _configProvider = configProvider;
         }
 
         #endregion
