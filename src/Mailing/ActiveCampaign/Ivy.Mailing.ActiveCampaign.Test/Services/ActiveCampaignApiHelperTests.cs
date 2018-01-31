@@ -11,6 +11,7 @@ using Moq;
 using System;
 using System.Net.Http;
 using Xunit;
+using Ivy.Web.Core.Json;
 
 namespace Ivy.Mailing.ActiveCampaign.Test.Services
 {
@@ -19,6 +20,7 @@ namespace Ivy.Mailing.ActiveCampaign.Test.Services
         #region Variables & Constants
 
         private readonly IMailingApiHelper _sut;
+        private readonly IJsonSerializationService _serializer;
 
         private readonly Mock<IApiHelper> _mockApiHelper;
         private readonly Mock<IMailingRequestFactory> _mockRequestFactory;
@@ -31,6 +33,8 @@ namespace Ivy.Mailing.ActiveCampaign.Test.Services
 
         public ActiveCampaignApiHelperTests()
         {
+            _serializer = ServiceLocator.Instance.GetService<IJsonSerializationService>();
+
             var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
 
             base.ConfigureContainer(containerGen);
@@ -198,6 +202,9 @@ namespace Ivy.Mailing.ActiveCampaign.Test.Services
             var req = new HttpRequestMessage();
             var resp = new HttpResponseMessage();
 
+            var acResp = new ActiveCampaignResponse { result_code = 1 };
+            resp.Content = new StringContent(_serializer.Serialize(acResp));
+
             _mockRequestFactory.Setup(x => x.GenerateAddMemberRequest(member)).Returns(req);
 
             _mockApiHelper.Setup(x => x.SendApiDataAsync(req)).ReturnsAsync(resp);
@@ -224,6 +231,9 @@ namespace Ivy.Mailing.ActiveCampaign.Test.Services
             var member = new MailingMember();
             var req = new HttpRequestMessage();
             var resp = new HttpResponseMessage();
+
+            var acResp = new ActiveCampaignResponse { result_code = 1 };
+            resp.Content = new StringContent(_serializer.Serialize(acResp));
 
             _mockRequestFactory.Setup(x => x.GenerateEditMemberRequest(member)).Returns(req);
 

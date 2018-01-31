@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
+using System.Net;
+using System.Linq;
 
 namespace Ivy.Mailing.ActiveCampaign.Test.Services
 {
@@ -62,7 +64,7 @@ namespace Ivy.Mailing.ActiveCampaign.Test.Services
 
             // Assert
             Assert.Equal(HttpMethod.Get, result.Method);
-            Assert.Equal(result.RequestUri.ToString(), $"{apiUrl}/admin/api.php?api_action=contact_list&api_key={apiKey}&api_output={outputType}&filter[email]={email}");
+            Assert.Equal(result.RequestUri.ToString(), $"{apiUrl}/admin/api.php?api_action=contact_list&api_key={apiKey}&api_output={outputType}&filters[email]={email}");
         }
 
         #endregion
@@ -132,31 +134,34 @@ namespace Ivy.Mailing.ActiveCampaign.Test.Services
             // Assert
             var action = isAdd ? "contact_add" : "contact_edit";
 
-            var requestUri = $"{apiUrl}/admin/api.php?api_action={action}";
+            var requestUri = $"{apiUrl}/admin/api.php?api_action={action}&api_key={apiKey}&api_output={outputType}";
             Assert.Equal(requestUri, result.RequestUri.ToString());
 
             Assert.Equal(HttpMethod.Post, result.Method);
 
             var body = await result.Content.ReadAsStringAsync();
 
-            var jObj = JObject.Parse(body);
+            // Need to decode this before we can rip it to a dictionary
+            body = WebUtility.UrlDecode(body);
+
+            var bodyParts = body.Split('&');
+
+            var bodyDict = bodyParts.ToDictionary(x => x.Split('=')[0], x => x.Split('=')[1]);
 
             if (!isAdd)
             {
-                Assert.Equal(member.Id, jObj.Property("id").Value);
+                Assert.Equal(member.Id, bodyDict["id"]);
             }
 
-            Assert.Equal(apiKey, jObj.Property("api_key").Value);
-            Assert.Equal(outputType, jObj.Property("api_output").Value);
-            Assert.Equal(email, jObj.Property("email").Value);
-            Assert.Equal(member.FirstName, jObj.Property("first_name").Value);
-            Assert.Equal(member.LastName, jObj.Property("last_name").Value);
-            Assert.Equal(member.Phone, jObj.Property("phone").Value);
-            Assert.Equal(listId, jObj.Property($"p[{listId}]").Value);
+            Assert.Equal(email, bodyDict["email"]);
+            Assert.Equal(member.FirstName, bodyDict["first_name"]);
+            Assert.Equal(member.LastName, bodyDict["last_name"]);
+            Assert.Equal(member.Phone, bodyDict["phone"]);
+            Assert.Equal(listId, bodyDict[$"p[{listId}]"]);
 
             foreach (var item in member.ExtraData)
             {
-                var propVal = jObj.Property($"field[{item.Key}]").Value;
+                var propVal = bodyDict[$"field[{item.Key}]"];
                 Assert.Equal(item.Value, propVal);
             }
         }

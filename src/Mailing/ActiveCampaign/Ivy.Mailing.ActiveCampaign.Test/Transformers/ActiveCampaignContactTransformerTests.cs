@@ -6,7 +6,6 @@ using Ivy.Mailing.Core.Enums;
 using Moq;
 using System;
 using Xunit;
-using Ivy.Mailing.Core.Interfaces.Transformers;
 using Ivy.Mailing.Core.Models;
 
 namespace Ivy.Mailing.ActiveCampaign.Test.Transformers
@@ -17,7 +16,7 @@ namespace Ivy.Mailing.ActiveCampaign.Test.Transformers
 
         private readonly IActiveCampaignContactTransformer _sut;
 
-        private readonly Mock<IExtraDataMailingMemberTransformer<ActiveCampaignContact>> _mockExtraDataTransformer;
+        private readonly Mock<IActiveCampaignExtraDataTransformer> _mockExtraDataTransformer;
 
         #endregion
 
@@ -29,9 +28,9 @@ namespace Ivy.Mailing.ActiveCampaign.Test.Transformers
 
             base.ConfigureContainer(containerGen);
 
-            _mockExtraDataTransformer = new Mock<IExtraDataMailingMemberTransformer<ActiveCampaignContact>>();
+            _mockExtraDataTransformer = new Mock<IActiveCampaignExtraDataTransformer>();
 
-            containerGen.RegisterInstance<IExtraDataMailingMemberTransformer<ActiveCampaignContact>>(_mockExtraDataTransformer.Object);
+            containerGen.RegisterInstance<IActiveCampaignExtraDataTransformer>(_mockExtraDataTransformer.Object);
 
             var container = containerGen.GenerateContainer();
 
