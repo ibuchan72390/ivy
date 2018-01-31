@@ -21,9 +21,11 @@ namespace Ivy.Mailing.ActiveCampaign.Services
         #region Constructor
         
         public ActiveCampaignService(
-            IMailingApiHelper apiHelper)
+            IMailingApiHelper apiHelper,
+            IActiveCampaignConfigurationProvider configProvider)
         {
             _apiHelper = apiHelper;
+            _configProvider = configProvider;
         }
         
         #endregion
