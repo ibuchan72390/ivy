@@ -10,5 +10,8 @@ namespace Ivy.Mailing.ActiveCampaign.Core.Interfaces.Providers
         string ApiUrl { get; }
         string ApiKey { get; }
         string ListId { get; }
+
+        string AlreadyEnrolledMessage { get; }
+        string NewEnrollmentMessage { get; }
     }
 }

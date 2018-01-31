@@ -4,6 +4,7 @@ using Ivy.Validation.Core.DomainModel;
 using Ivy.Validation.Core.Interfaces;
 using System.Threading.Tasks;
 using Ivy.Mailing.Core.Enums;
+using Ivy.Mailing.MailChimp.Core.Providers;
 
 namespace Ivy.Mailing.MailChimp.Services
 {
@@ -13,14 +14,18 @@ namespace Ivy.Mailing.MailChimp.Services
 
         private readonly IMailingApiHelper _apiHelper;
 
+        private readonly IMailChimpConfigurationProvider _configProvider;
+
         #endregion
 
         #region Constructor
 
         public MailChimpService(
-            IMailingApiHelper apiHelper)
+            IMailingApiHelper apiHelper,
+            IMailChimpConfigurationProvider configProvider)
         {
             _apiHelper = apiHelper;
+            _configProvider = configProvider;
         }
 
         #endregion
@@ -32,37 +37,23 @@ namespace Ivy.Mailing.MailChimp.Services
             // Validate new subscription status
             var member = await _apiHelper.GetMemberAsync(contactInfo.Email);
 
-            if (member != null && member.Status == MailingStatusName.Subscribed)
-            {
-                // This is technically valid, I just don't want to sign them up again
-                return new ValidationResult(true, "You have already signed up for our mailing list!");
-            }
-
             if (member == null)
             {
                // Submit to mailchimp
                await _apiHelper.AddMemberAsync(contactInfo);
+
+                return new ValidationResult(message: _configProvider.NewEnrollmentMessage);
+            }
+            else if (member.Status == MailingStatusName.Pending)
+            {
+                // Inform them of their pending status accordingly
+                return new ValidationResult(true, _configProvider.PendingEnrollmentMessage);
             }
             else
             {
-                // Update mailchimp accordingly
-                if (member.Status == MailingStatusName.Pending)
-                {
-                    return new ValidationResult(true, "We have already received your email, " +
-                        "but it does not appear that you have validated the acceptance email. " +
-                        "Please check your inbox for a confirmation email.");
-                }
-                else
-                {
-                    member.Status = MailingStatusName.Pending;
-                    await _apiHelper.EditMemberAsync(member);
-                }
+                // This is technically valid, I just don't want to sign them up again
+                return new ValidationResult(true, _configProvider.AlreadyEnrolledMessage);
             }
-
-            // return response
-            return new ValidationResult(message: "We have successfully received your contact information.  " +
-                "You should receive an email in your inbox shortly requesting you to confirm our mailing list. " +
-                "Please confirm the email or you may not receive our newsletter.");
         }
 
         #endregion

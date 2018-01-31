@@ -45,7 +45,7 @@ namespace Ivy.Mailing.ActiveCampaign.Services
             else if (member != null && member.Status == MailingStatusName.Subscribed && IsInApplicationList(member))
             {
                 // This is technically valid, I just don't want to sign them up again
-                return new ValidationResult(true, "You have already signed up for our mailing list!");
+                return new ValidationResult(true, _configProvider.AlreadyEnrolledMessage);
             }
             else if (!IsInApplicationList(member))
             {
@@ -56,8 +56,7 @@ namespace Ivy.Mailing.ActiveCampaign.Services
             }
 
             // return response
-            return new ValidationResult(message: "We have successfully received your contact " + 
-                "information and you have been added to our mailing list.");
+            return new ValidationResult(message: _configProvider.NewEnrollmentMessage);
         }
 
         #endregion

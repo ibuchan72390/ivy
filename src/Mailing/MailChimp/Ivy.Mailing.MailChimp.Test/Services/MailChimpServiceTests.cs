@@ -6,6 +6,7 @@ using Ivy.Mailing.Core.Models;
 using Moq;
 using Xunit;
 using Ivy.Mailing.Core.Enums;
+using Ivy.Mailing.MailChimp.Core.Providers;
 
 namespace Ivy.Mailing.MailChimp.Test
 {
@@ -16,12 +17,13 @@ namespace Ivy.Mailing.MailChimp.Test
         private readonly IMailingService _sut;
 
         private readonly Mock<IMailingApiHelper> _mockApiHelper;
+        private readonly Mock<IMailChimpConfigurationProvider> _configProvider;
 
         private const string testEmail = "test@gmail.com";
 
-        private const string successValidation = "We have successfully received your contact information.  " +
-            "You should receive an email in your inbox shortly requesting you to confirm our mailing list. " +
-            "Please confirm the email or you may not receive our newsletter.";
+        private const string newMsg = "New";
+        private const string pendingMsg = "Pending";
+        private const string existingMsg = "Existing";
 
         #endregion
 
@@ -30,12 +32,18 @@ namespace Ivy.Mailing.MailChimp.Test
         public MailChimpServiceTests()
         {
             _mockApiHelper = new Mock<IMailingApiHelper>();
+            _configProvider = new Mock<IMailChimpConfigurationProvider>();
 
             var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
 
             base.ConfigureContainer(containerGen);
 
             containerGen.RegisterInstance<IMailingApiHelper>(_mockApiHelper.Object);
+            containerGen.RegisterInstance<IMailChimpConfigurationProvider>(_configProvider.Object);
+
+            _configProvider.Setup(x => x.AlreadyEnrolledMessage).Returns(existingMsg);
+            _configProvider.Setup(x => x.NewEnrollmentMessage).Returns(newMsg);
+            _configProvider.Setup(x => x.PendingEnrollmentMessage).Returns(pendingMsg);
 
             var container = containerGen.GenerateContainer();
 
@@ -62,7 +70,7 @@ namespace Ivy.Mailing.MailChimp.Test
             _mockApiHelper.Verify(x => x.GetMemberAsync(testEmail), Times.Once);
 
             Assert.True(result.IsValid);
-            Assert.Equal("You have already signed up for our mailing list!", result.Message);
+            Assert.Equal(existingMsg, result.Message);
         }
 
         [Fact]
@@ -84,7 +92,7 @@ namespace Ivy.Mailing.MailChimp.Test
             _mockApiHelper.Verify(x => x.AddMemberAsync(It.IsAny<MailingMember>()), Times.Once);
 
             Assert.True(result.IsValid);
-            Assert.Equal(successValidation, result.Message);
+            Assert.Equal(newMsg, result.Message);
         }
 
         [Fact]
@@ -102,13 +110,10 @@ namespace Ivy.Mailing.MailChimp.Test
 
             _mockApiHelper.Verify(x => x.GetMemberAsync(testEmail), Times.Once);
 
-            _mockApiHelper.Verify(x => x.EditMemberAsync(returnedMember), Times.Once);
-
-            // Gets set during the process...
-            Assert.Equal(MailingStatusName.Pending, returnedMember.Status);
+            _mockApiHelper.Verify(x => x.EditMemberAsync(returnedMember), Times.Never);
 
             Assert.True(result.IsValid);
-            Assert.Equal(successValidation, result.Message);
+            Assert.Equal(existingMsg, result.Message);
         }
 
         [Fact]
@@ -132,9 +137,7 @@ namespace Ivy.Mailing.MailChimp.Test
             Assert.Equal(MailingStatusName.Pending, returnedMember.Status);
 
             Assert.True(result.IsValid);
-            Assert.Equal("We have already received your email, " +
-                        "but it does not appear that you have validated the acceptance email. " +
-                        "Please check your inbox for a confirmation email.", result.Message);
+            Assert.Equal(pendingMsg, result.Message);
         }
 
         #endregion
