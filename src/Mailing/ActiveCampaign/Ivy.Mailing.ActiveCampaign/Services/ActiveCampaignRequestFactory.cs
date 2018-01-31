@@ -80,7 +80,17 @@ namespace Ivy.Mailing.ActiveCampaign.Services
             postDict.Add("first_name", member.FirstName);
             postDict.Add("last_name", member.LastName);
             postDict.Add("phone", member.Phone);
-            postDict.Add($"p[{_configProvider.ListId}]", _configProvider.ListId);
+
+            // If we're adding or editing a Member, they must belong to at least one list
+            if (!member.ListIds.Contains(_configProvider.ListId))
+            {
+                member.ListIds.Add(_configProvider.ListId);
+            }
+
+            foreach (var listId in member.ListIds)
+            {
+                postDict.Add($"p[{listId}]", listId);
+            }
 
             foreach (var item in member.ExtraData)
             {

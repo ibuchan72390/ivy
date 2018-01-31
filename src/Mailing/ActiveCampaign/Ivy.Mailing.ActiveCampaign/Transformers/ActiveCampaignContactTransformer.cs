@@ -3,6 +3,7 @@ using Ivy.Mailing.ActiveCampaign.Core.Models;
 using Ivy.Mailing.Core.Enums;
 using Ivy.Mailing.Core.Models;
 using System;
+using System.Linq;
 
 namespace Ivy.Mailing.ActiveCampaign.Transformers
 {
@@ -48,6 +49,10 @@ namespace Ivy.Mailing.ActiveCampaign.Transformers
                 default:
                     throw new Exception($"Unknown ActiveCampaignContact.status received! status: {contact.status}");
             }
+
+            member.ListIds = contact.lists.
+                Select(x => x.Value).
+                Select(x => x.id).ToList();
 
             return _extraDataTransformer.Transform(member, contact);
         }

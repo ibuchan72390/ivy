@@ -10,6 +10,7 @@ namespace Ivy.Mailing.Core.Models
         public MailingMember()
         {
             ExtraData = new Dictionary<string, string>();
+            ListIds = new List<string>();
         }
 
         #endregion
@@ -36,6 +37,8 @@ namespace Ivy.Mailing.Core.Models
         // That way we can assign custom properties like property[ExtraData[1].Key]=ExtraData[1].Value
         //public object ExtraData { get; set; }
         public Dictionary<string, string> ExtraData { get; set; }
+
+        public IList<string> ListIds { get; set; }
 
         #endregion
     }

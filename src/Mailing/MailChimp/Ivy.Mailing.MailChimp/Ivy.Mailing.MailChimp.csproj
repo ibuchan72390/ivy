@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>1.0.6</Version>
+    <Version>1.0.7</Version>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <AssemblyName>Ivy.Mailing.MailChimp</AssemblyName>
     <PackageId>Ivy.Mailing.MailChimp</PackageId>

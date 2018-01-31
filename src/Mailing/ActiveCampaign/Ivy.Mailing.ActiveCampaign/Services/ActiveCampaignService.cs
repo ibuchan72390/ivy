@@ -1,4 +1,5 @@
-﻿using Ivy.Mailing.Core.Enums;
+﻿using Ivy.Mailing.ActiveCampaign.Core.Interfaces.Providers;
+using Ivy.Mailing.Core.Enums;
 using Ivy.Mailing.Core.Interfaces.Services;
 using Ivy.Mailing.Core.Models;
 using Ivy.Validation.Core.DomainModel;
@@ -12,6 +13,8 @@ namespace Ivy.Mailing.ActiveCampaign.Services
         #region Variables & Constants
 
         private readonly IMailingApiHelper _apiHelper;
+
+        private readonly IActiveCampaignConfigurationProvider _configProvider;
 
         #endregion
 
@@ -32,25 +35,36 @@ namespace Ivy.Mailing.ActiveCampaign.Services
             // Validate new subscription status
             var member = await _apiHelper.GetMemberAsync(contactInfo.Email);
 
-            if (member != null && member.Status == MailingStatusName.Subscribed)
+            if (member == null)
+            {
+                // Submit brand new contact
+                await _apiHelper.AddMemberAsync(contactInfo);
+            }
+            else if (member != null && member.Status == MailingStatusName.Subscribed && IsInApplicationList(member))
             {
                 // This is technically valid, I just don't want to sign them up again
                 return new ValidationResult(true, "You have already signed up for our mailing list!");
             }
+            else if (!IsInApplicationList(member))
+            {
+                // Valid, but they need to be added to the next list
+                contactInfo.ListIds.Add(_configProvider.ListId);
 
-            if (member == null)
-            {
-                // Submit to mailchimp
-                await _apiHelper.AddMemberAsync(contactInfo);
-            }
-            else
-            {
                 await _apiHelper.EditMemberAsync(member);
             }
 
             // return response
             return new ValidationResult(message: "We have successfully received your contact " + 
                 "information and you have been added to our mailing list.");
+        }
+
+        #endregion
+
+        #region Helper Methods
+
+        private bool IsInApplicationList(MailingMember member)
+        {
+            return member.ListIds.Contains(_configProvider.ListId);
         }
 
         #endregion

@@ -3,6 +3,8 @@ using Ivy.Mailing.MailChimp.Core.Models;
 using Ivy.Mailing.Core.Models;
 using System;
 using Ivy.Mailing.Core.Enums;
+using Ivy.Mailing.MailChimp.Core.Providers;
+using System.Collections.Generic;
 
 namespace Ivy.Mailing.MailChimp.Transformers
 {
@@ -11,6 +13,8 @@ namespace Ivy.Mailing.MailChimp.Transformers
         #region Variables & Constants
 
         private readonly IMailChimpExtraDataTransformer _extraDataTransformer;
+
+        private readonly IMailChimpConfigurationProvider _configProvider;
 
         #endregion
 
@@ -31,7 +35,11 @@ namespace Ivy.Mailing.MailChimp.Transformers
             var mailingMember = new MailingMember
             {
                 Id = member.id,
-                Email = member.email_address
+                Email = member.email_address,
+                ListIds = new List<string>
+                {
+                    _configProvider.ListId
+                }
             };
 
             switch (member.status)
