@@ -52,7 +52,7 @@ namespace Ivy.Mailing.ActiveCampaign.Transformers
 
             member.ListIds = contact.lists.
                 Select(x => x.Value).
-                Select(x => x.id).ToList();
+                Select(x => x.listid).ToList();
 
             return _extraDataTransformer.Transform(member, contact);
         }
