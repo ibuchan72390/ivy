@@ -1,6 +1,8 @@
-﻿namespace Ivy.Captcha.Core.Models
+﻿using Ivy.Captcha.Core.Interfaces.Models;
+
+namespace Ivy.Captcha.Core.Models
 {
-    public class CaptchaResult
+    public class CaptchaResult : ICaptchaResult
     {
         public string CaptchaCode { get; set; }
 

@@ -1,6 +1,6 @@
-﻿using Ivy.Captcha.Core.Interfaces.Services;
+﻿using Ivy.Captcha.Core.Interfaces.Models;
+using Ivy.Captcha.Core.Interfaces.Services;
 using Ivy.Captcha.Core.Models;
-using Ivy.Utility.Core;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -43,7 +43,7 @@ namespace Ivy.Captcha.Services
 
         #region Public Methods
 
-        public CaptchaResult GenerateCaptchaImage(int captchaCharLength, int width, int height)
+        public ICaptchaResult GenerateCaptchaImage(int captchaCharLength, int width, int height)
         {
             if (height <= 0 || width <= 0)
             {
