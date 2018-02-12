@@ -8,12 +8,11 @@ namespace Ivy.Data.Common.Base.Entity
      * You can probably repurpose this to use the generic key repository if necessary
      * It will be useful down the line when you finally want to use these entities.
      */
+    public class BaseEntityService<TEntity, TKey, TRepo> :
+       IEntityService<TEntity, TKey, TRepo>
 
-    public class BaseEntityService<TEntity, TRepo> : 
-        IEntityService<TEntity, TRepo>
-        
-        where TEntity : class, IEntity
-        where TRepo : IEntityRepository<TEntity>
+       where TEntity : class, IEntityWithTypedId<TKey>
+       where TRepo : IEntityRepository<TEntity, TKey>
     {
         #region Attributes
 
@@ -42,6 +41,24 @@ namespace Ivy.Data.Common.Base.Entity
         public virtual void InitializeByDatabaseKey(string databaseKey)
         {
             Repo.InitializeByDatabaseKey(databaseKey);
+        }
+
+        #endregion
+    }
+
+
+    public class BaseEntityService<TEntity, TRepo> : 
+        BaseEntityService<TEntity, int, TRepo>,
+        IEntityService<TEntity, TRepo>
+        
+        where TEntity : class, IEntity
+        where TRepo : IEntityRepository<TEntity>
+    {
+        #region Constructor
+
+        public BaseEntityService(TRepo repo)
+            : base(repo)
+        {
         }
 
         #endregion
