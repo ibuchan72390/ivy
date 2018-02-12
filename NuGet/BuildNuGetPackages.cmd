@@ -27,6 +27,9 @@ CALL NuGet\GenerateAuth0.cmd true
 :: Build Caching
 CALL NuGet\GenerateCaching.cmd true
 
+:: Build Captcha
+CALL NuGet\GenerateCaptcha.cmd true
+
 :: Build IoC
 CALL NuGet\GenerateIoC.cmd true
 
