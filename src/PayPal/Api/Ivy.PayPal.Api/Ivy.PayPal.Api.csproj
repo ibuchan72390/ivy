@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Web\Ivy.Web.Core\Ivy.Web.Core.csproj" />
+    <ProjectReference Include="..\Ivy.PayPal.Api.Core\Ivy.PayPal.Api.Core.csproj" />
+  </ItemGroup>
+
+</Project>
