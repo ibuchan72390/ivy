@@ -2,12 +2,12 @@
 {
     public class PayPalAmountDetail
     {
-        public double subtotal { get; set; }
-        public double tax { get; set; }
-        public double shipping { get; set; }
-        public double handling_fee { get; set; }
-        public double shipping_discount { get; set; }
-        public double insurance { get; set; }
-        public double gift_wrap { get; set; }
+        public decimal subtotal { get; set; }
+        public decimal tax { get; set; }
+        public decimal shipping { get; set; }
+        public decimal handling_fee { get; set; }
+        public decimal shipping_discount { get; set; }
+        public decimal insurance { get; set; }
+        public decimal gift_wrap { get; set; }
     }
 }

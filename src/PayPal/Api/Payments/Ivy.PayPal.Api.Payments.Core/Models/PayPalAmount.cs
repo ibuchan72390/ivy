@@ -2,7 +2,7 @@
 {
     public class PayPalAmount
     {
-        public double total { get; set; }
+        public decimal total { get; set; }
         public string currency { get; set; }
         public PayPalAmountDetail details { get; set; }
     }
