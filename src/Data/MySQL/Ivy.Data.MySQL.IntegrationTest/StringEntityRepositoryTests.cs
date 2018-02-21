@@ -3,6 +3,7 @@ using Ivy.IoC;
 using Ivy.TestHelper;
 using Ivy.TestHelper.TestEntities;
 using Ivy.TestHelper.TestValues;
+using Ivy.Utility.Core.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -120,10 +121,10 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
         #endregion
 
-        #region SaveOrUpdate
+        #region SaveOrUpdate (Entity)
 
         [Fact]
-        public void SaveOrUpdate_Identifies_New_Save_Correctly()
+        public void SaveOrUpdate_Entity_Identifies_New_Save_Correctly()
         {
             var testEntity = new StringEntity().GenerateForTest();
 
@@ -137,7 +138,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
         }
 
         [Fact]
-        public void SaveOrUpdate_Identifies_Existing_Update_Correctly()
+        public void SaveOrUpdate_Entity_Identifies_Existing_Update_Correctly()
         {
             var testEntity = new StringEntity().SaveForTest();
 
@@ -153,7 +154,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
         }
 
         [Fact]
-        public void SaveOrUpdate_Can_Take_TranConn()
+        public void SaveOrUpdate_Entity_Can_Take_TranConn()
         {
             var tranGen = ServiceLocator.Instance.GetService<ITranConnGenerator>();
 
@@ -162,6 +163,82 @@ namespace Ivy.Data.MySQL.IntegrationTest
             var testEntity = new StringEntity().GenerateForTest();
 
             _sut.SaveOrUpdate(testEntity, tc);
+
+            tc.Dispose();
+        }
+
+        #endregion
+
+        #region SaveOrUpdate (Entities)
+
+        [Fact]
+        public void SaveOrUpdate_Entities_Identifies_New_Save_Correctly()
+        {
+            var testEntities = Enumerable.Range(0, 3).
+                Select(x => new StringEntity().GenerateForTest()).
+                ToList();
+
+            var results = _sut.SaveOrUpdate(testEntities);
+
+            foreach (var result in testEntities)
+            {
+                Assert.True(result.Id != null);
+
+                var secondaryResult = _sut.GetById(result.Id);
+
+                Assert.True(result.Equals(secondaryResult));
+            }
+
+            foreach (var result in results)
+            {
+                Assert.True(result.Id != null);
+
+                var secondaryResult = _sut.GetById(result.Id);
+
+                Assert.True(result.Equals(secondaryResult));
+            }
+        }
+
+        [Fact]
+        public void SaveOrUpdate_Entities_Identifies_Existing_Update_Correctly()
+        {
+            var testEntities = Enumerable.Range(0, 3).
+               Select(x => new StringEntity().SaveForTest()).
+               ToList();
+
+            var results = _sut.SaveOrUpdate(testEntities);
+
+            foreach (var testEntity in testEntities)
+            {
+                var result = results.First(x => x.Id == testEntity.Id);
+
+                Assert.True(result.Id == testEntity.Id);
+                Assert.Equal(result.Integer, testEntity.Integer);
+                Assert.True(result.Equals(testEntity));
+            }
+
+            foreach (var testEntity in testEntities)
+            {
+                var secondaryResult = _sut.GetById(testEntity.Id);
+
+                Assert.True(secondaryResult.Id == testEntity.Id);
+                Assert.Equal(secondaryResult.Integer, testEntity.Integer);
+                Assert.True(secondaryResult.Equals(testEntity));
+            }
+        }
+
+        [Fact]
+        public void SaveOrUpdate_Entities_Can_Take_TranConn()
+        {
+            var tranGen = ServiceLocator.Instance.GetService<ITranConnGenerator>();
+
+            var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
+
+            var testEntities = Enumerable.Range(0, 3).
+               Select(x => new StringEntity().SaveForTest()).
+               ToList();
+
+            _sut.SaveOrUpdate(testEntities, tc);
 
             tc.Dispose();
         }

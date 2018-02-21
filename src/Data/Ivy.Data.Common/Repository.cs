@@ -370,6 +370,19 @@ namespace Ivy.Data.Common
             return entity;
         }
 
+        public IEnumerable<T> SaveOrUpdate(IEnumerable<T> entities, ITranConn tc = null)
+        {
+            _tranHelper.WrapInTransaction(tran => 
+            {
+                foreach (var entity in entities)
+                {
+                    SaveOrUpdate(entity, tran);
+                }
+            }, tc);
+
+            return entities;
+        }
+
         #endregion
 
         #region Helper Methods

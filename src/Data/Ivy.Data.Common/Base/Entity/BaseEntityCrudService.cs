@@ -74,6 +74,11 @@ namespace Ivy.Data.Common.Base.Entity
             return Repo.SaveOrUpdate(entity, tc);
         }
 
+        public IEnumerable<TEntity> SaveOrUpdate(IEnumerable<TEntity> entities, ITranConn tc = null)
+        {
+            return Repo.SaveOrUpdate(entities, tc);
+        }
+
         #endregion
     }
 
