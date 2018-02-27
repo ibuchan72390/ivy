@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <AssemblyName>Ivy.Google</AssemblyName>
+    <RootNamespace>Ivy.Google</RootNamespace>
+    <PackageId>Ivy.Google</PackageId>
+    <Authors>Ivy.Google</Authors>
+    <Company>Ivy.Google</Company>
+    <Product>Ivy.Google</Product>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Apis.Auth" Version="1.32.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Ivy.Google.Core\Ivy.Google.Core.csproj" />
+  </ItemGroup>
+
+</Project>

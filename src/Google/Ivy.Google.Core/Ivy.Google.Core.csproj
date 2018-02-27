@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <AssemblyName>Ivy.Google.Core</AssemblyName>
+    <RootNamespace>Ivy.Google.Core</RootNamespace>
+    <PackageId>Ivy.Google.Core</PackageId>
+    <Authors>Ivy.Google.Core</Authors>
+    <Company>Ivy.Google.Core</Company>
+    <Product>Ivy.Google.Core</Product>
+  </PropertyGroup>
+
+</Project>

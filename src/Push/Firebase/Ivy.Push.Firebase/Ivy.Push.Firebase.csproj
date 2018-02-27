@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Google\Ivy.Google.Core\Ivy.Google.Core.csproj" />
+    <ProjectReference Include="..\..\..\Web\Ivy.Web.Core\Ivy.Web.Core.csproj" />
+    <ProjectReference Include="..\..\Ivy.Push.Core\Ivy.Push.Core.csproj" />
+  </ItemGroup>
+
+</Project>
