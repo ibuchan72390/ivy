@@ -1,4 +1,4 @@
-﻿using Ivy.Push.Core.Models;
+﻿using Ivy.Push.Core.Models.Messages;
 using System.Net.Http;
 using System.Threading.Tasks;
 

@@ -1,4 +1,5 @@
-﻿using Ivy.Push.Core.Models;
+﻿using Ivy.Push.Core.Models.Messages;
+using Ivy.Push.Core.Models.Responses;
 using System.Threading.Tasks;
 
 namespace Ivy.Push.Core.Interfaces.Services

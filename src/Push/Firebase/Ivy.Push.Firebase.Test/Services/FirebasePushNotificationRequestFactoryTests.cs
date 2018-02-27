@@ -3,7 +3,7 @@ using Ivy.IoC;
 using Ivy.IoC.Core;
 using Ivy.Push.Core.Interfaces.Providers;
 using Ivy.Push.Core.Interfaces.Services;
-using Ivy.Push.Core.Models;
+using Ivy.Push.Core.Models.Messages;
 using Ivy.Push.Firebase.Test.Base;
 using Ivy.Web.Core.Json;
 using Moq;

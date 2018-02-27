@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Ivy.Push.Core.Interfaces.Services;
-using Ivy.Push.Core.Models;
+using Ivy.Push.Core.Models.Messages;
+using Ivy.Push.Core.Models.Responses;
 using Ivy.Web.Core.Client;
 
 namespace Ivy.Push.Firebase.Services
