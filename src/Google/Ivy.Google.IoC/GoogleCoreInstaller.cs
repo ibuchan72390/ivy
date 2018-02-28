@@ -4,7 +4,7 @@ using Ivy.IoC.Core;
 
 namespace Ivy.Google.IoC
 {
-    class GoogleCoreInstaller : IContainerInstaller
+    public class GoogleCoreInstaller : IContainerInstaller
     {
         public void Install(IContainerGenerator container)
         {
