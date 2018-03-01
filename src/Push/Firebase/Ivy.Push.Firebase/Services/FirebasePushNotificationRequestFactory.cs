@@ -76,7 +76,7 @@ namespace Ivy.Push.Firebase.Services
 
             var submissionModel = new PushMessageWrapper { message = model };
 
-            var json = _serializer.Serialize(model);
+            var json = _serializer.Serialize(submissionModel);
 
             req.Content = new StringContent(json, Encoding.Default, "application/json");
 

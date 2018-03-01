@@ -4,6 +4,7 @@ using Ivy.IoC.Core;
 using Ivy.Push.Core.Interfaces.Providers;
 using Ivy.Push.Core.Interfaces.Services;
 using Ivy.Push.Core.Models.Messages;
+using Ivy.Push.Core.Models.Wrappers;
 using Ivy.Push.Firebase.Test.Base;
 using Ivy.Web.Core.Json;
 using Moq;
@@ -96,7 +97,7 @@ namespace Ivy.Push.Firebase.Test.Services
         {
             const string resultJson = "json";
 
-            _mockSerializer.Setup(x => x.Serialize(model)).Returns(resultJson);
+            _mockSerializer.Setup(x => x.Serialize(It.Is<PushMessageWrapper>(y => y.message.Equals(model)))).Returns(resultJson);
 
             // Act
             var req = await getReqFn(model);
@@ -114,7 +115,7 @@ namespace Ivy.Push.Firebase.Test.Services
 
             Assert.Equal(resultJson, content);
 
-            _mockSerializer.Verify(x => x.Serialize(model), Times.Once);
+            _mockSerializer.Verify(x => x.Serialize(It.Is<PushMessageWrapper>(y => y.message.Equals(model))), Times.Once);
 
             _mockTokenGenerator.Verify(x => x.GetOAuthTokenAsync(It.Is<string[]>(y => y.Length == 1 &&
                                                                                      y.Contains(firebaseScope))), 
