@@ -1,7 +1,9 @@
 ﻿using Ivy.Google.Core.Interfaces.Services;
+using Ivy.Push.Core.Interfaces.Models;
 using Ivy.Push.Core.Interfaces.Providers;
 using Ivy.Push.Core.Interfaces.Services;
 using Ivy.Push.Core.Models.Messages;
+using Ivy.Push.Core.Models.Wrappers;
 using Ivy.Web.Core.Json;
 using System;
 using System.Net.Http;
@@ -59,6 +61,7 @@ namespace Ivy.Push.Firebase.Services
         }
 
         private async Task<HttpRequestMessage> GenerateRequestAsync<T>(T model)
+            where T: IPushMessage
         {
             var req = new HttpRequestMessage();
 
@@ -70,6 +73,8 @@ namespace Ivy.Push.Firebase.Services
                 "Bearer", authToken);
 
             req.RequestUri = new Uri(_configProvider.PushUrl);
+
+            var submissionModel = new PushMessageWrapper { message = model };
 
             var json = _serializer.Serialize(model);
 

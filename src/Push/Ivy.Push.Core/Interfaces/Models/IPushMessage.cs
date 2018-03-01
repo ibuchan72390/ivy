@@ -1,6 +1,4 @@
-﻿using Ivy.Push.Core.Interfaces.Models;
-
-namespace Ivy.Push.Core.Models.Interfaces
+﻿namespace Ivy.Push.Core.Interfaces.Models
 {
     public interface IPushMessage
     {
