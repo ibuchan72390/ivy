@@ -1,5 +1,6 @@
 ﻿using Ivy.Google.Core.Interfaces.Services;
 using Ivy.Push.Core.Interfaces.Models;
+using Ivy.Push.Core.Interfaces.Models.Messages;
 using Ivy.Push.Core.Interfaces.Providers;
 using Ivy.Push.Core.Interfaces.Services;
 using Ivy.Push.Core.Models.Messages;
@@ -50,18 +51,7 @@ namespace Ivy.Push.Firebase.Services
 
         #region Public Methods
 
-        public async Task<HttpRequestMessage> GeneratePushMessageRequestAsync(DevicePushMessage message)
-        {
-            return await GenerateRequestAsync(message);
-        }
-
-        public async Task<HttpRequestMessage> GeneratePushMessageRequestAsync(TopicPushMessage message)
-        {
-            return await GenerateRequestAsync(message);
-        }
-
-        private async Task<HttpRequestMessage> GenerateRequestAsync<T>(T model)
-            where T: IPushMessage
+        public async Task<HttpRequestMessage> GeneratePushMessageRequestAsync(IDataPushMessage message)
         {
             var req = new HttpRequestMessage();
 
@@ -74,7 +64,7 @@ namespace Ivy.Push.Firebase.Services
 
             req.RequestUri = new Uri(_configProvider.PushUrl);
 
-            var submissionModel = new PushMessageWrapper { message = model };
+            var submissionModel = new PushMessageWrapper { message = message };
 
             var json = _serializer.Serialize(submissionModel);
 

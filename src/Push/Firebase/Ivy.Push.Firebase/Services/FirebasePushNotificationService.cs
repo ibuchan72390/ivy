@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
+using Ivy.Push.Core.Interfaces.Models.Messages;
 using Ivy.Push.Core.Interfaces.Services;
-using Ivy.Push.Core.Models.Messages;
 using Ivy.Push.Core.Models.Responses;
 using Ivy.Web.Core.Client;
 
@@ -31,14 +31,7 @@ namespace Ivy.Push.Firebase.Services
 
         #region Public Methods
 
-        public async Task<PushResponse> SendPushNotificationAsync(DevicePushMessage message)
-        {
-            var req = await _requestFactory.GeneratePushMessageRequestAsync(message);
-
-            return await _apiHelper.GetApiDataAsync<PushResponse>(req);
-        }
-
-        public async Task<PushResponse> SendPushNotificationAsync(TopicPushMessage message)
+        public async Task<PushResponse> SendPushNotificationAsync(IDataPushMessage message)
         {
             var req = await _requestFactory.GeneratePushMessageRequestAsync(message);
 

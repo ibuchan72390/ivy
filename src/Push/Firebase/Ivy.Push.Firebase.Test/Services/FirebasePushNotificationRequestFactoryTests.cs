@@ -70,7 +70,7 @@ namespace Ivy.Push.Firebase.Test.Services
         public async void GeneratePushMessageRequest_Generates_Correctly_For_Device()
         {
             // Arrange
-            var msg = new DevicePushMessage();
+            var msg = new DeviceNotificationPushMessage();
 
             await TestGeneratePushMessageRequestAsync(msg, async model => await _sut.GeneratePushMessageRequestAsync(model));
         }
@@ -82,7 +82,7 @@ namespace Ivy.Push.Firebase.Test.Services
         [Fact]
         public async void GeneratePushMessageRequest_Generates_Correctly_For_Topic()
         {
-            var msg = new TopicPushMessage();
+            var msg = new TopicNotificationPushMessage();
 
             await TestGeneratePushMessageRequestAsync(msg, async model => await _sut.GeneratePushMessageRequestAsync(model));
         }

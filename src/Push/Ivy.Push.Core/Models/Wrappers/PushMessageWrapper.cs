@@ -1,4 +1,5 @@
-﻿using Ivy.Push.Core.Interfaces.Models;
+﻿using Ivy.Push.Core.Interfaces.Models.Messages;
+using Ivy.Push.Core.Interfaces.Models.Wrappers;
 
 namespace Ivy.Push.Core.Models.Wrappers
 {
@@ -9,6 +10,6 @@ namespace Ivy.Push.Core.Models.Wrappers
     public class PushMessageWrapper :
         IPushMessageWrapper
     {
-        public IPushMessage message { get; set; }
+        public IDataPushMessage message { get; set; }
     }
 }
