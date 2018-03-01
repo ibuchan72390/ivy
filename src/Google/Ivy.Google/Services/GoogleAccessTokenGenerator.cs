@@ -35,6 +35,12 @@ namespace Ivy.Google.Services
             // Each consuming project should simply provide the required scope that it needs to request
             // This way, we can use this OAuth Token Generator in many different Google API Projects
 
+            // We may need to find a way to cache this value; however, I have no idea how to determine expiration
+            // If necessary, we may need to strip the Google Library here and leverage a custom HTTP method for token exchange
+            // https://developers.google.com/identity/protocols/OAuth2ServiceAccount#makingrequest
+            // This appears to include information regarding the expiration of the token we receive that is not available with the library below
+            // This should be placed in a cache server somewhere so we can centralize the cache between many Lambda instances
+
             GoogleCredential googleCredential = GoogleCredential.
                 FromJson(_configProvider.ServiceAccountKeyJson).
                 CreateScoped(scopes);
