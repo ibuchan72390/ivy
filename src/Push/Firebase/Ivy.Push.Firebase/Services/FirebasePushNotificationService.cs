@@ -7,13 +7,13 @@ using Ivy.Web.Core.Client;
 namespace Ivy.Push.Firebase.Services
 {
     public class FirebasePushNotificationService :
-        IPushNotificationService
+        IFirebasePushNotificationService
     {
         #region Variables & Constants
 
         private readonly IApiHelper _apiHelper;
 
-        private readonly IPushNotificationRequestFactory _requestFactory;
+        private readonly IFirebasePushNotificationFactory _requestFactory;
 
         #endregion
 
@@ -21,7 +21,7 @@ namespace Ivy.Push.Firebase.Services
 
         public FirebasePushNotificationService(
             IApiHelper apiHelper,
-            IPushNotificationRequestFactory requestFactory)
+            IFirebasePushNotificationFactory requestFactory)
         {
             _apiHelper = apiHelper;
             _requestFactory = requestFactory;

@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace Ivy.Push.Firebase.Services
 {
     public class FirebasePushNotificationRequestFactory :
-        IPushNotificationRequestFactory
+        IFirebasePushNotificationFactory
     {
         #region Variables & Constants
 

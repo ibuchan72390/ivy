@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Ivy.Push.Web.Core.Interfaces.Services
 {
-    public interface IWebPushService
+    public interface IWebPushNotificationService
     {
         void PushNotification(string endpoint, string p256dh, string auth, IDataPushMessage message);
 

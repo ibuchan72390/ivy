@@ -21,7 +21,7 @@ namespace Ivy.Push.Firebase.Test.Services
     {
         #region Variables & Constants
 
-        private readonly IPushNotificationRequestFactory _sut;
+        private readonly IFirebasePushNotificationFactory _sut;
 
         private readonly Mock<IPushNotificationConfigurationProvider> _mockConfigProvider;
         private readonly Mock<IJsonSerializationService> _mockSerializer;
@@ -57,7 +57,7 @@ namespace Ivy.Push.Firebase.Test.Services
                                                                                      y.Contains(firebaseScope)))).
                 ReturnsAsync(token);
 
-            _sut = containerGen.GenerateContainer().GetService<IPushNotificationRequestFactory>();
+            _sut = containerGen.GenerateContainer().GetService<IFirebasePushNotificationFactory>();
         }
 
         #endregion

@@ -17,7 +17,7 @@ namespace Ivy.Push.Web.Test.Services
     {
         #region Variables & Constants
 
-        private readonly IWebPushService _sut;
+        private readonly IWebPushNotificationService _sut;
 
         private readonly Mock<IWebPushClientService> _mockClientService;
         private readonly Mock<IWebPushConfigurationProvider> _mockConfigProvider;
@@ -52,7 +52,7 @@ namespace Ivy.Push.Web.Test.Services
             _mockClient = new Mock<IWebPushClient>();
             _mockClientService.Setup(x => x.GetClient()).Returns(_mockClient.Object);
 
-            _sut = containerGen.GenerateContainer().GetService<IWebPushService>();
+            _sut = containerGen.GenerateContainer().GetService<IWebPushNotificationService>();
         }
 
         #endregion

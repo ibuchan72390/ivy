@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Ivy.Push.Firebase.Core.Interfaces.Services
 {
-    public interface IPushNotificationService
+    public interface IFirebasePushNotificationService
     {
         Task<PushResponse> SendPushNotificationAsync(IDataPushMessage message);
     }

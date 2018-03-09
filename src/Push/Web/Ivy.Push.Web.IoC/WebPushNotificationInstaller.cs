@@ -10,7 +10,7 @@ namespace Ivy.Push.Web.IoC
         {
             containerGenerator.RegisterSingleton<IWebPushClientGenerator, WebPushClientGenerator>();
             containerGenerator.RegisterSingleton<IWebPushClientService, WebPushClientService>();
-            containerGenerator.RegisterSingleton<IWebPushService, WebPushService>();
+            containerGenerator.RegisterSingleton<IWebPushNotificationService, WebPushNotificationService>();
         }
     }
 

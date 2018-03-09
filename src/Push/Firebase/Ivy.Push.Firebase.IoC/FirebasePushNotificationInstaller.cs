@@ -8,8 +8,8 @@ namespace Ivy.Push.Firebase.IoC
     {
         public void Install(IContainerGenerator containerGenerator)
         {
-            containerGenerator.RegisterSingleton<IPushNotificationService, FirebasePushNotificationService>();
-            containerGenerator.RegisterSingleton<IPushNotificationRequestFactory, FirebasePushNotificationRequestFactory>();        
+            containerGenerator.RegisterSingleton<IFirebasePushNotificationService, FirebasePushNotificationService>();
+            containerGenerator.RegisterSingleton<IFirebasePushNotificationFactory, FirebasePushNotificationRequestFactory>();        
         }
     }
 

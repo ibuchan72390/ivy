@@ -6,7 +6,7 @@ using Ivy.Web.Core.Json;
 
 namespace Ivy.Push.Web.Services
 {
-    public class WebPushService : IWebPushService
+    public class WebPushNotificationService : IWebPushNotificationService
     {
         #region Variables & Constants
 
@@ -20,7 +20,7 @@ namespace Ivy.Push.Web.Services
 
         #region Constructor
 
-        public WebPushService(
+        public WebPushNotificationService(
             IWebPushClientService clientService,
             IWebPushConfigurationProvider config,
             IJsonSerializationService jsonSerializer)
