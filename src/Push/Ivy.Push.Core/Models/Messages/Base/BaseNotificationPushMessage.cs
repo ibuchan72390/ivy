@@ -1,7 +1,7 @@
-﻿using Ivy.Push.Firebase.Core.Interfaces.Models.Messages;
-using Ivy.Push.Firebase.Core.Interfaces.Models.Notifications;
+﻿using Ivy.Push.Core.Interfaces.Models.Messages;
+using Ivy.Push.Core.Interfaces.Models.Notifications;
 
-namespace Ivy.Push.Firebase.Core.Models.Messages
+namespace Ivy.Push.Core.Models.Messages
 {
     public abstract class BaseNotificationPushMessage : 
         BaseDataPushMessage,

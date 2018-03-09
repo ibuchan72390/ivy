@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Ivy.Push.Firebase.Core.Interfaces.Models.Messages;
+using Ivy.Push.Core.Interfaces.Models.Messages;
 using Ivy.Push.Web.Core.Interfaces.Providers;
 using Ivy.Push.Web.Core.Interfaces.Services;
 using Ivy.Web.Core.Json;

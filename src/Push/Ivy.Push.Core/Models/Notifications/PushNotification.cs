@@ -1,6 +1,6 @@
-﻿using Ivy.Push.Firebase.Core.Interfaces.Models.Notifications;
+﻿using Ivy.Push.Core.Interfaces.Models.Notifications;
 
-namespace Ivy.Push.Firebase.Core.Models.Notifications
+namespace Ivy.Push.Core.Models.Notifications
 {
     public class PushNotification : 
         IPushNotification

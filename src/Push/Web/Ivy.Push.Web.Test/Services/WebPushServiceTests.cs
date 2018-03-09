@@ -1,7 +1,7 @@
 ﻿using Ivy.IoC;
 using Ivy.IoC.Core;
-using Ivy.Push.Firebase.Core.Interfaces.Models.Messages;
-using Ivy.Push.Firebase.Core.Models.Messages;
+using Ivy.Push.Core.Interfaces.Models.Messages;
+using Ivy.Push.Core.Models.Messages;
 using Ivy.Push.Web.Core.Interfaces.Clients;
 using Ivy.Push.Web.Core.Interfaces.Providers;
 using Ivy.Push.Web.Core.Interfaces.Services;

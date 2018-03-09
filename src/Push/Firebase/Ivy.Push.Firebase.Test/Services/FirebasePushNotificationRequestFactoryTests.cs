@@ -1,9 +1,9 @@
 ﻿using Ivy.Google.Core.Interfaces.Services;
 using Ivy.IoC;
 using Ivy.IoC.Core;
+using Ivy.Push.Core.Models.Messages;
 using Ivy.Push.Firebase.Core.Interfaces.Providers;
 using Ivy.Push.Firebase.Core.Interfaces.Services;
-using Ivy.Push.Firebase.Core.Models.Messages;
 using Ivy.Push.Firebase.Core.Models.Wrappers;
 using Ivy.Push.Firebase.Test.Base;
 using Ivy.Web.Core.Json;

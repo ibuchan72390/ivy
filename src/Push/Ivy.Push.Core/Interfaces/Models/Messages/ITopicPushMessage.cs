@@ -1,4 +1,4 @@
-﻿namespace Ivy.Push.Firebase.Core.Interfaces.Models.Messages
+﻿namespace Ivy.Push.Core.Interfaces.Models.Messages
 {
     public interface ITopicPushMessage
     {

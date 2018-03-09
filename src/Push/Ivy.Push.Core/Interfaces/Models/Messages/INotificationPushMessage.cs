@@ -1,6 +1,6 @@
-﻿using Ivy.Push.Firebase.Core.Interfaces.Models.Notifications;
+﻿using Ivy.Push.Core.Interfaces.Models.Notifications;
 
-namespace Ivy.Push.Firebase.Core.Interfaces.Models.Messages
+namespace Ivy.Push.Core.Interfaces.Models.Messages
 {
     public interface INotificationPushMessage :
         IDataPushMessage

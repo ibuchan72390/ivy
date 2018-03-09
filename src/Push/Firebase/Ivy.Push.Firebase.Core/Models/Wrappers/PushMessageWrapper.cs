@@ -1,4 +1,4 @@
-﻿using Ivy.Push.Firebase.Core.Interfaces.Models.Messages;
+﻿using Ivy.Push.Core.Interfaces.Models.Messages;
 using Ivy.Push.Firebase.Core.Interfaces.Models.Wrappers;
 
 namespace Ivy.Push.Firebase.Core.Models.Wrappers

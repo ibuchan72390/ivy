@@ -1,4 +1,4 @@
-﻿using Ivy.Push.Firebase.Core.Interfaces.Models.Messages;
+﻿using Ivy.Push.Core.Interfaces.Models.Messages;
 using System.Threading.Tasks;
 
 namespace Ivy.Push.Web.Core.Interfaces.Services

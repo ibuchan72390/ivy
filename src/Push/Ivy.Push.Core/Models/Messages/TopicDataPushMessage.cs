@@ -1,6 +1,6 @@
-﻿using Ivy.Push.Firebase.Core.Interfaces.Models.Messages;
+﻿using Ivy.Push.Core.Interfaces.Models.Messages;
 
-namespace Ivy.Push.Firebase.Core.Models.Messages
+namespace Ivy.Push.Core.Models.Messages
 {
     class TopicDataPushMessage :
         BaseDataPushMessage,

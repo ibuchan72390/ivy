@@ -1,5 +1,5 @@
 ﻿using Ivy.Google.Core.Interfaces.Services;
-using Ivy.Push.Firebase.Core.Interfaces.Models.Messages;
+using Ivy.Push.Core.Interfaces.Models.Messages;
 using Ivy.Push.Firebase.Core.Interfaces.Providers;
 using Ivy.Push.Firebase.Core.Interfaces.Services;
 using Ivy.Push.Firebase.Core.Models.Wrappers;

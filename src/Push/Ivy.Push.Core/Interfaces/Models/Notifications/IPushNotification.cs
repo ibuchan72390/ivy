@@ -1,4 +1,4 @@
-﻿namespace Ivy.Push.Firebase.Core.Interfaces.Models.Notifications
+﻿namespace Ivy.Push.Core.Interfaces.Models.Notifications
 {
     public interface IPushNotification
     {
