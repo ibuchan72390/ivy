@@ -13,6 +13,8 @@ CALL %ScriptDir%/PublishProject.cmd src\Push\Ivy.Push.Core
 
 CALL %ScriptDir%/PublishProjectSeries.cmd src\Push\Firebase\Ivy.Push.Firebase
 
+CALL %ScriptDir%/PublishProjectSeries.cmd src\Push\Web\Ivy.Push.Web
+
 IF "%1" NEQ "true" (
 	:: return to orig directory for command line
 	CD NuGet

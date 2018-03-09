@@ -1,5 +1,5 @@
 ﻿using Ivy.IoC.Core;
-using Ivy.Push.Core.Interfaces.Services;
+using Ivy.Push.Firebase.Core.Interfaces.Services;
 using Ivy.Push.Firebase.Services;
 
 namespace Ivy.Push.Firebase.IoC

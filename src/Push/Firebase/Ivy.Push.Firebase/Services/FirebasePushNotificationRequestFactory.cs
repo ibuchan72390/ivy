@@ -1,10 +1,8 @@
 ﻿using Ivy.Google.Core.Interfaces.Services;
-using Ivy.Push.Core.Interfaces.Models;
-using Ivy.Push.Core.Interfaces.Models.Messages;
-using Ivy.Push.Core.Interfaces.Providers;
-using Ivy.Push.Core.Interfaces.Services;
-using Ivy.Push.Core.Models.Messages;
-using Ivy.Push.Core.Models.Wrappers;
+using Ivy.Push.Firebase.Core.Interfaces.Models.Messages;
+using Ivy.Push.Firebase.Core.Interfaces.Providers;
+using Ivy.Push.Firebase.Core.Interfaces.Services;
+using Ivy.Push.Firebase.Core.Models.Wrappers;
 using Ivy.Web.Core.Json;
 using System;
 using System.Net.Http;

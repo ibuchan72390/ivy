@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.1.0-preview1-final" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.6.0-preview-20180109-01" />
     <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
@@ -15,13 +19,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Ivy.Push.Core\Ivy.Push.Core.csproj" />
-    <ProjectReference Include="..\..\..\Google\Ivy.Google.Core\Ivy.Google.Core.csproj" />
     <ProjectReference Include="..\..\..\IoC\Ivy.IoC.Core\Ivy.IoC.Core.csproj" />
-    <ProjectReference Include="..\..\..\IoC\Ivy.IoC\Ivy.IoC.csproj" />
     <ProjectReference Include="..\..\..\Test\Ivy.TestHelper\Ivy.TestHelper.csproj" />
     <ProjectReference Include="..\..\..\Web\Ivy.Web.Core\Ivy.Web.Core.csproj" />
-    <ProjectReference Include="..\Ivy.Push.Firebase.IoC\Ivy.Push.Firebase.IoC.csproj" />
+    <ProjectReference Include="..\..\..\Web\Ivy.Web.IoC\Ivy.Web.IoC.csproj" />
+    <ProjectReference Include="..\Ivy.Push.Web.Core\Ivy.Push.Web.Core.csproj" />
+    <ProjectReference Include="..\Ivy.Push.Web.IoC\Ivy.Push.Web.IoC.csproj" />
+    <ProjectReference Include="..\Ivy.Push.Web\Ivy.Push.Web.csproj" />
   </ItemGroup>
 
 </Project>

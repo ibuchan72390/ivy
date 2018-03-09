@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <Version>1.0.5</Version>
+    <Version>2.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Google\Ivy.Google.Core\Ivy.Google.Core.csproj" />
     <ProjectReference Include="..\..\..\Web\Ivy.Web.Core\Ivy.Web.Core.csproj" />
-    <ProjectReference Include="..\..\Ivy.Push.Core\Ivy.Push.Core.csproj" />
+    <ProjectReference Include="..\Ivy.Push.Firebase.Core\Ivy.Push.Firebase.Core.csproj" />
   </ItemGroup>
 
 </Project>
