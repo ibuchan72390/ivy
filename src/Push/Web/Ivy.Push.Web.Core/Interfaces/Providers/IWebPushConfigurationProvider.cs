@@ -18,11 +18,6 @@
         string GcmApiKey { get; }
 
         /// <summary>
-        /// The origin of the push service.
-        /// </summary>
-        string PushAudience { get; }
-
-        /// <summary>
         /// The contact Email / URL of the Push owner
         /// </summary>
         string PushSubject { get; }
