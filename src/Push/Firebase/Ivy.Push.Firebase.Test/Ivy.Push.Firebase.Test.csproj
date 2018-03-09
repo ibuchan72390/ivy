@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Ivy.Push.Core\Ivy.Push.Core.csproj" />
+    <ProjectReference Include="..\..\Ivy.Push.Core\Ivy.Push.Core.csproj" />
     <ProjectReference Include="..\..\..\Google\Ivy.Google.Core\Ivy.Google.Core.csproj" />
     <ProjectReference Include="..\..\..\IoC\Ivy.IoC.Core\Ivy.IoC.Core.csproj" />
     <ProjectReference Include="..\..\..\IoC\Ivy.IoC\Ivy.IoC.csproj" />

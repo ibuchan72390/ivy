@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Ivy.Push.Core\Ivy.Push.Core.csproj" />
+    <ProjectReference Include="..\..\Ivy.Push.Core\Ivy.Push.Core.csproj" />
   </ItemGroup>
 
 </Project>
