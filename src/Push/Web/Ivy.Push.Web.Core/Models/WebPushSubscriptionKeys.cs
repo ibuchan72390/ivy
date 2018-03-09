@@ -2,7 +2,7 @@
 {
     public class WebPushSubscriptionKeys
     {
-        string p256dh { get; set; }
-        string auth { get; set; }
+        public string p256dh { get; set; }
+        public string auth { get; set; }
     }
 }

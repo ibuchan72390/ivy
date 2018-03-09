@@ -2,7 +2,7 @@
 {
     public class WebPushSubscription
     {
-        string endpoint { get; set; }
-        WebPushSubscriptionKeys keys { get; set; }
+        public string endpoint { get; set; }
+        public WebPushSubscriptionKeys keys { get; set; }
     }
 }
