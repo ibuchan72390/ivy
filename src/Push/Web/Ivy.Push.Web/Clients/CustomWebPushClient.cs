@@ -22,7 +22,7 @@ namespace Ivy.Push.Web.Clients
                 Auth = auth
             };
 
-            SendNotification(endpoint, p256dh, auth, payload);
+            base.SendNotification(subscription, payload);
         }
 
         public async Task SendNotificationAsync(string endpoint, string p256dh, string auth, string payload)
@@ -34,7 +34,7 @@ namespace Ivy.Push.Web.Clients
                 Auth = auth
             };
 
-            await SendNotificationAsync(endpoint, p256dh, auth, payload);
+            await base.SendNotificationAsync(subscription, payload);
         }
     }
 }
