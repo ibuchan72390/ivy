@@ -27,7 +27,7 @@ namespace Ivy.Push.Web.Test.Services
         const string endpoint = "endpoint";
         const string p256dh = "p256dh";
         const string auth = "auth";
-        private readonly IDataPushMessage msg = new DeviceDataPushMessage();
+        private readonly IDataPushMessage msg = new DataPushMessage();
         const string serializedMsg = "Serialized Msg";
 
         #endregion

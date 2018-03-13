@@ -2,7 +2,7 @@
 
 namespace Ivy.Push.Core.Models.Messages
 {
-    public class BaseDataPushMessage :
+    public class DataPushMessage :
         IDataPushMessage
     {
         public object data { get; set; }
