@@ -1,21 +1,23 @@
 ﻿using Ivy.Captcha.Core.Interfaces.Services;
-using Ivy.Captcha.Test.Base;
+using Ivy.Captcha.Drawing.Core.Interfaces.Services;
+using Ivy.Captcha.Drawing.Test.Base;
 using Ivy.IoC;
 using Ivy.IoC.Core;
+using Ivy.Utility.Core;
 using Moq;
 using System;
 using System.Drawing;
 using Xunit;
 
-namespace Ivy.Captcha.Test.Services
+namespace Ivy.Captcha.Drawing.Test.Services
 {
-    public class CaptchaGenerationServiceTests : CaptchaTestBase
+    public class CaptchaGenerationServiceTests : CaptchaDrawingTestBase
     {
         #region Variables & Constants
 
         private readonly ICaptchaGenerationService _sut;
 
-        private readonly Mock<ICaptchaCodeGenerator> _mockCodeGen;
+        private readonly Mock<IRandomizationHelper> _mockCodeGen;
         private readonly Mock<ICaptchaImageHelper> _mockImageHelper;
         private readonly Mock<ICaptchaDrawingService> _mockDrawingService;
         
@@ -29,8 +31,8 @@ namespace Ivy.Captcha.Test.Services
 
             base.ConfigureContainer(containerGen);
 
-            _mockCodeGen = new Mock<ICaptchaCodeGenerator>();
-            containerGen.RegisterInstance<ICaptchaCodeGenerator>(_mockCodeGen.Object);
+            _mockCodeGen = new Mock<IRandomizationHelper>();
+            containerGen.RegisterInstance<IRandomizationHelper>(_mockCodeGen.Object);
 
             _mockImageHelper = new Mock<ICaptchaImageHelper>();
             containerGen.RegisterInstance<ICaptchaImageHelper>(_mockImageHelper.Object);
@@ -70,7 +72,7 @@ namespace Ivy.Captcha.Test.Services
             const int height = 1;
             const string code = "TEST";
 
-            _mockCodeGen.Setup(x => x.GenerateCaptchaCode(charLength)).
+            _mockCodeGen.Setup(x => x.RandomString(charLength)).
                 Returns(code);
 
             _mockDrawingService.Setup(x => x.DrawCaptchaCode(width, height, code, It.IsAny<Graphics>()));
@@ -81,7 +83,7 @@ namespace Ivy.Captcha.Test.Services
             var result = _sut.GenerateCaptchaImage(charLength, width, height);
 
             // Assert
-            _mockCodeGen.Verify(x => x.GenerateCaptchaCode(charLength), Times.Once);
+            _mockCodeGen.Verify(x => x.RandomString(charLength), Times.Once);
             _mockDrawingService.Verify(x => x.DrawCaptchaCode(width, height, code, It.IsAny<Graphics>()), Times.Once);
             _mockDrawingService.Verify(x => x.DrawDisorderLine(width, height, It.IsAny<Graphics>()), Times.Once);
             _mockDrawingService.Verify(x => x.UnsafeAdjustRippleEffect(It.IsAny<Bitmap>()), Times.Once);

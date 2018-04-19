@@ -1,6 +1,8 @@
 ﻿using Ivy.Captcha.Core.Interfaces.Models;
 using Ivy.Captcha.Core.Interfaces.Services;
 using Ivy.Captcha.Core.Models;
+using Ivy.Captcha.Drawing.Core.Interfaces.Services;
+using Ivy.Utility.Core;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -17,11 +19,12 @@ using System.IO;
 
 namespace Ivy.Captcha.Services
 {
-    public class CaptchaGenerationService : ICaptchaGenerationService
+    public class DrawingCaptchaGenerationService : ICaptchaGenerationService
     {
         #region Variables & Constants
 
-        private readonly ICaptchaCodeGenerator _captchaCodeGen;
+        private readonly IRandomizationHelper _randomHelper;
+
         private readonly ICaptchaImageHelper _imageHelper;
         private readonly ICaptchaDrawingService _captchaDrawer;
 
@@ -29,12 +32,12 @@ namespace Ivy.Captcha.Services
 
         #region Constructor
 
-        public CaptchaGenerationService(
-            ICaptchaCodeGenerator captchaCodeGen,
+        public DrawingCaptchaGenerationService(
+            IRandomizationHelper randomHelper,
             ICaptchaImageHelper imageHelper,
             ICaptchaDrawingService captchaDrawer)
         {
-            _captchaCodeGen = captchaCodeGen;
+            _randomHelper = randomHelper;
             _imageHelper = imageHelper;
             _captchaDrawer = captchaDrawer;
         }
@@ -55,7 +58,7 @@ namespace Ivy.Captcha.Services
             {
                 graph.Clear(_imageHelper.GetRandomLightColor());
 
-                var captchaCode = _captchaCodeGen.GenerateCaptchaCode(captchaCharLength);
+                var captchaCode = _randomHelper.RandomString(captchaCharLength);
 
                 _captchaDrawer.DrawCaptchaCode(width, height, captchaCode, graph);
 
@@ -74,7 +77,8 @@ namespace Ivy.Captcha.Services
                 };
             }
 
-            #endregion
         }
+
+        #endregion
     }
 }

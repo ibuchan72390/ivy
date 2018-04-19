@@ -1,4 +1,5 @@
 ﻿using Ivy.Captcha.Core.Interfaces.Services;
+using Ivy.Captcha.Drawing.Core.Interfaces.Services;
 using Ivy.Utility.Core;
 using System;
 using System.Drawing;

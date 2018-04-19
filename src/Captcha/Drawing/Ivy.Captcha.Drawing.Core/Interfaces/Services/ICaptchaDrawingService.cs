@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace Ivy.Captcha.Core.Interfaces.Services
+namespace Ivy.Captcha.Drawing.Core.Interfaces.Services
 {
     public interface ICaptchaDrawingService
     {
