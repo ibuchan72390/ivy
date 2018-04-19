@@ -77,18 +77,6 @@ namespace Ivy.Push.Firebase.Test.Services
 
         #endregion
 
-        #region GeneratePushMessageRequest (Topic)
-
-        [Fact]
-        public async void GeneratePushMessageRequest_Generates_Correctly_For_Topic()
-        {
-            var msg = new TopicNotificationPushMessage();
-
-            await TestGeneratePushMessageRequestAsync(msg, async model => await _sut.GeneratePushMessageRequestAsync(model));
-        }
-
-        #endregion
-
         #endregion
 
         #region Helper Methods
