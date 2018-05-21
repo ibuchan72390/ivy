@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\IoC\Ivy.IoC.Core\Ivy.IoC.Core.csproj" />
+    <ProjectReference Include="..\Ivy.Pdf.Templating.Core\Ivy.Pdf.Templating.Core.csproj" />
+    <ProjectReference Include="..\Ivy.Pdf.Templating\Ivy.Pdf.Templating.csproj" />
+  </ItemGroup>
+
+</Project>
