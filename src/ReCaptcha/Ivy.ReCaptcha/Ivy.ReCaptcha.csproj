@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Ivy.ReCaptcha.Core\Ivy.ReCaptcha.Core.csproj" />
+    <ProjectReference Include="..\..\Web\Ivy.Web.Core\Ivy.Web.Core.csproj" />
+  </ItemGroup>
+
+</Project>
