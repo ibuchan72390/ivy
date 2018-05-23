@@ -244,3 +244,4 @@ ModelManifest.xml
 AppCache
 *.jfm
 NuGet/Publish All Packages.cmd
+/src/Pdf/Templating/Ivy.Pdf.Templating.Test/Results/result_template.pdf

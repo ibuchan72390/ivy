@@ -21,4 +21,8 @@
     <ProjectReference Include="..\Ivy.Pdf.Templating.IoC\Ivy.Pdf.Templating.IoC.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Results\" />
+  </ItemGroup>
+
 </Project>
