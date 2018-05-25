@@ -16,7 +16,7 @@ namespace Ivy.Pdf.Templating.IoC
 
     public static class PdfTemplatingInstallerExtension
     {
-        public static IContainerGenerator InstallIvyPdfTempalting(this IContainerGenerator containerGenerator)
+        public static IContainerGenerator InstallIvyPdfTemplating(this IContainerGenerator containerGenerator)
         {
             new PdfTemplatingInstaller().Install(containerGenerator);
             return containerGenerator;

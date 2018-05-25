@@ -7,7 +7,7 @@ namespace Ivy.Pdf.Templating.Test.Base
     {
         protected override void InitWrapper()
         {
-            base.Init(containerGen => containerGen.InstallIvyPdfTempalting());
+            base.Init(containerGen => containerGen.InstallIvyPdfTemplating());
         }
     }
 }

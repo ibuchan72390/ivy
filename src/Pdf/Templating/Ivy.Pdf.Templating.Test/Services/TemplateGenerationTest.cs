@@ -25,7 +25,7 @@ namespace Ivy.Pdf.Templating.Test.Services
         {
             var containerGen = new ContainerGenerator();
 
-            containerGen.InstallIvyPdfTempalting();
+            containerGen.InstallIvyPdfTemplating();
 
             _sut = containerGen.GenerateContainer().GetService<IPdfTemplatingService>();
         }
