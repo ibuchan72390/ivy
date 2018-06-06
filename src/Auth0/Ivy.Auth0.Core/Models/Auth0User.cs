@@ -16,8 +16,6 @@ namespace Ivy.Auth0.Core.Models
         public DateTime? updated_at { get; set; }
         public DateTime created_at { get; set; }
         public IEnumerable<Auth0Identity> identities { get; set; }
-        public Auth0AppMetadata app_metadata { get; set; }
-        public Auth0UserMetadata user_metadata { get; set; }
         public string picture { get; set; }
         public string name { get; set; }
         public string nickname { get; set; }
@@ -28,6 +26,14 @@ namespace Ivy.Auth0.Core.Models
         public bool blocked { get; set; }
         public string given_name { get; set; }
         public string family_name { get; set; }
+
+        /*
+         * These variables are supposed to be set by the consuming application.
+         * Attempting to model them at this level is foolish and backwards.
+         * By setting them as a default object, the consuming app can model as they wish.
+         */
+        public object app_metadata { get; set; }
+        public object user_metadata { get; set; }
 
         #endregion
     }

@@ -18,9 +18,9 @@ namespace Ivy.Auth0.Management.Core.Models.Requests
         {
             verify_email = true;
 
-            // We get errors if these are left null
-            user_metadata = new Auth0UserMetadata();
-            app_metadata = new Auth0AppMetadata();
+            // We get errors if these are left null ???
+            user_metadata = new object();
+            app_metadata = new object();
         }
 
         #endregion
@@ -36,8 +36,8 @@ namespace Ivy.Auth0.Management.Core.Models.Requests
         public bool verify_email { get; set; }
         public bool phone_verified { get; set; } // false if no phone number
 
-        public Auth0UserMetadata user_metadata { get; set; }
-        public Auth0AppMetadata app_metadata { get; set; }
+        public object user_metadata { get; set; }
+        public object app_metadata { get; set; }
 
         #endregion
     }

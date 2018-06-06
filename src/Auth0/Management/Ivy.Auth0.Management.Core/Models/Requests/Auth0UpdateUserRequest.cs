@@ -16,8 +16,8 @@ namespace Ivy.Auth0.Management.Core.Models.Requests
         public bool verify_phone_number { get; set; }
         public string password { get; set; }
         public bool verify_password { get; set; }
-        public Auth0UserMetadata user_metadata { get; set; }
-        public Auth0AppMetadata app_metadata { get; set; }
+        public object user_metadata { get; set; }
+        public object app_metadata { get; set; }
         public string connection { get; set; }
         public string username { get; set; }
         public string client_id { get; set; }
