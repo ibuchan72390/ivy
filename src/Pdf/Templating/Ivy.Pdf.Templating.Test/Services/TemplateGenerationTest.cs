@@ -51,7 +51,7 @@ namespace Ivy.Pdf.Templating.Test.Services
                 {
                     var dict = new Dictionary<string, string>
                     {
-                        { "StudentName", "Ian Buchan" },
+                        { "StudentName", "Anne Marie Woolsey" },
                         { "ClassName", "Test Class Sample Name" },
                         { "CompletionDate", todayDate }
                     };

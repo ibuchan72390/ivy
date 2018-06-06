@@ -38,16 +38,20 @@ namespace Ivy.Pdf.Templating.Services
 
                 foreach (string name in replacementDictionary.Keys)
                 {
-                    // I THINK this is going to center it using Quadding???
-                    // I don't get this library at all, but this is answered by the IText CTO
-                    //https://stackoverflow.com/questions/24301578/align-acrofields-in-java
                     var item = fields.GetFieldItem(name);
-                    item.GetMerged(0).Put(PdfName.Q, new PdfNumber(PdfFormField.Q_CENTER));
+
+                    if (item != null)
+                    {
+                        // I THINK this is going to center it using Quadding???
+                        // I don't get this library at all, but this is answered by the IText CTO
+                        //https://stackoverflow.com/questions/24301578/align-acrofields-in-java
+                        item.GetMerged(0).Put(PdfName.Q, new PdfNumber(PdfFormField.Q_CENTER));
 
 
-                    // This must be done AFTER the above, the above sets the write style used in this method
-                    // If you set field prior to setting the style, it will not be carried over correctly.
-                    fields.SetField(name, replacementDictionary[name]);
+                        // This must be done AFTER the above, the above sets the write style used in this method
+                        // If you set field prior to setting the style, it will not be carried over correctly.
+                        fields.SetField(name, replacementDictionary[name]);
+                    }
                 }
 
                 // If we had not set the CloseStream property to false, 
