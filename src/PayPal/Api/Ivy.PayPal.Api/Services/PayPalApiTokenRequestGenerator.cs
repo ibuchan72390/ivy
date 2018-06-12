@@ -13,18 +13,22 @@ namespace Ivy.PayPal.Api.Services
     {
         #region Variables & Constants
 
-        const string tokenApi = "https://api.sandbox.paypal.com/v1/oauth2/token";
+        const string tokenApiRefUrl = "v1/oauth2/token";
 
         private readonly IPayPalApiConfigProvider _configProvider;
+
+        private readonly IPayPalUrlGenerator _urlGenerator;
 
         #endregion
 
         #region Constructor
 
         public PayPalApiTokenRequestGenerator(
-            IPayPalApiConfigProvider configProvider)
+            IPayPalApiConfigProvider configProvider,
+            IPayPalUrlGenerator urlGenerator)
         {
             _configProvider = configProvider;
+            _urlGenerator = urlGenerator;
         }
 
         #endregion
@@ -35,6 +39,8 @@ namespace Ivy.PayPal.Api.Services
         // https://developer.paypal.com/docs/api/overview/#get-an-access-token
         public HttpRequestMessage GenerateApiTokenRequest()
         {
+            var tokenApi = _urlGenerator.GetPayPalUrl() + tokenApiRefUrl;
+
             var req = new HttpRequestMessage
             {
                 Method = HttpMethod.Post,

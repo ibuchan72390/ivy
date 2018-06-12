@@ -12,17 +12,20 @@ namespace Ivy.PayPal.Api.Payments.Services
         #region Variables & Constants
 
         private readonly IPayPalApiTokenGenerator _tokenGenerator;
+        private readonly IPayPalUrlGenerator _urlGenerator;
 
-        const string urlBase = "https://api.sandbox.paypal.com/v1/payments/payment/";
+        private const string paymentRefUrl = "v1/payments/payment/";
 
         #endregion
 
         #region Constructor
 
         public PayPalPaymentsRequestGenerator(
-            IPayPalApiTokenGenerator tokenGenerator)
+            IPayPalApiTokenGenerator tokenGenerator,
+            IPayPalUrlGenerator urlGenerator)
         {
             _tokenGenerator = tokenGenerator;
+            _urlGenerator = urlGenerator;
         }
 
         #endregion
@@ -40,10 +43,12 @@ namespace Ivy.PayPal.Api.Payments.Services
         
         private async Task<HttpRequestMessage> GenerateBaseRequestAsync(HttpMethod method, string refUrl)
         {
+            var url = _urlGenerator.GetPayPalUrl() + paymentRefUrl + refUrl;
+
             var req = new HttpRequestMessage
             {
                 Method = method,
-                RequestUri = new Uri(urlBase + refUrl)
+                RequestUri = new Uri(url)
             };
 
             var token = await _tokenGenerator.GetApiTokenAsync();

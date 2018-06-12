@@ -18,6 +18,9 @@ namespace Ivy.PayPal.Api.Payments.Tests.Services
         private readonly IPayPalPaymentsRequestGenerator _sut;
 
         private readonly Mock<IPayPalApiTokenGenerator> _mockTokenGen;
+        private readonly Mock<IPayPalUrlGenerator> _mockUrlGen;
+
+        private const string payPalUrl = "https://api.sandbox.paypal.com/";
 
         #endregion
 
@@ -31,6 +34,10 @@ namespace Ivy.PayPal.Api.Payments.Tests.Services
 
             _mockTokenGen = new Mock<IPayPalApiTokenGenerator>();
             containerGen.RegisterInstance<IPayPalApiTokenGenerator>(_mockTokenGen.Object);
+
+            _mockUrlGen = new Mock<IPayPalUrlGenerator>();
+            containerGen.RegisterInstance<IPayPalUrlGenerator>(_mockUrlGen.Object);
+            _mockUrlGen.Setup(x => x.GetPayPalUrl()).Returns(payPalUrl);
 
             _sut = containerGen.GenerateContainer().GetService<IPayPalPaymentsRequestGenerator>();
         }

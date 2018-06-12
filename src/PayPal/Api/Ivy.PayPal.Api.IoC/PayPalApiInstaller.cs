@@ -10,6 +10,7 @@ namespace Ivy.PayPal.Api.IoC
         {
             containerGenerator.RegisterSingleton<IPayPalApiTokenGenerator, PayPalApiTokenGenerator>();
             containerGenerator.RegisterSingleton<IPayPalApiTokenRequestGenerator, PayPalApiTokenRequestGenerator>();
+            containerGenerator.RegisterSingleton<IPayPalUrlGenerator, PayPalUrlGenerator>();
         }
     }
 

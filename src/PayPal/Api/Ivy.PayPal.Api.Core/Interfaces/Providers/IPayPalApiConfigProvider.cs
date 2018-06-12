@@ -4,5 +4,6 @@
     {
         string ClientId { get; }
         string ClientSecret { get; }
+        bool SandboxMode { get; }
     }
 }
