@@ -374,6 +374,43 @@ namespace Ivy.Utility.Test.Extensions
             }
         }
 
+        [Fact]
+        public void MapEntityParents_Assigns_Null_When_Entities_Not_Found()
+        {
+            // Sometimes, we have "pseudo-parent" entities that are optionally bound
+            // Need to verify that this can work with a null dictionary reference
+
+            const int entityCount = 4;
+            const int perCount = 2;
+
+            var entities = Enumerable.Range(1, entityCount).
+                Select(x => new CoreEntity { Id = x }.GenerateForTest()).
+                ToList();
+
+            Dictionary<CoreEntity, IEnumerable<ChildEntity>> dict =
+                new Dictionary<CoreEntity, IEnumerable<ChildEntity>>();
+
+            foreach (var entity in entities)
+            {
+                var childs = Enumerable.Range(1, perCount).
+                    Select(x => new ChildEntity { References = new Dictionary<string, object> { { "CoreEntityId", System.DBNull.Value } } });
+
+                dict.Add(entity, childs);
+            }
+
+            var children = dict.Values.SelectMany(x => x).ToList();
+
+            children.MapEntityParents<ChildEntity, CoreEntity>(entities,
+                y => y.CoreEntity,
+                (child, core) => child.CoreEntity = core);
+
+
+            foreach (var entity in children)
+            {
+                Assert.Null(entity.CoreEntity);
+            }
+        }
+
         #endregion
 
         #region MapEntityWithTypedIdParents

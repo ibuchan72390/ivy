@@ -176,7 +176,8 @@ namespace Ivy.Utility.Core.Extensions
 
                 foreach (var child in childs)
                 {
-                    var parent = parents.First(x => x.Id.Equals(group.Key));
+                    // Use FirstOrDefault here, turns out many "Parents" are optional references
+                    var parent = parents.FirstOrDefault(x => x.Id.Equals(group.Key));
 
                     assignParentFn(child, parent);
                 }
