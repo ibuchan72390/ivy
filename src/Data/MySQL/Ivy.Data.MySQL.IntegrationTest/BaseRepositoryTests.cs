@@ -137,5 +137,27 @@ namespace Ivy.Data.MySQL.IntegrationTest
         }
 
         #endregion
+
+        #region GetCount
+
+        [Fact]
+        public void GetCount_Executes_As_Expected_If_None_Exist()
+        {
+            Assert.Equal(0, _sut.GetCount());
+        }
+
+        [Fact]
+        public void GetCount_Executes_As_Expected_If_Entities_Exist()
+        {
+            const int toCreate = 4;
+
+            Enumerable.Range(0, toCreate)
+                .Select(x => new BlobEntity().SaveForTest())
+                .ToList();
+
+            Assert.Equal(toCreate, _sut.GetCount());
+        }
+
+        #endregion
     }
 }

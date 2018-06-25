@@ -85,6 +85,13 @@ namespace Ivy.Data.Common
             return InternalSelectPaginated(pagingRequest: request, tc: tc);
         }
 
+        public virtual int GetCount(ITranConn tc = null)
+        {
+            var countQuery = _sqlGenerator.GenerateGetCountQuery();
+
+            return InternalExecuteAlternateTypeQuery<int>(countQuery, tc).FirstOrDefault();
+        }
+
         #endregion
 
         #region Helper Methods

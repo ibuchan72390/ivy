@@ -13,7 +13,8 @@ namespace Ivy.Data.Core.Interfaces
         IInitialize, 
         IDeleteAll<TObject>, 
         IGetAll<TObject>, 
-        IPaginatedGetAll<TObject>
+        IPaginatedGetAll<TObject>,
+        IGetCount
 
         where TObject : class
     {
