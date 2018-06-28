@@ -65,15 +65,21 @@ namespace Ivy.TestUtilities.Base
 
         #region Helper Methods
 
-        protected virtual void InitMockingContainer(Action<IContainerGenerator> mockSetupFn)
-        {
-            var containerGen = new ContainerGenerator();
-            InitializeContainerFn(containerGen);
 
-            mockSetupFn(containerGen);
+        /*
+         * The reason I'm leaving this is so that you properly understand a proper mocking method in the future
+         * If we want to Mock, all we need to do is override the InitializeContainerFn
+         * Allow the base to execute and load your Mocks on top of the base container leveraging the IntiializeMoq<> function
+         */
+        //protected virtual void InitMockingContainer(Action<IContainerGenerator> mockSetupFn)
+        //{
+        //    var containerGen = new ContainerGenerator();
+        //    InitializeContainerFn(containerGen);
 
-            InitTestContainer(containerGen);
-        }
+        //    mockSetupFn(containerGen);
+
+        //    InitTestContainer(containerGen);
+        //}
 
         protected virtual void InitTestContainer(IContainerGenerator containerGen = null)
         {
