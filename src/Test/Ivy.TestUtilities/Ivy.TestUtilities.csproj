@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>2.1.0</Version>
+    <Version>2.2.1</Version>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <AssemblyName>Ivy.TestUtilities</AssemblyName>
     <PackageId>Ivy.TestUtilities</PackageId>
@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\IoC\Ivy.IoC\Ivy.IoC.csproj" />
     <ProjectReference Include="..\..\IoC\Ivy.IoC.IoC\Ivy.IoC.IoC.csproj" />
+    <ProjectReference Include="..\..\Utility\Ivy.Utility.IoC\Ivy.Utility.IoC.csproj" />
   </ItemGroup>
 
   <ItemGroup>
