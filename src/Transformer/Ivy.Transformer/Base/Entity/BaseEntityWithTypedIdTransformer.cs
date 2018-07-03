@@ -7,10 +7,7 @@ using Ivy.Transformer.Core.Models;
 namespace Ivy.Transformer.Base.Entity
 {
     public class BaseEntityWithTypedIdTransformer<TEntity, TModel, TKey> :
-        IEntityToViewModelTransformer<TEntity, TModel>,
-        IEntityToViewModelListTransformer<TEntity, TModel>,
-        IViewModelToEntityTransformer<TEntity, TModel>,
-        IViewModelToEntityListTransformer<TEntity, TModel>
+        IEntityTransformer<TEntity, TModel, TKey>
 
         where TEntity : IEntityWithTypedId<TKey>, new()
         where TModel : BaseEntityWithTypedIdModel<TKey>, new()
