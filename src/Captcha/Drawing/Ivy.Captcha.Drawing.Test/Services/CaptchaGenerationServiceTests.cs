@@ -11,47 +11,37 @@ using Xunit;
 
 namespace Ivy.Captcha.Drawing.Test.Services
 {
-    public class CaptchaGenerationServiceTests : CaptchaDrawingTestBase
+    public class CaptchaGenerationServiceTests : 
+        CaptchaDrawingTestBase<ICaptchaGenerationService>
     {
         #region Variables & Constants
 
-        private readonly ICaptchaGenerationService _sut;
-
-        private readonly Mock<IRandomizationHelper> _mockCodeGen;
-        private readonly Mock<ICaptchaImageHelper> _mockImageHelper;
-        private readonly Mock<ICaptchaDrawingService> _mockDrawingService;
+        private Mock<IRandomizationHelper> _mockCodeGen;
+        private Mock<ICaptchaImageHelper> _mockImageHelper;
+        private Mock<ICaptchaDrawingService> _mockDrawingService;
         
         #endregion
 
         #region SetUp & TearDown
 
-        public CaptchaGenerationServiceTests()
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
-            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
+            base.InitializeContainerFn(containerGen);
 
-            base.ConfigureContainer(containerGen);
-
-            _mockCodeGen = new Mock<IRandomizationHelper>();
-            containerGen.RegisterInstance<IRandomizationHelper>(_mockCodeGen.Object);
-
-            _mockImageHelper = new Mock<ICaptchaImageHelper>();
-            containerGen.RegisterInstance<ICaptchaImageHelper>(_mockImageHelper.Object);
-
-            _mockDrawingService = new Mock<ICaptchaDrawingService>();
-            containerGen.RegisterInstance<ICaptchaDrawingService>(_mockDrawingService.Object);
-
-            _sut = containerGen.GenerateContainer().GetService<ICaptchaGenerationService>();
+            _mockCodeGen = InitializeMoq<IRandomizationHelper>(containerGen);
+            _mockImageHelper = InitializeMoq<ICaptchaImageHelper>(containerGen);
+            _mockDrawingService = InitializeMoq<ICaptchaDrawingService>(containerGen);
         }
 
         #endregion
 
         #region Tests
-        
+
         [Fact]
         public void GenerateCaptchaImage_Throws_Exception_For_Invalid_Height()
         {
             const string err = "Both height and width need to be greater than 0!";
-            var e = Assert.Throws<Exception>(() => _sut.GenerateCaptchaImage(5, 5, 0));
+            var e = Assert.Throws<Exception>(() => Sut.GenerateCaptchaImage(5, 5, 0));
             Assert.Equal(err, e.Message);
         }
 
@@ -59,7 +49,7 @@ namespace Ivy.Captcha.Drawing.Test.Services
         public void GenerateCaptchaImage_Throws_Exception_For_Invalid_Width()
         {
             const string err = "Both height and width need to be greater than 0!";
-            var e = Assert.Throws<Exception>(() => _sut.GenerateCaptchaImage(5, 0, 5));
+            var e = Assert.Throws<Exception>(() => Sut.GenerateCaptchaImage(5, 0, 5));
             Assert.Equal(err, e.Message);
         }
 
@@ -80,7 +70,7 @@ namespace Ivy.Captcha.Drawing.Test.Services
             _mockDrawingService.Setup(x => x.UnsafeAdjustRippleEffect(It.IsAny<Bitmap>()));
 
             // Act
-            var result = _sut.GenerateCaptchaImage(charLength, width, height);
+            var result = Sut.GenerateCaptchaImage(charLength, width, height);
 
             // Assert
             _mockCodeGen.Verify(x => x.RandomString(charLength), Times.Once);

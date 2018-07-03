@@ -9,14 +9,14 @@ using Xunit;
 
 namespace Ivy.Auth0.Management.Test.Services
 {
-    public class Auth0JsonGeneratorTests : Auth0ManagementTestBase
+    public class Auth0JsonGeneratorTests : 
+        Auth0ManagementTestBase<IAuth0JsonGenerator>
     {
         #region Variables & Constants
 
-        private readonly IAuth0JsonGenerator _sut;
         private readonly IJsonSerializationService _serializationService;
 
-        private readonly Mock<IAuth0JsonManipulator> _mockJsonManipulator;
+        private Mock<IAuth0JsonManipulator> _mockJsonManipulator;
 
         #endregion
 
@@ -25,16 +25,13 @@ namespace Ivy.Auth0.Management.Test.Services
         public Auth0JsonGeneratorTests()
         {
             _serializationService = ServiceLocator.Instance.GetService<IJsonSerializationService>();
+        }
 
-            _mockJsonManipulator = new Mock<IAuth0JsonManipulator>();
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
+        {
+            base.InitializeContainerFn(containerGen);
 
-            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
-
-            base.ConfigureContainer(containerGen);
-
-            containerGen.RegisterInstance<IAuth0JsonManipulator>(_mockJsonManipulator.Object);
-
-            _sut = containerGen.GenerateContainer().GetService<IAuth0JsonGenerator>();
+            _mockJsonManipulator = InitializeMoq<IAuth0JsonManipulator>(containerGen);
         }
 
         #endregion
@@ -53,7 +50,7 @@ namespace Ivy.Auth0.Management.Test.Services
             _mockJsonManipulator.Setup(x => x.EditPhoneJson(json, req)).Returns(json);
             _mockJsonManipulator.Setup(x => x.EditUsernameJson(json, req)).Returns(json);
 
-            var result = _sut.ConfigureCreateUserJson(req);
+            var result = Sut.ConfigureCreateUserJson(req);
 
             _mockJsonManipulator.Verify(x => x.EditPhoneJson(json, req), Times.Once);
             _mockJsonManipulator.Verify(x => x.EditUsernameJson(json, req), Times.Once);
@@ -75,7 +72,7 @@ namespace Ivy.Auth0.Management.Test.Services
             _mockJsonManipulator.Setup(x => x.EditPhoneJson(json, req)).Returns(json);
             _mockJsonManipulator.Setup(x => x.EditUsernameJson(json, req)).Returns(json);
 
-            var result = _sut.ConfigureUpdateUserJson(req);
+            var result = Sut.ConfigureUpdateUserJson(req);
 
             _mockJsonManipulator.Verify(x => x.EditPhoneJson(It.IsAny<string>(), req), Times.Once);
             _mockJsonManipulator.Verify(x => x.EditUsernameJson(It.IsAny<string>(), req), Times.Once);
@@ -93,7 +90,7 @@ namespace Ivy.Auth0.Management.Test.Services
             _mockJsonManipulator.Setup(x => x.EditPhoneJson(json, req)).Returns(json);
             _mockJsonManipulator.Setup(x => x.EditUsernameJson(json, req)).Returns(json);
 
-            var result = _sut.ConfigureUpdateUserJson(req);
+            var result = Sut.ConfigureUpdateUserJson(req);
 
             Assert.DoesNotContain("verify_phone_number", result);
         }
@@ -108,7 +105,7 @@ namespace Ivy.Auth0.Management.Test.Services
             _mockJsonManipulator.Setup(x => x.EditPhoneJson(json, req)).Returns(json);
             _mockJsonManipulator.Setup(x => x.EditUsernameJson(json, req)).Returns(json);
 
-            var result = _sut.ConfigureUpdateUserJson(req);
+            var result = Sut.ConfigureUpdateUserJson(req);
 
             Assert.DoesNotContain("verify_phone_number", result);
         }
@@ -123,7 +120,7 @@ namespace Ivy.Auth0.Management.Test.Services
             _mockJsonManipulator.Setup(x => x.EditPhoneJson(json, req)).Returns(json);
             _mockJsonManipulator.Setup(x => x.EditUsernameJson(json, req)).Returns(json);
 
-            var result = _sut.ConfigureUpdateUserJson(req);
+            var result = Sut.ConfigureUpdateUserJson(req);
 
             Assert.Contains("verify_phone_number", result);
         }
@@ -138,7 +135,7 @@ namespace Ivy.Auth0.Management.Test.Services
             _mockJsonManipulator.Setup(x => x.EditPhoneJson(json, req)).Returns(json);
             _mockJsonManipulator.Setup(x => x.EditUsernameJson(json, req)).Returns(json);
 
-            var result = _sut.ConfigureUpdateUserJson(req);
+            var result = Sut.ConfigureUpdateUserJson(req);
 
             Assert.DoesNotContain("email", result);
             Assert.DoesNotContain("email_verified", result);
@@ -155,7 +152,7 @@ namespace Ivy.Auth0.Management.Test.Services
             _mockJsonManipulator.Setup(x => x.EditPhoneJson(json, req)).Returns(json);
             _mockJsonManipulator.Setup(x => x.EditUsernameJson(json, req)).Returns(json);
 
-            var result = _sut.ConfigureUpdateUserJson(req);
+            var result = Sut.ConfigureUpdateUserJson(req);
 
             Assert.DoesNotContain("email", result);
             Assert.DoesNotContain("email_verified", result);
@@ -172,7 +169,7 @@ namespace Ivy.Auth0.Management.Test.Services
             _mockJsonManipulator.Setup(x => x.EditPhoneJson(json, req)).Returns(json);
             _mockJsonManipulator.Setup(x => x.EditUsernameJson(json, req)).Returns(json);
 
-            var result = _sut.ConfigureUpdateUserJson(req);
+            var result = Sut.ConfigureUpdateUserJson(req);
 
             Assert.Contains("email", result);
             Assert.Contains("email_verified", result);
@@ -189,7 +186,7 @@ namespace Ivy.Auth0.Management.Test.Services
             _mockJsonManipulator.Setup(x => x.EditPhoneJson(json, req)).Returns(json);
             _mockJsonManipulator.Setup(x => x.EditUsernameJson(json, req)).Returns(json);
 
-            var result = _sut.ConfigureUpdateUserJson(req);
+            var result = Sut.ConfigureUpdateUserJson(req);
 
             Assert.DoesNotContain("password", result);
             Assert.DoesNotContain("verify_password", result);
@@ -205,7 +202,7 @@ namespace Ivy.Auth0.Management.Test.Services
             _mockJsonManipulator.Setup(x => x.EditPhoneJson(json, req)).Returns(json);
             _mockJsonManipulator.Setup(x => x.EditUsernameJson(json, req)).Returns(json);
 
-            var result = _sut.ConfigureUpdateUserJson(req);
+            var result = Sut.ConfigureUpdateUserJson(req);
 
             Assert.DoesNotContain("password", result);
             Assert.DoesNotContain("verify_password", result);
@@ -221,7 +218,7 @@ namespace Ivy.Auth0.Management.Test.Services
             _mockJsonManipulator.Setup(x => x.EditPhoneJson(json, req)).Returns(json);
             _mockJsonManipulator.Setup(x => x.EditUsernameJson(json, req)).Returns(json);
 
-            var result = _sut.ConfigureUpdateUserJson(req);
+            var result = Sut.ConfigureUpdateUserJson(req);
 
             Assert.Contains("password", result);
             Assert.Contains("verify_password", result);

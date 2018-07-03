@@ -1,4 +1,4 @@
-﻿using Ivy.IoC;
+﻿using Ivy.IoC.Core;
 using Ivy.PayPal.Api.Core.Interfaces.Providers;
 using Ivy.PayPal.Api.Core.Interfaces.Services;
 using Ivy.PayPal.Api.Tests.Base;
@@ -7,28 +7,22 @@ using Xunit;
 
 namespace Ivy.PayPal.Api.Tests.Services
 {
-    public class PayPalUrlGeneratorTests : PayPalApiTestBase
+    public class PayPalUrlGeneratorTests : 
+        PayPalApiTestBase<IPayPalUrlGenerator>
     {
         #region Variables & Constants
 
-        private readonly IPayPalUrlGenerator _sut;
-
-        private readonly Mock<IPayPalApiConfigProvider> _mockConfigProvider;
+        private Mock<IPayPalApiConfigProvider> _mockConfigProvider;
 
         #endregion
 
         #region SetUp & TearDown
 
-        public PayPalUrlGeneratorTests()
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
-            var containerGen = new ContainerGenerator();
+            base.InitializeContainerFn(containerGen);
 
-            base.ConfigureContainer(containerGen);
-
-            _mockConfigProvider = new Mock<IPayPalApiConfigProvider>();
-            containerGen.RegisterInstance<IPayPalApiConfigProvider>(_mockConfigProvider.Object);
-
-            _sut = containerGen.GenerateContainer().GetService<IPayPalUrlGenerator>();
+            _mockConfigProvider = InitializeMoq<IPayPalApiConfigProvider>(containerGen);
         }
 
         #endregion
@@ -40,7 +34,7 @@ namespace Ivy.PayPal.Api.Tests.Services
         {
             _mockConfigProvider.Setup(x => x.SandboxMode).Returns(true);
 
-            Assert.Equal("https://api.sandbox.paypal.com/", _sut.GetPayPalUrl());
+            Assert.Equal("https://api.sandbox.paypal.com/", Sut.GetPayPalUrl());
         }
 
         [Fact]
@@ -48,7 +42,7 @@ namespace Ivy.PayPal.Api.Tests.Services
         {
             _mockConfigProvider.Setup(x => x.SandboxMode).Returns(false);
 
-            Assert.Equal("https://api.paypal.com/", _sut.GetPayPalUrl());
+            Assert.Equal("https://api.paypal.com/", Sut.GetPayPalUrl());
         }
 
         #endregion

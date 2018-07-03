@@ -11,14 +11,13 @@ using Xunit;
 
 namespace Ivy.Amazon.S3.Test.Services
 {
-    public class S3SignedUrlServiceTests : AmazonS3TestBase
+    public class S3SignedUrlServiceTests : 
+        AmazonS3TestBase<IS3SignedUrlService>
     {
         #region Variables & Constants
 
-        private readonly IS3SignedUrlService _sut;
-
-        private readonly Mock<IAmazonS3> _mockS3;
-        private readonly Mock<IClock> _mockClock;
+        private Mock<IAmazonS3> _mockS3;
+        private Mock<IClock> _mockClock;
 
         private readonly DateTime now = new DateTime(2010, 10, 10);
 
@@ -26,23 +25,14 @@ namespace Ivy.Amazon.S3.Test.Services
 
         #region SetUp & TearDown
 
-        public S3SignedUrlServiceTests()
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
-            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
+            base.InitializeContainerFn(containerGen);
 
-            base.ConfigureContainer(containerGen);
+            _mockS3 = InitializeMoq<IAmazonS3>(containerGen);
 
-            _mockS3 = new Mock<IAmazonS3>();
-            containerGen.RegisterInstance<IAmazonS3>(_mockS3.Object);
-
-            _mockClock = new Mock<IClock>();
-            containerGen.RegisterInstance<IClock>(_mockClock.Object);
-
+            _mockClock = InitializeMoq<IClock>(containerGen);
             _mockClock.SetupGet(x => x.UtcNow).Returns(now);
-
-            var container = containerGen.GenerateContainer();
-
-            _sut = container.GetService<IS3SignedUrlService>();
         }
 
         #endregion
@@ -67,7 +57,7 @@ namespace Ivy.Amazon.S3.Test.Services
                      y.Expires == expectedNow &&
                      y.Verb == HttpVerb.GET))).Returns(expectedReturn);
 
-            var result = _sut.GetS3SignedFileDownloadUrl(bucketName, key);
+            var result = Sut.GetS3SignedFileDownloadUrl(bucketName, key);
 
             Assert.Equal(expectedReturn, result);
 
@@ -98,7 +88,7 @@ namespace Ivy.Amazon.S3.Test.Services
                      y.Verb == HttpVerb.GET &&
                      y.ResponseHeaderOverrides.ContentDisposition == expectedContentDisposition))).Returns(expectedReturn);
 
-            var result = _sut.GetS3SignedFileDownloadUrl(bucketName, key, nameOverride);
+            var result = Sut.GetS3SignedFileDownloadUrl(bucketName, key, nameOverride);
 
             Assert.Equal(expectedReturn, result);
 
@@ -131,7 +121,7 @@ namespace Ivy.Amazon.S3.Test.Services
                      y.Verb == HttpVerb.PUT
                 ))).Returns(expectedReturn);
 
-            var result = _sut.GetS3SignedFileUploadUrl(bucketName, key);
+            var result = Sut.GetS3SignedFileUploadUrl(bucketName, key);
 
             Assert.Equal(expectedReturn, result);
 

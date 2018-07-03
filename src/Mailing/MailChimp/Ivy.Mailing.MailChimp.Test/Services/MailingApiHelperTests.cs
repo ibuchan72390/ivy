@@ -15,11 +15,11 @@ using Ivy.Mailing.MailChimp.Core.Interfaces.Transformers;
 
 namespace Ivy.Mailing.MailChimp.Test
 {
-    public class MailChimpApiHelperTests : MailChimpTestBase
+    public class MailingApiHelperTests : 
+        MailChimpTestBase<IMailingApiHelper>
     {
         #region Variables & Constants
 
-        private IMailingApiHelper _sut;
         private IJsonSerializationService _serializationService;
 
         private Mock<IMailingRequestFactory> _mockRequestFactory;
@@ -32,38 +32,23 @@ namespace Ivy.Mailing.MailChimp.Test
 
         #region SetUp & TearDown
 
-        public MailChimpApiHelperTests()
+        public MailingApiHelperTests()
         {
-            _serializationService = ServiceLocator.Instance.GetService<IJsonSerializationService>();
+            var containerGen = GetContainerGenerator();
+            base.InitializeContainerFn(containerGen);
 
-            // Configure Test Container
-            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
+            _serializationService = containerGen.GenerateContainer().GetService<IJsonSerializationService>();
+        }
 
-            base.ConfigureContainer(containerGen);
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
+        {
+            base.InitializeContainerFn(containerGen);
 
-            // Setup Logger Mock
-            _mockLogger = new Mock<ILogger<IMailingApiHelper>>();
-            containerGen.RegisterInstance<ILogger<IMailingApiHelper>>(_mockLogger.Object);
-
-            // Setup HttpClientFactory Mock
-            _mockClientHelper = new Mock<IHttpClientHelper>();
-            containerGen.RegisterInstance<IHttpClientHelper>(_mockClientHelper.Object);
-
-            // Setup MailChimpRequestFactory Mock
-            _mockRequestFactory = new Mock<IMailingRequestFactory>();
-            containerGen.RegisterInstance<IMailingRequestFactory>(_mockRequestFactory.Object);
-
-            // Setup JsonSerializationService Mock
-            _mockSerialier = new Mock<IJsonSerializationService>();
-            containerGen.RegisterInstance<IJsonSerializationService>(_mockSerialier.Object);
-
-            // Setup MailChimpContactTransformer Mock
-            _mockTransformer = new Mock<IMailChimpContactTransformer>();
-            containerGen.RegisterInstance<IMailChimpContactTransformer>(_mockTransformer.Object);
-
-            var container = containerGen.GenerateContainer();
-
-            _sut = container.GetService<IMailingApiHelper>();
+            _mockLogger = InitializeMoq<ILogger<IMailingApiHelper>>(containerGen);
+            _mockClientHelper = InitializeMoq<IHttpClientHelper>(containerGen);
+            _mockRequestFactory = InitializeMoq<IMailingRequestFactory>(containerGen);
+            _mockSerialier = InitializeMoq<IJsonSerializationService>(containerGen);
+            _mockTransformer = InitializeMoq<IMailChimpContactTransformer>(containerGen);
         }
 
         #endregion
@@ -94,7 +79,7 @@ namespace Ivy.Mailing.MailChimp.Test
 
             _mockTransformer.Setup(x => x.Transform(resultMember)).Returns(member);
 
-            var result = await _sut.EditMemberAsync(member);
+            var result = await Sut.EditMemberAsync(member);
 
             Assert.Same(result, member);
 
@@ -135,7 +120,7 @@ namespace Ivy.Mailing.MailChimp.Test
 
             _mockTransformer.Setup(x => x.Transform(resultMember)).Returns(mailingMember);
 
-            var result = await _sut.GetMemberAsync(testEmail);
+            var result = await Sut.GetMemberAsync(testEmail);
 
             Assert.Same(result, mailingMember);
 
@@ -177,7 +162,7 @@ namespace Ivy.Mailing.MailChimp.Test
 
             _mockTransformer.Setup(x => x.Transform(resultMember)).Returns(contactInfo);
 
-            var result = await _sut.AddMemberAsync(contactInfo);
+            var result = await Sut.AddMemberAsync(contactInfo);
 
             Assert.Equal(contactInfo, result);
 

@@ -1,18 +1,19 @@
 ﻿using Ivy.Captcha.IoC;
 using Ivy.Captcha.Magick.IoC;
+using Ivy.IoC.Core;
 using Ivy.TestHelper;
 
 namespace Ivy.Captcha.Magick.Test.Base
 {
-    public class CaptchaMagickTestBase : TestBase
+    public class CaptchaMagickTestBase<T> : TestBase<T>
+        where T: class
     {
-        protected override void InitWrapper()
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
-            base.Init(containerGen =>
-            {
-                containerGen.InstallIvyCaptcha();
-                containerGen.InstallIvyCaptchaMagick();
-            });
+            base.InitializeContainerFn(containerGen);
+
+            containerGen.InstallIvyCaptcha();
+            containerGen.InstallIvyCaptchaMagick();
         }
     }
 }

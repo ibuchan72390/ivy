@@ -9,28 +9,22 @@ using Xunit;
 
 namespace Ivy.Captcha.Test.Services
 {
-    public class CaptchaImageHelperTests : CaptchaTestBase
+    public class CaptchaImageHelperTests : 
+        CaptchaTestBase<ICaptchaImageHelper>
     {
         #region Variables & Constants
 
-        private readonly ICaptchaImageHelper _sut;
-
-        private readonly Mock<IRandomizationHelper> _mockRand;
+        private Mock<IRandomizationHelper> _mockRand;
 
         #endregion
 
         #region SetUp & TearDown
 
-        public CaptchaImageHelperTests()
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
-            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
+            base.InitializeContainerFn(containerGen);
 
-            base.ConfigureContainer(containerGen);
-
-            _mockRand = new Mock<IRandomizationHelper>();
-            containerGen.RegisterInstance<IRandomizationHelper>(_mockRand.Object);
-
-            _sut = containerGen.GenerateContainer().GetService<ICaptchaImageHelper>();
+            _mockRand = InitializeMoq<IRandomizationHelper>(containerGen);
         }
 
         #endregion
@@ -38,7 +32,7 @@ namespace Ivy.Captcha.Test.Services
         #region Tests
 
         #region GetFontSize
-        
+
         [Fact]
         public void GetFontSize_Executes_As_Expected()
         {
@@ -49,7 +43,7 @@ namespace Ivy.Captcha.Test.Services
             var expected = Convert.ToInt32(width / codeCount);
 
             // Act
-            var result = _sut.GetFontSize(width, codeCount);
+            var result = Sut.GetFontSize(width, codeCount);
 
             // Assert
             Assert.Equal(expected, result);
@@ -71,7 +65,7 @@ namespace Ivy.Captcha.Test.Services
                 Returns(randResult);
 
             // Act
-            var result = _sut.GetRandomDeepColor();
+            var result = Sut.GetRandomDeepColor();
 
             // Assert
             _mockRand.Verify(x => x.RandomInt(randLow, randHigh),
@@ -98,7 +92,7 @@ namespace Ivy.Captcha.Test.Services
                 Returns(randResult);
 
             // Act
-            var result = _sut.GetRandomLightColor();
+            var result = Sut.GetRandomLightColor();
 
             // Assert
             _mockRand.Verify(x => x.RandomInt(randLow, randHigh),

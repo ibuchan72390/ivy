@@ -1,6 +1,5 @@
 ﻿using Ivy.Auth0.Web.Core.Services;
 using Ivy.Auth0.Web.Test.Base;
-using Ivy.IoC;
 using Ivy.IoC.Core;
 using Microsoft.AspNetCore.Http;
 using Moq;
@@ -11,28 +10,22 @@ using Xunit;
 
 namespace Ivy.Auth0.Web.Test.Services
 {
-    public class UserProviderTests : Auth0WebTestBase
+    public class UserProviderTests : 
+        Auth0WebTestBase<IUserProvider>
     {
         #region Variables & Constants
 
-        private readonly IUserProvider _sut;
-
-        private readonly Mock<IHttpContextAccessor> _mockContext;
+        private Mock<IHttpContextAccessor> _mockContext;
 
         #endregion
 
         #region SetUp & TearDown
 
-        public UserProviderTests()
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
-            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
+            base.InitializeContainerFn(containerGen);
 
-            base.ConfigureContainer(containerGen);
-
-            _mockContext = new Mock<IHttpContextAccessor>();
-            containerGen.RegisterInstance<IHttpContextAccessor>(_mockContext.Object);
-
-            _sut = containerGen.GenerateContainer().GetService<IUserProvider>();
+            _mockContext = InitializeMoq<IHttpContextAccessor>(containerGen);
         }
 
         #endregion
@@ -47,7 +40,7 @@ namespace Ivy.Auth0.Web.Test.Services
 
         //    _mockContext.Setup(x => x.HttpContext).Returns(context);
 
-        //    var e = Assert.Throws<Exception>(() => _sut.AuthenticationId);
+        //    var e = Assert.Throws<Exception>(() => Sut.AuthenticationId);
 
         //    Assert.Equal("No user has been authenticated in the provided context!", e.Message);
         //}
@@ -61,7 +54,7 @@ namespace Ivy.Auth0.Web.Test.Services
 
             _mockContext.Setup(x => x.HttpContext).Returns(context);
 
-            var e = Assert.Throws<Exception>(() => _sut.AuthenticationId);
+            var e = Assert.Throws<Exception>(() => Sut.AuthenticationId);
 
             var err = $"The provided claim key does not exist on the User! Claim Key: {ClaimTypes.NameIdentifier}";
 
@@ -80,10 +73,9 @@ namespace Ivy.Auth0.Web.Test.Services
 
             _mockContext.Setup(x => x.HttpContext).Returns(context);
 
-            Assert.Equal(val, _sut.AuthenticationId);
+            Assert.Equal(val, Sut.AuthenticationId);
         }
 
         #endregion
-
     }
 }

@@ -12,17 +12,15 @@ using Xunit;
 
 namespace Ivy.Web.Test.Client
 {
-    public class ApiHelperTests : WebTestBase
+    public class ApiHelperTests : WebTestBase<IApiHelper>
     {
         #region Variables & Constants
 
         private readonly HttpRequestMessage request;
         private readonly HttpResponseMessage response;
 
-        private readonly IApiHelper _sut;
-
-        private readonly Mock<IHttpClientHelper> _clientHelperMock;
-        private readonly Mock<IJsonSerializationService> _serializerMock;
+        private Mock<IHttpClientHelper> _clientHelperMock;
+        private Mock<IJsonSerializationService> _serializerMock;
 
         #endregion
 
@@ -32,20 +30,14 @@ namespace Ivy.Web.Test.Client
         {
             request = new HttpRequestMessage { RequestUri = new Uri("http://google.com") };
             response = new HttpResponseMessage { RequestMessage = request };
+        }
 
-            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
+        {
+            base.InitializeContainerFn(containerGen);
 
-            base.ConfigureContainer(containerGen);
-
-            _clientHelperMock = new Mock<IHttpClientHelper>();
-            containerGen.RegisterInstance<IHttpClientHelper>(_clientHelperMock.Object);
-
-            _serializerMock = new Mock<IJsonSerializationService>();
-            containerGen.RegisterInstance<IJsonSerializationService>(_serializerMock.Object);
-
-            var container = containerGen.GenerateContainer();
-
-            _sut = container.GetService<IApiHelper>();
+            _clientHelperMock = InitializeMoq<IHttpClientHelper>(containerGen);
+            _serializerMock = InitializeMoq<IJsonSerializationService>(containerGen);
         }
 
         #endregion
@@ -66,7 +58,7 @@ namespace Ivy.Web.Test.Client
 
             _serializerMock.Setup(x => x.Deserialize<BlobEntity>(testContent)).Returns(expected);
 
-            var result = _sut.GetApiData<BlobEntity>(request);
+            var result = Sut.GetApiData<BlobEntity>(request);
 
             Assert.Same(expected, result);
         }
@@ -78,7 +70,7 @@ namespace Ivy.Web.Test.Client
 
             _clientHelperMock.Setup(x => x.Send(request)).Returns(response);
 
-            var e = Assert.Throws<Exception>(() => _sut.GetApiData<BlobEntity>(request));
+            var e = Assert.Throws<Exception>(() => Sut.GetApiData<BlobEntity>(request));
 
             string expectedErr = "Unsuccessful response received when requesting API! " +
                                  $"Request Uri: {response.RequestMessage.RequestUri.ToString()} / " +
@@ -104,7 +96,7 @@ namespace Ivy.Web.Test.Client
 
             _clientHelperMock.Setup(x => x.Send(request)).Returns(response);
 
-            var result = _sut.SendApiData(request);
+            var result = Sut.SendApiData(request);
 
             Assert.Same(response, result);
         }
@@ -116,7 +108,7 @@ namespace Ivy.Web.Test.Client
 
             _clientHelperMock.Setup(x => x.Send(request)).Returns(response);
 
-            var e = Assert.Throws<Exception>(() => _sut.SendApiData(request));
+            var e = Assert.Throws<Exception>(() => Sut.SendApiData(request));
 
             string expectedErr = "Unsuccessful response received when requesting API! " +
                                  $"Request Uri: {response.RequestMessage.RequestUri.ToString()} / " +
@@ -145,7 +137,7 @@ namespace Ivy.Web.Test.Client
 
             _serializerMock.Setup(x => x.Deserialize<BlobEntity>(testContent)).Returns(expected);
 
-            var result = await _sut.GetApiDataAsync<BlobEntity>(request);
+            var result = await Sut.GetApiDataAsync<BlobEntity>(request);
 
             Assert.Same(expected, result);
         }
@@ -157,7 +149,7 @@ namespace Ivy.Web.Test.Client
 
             _clientHelperMock.Setup(x => x.SendAsync(request)).ReturnsAsync(response);
 
-            var e = await Assert.ThrowsAsync<Exception>(async () => await _sut.GetApiDataAsync<BlobEntity>(request));
+            var e = await Assert.ThrowsAsync<Exception>(async () => await Sut.GetApiDataAsync<BlobEntity>(request));
 
             string expectedErr = "Unsuccessful response received when requesting API! " +
                                  $"Request Uri: {response.RequestMessage.RequestUri.ToString()} / " +
@@ -183,7 +175,7 @@ namespace Ivy.Web.Test.Client
 
             _clientHelperMock.Setup(x => x.SendAsync(request)).ReturnsAsync(response);
 
-            var result = await _sut.SendApiDataAsync(request);
+            var result = await Sut.SendApiDataAsync(request);
 
             Assert.Same(response, result);
         }
@@ -195,7 +187,7 @@ namespace Ivy.Web.Test.Client
 
             _clientHelperMock.Setup(x => x.SendAsync(request)).ReturnsAsync(response);
 
-            var e = await Assert.ThrowsAsync<Exception>(async () => await _sut.SendApiDataAsync(request));
+            var e = await Assert.ThrowsAsync<Exception>(async () => await Sut.SendApiDataAsync(request));
 
             string expectedErr = "Unsuccessful response received when requesting API! " +
                                  $"Request Uri: {response.RequestMessage.RequestUri.ToString()} / " +

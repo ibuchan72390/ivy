@@ -1,8 +1,11 @@
-﻿using Ivy.TestHelper;
+﻿using Ivy.IoC.Core;
+using Ivy.TestHelper;
 using Ivy.TestHelper.TestEntities;
 using Ivy.TestHelper.TestEntities.Flipped;
+using Ivy.TestUtilities.Base;
 using Ivy.TestUtilities.Utilities;
 using Ivy.Utility.Core.Extensions;
+using Ivy.Utility.IoC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +13,20 @@ using Xunit;
 
 namespace Ivy.Utility.Test.Extensions
 {
-    public class EntityExtensionsTests : TestBase
+    public class EntityExtensionsTests : 
+        GenericTestBase
     {
+        #region SetUp & TearDown
+
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
+        {
+            base.InitializeContainerFn(containerGen);
+
+            containerGen.InstallIvyUtility();
+        }
+
+        #endregion
+
         #region Tests
 
         #region ToEntity

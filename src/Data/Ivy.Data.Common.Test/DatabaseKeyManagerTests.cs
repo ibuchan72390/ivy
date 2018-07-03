@@ -10,7 +10,9 @@ using Xunit;
 
 namespace Ivy.Data.Common.Test
 {
-    public class DatabaseKeyManagerTests : TestBase, IDisposable
+    public class DatabaseKeyManagerTests : 
+        TestBase<IDatabaseKeyManager>,
+        IDisposable
     {
         private readonly IContainer _testContainer;
 

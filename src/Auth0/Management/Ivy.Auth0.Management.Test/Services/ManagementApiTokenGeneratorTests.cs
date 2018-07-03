@@ -10,14 +10,13 @@ using Xunit;
 
 namespace Ivy.Auth0.Management.Test.Services
 {
-    public class ManagementApiTokenGeneratorTests : Auth0ManagementTestBase
+    public class ManagementApiTokenGeneratorTests : 
+        Auth0ManagementTestBase<IManagementApiTokenGenerator>
     {
         #region Variables & Constants
 
-        private readonly IManagementApiTokenGenerator _sut;
-
-        private readonly Mock<IApiHelper> _mockApiHelper;
-        private readonly Mock<IAuth0ManagementRequestGenerator> _mockRequestGen;
+        private Mock<IApiHelper> _mockApiHelper;
+        private Mock<IAuth0ManagementRequestGenerator> _mockRequestGen;
 
         private readonly HttpRequestMessage request;
 
@@ -32,21 +31,6 @@ namespace Ivy.Auth0.Management.Test.Services
 
         public ManagementApiTokenGeneratorTests()
         {
-            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
-
-            base.ConfigureContainer(containerGen);
-
-            _mockApiHelper = new Mock<IApiHelper>();
-            containerGen.RegisterInstance<IApiHelper>(_mockApiHelper.Object);
-
-            _mockRequestGen = new Mock<IAuth0ManagementRequestGenerator>();
-            containerGen.RegisterInstance<IAuth0ManagementRequestGenerator>(_mockRequestGen.Object);
-
-
-            var container = containerGen.GenerateContainer();
-            _sut = container.GetService<IManagementApiTokenGenerator>();
-
-
             request = new HttpRequestMessage();
 
             _mockRequestGen.
@@ -58,6 +42,14 @@ namespace Ivy.Auth0.Management.Test.Services
                 ReturnsAsync(modelResponse);
         }
 
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
+        {
+            base.InitializeContainerFn(containerGen);
+
+            _mockApiHelper = InitializeMoq<IApiHelper>(containerGen);
+            _mockRequestGen = InitializeMoq<IAuth0ManagementRequestGenerator>(containerGen);
+        }
+
         #endregion
 
         #region Tests
@@ -65,7 +57,7 @@ namespace Ivy.Auth0.Management.Test.Services
         [Fact]
         public async void GetApiAuthTokenAsync_Returns_As_Expected_For_Fresh_Token()
         {
-            var authToken = await _sut.GetApiTokenAsync();
+            var authToken = await Sut.GetApiTokenAsync();
 
             Assert.Equal(authToken, modelResponse.access_token);
 
@@ -83,7 +75,7 @@ namespace Ivy.Auth0.Management.Test.Services
 
             for (var i = 0; i < repeatCount; i++)
             {
-                var authToken = await _sut.GetApiTokenAsync();
+                var authToken = await Sut.GetApiTokenAsync();
 
                 Assert.Equal(authToken, modelResponse.access_token);
             }

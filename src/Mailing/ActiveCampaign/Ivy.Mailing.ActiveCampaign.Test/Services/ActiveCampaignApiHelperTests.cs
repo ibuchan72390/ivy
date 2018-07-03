@@ -15,17 +15,17 @@ using Ivy.Web.Core.Json;
 
 namespace Ivy.Mailing.ActiveCampaign.Test.Services
 {
-    public class ActiveCampaignApiHelperTests : BaseActiveCampaignTest
+    public class ActiveCampaignApiHelperTests : 
+        BaseActiveCampaignTest<IMailingApiHelper>
     {
         #region Variables & Constants
 
-        private readonly IMailingApiHelper _sut;
         private readonly IJsonSerializationService _serializer;
 
-        private readonly Mock<IApiHelper> _mockApiHelper;
-        private readonly Mock<IMailingRequestFactory> _mockRequestFactory;
-        private readonly Mock<IActiveCampaignContactListDeserializer> _mockContactDeserializer;
-        private readonly Mock<IActiveCampaignContactTransformer> _mockContactTransformer;
+        private Mock<IApiHelper> _mockApiHelper;
+        private Mock<IMailingRequestFactory> _mockRequestFactory;
+        private Mock<IActiveCampaignContactListDeserializer> _mockContactDeserializer;
+        private Mock<IActiveCampaignContactTransformer> _mockContactTransformer;
 
         #endregion
 
@@ -34,24 +34,16 @@ namespace Ivy.Mailing.ActiveCampaign.Test.Services
         public ActiveCampaignApiHelperTests()
         {
             _serializer = ServiceLocator.Instance.GetService<IJsonSerializationService>();
+        }
 
-            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
+        {
+            base.InitializeContainerFn(containerGen);
 
-            base.ConfigureContainer(containerGen);
-
-            _mockApiHelper = new Mock<IApiHelper>();
-            containerGen.RegisterInstance<IApiHelper>(_mockApiHelper.Object);
-
-            _mockRequestFactory = new Mock<IMailingRequestFactory>();
-            containerGen.RegisterInstance<IMailingRequestFactory>(_mockRequestFactory.Object);
-
-            _mockContactDeserializer = new Mock<IActiveCampaignContactListDeserializer>();
-            containerGen.RegisterInstance<IActiveCampaignContactListDeserializer>(_mockContactDeserializer.Object);
-
-            _mockContactTransformer = new Mock<IActiveCampaignContactTransformer>();
-            containerGen.RegisterInstance<IActiveCampaignContactTransformer>(_mockContactTransformer.Object);
-
-            _sut = containerGen.GenerateContainer().GetService<IMailingApiHelper>();
+            _mockApiHelper = InitializeMoq<IApiHelper>(containerGen);
+            _mockRequestFactory = InitializeMoq<IMailingRequestFactory>(containerGen);
+            _mockContactDeserializer = InitializeMoq<IActiveCampaignContactListDeserializer>(containerGen);
+            _mockContactTransformer = InitializeMoq<IActiveCampaignContactTransformer>(containerGen);
         }
 
         #endregion
@@ -89,7 +81,7 @@ namespace Ivy.Mailing.ActiveCampaign.Test.Services
             _mockContactTransformer.Setup(x => x.Transform(contact)).Returns(finalMember);
 
             // Act
-            var result = await _sut.GetMemberAsync(email);
+            var result = await Sut.GetMemberAsync(email);
 
             // Assert
             Assert.Same(finalMember, result);
@@ -131,7 +123,7 @@ namespace Ivy.Mailing.ActiveCampaign.Test.Services
             _mockContactTransformer.Setup(x => x.Transform(contact)).Returns(finalMember);
 
             // Act
-            var result = await _sut.GetMemberAsync(email);
+            var result = await Sut.GetMemberAsync(email);
 
             // Assert
             Assert.Null(result);
@@ -175,7 +167,7 @@ namespace Ivy.Mailing.ActiveCampaign.Test.Services
             _mockContactTransformer.Setup(x => x.Transform(contact)).Returns(finalMember);
 
             // Act
-            var e = await Assert.ThrowsAsync<Exception>(() => _sut.GetMemberAsync(email));
+            var e = await Assert.ThrowsAsync<Exception>(() => Sut.GetMemberAsync(email));
 
             // Assert
             var err = $"Found multiple ActiveCampaign users with the same email! Email: {email}";
@@ -210,7 +202,7 @@ namespace Ivy.Mailing.ActiveCampaign.Test.Services
             _mockApiHelper.Setup(x => x.SendApiDataAsync(req)).ReturnsAsync(resp);
 
             // Act
-            var result = await _sut.AddMemberAsync(member);
+            var result = await Sut.AddMemberAsync(member);
 
             // Assert
             Assert.Same(member, result);
@@ -240,7 +232,7 @@ namespace Ivy.Mailing.ActiveCampaign.Test.Services
             _mockApiHelper.Setup(x => x.SendApiDataAsync(req)).ReturnsAsync(resp);
 
             // Act
-            var result = await _sut.EditMemberAsync(member);
+            var result = await Sut.EditMemberAsync(member);
 
             // Assert
             Assert.Same(member, result);

@@ -2,7 +2,6 @@
 using Ivy.IoC.Core;
 using Ivy.IoC.IoC;
 using Moq;
-using System;
 
 /*
  * Examine the references on this as it develops further...
@@ -13,20 +12,12 @@ using System;
 
 namespace Ivy.TestUtilities.Base
 {
-    public abstract class GenericTestBase<TService> : IDisposable
-        where TService : class
+    public abstract class GenericTestBase
     {
         #region Variables & Constants
 
-        private IContainerGenerator _containerGen;
-
         // Container for reference to remove bind to static ServiceLocator
-        protected IContainer Container;
-        protected TService Sut;
-
-        // Placeholders for custom test setup and teardown
-        // Override the InitailizeContainerFn and invoke base.InitializeContainer(containerGen) to setup Mock tests
-        protected abstract void TearDownFn();
+        protected readonly IContainer TestContainer;
 
         #endregion
 
@@ -35,23 +26,18 @@ namespace Ivy.TestUtilities.Base
         public GenericTestBase()
         {
             // Need to new up our container really quick
-            _containerGen = new ContainerGenerator();
+            var _containerGen = new ContainerGenerator();
 
             // Initialize our container
             InitializeContainerFn(_containerGen);
 
             // Setup our local container for the time being
-            var tempContainer = _containerGen.GenerateContainer();
+            TestContainer = _containerGen.GenerateContainer();
 
             // Setup our Service Locator for test facilities
             // This should set up our SvcLocator with the correct items for test without Mocks
-            var svcLocator = tempContainer.GetService<IServiceLocator>();
-            svcLocator.Init(tempContainer);
-        }
-
-        public void Dispose()
-        {
-            TearDownFn();
+            var svcLocator = TestContainer.GetService<IServiceLocator>();
+            svcLocator.Init(TestContainer);
         }
 
         protected virtual void InitializeContainerFn(IContainerGenerator containerGen)
@@ -65,36 +51,37 @@ namespace Ivy.TestUtilities.Base
 
         #region Helper Methods
 
-
-        /*
-         * The reason I'm leaving this is so that you properly understand a proper mocking method in the future
-         * If we want to Mock, all we need to do is override the InitializeContainerFn
-         * Allow the base to execute and load your Mocks on top of the base container leveraging the IntiializeMoq<> function
-         */
-        //protected virtual void InitMockingContainer(Action<IContainerGenerator> mockSetupFn)
-        //{
-        //    var containerGen = new ContainerGenerator();
-        //    InitializeContainerFn(containerGen);
-
-        //    mockSetupFn(containerGen);
-
-        //    InitTestContainer(containerGen);
-        //}
-
-        protected virtual void InitTestContainer(IContainerGenerator containerGen = null)
-        {
-            if (containerGen == null) containerGen = _containerGen;
-
-            Container = containerGen.GenerateContainer();
-            Sut = Container.GetService<TService>();
-        }
-
         protected Mock<T> InitializeMoq<T>(IContainerGenerator containerGen)
             where T : class
         {
             var mock = new Mock<T>();
             containerGen.RegisterInstance<T>(mock.Object);
             return mock;
+        }
+
+        protected IContainerGenerator GetContainerGenerator()
+        {
+            return new ContainerGenerator();
+        }
+
+        #endregion
+    }
+
+    public abstract class GenericTestBase<TService> :
+        GenericTestBase
+        where TService : class
+    {
+        #region Variables & Constants
+
+        protected readonly TService Sut;
+
+        #endregion
+
+        #region SetUp & TearDown
+
+        public GenericTestBase()
+        {
+            Sut = TestContainer.GetService<TService>();
         }
 
         #endregion

@@ -1,14 +1,17 @@
 ﻿using Ivy.Google.IoC;
+using Ivy.IoC.Core;
 using Ivy.TestHelper;
 
 namespace Ivy.Google.Tests.Base
 {
-    public class GoogleTestBase : TestBase
+    public class GoogleTestBase<T> : TestBase<T>
+        where T: class
     {
-        public GoogleTestBase()
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
-            base.Init(
-                containerGen => containerGen.InstallIvyGoogleCore());
+            base.InitializeContainerFn(containerGen);
+
+            containerGen.InstallIvyGoogleCore();
         }
     }
 }

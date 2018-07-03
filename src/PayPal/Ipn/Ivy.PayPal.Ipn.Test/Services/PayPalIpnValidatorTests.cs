@@ -11,32 +11,24 @@ using Xunit;
 
 namespace Ivy.PayPal.Ipn.Test.Services
 {
-    public class PayPalIpnValidatorTests : PayPalTestBase
+    public class PayPalIpnValidatorTests : 
+        PayPalTestBase<IPayPalIpnValidator>
     {
         #region Variables & Constants
 
-        private readonly IPayPalIpnValidator _sut;
-
-        private readonly Mock<IPayPalRequestGenerator> mockRequestGen;
-        private readonly Mock<IHttpClientHelper> mockClientHelper;
+        private Mock<IPayPalRequestGenerator> mockRequestGen;
+        private Mock<IHttpClientHelper> mockClientHelper;
 
         #endregion
 
         #region SetUp & TearDown
 
-        public PayPalIpnValidatorTests()
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
-            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
+            base.InitializeContainerFn(containerGen);
 
-            base.ConfigureContainer(containerGen);
-
-            mockRequestGen = new Mock<IPayPalRequestGenerator>();
-            containerGen.RegisterInstance<IPayPalRequestGenerator>(mockRequestGen.Object);
-
-            mockClientHelper = new Mock<IHttpClientHelper>();
-            containerGen.RegisterInstance<IHttpClientHelper>(mockClientHelper.Object);
-
-            _sut = containerGen.GenerateContainer().GetService<IPayPalIpnValidator>();
+            mockRequestGen = InitializeMoq<IPayPalRequestGenerator>(containerGen);
+            mockClientHelper = InitializeMoq<IHttpClientHelper>(containerGen);
         }
 
         #endregion
@@ -60,7 +52,7 @@ namespace Ivy.PayPal.Ipn.Test.Services
             mockRequestGen.Setup(x => x.GenerateValidationRequest(bodyStr, model.Test_Ipn == 1)).Returns(req);
             mockClientHelper.Setup(x => x.SendAsync(req)).ReturnsAsync(resp);
 
-            var result = await _sut.GetValidationResultAsync(bodyStr, model);
+            var result = await Sut.GetValidationResultAsync(bodyStr, model);
 
             Assert.Equal(result, resultContent);
 
@@ -80,7 +72,7 @@ namespace Ivy.PayPal.Ipn.Test.Services
             mockRequestGen.Setup(x => x.GenerateValidationRequest(bodyStr, model.Test_Ipn == 1)).Returns(req);
             mockClientHelper.Setup(x => x.SendAsync(req)).Throws(err);
 
-            var result = await Assert.ThrowsAsync<Exception>(() => _sut.GetValidationResultAsync(bodyStr, model));
+            var result = await Assert.ThrowsAsync<Exception>(() => Sut.GetValidationResultAsync(bodyStr, model));
 
             Assert.Same(result, err);
 

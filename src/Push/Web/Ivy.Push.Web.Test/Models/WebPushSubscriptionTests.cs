@@ -6,23 +6,9 @@ using Xunit;
 
 namespace Ivy.Push.Web.Test.Models
 {
-    public class WebPushSubscriptionTests : BaseWebPushTest
+    public class WebPushSubscriptionTests : 
+        BaseWebPushTest<IJsonSerializationService>
     {
-        #region Variables & Constants
-
-        private readonly IJsonSerializationService _serializer;
-
-        #endregion
-
-        #region SetUp & TearDown
-
-        public WebPushSubscriptionTests()
-        {
-            _serializer = ServiceLocator.Instance.GetService<IJsonSerializationService>();
-        }
-
-        #endregion
-
         #region Tests
 
         [Fact]
@@ -43,7 +29,7 @@ namespace Ivy.Push.Web.Test.Models
 
 
             // Act
-            var result = _serializer.Deserialize<WebPushSubscription>(json);
+            var result = Sut.Deserialize<WebPushSubscription>(json);
 
 
             // Assert

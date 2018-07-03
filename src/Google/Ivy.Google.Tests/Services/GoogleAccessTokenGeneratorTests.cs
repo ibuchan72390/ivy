@@ -6,33 +6,42 @@ using Ivy.IoC.Core;
 using Moq;
 using Xunit;
 
+/*
+ * I honestly have absolutely no idea how we can test this service
+ * It is simply invoking a static Google class' child functions.
+ * 
+ * If you figure out how to make this work, put some tests here.
+ * 
+ * At the very least, I can test the container resolution to ensure
+ * the container installer is configured properly.
+ */
+
 namespace Ivy.Google.Tests.Services
 {
-    public class GoogleAccessTokenGeneratorTests : GoogleTestBase
+    public class GoogleAccessTokenGeneratorTests : 
+        GoogleTestBase<IGoogleAccessTokenGenerator>
     {
-        /*
-         * I honestly have absolutely no idea how we can test this service
-         * It is simply invoking a static Google class' child functions.
-         * 
-         * If you figure out how to make this work, put some tests here.
-         * 
-         * At the very least, I can test the container resolution to ensure
-         * the container installer is configured properly.
-         */
+        #region Variables & Constants
+
+        private Mock<IGoogleConfigurationProvider> _mockConfig;
+
+        #endregion
+
+        #region SetUp & TearDown
+
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
+        {
+            base.InitializeContainerFn(containerGen);
+
+            _mockConfig = InitializeMoq<IGoogleConfigurationProvider>(containerGen);
+        }
+
+        #endregion
 
         [Fact] // This should at least test the IvyGoogleCoreInstaller
         public void GoogleAccessTokenGenerator_Resolves_Correctly()
         {
-            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
-
-            base.ConfigureContainer(containerGen);
-
-            var configMock = new Mock<IGoogleConfigurationProvider>();
-            containerGen.RegisterInstance<IGoogleConfigurationProvider>(configMock.Object);
-
-            var result = containerGen.GenerateContainer().GetService<IGoogleAccessTokenGenerator>();
-
-            Assert.NotNull(result);
+            Assert.NotNull(Sut);
         }
     }
 }

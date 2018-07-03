@@ -11,14 +11,12 @@ using Xunit;
 namespace Ivy.PayPal.Api.Payments.Tests.Services
 {
     public class PayPalPaymentRequestGeneratorTests : 
-        PayPalPaymentsTestBase
+        PayPalPaymentsTestBase<IPayPalPaymentsRequestGenerator>
     {
         #region Variables & Constants
 
-        private readonly IPayPalPaymentsRequestGenerator _sut;
-
-        private readonly Mock<IPayPalApiTokenGenerator> _mockTokenGen;
-        private readonly Mock<IPayPalUrlGenerator> _mockUrlGen;
+        private Mock<IPayPalApiTokenGenerator> _mockTokenGen;
+        private Mock<IPayPalUrlGenerator> _mockUrlGen;
 
         private const string payPalUrl = "https://api.sandbox.paypal.com/";
 
@@ -26,20 +24,14 @@ namespace Ivy.PayPal.Api.Payments.Tests.Services
 
         #region SetUp & TearDown
 
-        public PayPalPaymentRequestGeneratorTests()
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
-            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
+            base.InitializeContainerFn(containerGen);
 
-            base.ConfigureContainer(containerGen);
+            _mockTokenGen = InitializeMoq<IPayPalApiTokenGenerator>(containerGen);
 
-            _mockTokenGen = new Mock<IPayPalApiTokenGenerator>();
-            containerGen.RegisterInstance<IPayPalApiTokenGenerator>(_mockTokenGen.Object);
-
-            _mockUrlGen = new Mock<IPayPalUrlGenerator>();
-            containerGen.RegisterInstance<IPayPalUrlGenerator>(_mockUrlGen.Object);
+            _mockUrlGen = InitializeMoq<IPayPalUrlGenerator>(containerGen);
             _mockUrlGen.Setup(x => x.GetPayPalUrl()).Returns(payPalUrl);
-
-            _sut = containerGen.GenerateContainer().GetService<IPayPalPaymentsRequestGenerator>();
         }
 
         #endregion
@@ -57,7 +49,7 @@ namespace Ivy.PayPal.Api.Payments.Tests.Services
 
 
             // Act
-            var result = await _sut.GenerateShowPaymentRequestAsync(paymentId);
+            var result = await Sut.GenerateShowPaymentRequestAsync(paymentId);
 
 
             // Assert

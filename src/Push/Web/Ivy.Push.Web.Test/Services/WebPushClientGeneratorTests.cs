@@ -7,33 +7,19 @@ using Xunit;
 
 namespace Ivy.Push.Web.Test.Services
 {
-    public class WebPushClientGeneratorTests : BaseWebPushTest
+    public class WebPushClientGeneratorTests : 
+        BaseWebPushTest<IWebPushClientGenerator>
     {
-        #region Variables & Constants
-
-        private readonly IWebPushClientGenerator _sut;
-
-        #endregion
-
-        #region SetUp & TearDown
-
-        public WebPushClientGeneratorTests()
-        {
-            _sut = ServiceLocator.Instance.GetService<IWebPushClientGenerator>();
-        }
-
-        #endregion
-
         #region Tests
 
         [Fact]
         public void GenerateClient_Only_Creates_A_Single_Instance()
         {
-            var created = new List<IWebPushClient> { _sut.GenerateClient() };
+            var created = new List<IWebPushClient> { Sut.GenerateClient() };
 
             for (var i = 0; i < 5; i++)
             {
-                var item = _sut.GenerateClient();
+                var item = Sut.GenerateClient();
 
                 foreach (var validationItem in created)
                 {

@@ -11,11 +11,9 @@ using Xunit;
 namespace Ivy.PayPal.Api.Payments.Tests.Services
 {
     public class PayPalPaymentsServiceTests : 
-        PayPalPaymentsTestBase
+        PayPalPaymentsTestBase<IPayPalPaymentsService>
     {
         #region Variables & Constants
-
-        private readonly IPayPalPaymentsService _sut;
 
         private Mock<IPayPalPaymentsRequestGenerator> _mockRequestGen;
         private Mock<IApiHelper> _mockApiHelper;
@@ -24,25 +22,18 @@ namespace Ivy.PayPal.Api.Payments.Tests.Services
 
         #region SetUp & TearDown
         
-        public PayPalPaymentsServiceTests()
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
-            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
+            base.InitializeContainerFn(containerGen);
 
-            base.ConfigureContainer(containerGen);
-
-            _mockRequestGen = new Mock<IPayPalPaymentsRequestGenerator>();
-            containerGen.RegisterInstance<IPayPalPaymentsRequestGenerator>(_mockRequestGen.Object);
-
-            _mockApiHelper = new Mock<IApiHelper>();
-            containerGen.RegisterInstance<IApiHelper>(_mockApiHelper.Object);
-
-            _sut = containerGen.GenerateContainer().GetService<IPayPalPaymentsService>();
+            _mockRequestGen = InitializeMoq<IPayPalPaymentsRequestGenerator>(containerGen);
+            _mockApiHelper = InitializeMoq<IApiHelper>(containerGen);
         }
-        
+
         #endregion
 
         #region Tests
-        
+
         [Fact]
         public async void GetPaymentDetailsAsync_Returns_As_Expected()
         {
@@ -58,7 +49,7 @@ namespace Ivy.PayPal.Api.Payments.Tests.Services
                 ReturnsAsync(expected);
 
             // Act
-            var result = await _sut.GetPaymentDetailsAsync(paymentId);
+            var result = await Sut.GetPaymentDetailsAsync(paymentId);
 
             // Assert
             _mockRequestGen.Verify(x => x.GenerateShowPaymentRequestAsync(paymentId),

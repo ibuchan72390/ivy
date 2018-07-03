@@ -13,16 +13,15 @@ using Xunit;
 
 namespace Ivy.Push.Web.Test.Services
 {
-    public class WebPushServiceTests : BaseWebPushTest
+    public class WebPushServiceTests : 
+        BaseWebPushTest<IWebPushNotificationService>
     {
         #region Variables & Constants
 
-        private readonly IWebPushNotificationService _sut;
-
-        private readonly Mock<IWebPushClientService> _mockClientService;
-        private readonly Mock<IWebPushConfigurationProvider> _mockConfigProvider;
-        private readonly Mock<IJsonSerializationService> _mockSerializer;
-        private readonly Mock<IWebPushClient> _mockClient;
+        private Mock<IWebPushClientService> _mockClientService;
+        private Mock<IWebPushConfigurationProvider> _mockConfigProvider;
+        private Mock<IJsonSerializationService> _mockSerializer;
+        private Mock<IWebPushClient> _mockClient;
 
         const string endpoint = "endpoint";
         const string p256dh = "p256dh";
@@ -34,25 +33,16 @@ namespace Ivy.Push.Web.Test.Services
 
         #region SetUp & TearDown
 
-        public WebPushServiceTests()
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
-            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
+            base.InitializeContainerFn(containerGen);
 
-            base.ConfigureContainer(containerGen);
+            _mockClientService = InitializeMoq<IWebPushClientService>(containerGen);
+            _mockConfigProvider = InitializeMoq<IWebPushConfigurationProvider>(containerGen);
+            _mockSerializer = InitializeMoq<IJsonSerializationService>(containerGen);
 
-            _mockClientService = new Mock<IWebPushClientService>();
-            containerGen.RegisterInstance<IWebPushClientService>(_mockClientService.Object);
-
-            _mockConfigProvider = new Mock<IWebPushConfigurationProvider>();
-            containerGen.RegisterInstance<IWebPushConfigurationProvider>(_mockConfigProvider.Object);
-
-            _mockSerializer = new Mock<IJsonSerializationService>();
-            containerGen.RegisterInstance<IJsonSerializationService>(_mockSerializer.Object);
-
-            _mockClient = new Mock<IWebPushClient>();
+            _mockClient = InitializeMoq<IWebPushClient>(containerGen);
             _mockClientService.Setup(x => x.GetClient()).Returns(_mockClient.Object);
-
-            _sut = containerGen.GenerateContainer().GetService<IWebPushNotificationService>();
         }
 
         #endregion
@@ -71,7 +61,7 @@ namespace Ivy.Push.Web.Test.Services
 
 
             // Act
-            _sut.PushNotification(endpoint, p256dh, auth, msg);
+            Sut.PushNotification(endpoint, p256dh, auth, msg);
 
 
             // Assert
@@ -98,7 +88,7 @@ namespace Ivy.Push.Web.Test.Services
 
 
             // Act
-            await _sut.PushNotificationAsync(endpoint, p256dh, auth, msg);
+            await Sut.PushNotificationAsync(endpoint, p256dh, auth, msg);
 
 
             // Assert

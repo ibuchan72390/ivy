@@ -9,11 +9,10 @@ using Xunit;
 
 namespace Ivy.Data.MySQL.Test
 {
-    public class MySqlGeneratorStringEntityTests : MySqlTestBase
+    public class MySqlGeneratorStringEntityTests : 
+        MySqlTestBase<ISqlPropertyGenerator>
     {
         #region Variables & Constants
-
-        private ISqlPropertyGenerator _propertyGenerator;
 
         private IRandomizationHelper _randomizationHelper;
 
@@ -23,8 +22,6 @@ namespace Ivy.Data.MySQL.Test
 
         public MySqlGeneratorStringEntityTests()
         {
-            _propertyGenerator = ServiceLocator.Instance.GetService<ISqlPropertyGenerator>();
-
             _randomizationHelper = ServiceLocator.Instance.GetService<IRandomizationHelper>();
         }
 
@@ -43,7 +40,7 @@ namespace Ivy.Data.MySQL.Test
             var parms = new Dictionary<string, object>();
             var result = _sut.GenerateDeleteQuery(idVal, ref parms);
 
-            var attrs = _propertyGenerator.GetSqlPropertyNames<StringEntity>().Select(FormatSqlAttr);
+            var attrs = Sut.GetSqlPropertyNames<StringEntity>().Select(FormatSqlAttr);
 
             var expectedAttrString = attrs.Aggregate((x, y) => x + $", {y}");
 
@@ -67,7 +64,7 @@ namespace Ivy.Data.MySQL.Test
             var parms = new Dictionary<string, object>();
             var result = _sut.GenerateGetQuery(idVal, ref parms);
 
-            var attrs = _propertyGenerator.GetSqlPropertyNames<StringEntity>().Select(FormatSqlAttr);
+            var attrs = Sut.GetSqlPropertyNames<StringEntity>().Select(FormatSqlAttr);
 
             var expectedAttrString = attrs.
                                         Select(x => $"`THIS`.{x}").
@@ -94,7 +91,7 @@ namespace Ivy.Data.MySQL.Test
             var parms = new Dictionary<string, object>();
             var result = _sut.GenerateSaveOrUpdateQuery(StringIdEntity, ref parms);
 
-            var attrs = _propertyGenerator.GetSqlPropertyNames<StringEntity>();
+            var attrs = Sut.GetSqlPropertyNames<StringEntity>();
 
             var expectedAttrString = attrs.Select(FormatSqlAttr).Aggregate((x, y) => x + $", {y}");
             var expectedParamString = attrs.Aggregate("", (x, y) => $"{x}@{y}0, ");

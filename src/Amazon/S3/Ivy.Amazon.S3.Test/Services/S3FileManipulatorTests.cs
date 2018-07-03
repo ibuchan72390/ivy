@@ -2,7 +2,6 @@
 using Amazon.S3.Model;
 using Ivy.Amazon.S3.Core.Services;
 using Ivy.Amazon.S3.Test.Base;
-using Ivy.IoC;
 using Ivy.IoC.Core;
 using Moq;
 using System;
@@ -11,11 +10,10 @@ using Xunit;
 
 namespace Ivy.Amazon.S3.Test.Services
 {
-    public class S3FileManipulatorTests : AmazonS3TestBase
+    public class S3FileManipulatorTests : 
+        AmazonS3TestBase<IS3FileManipulator>
     {
         #region Variables & Constants
-
-        private IS3FileManipulator _sut;
 
         private Mock<IAmazonS3> _mockS3Client;
 
@@ -27,16 +25,11 @@ namespace Ivy.Amazon.S3.Test.Services
 
         #region SetUp & TearDown
 
-        public S3FileManipulatorTests()
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
-            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
+            base.InitializeContainerFn(containerGen);
 
-            base.ConfigureContainer(containerGen);
-
-            _mockS3Client = new Mock<IAmazonS3>();
-            containerGen.RegisterInstance<IAmazonS3>(_mockS3Client.Object);
-
-            _sut = containerGen.GenerateContainer().GetService<IS3FileManipulator>();
+            _mockS3Client = InitializeMoq<IAmazonS3>(containerGen);
         }
 
         #endregion
@@ -55,7 +48,7 @@ namespace Ivy.Amazon.S3.Test.Services
                                                                               y.Key == objectKey), default(CancellationToken))).
                     ReturnsAsync(response);
 
-            Assert.True(await _sut.FileExistsAsync(bucketName, objectKey));
+            Assert.True(await Sut.FileExistsAsync(bucketName, objectKey));
 
             _mockS3Client.Verify(x =>
                 x.GetObjectMetadataAsync(It.Is<GetObjectMetadataRequest>(y => y.BucketName == bucketName &&
@@ -74,7 +67,7 @@ namespace Ivy.Amazon.S3.Test.Services
                                                                               y.Key == objectKey), default(CancellationToken))).
                     Throws(err);
 
-            Assert.False(await _sut.FileExistsAsync(bucketName, objectKey));
+            Assert.False(await Sut.FileExistsAsync(bucketName, objectKey));
 
             _mockS3Client.Verify(x =>
                 x.GetObjectMetadataAsync(It.Is<GetObjectMetadataRequest>(y => y.BucketName == bucketName &&
@@ -92,7 +85,7 @@ namespace Ivy.Amazon.S3.Test.Services
                                                                               y.Key == objectKey), default(CancellationToken))).
                     Throws(err);
 
-            var e = await Assert.ThrowsAsync<Exception>(async () => await _sut.FileExistsAsync(bucketName, objectKey));
+            var e = await Assert.ThrowsAsync<Exception>(async () => await Sut.FileExistsAsync(bucketName, objectKey));
 
             Assert.Same(err, e);
 
@@ -112,7 +105,7 @@ namespace Ivy.Amazon.S3.Test.Services
             _mockS3Client.Setup(x => x.DeleteObjectAsync(bucketName, objectKey, default(CancellationToken)))
                 .ReturnsAsync(new DeleteObjectResponse());
 
-            await _sut.DeleteFileAsync(bucketName, objectKey);
+            await Sut.DeleteFileAsync(bucketName, objectKey);
 
             _mockS3Client.Verify(x => x.DeleteObjectAsync(bucketName, objectKey, default(CancellationToken)), 
                 Times.Once);
@@ -128,7 +121,7 @@ namespace Ivy.Amazon.S3.Test.Services
             _mockS3Client.Setup(x => x.CopyObjectAsync(bucketName, objectKey, bucketName, newKey, default(CancellationToken)))
                 .ReturnsAsync(new CopyObjectResponse());
 
-            await _sut.CopyFileAsync(bucketName, objectKey, newKey);
+            await Sut.CopyFileAsync(bucketName, objectKey, newKey);
 
             _mockS3Client.Verify(x => x.CopyObjectAsync(bucketName, objectKey, bucketName, newKey, default(CancellationToken)),
                 Times.Once);
@@ -148,7 +141,7 @@ namespace Ivy.Amazon.S3.Test.Services
             _mockS3Client.Setup(x => x.CopyObjectAsync(bucketName, objectKey, bucketName, newKey, default(CancellationToken)))
                 .ReturnsAsync(new CopyObjectResponse());
 
-            await _sut.MoveFileAsync(bucketName, objectKey, newKey);
+            await Sut.MoveFileAsync(bucketName, objectKey, newKey);
 
             _mockS3Client.Verify(x => x.DeleteObjectAsync(bucketName, objectKey, default(CancellationToken)), 
                 Times.Once);

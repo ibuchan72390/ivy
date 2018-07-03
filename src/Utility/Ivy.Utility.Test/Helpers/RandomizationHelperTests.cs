@@ -7,23 +7,8 @@ using Xunit;
 
 namespace Ivy.Utility.Test.Helpers
 {
-    public class RandomizationHelperTests : TestBase
+    public class RandomizationHelperTests : TestBase<IRandomizationHelper>
     {
-        #region Variables & Constants
-
-        private readonly IRandomizationHelper _sut;
-
-        #endregion
-
-        #region Constructor
-
-        public RandomizationHelperTests()
-        {
-            _sut = ServiceLocator.Instance.GetService<IRandomizationHelper>();
-        }
-
-        #endregion
-
         #region Tests
 
         [Fact]
@@ -31,7 +16,7 @@ namespace Ivy.Utility.Test.Helpers
         {
             const int length = 20;
 
-            var result = _sut.RandomString(length);
+            var result = Sut.RandomString(length);
 
             Assert.Equal(length, result.Length);
         }
@@ -40,13 +25,13 @@ namespace Ivy.Utility.Test.Helpers
         public void RandomString_Passes_Random_Sample_Test()
         {
             TestRandomSample(
-                () => _sut.RandomString());
+                () => Sut.RandomString());
         }
 
         [Fact]
         public void RandomString_Doesnt_Create_Duplicates()
         {
-            var origItems = Enumerable.Range(0, 10).Select(x => _sut.RandomString());
+            var origItems = Enumerable.Range(0, 10).Select(x => Sut.RandomString());
             var distinctItems = origItems.Distinct();
 
             Assert.Equal(origItems.Count(), distinctItems.Count());
@@ -56,14 +41,14 @@ namespace Ivy.Utility.Test.Helpers
         public void RandomDouble_Passes_Random_Sample_Test()
         {
             TestRandomSample(
-                () => _sut.RandomDouble());
+                () => Sut.RandomDouble());
         }
 
         [Fact]
         public void RandomInt_Passes_Random_Sample_Test()
         {
             TestRandomSample(
-                () => _sut.RandomInt());
+                () => Sut.RandomInt());
         }
 
         [Fact]
@@ -75,7 +60,7 @@ namespace Ivy.Utility.Test.Helpers
             // We should be able to get both in 50 Randoms
             for (var i = 0; i < 50; i++)
             {
-                var result = _sut.RandomInt(min, max);
+                var result = Sut.RandomInt(min, max);
 
                 if (result == max)
                     return;
@@ -88,18 +73,18 @@ namespace Ivy.Utility.Test.Helpers
         public void RandomDecimal_Passes_Random_Sample_Test()
         {
             TestRandomSample(
-                () => _sut.RandomDecimal());
+                () => Sut.RandomDecimal());
         }
 
         [Fact]
         public void RandomBoolean_Passes_Random_Sample_Test()
         {
-            bool init = _sut.RandomBool();
+            bool init = Sut.RandomBool();
 
             // The chances of 50 in a row are absurd
             for (var i = 0; i < 50; i++)
             {
-                if (_sut.RandomBool() != init)
+                if (Sut.RandomBool() != init)
                     return;
             }
 

@@ -8,23 +8,9 @@ using Xunit;
 
 namespace Ivy.Data.MySQL.Test
 {
-    public class MySqlGeneratorEntityTests : MySqlTestBase
+    public class MySqlGeneratorEntityTests : 
+        MySqlTestBase<ISqlPropertyGenerator>
     {
-        #region Variables & Constants
-
-        private ISqlPropertyGenerator _propertyGenerator;
-
-        #endregion
-
-        #region Constructor
-
-        public MySqlGeneratorEntityTests()
-        {
-            _propertyGenerator = ServiceLocator.Instance.GetService<ISqlPropertyGenerator>();
-        }
-
-        #endregion
-
         #region Tests
 
         #region GenerateDeleteQuery
@@ -89,7 +75,7 @@ namespace Ivy.Data.MySQL.Test
             var parms = new Dictionary<string, object>();
             var result = _sut.GenerateGetQuery(idVal, ref parms);
 
-            var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
+            var attrs = Sut.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
 
             var expectedAttrString = attrs.
                                         Select(x => $"`THIS`.{x}").
@@ -120,7 +106,7 @@ namespace Ivy.Data.MySQL.Test
             var idParams = ids.Select(x => $"@id{x}");
             var idInList = string.Join(",", idParams);
 
-            var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
+            var attrs = Sut.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
 
             var expectedAttrString = attrs.
                                         Select(x => $"`THIS`.{x}").
@@ -156,7 +142,7 @@ namespace Ivy.Data.MySQL.Test
             var parms = new Dictionary<string, object>();
             var result = _sut.GenerateSaveOrUpdateQuery(childEntity, ref parms);
 
-            var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>().Where(x => x != "Id");
+            var attrs = Sut.GetSqlPropertyNames<ChildEntity>().Where(x => x != "Id");
 
             var expectedAttrString = attrs.Select(FormatSqlAttr).Aggregate((x, y) => x + $", {y}");
             var expectedParamString = attrs.Aggregate("", (x, y) => $"{x}@{y}0, ");
@@ -178,7 +164,7 @@ namespace Ivy.Data.MySQL.Test
             var parms = new Dictionary<string, object>();
             var result = _sut.GenerateSaveOrUpdateQuery(childEntity, ref parms);
 
-            var allAttrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>();
+            var allAttrs = Sut.GetSqlPropertyNames<ChildEntity>();
             var attrs = allAttrs.Where(x => x != "Id");
 
             var expectedParamString = attrs.Aggregate("", (x, y) => $"{x}`{y}` = @{y}, ");

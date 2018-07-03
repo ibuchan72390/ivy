@@ -5,23 +5,9 @@ using Xunit;
 
 namespace Ivy.Amazon.S3.Test.Services
 {
-    public class S3UrlHelperTests : AmazonS3TestBase
+    public class S3UrlHelperTests : 
+        AmazonS3TestBase<IS3UrlHelper>
     {
-        #region Varibales & & Constants
-
-        private readonly IS3UrlHelper _sut;
-
-        #endregion
-
-        #region SetUp
-
-        public S3UrlHelperTests()
-        {
-            _sut = ServiceLocator.Instance.GetService<IS3UrlHelper>();
-        }
-
-        #endregion
-
         #region Tests
 
         [Fact]
@@ -31,7 +17,7 @@ namespace Ivy.Amazon.S3.Test.Services
             const string bucket = "TESTBucket";
             const string key = "TESTKey";
 
-            var result = _sut.GetS3Url(region, bucket, key);
+            var result = Sut.GetS3Url(region, bucket, key);
 
             var expected = $"http://{bucket}.s3-{region}.amazon.aws.com/{key}";
 

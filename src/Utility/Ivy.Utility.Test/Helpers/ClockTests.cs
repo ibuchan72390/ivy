@@ -6,39 +6,43 @@ using Xunit;
 
 namespace Ivy.Utility.Test.Helpers
 {
-    public class ClockTests : TestBase
+    public class ClockTests : TestBase<IClock>
     {
-        private IClock _sut;
+        #region Variables & Constants
+
         private TimeSpan delta = new TimeSpan(0,0,1);
 
-        public ClockTests()
-        {
-            _sut = ServiceLocator.Instance.GetService<IClock>();
-        }
+        #endregion
+
+        #region Tests
 
         [Fact]
         public void Now()
         {
-            AssertClose(DateTime.Now, _sut.Now, delta);
+            AssertClose(DateTime.Now, Sut.Now, delta);
         }
 
         [Fact]
         public void NowWithOffset()
         {
-            AssertClose(DateTimeOffset.Now, _sut.NowWithOffset, delta);
+            AssertClose(DateTimeOffset.Now, Sut.NowWithOffset, delta);
         }
 
         [Fact]
         public void UtcNow()
         {
-            AssertClose(DateTime.UtcNow, _sut.UtcNow, delta);
+            AssertClose(DateTime.UtcNow, Sut.UtcNow, delta);
         }
 
         [Fact]
         public void UtcNowWithOffset()
         {
-            AssertClose(DateTimeOffset.UtcNow, _sut.UtcNowWithOffset, delta);
+            AssertClose(DateTimeOffset.UtcNow, Sut.UtcNowWithOffset, delta);
         }
+
+        #endregion
+
+        #region Helper Methods
 
         private void AssertClose(DateTimeOffset expected, DateTimeOffset received, TimeSpan dif)
         {
@@ -48,5 +52,7 @@ namespace Ivy.Utility.Test.Helpers
             Assert.True(low < received);
             Assert.True(received < high);
         }
+
+        #endregion
     }
 }

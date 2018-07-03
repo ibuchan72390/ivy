@@ -1,40 +1,31 @@
 ﻿using Ivy.Mailing.ActiveCampaign.Core.Interfaces.Transformers;
 using Ivy.Mailing.ActiveCampaign.Core.Models;
 using Ivy.Mailing.ActiveCampaign.Test.Base;
-using Ivy.IoC;
 using Ivy.Mailing.Core.Enums;
 using Moq;
 using System;
 using Xunit;
 using Ivy.Mailing.Core.Models;
+using Ivy.IoC.Core;
 
 namespace Ivy.Mailing.ActiveCampaign.Test.Transformers
 {
-    public class ActiveCampaignContactTransformerTests : BaseActiveCampaignTest
+    public class ActiveCampaignContactTransformerTests : 
+        BaseActiveCampaignTest<IActiveCampaignContactTransformer>
     {
         #region Variables & Constants
 
-        private readonly IActiveCampaignContactTransformer _sut;
-
-        private readonly Mock<IActiveCampaignExtraDataTransformer> _mockExtraDataTransformer;
+        private Mock<IActiveCampaignExtraDataTransformer> _mockExtraDataTransformer;
 
         #endregion
 
         #region SetUp & TearDown
 
-        public ActiveCampaignContactTransformerTests()
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
-            var containerGen = new ContainerGenerator();
+            base.InitializeContainerFn(containerGen);
 
-            base.ConfigureContainer(containerGen);
-
-            _mockExtraDataTransformer = new Mock<IActiveCampaignExtraDataTransformer>();
-
-            containerGen.RegisterInstance<IActiveCampaignExtraDataTransformer>(_mockExtraDataTransformer.Object);
-
-            var container = containerGen.GenerateContainer();
-
-            _sut = container.GetService<IActiveCampaignContactTransformer>();
+            _mockExtraDataTransformer = InitializeMoq<IActiveCampaignExtraDataTransformer>(containerGen);
         }
 
         #endregion
@@ -59,7 +50,7 @@ namespace Ivy.Mailing.ActiveCampaign.Test.Transformers
                 Returns((MailingMember mem, ActiveCampaignContact contact) => mem);
 
             // Act
-            var result = _sut.Transform(obj);
+            var result = Sut.Transform(obj);
 
             // Assert
             Assert.Equal(obj.id, result.Id);
@@ -93,7 +84,7 @@ namespace Ivy.Mailing.ActiveCampaign.Test.Transformers
                 Returns((MailingMember mem, ActiveCampaignContact contact) => mem);
 
             // Act
-            var result = _sut.Transform(obj);
+            var result = Sut.Transform(obj);
 
             // Assert
             Assert.Equal(obj.id, result.Id);
@@ -127,7 +118,7 @@ namespace Ivy.Mailing.ActiveCampaign.Test.Transformers
                 Returns((MailingMember mem, ActiveCampaignContact contact) => mem);
 
             // Act
-            var e = Assert.Throws<Exception>(() => _sut.Transform(obj));
+            var e = Assert.Throws<Exception>(() => Sut.Transform(obj));
 
             // Assert
             var err = $"Unknown ActiveCampaignContact.status received! status: {obj.status}";

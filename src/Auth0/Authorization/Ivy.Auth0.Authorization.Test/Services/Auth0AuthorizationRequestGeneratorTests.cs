@@ -15,18 +15,16 @@ using Xunit;
 namespace Ivy.Auth0.Authorization.Test.Services
 {
     public class Auth0AuthorizationRequestGeneratorTests : 
-        Auth0AuthorizationTestBase
+        Auth0AuthorizationTestBase<IAuth0AuthorizationRequestGenerator>
     {
         #region Variables & Constants
 
         private readonly IJsonSerializationService _serializationService;
 
-        private readonly IAuth0AuthorizationRequestGenerator _sut;
-
-        private readonly Mock<IAuth0GenericConfigurationProvider> _mockConfig;
-        private readonly Mock<IAuth0ClientConfigurationProvider> _mockClientConfig;
-        private readonly Mock<IAuth0ApiConfigurationProvider> _mockApiConfig;
-        private readonly Mock<IAuth0AuthorizationConfigurationProvider> _mockAuthConfig;
+        private Mock<IAuth0GenericConfigurationProvider> _mockConfig;
+        private Mock<IAuth0ClientConfigurationProvider> _mockClientConfig;
+        private Mock<IAuth0ApiConfigurationProvider> _mockApiConfig;
+        private Mock<IAuth0AuthorizationConfigurationProvider> _mockAuthConfig;
 
         const string testUserId = "TESTUserId";
 
@@ -52,34 +50,25 @@ namespace Ivy.Auth0.Authorization.Test.Services
         public Auth0AuthorizationRequestGeneratorTests()
         {
             _serializationService = ServiceLocator.Instance.GetService<IJsonSerializationService>();
+        }
 
-            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
+        {
+            base.InitializeContainerFn(containerGen);
 
-            base.ConfigureContainer(containerGen);
-
-            _mockConfig = new Mock<IAuth0GenericConfigurationProvider>();
-            containerGen.RegisterInstance<IAuth0GenericConfigurationProvider>(_mockConfig.Object);
-
+            _mockConfig = InitializeMoq<IAuth0GenericConfigurationProvider>(containerGen);
             _mockConfig.Setup(x => x.Connection).Returns(testConnection);
             _mockConfig.Setup(x => x.Domain).Returns(testDomain);
 
-            _mockApiConfig = new Mock<IAuth0ApiConfigurationProvider>();
+            _mockApiConfig = InitializeMoq<IAuth0ApiConfigurationProvider>(containerGen);
             _mockApiConfig.Setup(x => x.ApiClientId).Returns(testApiClientId);
             _mockApiConfig.Setup(x => x.ApiClientSecret).Returns(testApiClientSecret);
-            containerGen.RegisterInstance<IAuth0ApiConfigurationProvider>(_mockApiConfig.Object);
 
-            _mockClientConfig = new Mock<IAuth0ClientConfigurationProvider>();
+            _mockClientConfig = InitializeMoq<IAuth0ClientConfigurationProvider>(containerGen);
             _mockClientConfig.Setup(x => x.SpaClientId).Returns(testSpaClientId);
-            containerGen.RegisterInstance<IAuth0ClientConfigurationProvider>(_mockClientConfig.Object);
 
-            _mockAuthConfig = new Mock<IAuth0AuthorizationConfigurationProvider>();
-            containerGen.RegisterInstance<IAuth0AuthorizationConfigurationProvider>(_mockAuthConfig.Object);
-
+            _mockAuthConfig = InitializeMoq<IAuth0AuthorizationConfigurationProvider>(containerGen);
             _mockAuthConfig.Setup(x => x.AuthorizationUrl).Returns(testAuthUrl);
-
-            var container = containerGen.GenerateContainer();
-
-            _sut = container.GetService<IAuth0AuthorizationRequestGenerator>();
         }
 
         #endregion
@@ -91,7 +80,7 @@ namespace Ivy.Auth0.Authorization.Test.Services
         [Fact]
         public async void GenerateManagementApiTokenRequest_Works_As_Expected()
         {
-            var req = _sut.GenerateApiTokenRequest();
+            var req = Sut.GenerateApiTokenRequest();
 
             Assert.Equal(HttpMethod.Post, req.Method);
 
@@ -126,7 +115,7 @@ namespace Ivy.Auth0.Authorization.Test.Services
         [Fact]
         public void GenerateGetRolesRequest_Creates_Request_As_Expected()
         {
-            var req = _sut.GenerateGetRolesRequest(testToken);
+            var req = Sut.GenerateGetRolesRequest(testToken);
 
             var expectedUrl = $"{testAuthUrl}/roles";
 
@@ -140,7 +129,7 @@ namespace Ivy.Auth0.Authorization.Test.Services
         [Fact]
         public async void GenerateAddUserRoleRequest_Creates_Request_As_Expected()
         {
-            var req = _sut.GenerateAddUserRolesRequest(testToken, testUserId, testRoles);
+            var req = Sut.GenerateAddUserRolesRequest(testToken, testUserId, testRoles);
 
             string expectedUri = GenerateUserRoleUrl();
 
@@ -161,7 +150,7 @@ namespace Ivy.Auth0.Authorization.Test.Services
         [Fact]
         public async void GenerateDeleteUserRoleRequest_Creates_Request_As_Expected()
         {
-            var req = _sut.GenerateDeleteUserRolesRequest(testToken, testUserId, testRoles);
+            var req = Sut.GenerateDeleteUserRolesRequest(testToken, testUserId, testRoles);
 
             string expectedUri = GenerateUserRoleUrl();
 
@@ -182,7 +171,7 @@ namespace Ivy.Auth0.Authorization.Test.Services
         [Fact]
         public void GenerateGetUserRolesRequest_Creates_Request_As_Expected()
         {
-            var req = _sut.GenerateGetUserRolesRequest(testToken, testUserId);
+            var req = Sut.GenerateGetUserRolesRequest(testToken, testUserId);
 
             string expectedUri = GenerateUserRoleUrl();
 

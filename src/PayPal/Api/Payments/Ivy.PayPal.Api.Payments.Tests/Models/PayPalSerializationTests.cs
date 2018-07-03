@@ -1,28 +1,13 @@
-﻿using Ivy.IoC;
-using Ivy.PayPal.Api.Payments.Core.Models.Response;
+﻿using Ivy.PayPal.Api.Payments.Core.Models.Response;
 using Ivy.PayPal.Api.Payments.Tests.Base;
 using Ivy.Web.Core.Json;
 using Xunit;
 
 namespace Ivy.PayPal.Api.Payments.Tests.Models
 {
-    public class PayPalSerializationTests : PayPalPaymentsTestBase
+    public class PayPalSerializationTests : 
+        PayPalPaymentsTestBase<IJsonSerializationService>
     {
-        #region Variables & Constants
-
-        private readonly IJsonSerializationService _serializer;
-       
-        #endregion
-
-        #region SetUp & TearDown
-
-        public PayPalSerializationTests()
-        {
-            _serializer = ServiceLocator.Instance.GetService<IJsonSerializationService>();
-        }
-
-        #endregion
-
         #region Tests
 
         [Fact]
@@ -98,7 +83,7 @@ namespace Ivy.PayPal.Api.Payments.Tests.Models
             }";
 
 
-            var result = _serializer.Deserialize<PayPalPaymentCreateResponse>(json);
+            var result = Sut.Deserialize<PayPalPaymentCreateResponse>(json);
 
             Assert.NotNull(result);
             Assert.NotNull(result.payer);
@@ -404,7 +389,7 @@ namespace Ivy.PayPal.Api.Payments.Tests.Models
             }";
 
 
-            var result = _serializer.Deserialize<PayPalPaymentListResponse>(json);
+            var result = Sut.Deserialize<PayPalPaymentListResponse>(json);
 
             Assert.NotNull(result);
             Assert.True(result.payments.Count > 0);
@@ -502,7 +487,7 @@ namespace Ivy.PayPal.Api.Payments.Tests.Models
             }";
 
 
-            var result = _serializer.Deserialize<PayPalPaymentShowResponse>(json);
+            var result = Sut.Deserialize<PayPalPaymentShowResponse>(json);
 
             Assert.NotNull(result);
             Assert.NotNull(result.payer);

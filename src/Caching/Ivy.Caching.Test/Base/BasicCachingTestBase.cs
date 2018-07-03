@@ -1,23 +1,22 @@
 ﻿using Ivy.Caching.IoC;
+using Ivy.IoC.Core;
 using Ivy.TestHelper;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Ivy.Caching.Test.Base
 {
-    public class BasicCachingTestBase : TestBase
+    public class BasicCachingTestBase<T> : TestBase<T>
+        where T: class
     {
-        public BasicCachingTestBase()
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
-            base.Init(
-                containerGen => {
+            base.InitializeContainerFn(containerGen);
 
-                    containerGen.InstallIvyBasicCaching();
-                },
-                svcColl => {
+            containerGen.InstallIvyBasicCaching();
 
-                    svcColl.AddMemoryCache();
-                }    
-            );
+            var svcColl = containerGen.GetServiceCollection();
+
+            svcColl.AddMemoryCache();
         }
     }
 }

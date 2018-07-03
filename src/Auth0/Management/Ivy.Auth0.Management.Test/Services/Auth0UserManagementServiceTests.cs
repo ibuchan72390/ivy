@@ -12,15 +12,14 @@ using Xunit;
 
 namespace Ivy.Auth0.Management.Test.Services
 {
-    public class Auth0UserManagementServiceTests : Auth0ManagementTestBase
+    public class Auth0UserManagementServiceTests : 
+        Auth0ManagementTestBase<IAuth0UserManagementService>
     {
         #region Variables & Constants
 
-        private readonly IAuth0UserManagementService _sut;
-
-        private readonly Mock<IApiHelper> _mockClientHelper;
-        private readonly Mock<IManagementApiTokenGenerator> _mockTokenGenerator;
-        private readonly Mock<IAuth0ManagementRequestGenerator> _mockRequestGen;
+        private Mock<IApiHelper> _mockClientHelper;
+        private Mock<IManagementApiTokenGenerator> _mockTokenGenerator;
+        private Mock<IAuth0ManagementRequestGenerator> _mockRequestGen;
 
         const string TestUserId = "TESTUserId";
 
@@ -31,24 +30,13 @@ namespace Ivy.Auth0.Management.Test.Services
 
         #region SetUp & TearDown
 
-        public Auth0UserManagementServiceTests()
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
-            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
+            base.InitializeContainerFn(containerGen);
 
-            base.ConfigureContainer(containerGen);
-
-            _mockClientHelper = new Mock<IApiHelper>();
-            containerGen.RegisterInstance<IApiHelper>(_mockClientHelper.Object);
-            
-            _mockTokenGenerator = new Mock<IManagementApiTokenGenerator>();
-            containerGen.RegisterInstance<IManagementApiTokenGenerator>(_mockTokenGenerator.Object);
-
-            _mockRequestGen = new Mock<IAuth0ManagementRequestGenerator>();
-            containerGen.RegisterInstance<IAuth0ManagementRequestGenerator>(_mockRequestGen.Object);
-
-            var container = containerGen.GenerateContainer();
-
-            _sut = container.GetService<IAuth0UserManagementService>();
+            _mockClientHelper = InitializeMoq<IApiHelper>(containerGen);
+            _mockTokenGenerator = InitializeMoq<IManagementApiTokenGenerator>(containerGen);
+            _mockRequestGen = InitializeMoq<IAuth0ManagementRequestGenerator>(containerGen);
 
             _mockTokenGenerator.
                 Setup(x => x.GetApiTokenAsync()).
@@ -75,7 +63,7 @@ namespace Ivy.Auth0.Management.Test.Services
                 Setup(x => x.GetApiDataAsync<Auth0ListUsersResponse>(req)).
                 ReturnsAsync(responseModel);
 
-            var result = await _sut.GetUsersAsync(model);
+            var result = await Sut.GetUsersAsync(model);
 
             Assert.Same(responseModel, result);
 
@@ -102,7 +90,7 @@ namespace Ivy.Auth0.Management.Test.Services
                 Setup(x => x.GetApiDataAsync<Auth0User>(req)).
                 ReturnsAsync(responseModel);
 
-            var result = await _sut.CreateUserAsync(model);
+            var result = await Sut.CreateUserAsync(model);
 
             Assert.Same(responseModel, result);
 
@@ -128,7 +116,7 @@ namespace Ivy.Auth0.Management.Test.Services
                 Setup(x => x.GetApiDataAsync<Auth0User>(req)).
                 ReturnsAsync(responseModel);
 
-            var result = await _sut.GetUserAsync(TestUserId);
+            var result = await Sut.GetUserAsync(TestUserId);
 
             Assert.Same(responseModel, result);
 
@@ -155,7 +143,7 @@ namespace Ivy.Auth0.Management.Test.Services
                 Setup(x => x.GetApiDataAsync<Auth0User>(req)).
                 ReturnsAsync(responseModel);
 
-            var result = await _sut.UpdateUserAsync(requestModel);
+            var result = await Sut.UpdateUserAsync(requestModel);
 
             Assert.Same(responseModel, result);
 
@@ -181,7 +169,7 @@ namespace Ivy.Auth0.Management.Test.Services
                 Setup(x => x.SendApiDataAsync(req)).
                 ReturnsAsync(response);
 
-            await _sut.DeleteUserAsync(TestUserId);
+            await Sut.DeleteUserAsync(TestUserId);
 
             _mockTokenGenerator.Verify(x => x.GetApiTokenAsync(), Times.Once);
             _mockRequestGen.Verify(x => x.GenerateDeleteUserRequest(apiToken, TestUserId), Times.Once);

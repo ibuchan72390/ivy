@@ -6,23 +6,9 @@ using Xunit;
 
 namespace Ivy.Web.Test.Json
 {
-    public class JsonSerializationServiceTests : WebTestBase
+    public class JsonSerializationServiceTests : 
+        WebTestBase<IJsonSerializationService>
     {
-        #region Variables & Constants
-
-        private IJsonSerializationService _sut;
-
-        #endregion
-
-        #region SetUp & TearDown
-
-        public JsonSerializationServiceTests()
-        {
-            _sut = ServiceLocator.Instance.GetService<IJsonSerializationService>();
-        }
-
-        #endregion
-
         #region Tests
 
         [Fact]
@@ -41,7 +27,7 @@ namespace Ivy.Web.Test.Json
                 Boolean = false
             };
 
-            var result = _sut.Serialize(blobEntity);
+            var result = Sut.Serialize(blobEntity);
 
             string expected = $"\"Name\":\"{blobEntity.Name}\",\"Integer\":{blobEntity.Integer},\"Decimal\":{blobEntity.Decimal},\"Double\":{blobEntity.Double},\"Boolean\":{blobEntity.Boolean.ToString().ToLower()},\"References\":null";
 
@@ -62,7 +48,7 @@ namespace Ivy.Web.Test.Json
 
             json = "{" + json + "}";
 
-            var result = _sut.Deserialize<BlobEntity>(json);
+            var result = Sut.Deserialize<BlobEntity>(json);
 
             Assert.Equal(name, result.Name);
             Assert.Equal(integer, result.Integer);

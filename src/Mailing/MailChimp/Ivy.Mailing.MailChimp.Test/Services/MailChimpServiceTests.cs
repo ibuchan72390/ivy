@@ -10,14 +10,13 @@ using Ivy.Mailing.MailChimp.Core.Providers;
 
 namespace Ivy.Mailing.MailChimp.Test
 {
-    public class MailChimpServiceTests : MailChimpTestBase
+    public class MailChimpServiceTests : 
+        MailChimpTestBase<IMailingService>
     {
         #region Variables & Constants
 
-        private readonly IMailingService _sut;
-
-        private readonly Mock<IMailingApiHelper> _mockApiHelper;
-        private readonly Mock<IMailChimpConfigurationProvider> _configProvider;
+        private Mock<IMailingApiHelper> _mockApiHelper;
+        private Mock<IMailChimpConfigurationProvider> _configProvider;
 
         private const string testEmail = "test@gmail.com";
 
@@ -29,25 +28,16 @@ namespace Ivy.Mailing.MailChimp.Test
 
         #region SetUp & TearDown
 
-        public MailChimpServiceTests()
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
-            _mockApiHelper = new Mock<IMailingApiHelper>();
-            _configProvider = new Mock<IMailChimpConfigurationProvider>();
+            base.InitializeContainerFn(containerGen);
 
-            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
-
-            base.ConfigureContainer(containerGen);
-
-            containerGen.RegisterInstance<IMailingApiHelper>(_mockApiHelper.Object);
-            containerGen.RegisterInstance<IMailChimpConfigurationProvider>(_configProvider.Object);
+            _mockApiHelper = InitializeMoq<IMailingApiHelper>(containerGen);
+            _configProvider = InitializeMoq<IMailChimpConfigurationProvider>(containerGen);
 
             _configProvider.Setup(x => x.AlreadyEnrolledMessage).Returns(existingMsg);
             _configProvider.Setup(x => x.NewEnrollmentMessage).Returns(newMsg);
             _configProvider.Setup(x => x.PendingEnrollmentMessage).Returns(pendingMsg);
-
-            var container = containerGen.GenerateContainer();
-
-            _sut = container.GetService<IMailingService>();
         }
 
         #endregion
@@ -65,7 +55,7 @@ namespace Ivy.Mailing.MailChimp.Test
 
             _mockApiHelper.Setup(x => x.GetMemberAsync(testEmail)).ReturnsAsync(returnedMember);
 
-            var result = await _sut.ProcessContactInfoAsync(contactInfo);
+            var result = await Sut.ProcessContactInfoAsync(contactInfo);
 
             _mockApiHelper.Verify(x => x.GetMemberAsync(testEmail), Times.Once);
 
@@ -85,7 +75,7 @@ namespace Ivy.Mailing.MailChimp.Test
             _mockApiHelper.Setup(x => x.AddMemberAsync(It.IsAny<MailingMember>()))
                 .ReturnsAsync(returnedMember);
 
-            var result = await _sut.ProcessContactInfoAsync(contactInfo);
+            var result = await Sut.ProcessContactInfoAsync(contactInfo);
 
             _mockApiHelper.Verify(x => x.GetMemberAsync(testEmail), Times.Once);
 
@@ -106,7 +96,7 @@ namespace Ivy.Mailing.MailChimp.Test
 
             _mockApiHelper.Setup(x => x.EditMemberAsync(returnedMember)).ReturnsAsync(returnedMember);
 
-            var result = await _sut.ProcessContactInfoAsync(contactInfo);
+            var result = await Sut.ProcessContactInfoAsync(contactInfo);
 
             _mockApiHelper.Verify(x => x.GetMemberAsync(testEmail), Times.Once);
 
@@ -127,7 +117,7 @@ namespace Ivy.Mailing.MailChimp.Test
 
             _mockApiHelper.Setup(x => x.EditMemberAsync(returnedMember)).ReturnsAsync(returnedMember);
 
-            var result = await _sut.ProcessContactInfoAsync(contactInfo);
+            var result = await Sut.ProcessContactInfoAsync(contactInfo);
 
             _mockApiHelper.Verify(x => x.GetMemberAsync(testEmail), Times.Once);
 

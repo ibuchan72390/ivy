@@ -1,4 +1,5 @@
 ﻿using Ivy.IoC;
+using Ivy.IoC.Core;
 using Ivy.Pdf.Templating.Core.Interfaces.Services;
 using Ivy.Pdf.Templating.Test.Base;
 using Moq;
@@ -8,32 +9,24 @@ using Xunit;
 
 namespace Ivy.Pdf.Templating.Test.Services
 {
-    public class PdfTemplatingServiceTests : PdfTemplatingTestBase
+    public class PdfTemplatingServiceTests : 
+        PdfTemplatingTestBase<IPdfTemplatingService>
     {
         #region Variables & Constants
 
-        private readonly IPdfTemplatingService sut;
-
-        private readonly Mock<IPdfPageGenerator> _mockPageGen;
-        private readonly Mock<IPdfByteWriter> _mockByteWriter;
+        private Mock<IPdfPageGenerator> _mockPageGen;
+        private Mock<IPdfByteWriter> _mockByteWriter;
 
         #endregion
 
         #region Setup & Teardown
 
-        public PdfTemplatingServiceTests()
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
-            var containerGen = new ContainerGenerator();
+            base.InitializeContainerFn(containerGen);
 
-            base.ConfigureContainer(containerGen);
-
-            _mockPageGen = new Mock<IPdfPageGenerator>();
-            containerGen.RegisterInstance<IPdfPageGenerator>(_mockPageGen.Object);
-
-            _mockByteWriter = new Mock<IPdfByteWriter>();
-            containerGen.RegisterInstance<IPdfByteWriter>(_mockByteWriter.Object);
-
-            sut = containerGen.GenerateContainer().GetService<IPdfTemplatingService>();
+            _mockPageGen = InitializeMoq<IPdfPageGenerator>(containerGen);
+            _mockByteWriter = InitializeMoq<IPdfByteWriter>(containerGen);
         }
 
         #endregion
@@ -61,7 +54,7 @@ namespace Ivy.Pdf.Templating.Test.Services
 
 
                     // Act
-                    sut.TemplatePdf(fileStream, replacementDict, resultStream);
+                    Sut.TemplatePdf(fileStream, replacementDict, resultStream);
 
 
                     // Assert

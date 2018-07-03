@@ -8,23 +8,9 @@ using Ivy.IoC;
 
 namespace Ivy.PayPal.Ipn.Test.Transformers
 {
-    public class PayPalIpnResponseTransformerTests : PayPalTestBase
+    public class PayPalIpnResponseTransformerTests : 
+        PayPalTestBase<IPayPalIpnResponseTransformer>
     {
-        #region Variables & Constants
-
-        private IPayPalIpnResponseTransformer _sut;
-
-        #endregion
-
-        #region Constructor
-
-        public PayPalIpnResponseTransformerTests()
-        {
-            _sut = ServiceLocator.Instance.GetService<IPayPalIpnResponseTransformer>();
-        }
-
-        #endregion
-
         #region Tests
 
         /*
@@ -177,7 +163,7 @@ namespace Ivy.PayPal.Ipn.Test.Transformers
             };
             context.Request.Form = new FormCollection(formDictionary);
 
-            var result = _sut.Transform(context.Request);
+            var result = Sut.Transform(context.Request);
 
             Assert.Equal(expectedBodyText, result);
         }

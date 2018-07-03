@@ -12,23 +12,8 @@ using Xunit;
 
 namespace Ivy.Transformer.Test.Pagination
 {
-    public class PaginatedResponseTransformerTests : TransformerTestBase
+    public class PaginatedResponseTransformerTests : TransformerTestBase<IPaginatedResponseTransformer<TestEntity, TestEntityModel, IEntityToViewModelListTransformer<TestEntity, TestEntityModel>>>
     {
-        #region Variables & Constants
-
-        private readonly IPaginatedResponseTransformer<TestEntity, TestEntityModel, IEntityToViewModelListTransformer<TestEntity, TestEntityModel>> _sut;
-
-        #endregion
-
-        #region Constructor
-
-        public PaginatedResponseTransformerTests()
-        {
-            _sut = ServiceLocator.Instance.GetService<IPaginatedResponseTransformer<TestEntity, TestEntityModel, IEntityToViewModelListTransformer<TestEntity, TestEntityModel>>>();
-        }
-
-        #endregion
-
         #region Tests
 
         [Fact]
@@ -43,7 +28,7 @@ namespace Ivy.Transformer.Test.Pagination
                 TotalCount = totalCount
             };
 
-            var result = _sut.Transform(model);
+            var result = Sut.Transform(model);
 
             Assert.Equal(totalCount, result.TotalCount);
 

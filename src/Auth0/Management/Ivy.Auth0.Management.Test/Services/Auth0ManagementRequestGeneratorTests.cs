@@ -15,18 +15,17 @@ using Xunit;
 
 namespace Ivy.Auth0.Management.Test.Services
 {
-    public class Auth0ManagementRequestGeneratorTests : Auth0ManagementTestBase
+    public class Auth0ManagementRequestGeneratorTests : 
+        Auth0ManagementTestBase<IAuth0ManagementRequestGenerator>
     {
         #region Variables & Constants
 
-        private readonly IAuth0ManagementRequestGenerator _sut;
-
         private readonly IAuth0QueryStringUriGenerator _queryStringGenerator;
 
-        private readonly Mock<IAuth0GenericConfigurationProvider> _mockConfig;
-        private readonly Mock<IAuth0ClientConfigurationProvider> _mockClientConfig;
-        private readonly Mock<IAuth0ApiConfigurationProvider> _mockApiConfig;
-        private readonly Mock<IAuth0ManagementConfigurationProvider> _mockManagementConfig;
+        private Mock<IAuth0GenericConfigurationProvider> _mockConfig;
+        private Mock<IAuth0ClientConfigurationProvider> _mockClientConfig;
+        private Mock<IAuth0ApiConfigurationProvider> _mockApiConfig;
+        private Mock<IAuth0ManagementConfigurationProvider> _mockManagementConfig;
 
         const string testUserId = "TESTUserId";
 
@@ -46,33 +45,26 @@ namespace Ivy.Auth0.Management.Test.Services
 
         public Auth0ManagementRequestGeneratorTests()
         {
-            _queryStringGenerator = ServiceLocator.Instance.GetService<IAuth0QueryStringUriGenerator>();
+            _queryStringGenerator = TestContainer.GetService<IAuth0QueryStringUriGenerator>();
+        }
 
-            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
+        {
+            base.InitializeContainerFn(containerGen);
 
-            base.ConfigureContainer(containerGen);
-
-            _mockConfig = new Mock<IAuth0GenericConfigurationProvider>();
-            containerGen.RegisterInstance<IAuth0GenericConfigurationProvider>(_mockConfig.Object);
+            _mockConfig = InitializeMoq<IAuth0GenericConfigurationProvider>(containerGen);
 
             _mockConfig.Setup(x => x.Connection).Returns(testConnection);
             _mockConfig.Setup(x => x.Domain).Returns(testDomain);
 
-            _mockApiConfig = new Mock<IAuth0ApiConfigurationProvider>();
+            _mockApiConfig = InitializeMoq<IAuth0ApiConfigurationProvider>(containerGen);
             _mockApiConfig.Setup(x => x.ApiClientId).Returns(testApiClientId);
             _mockApiConfig.Setup(x => x.ApiClientSecret).Returns(testApiClientSecret);
-            containerGen.RegisterInstance<IAuth0ApiConfigurationProvider>(_mockApiConfig.Object);
 
-            _mockClientConfig = new Mock<IAuth0ClientConfigurationProvider>();
+            _mockClientConfig = InitializeMoq<IAuth0ClientConfigurationProvider>(containerGen);
             _mockClientConfig.Setup(x => x.SpaClientId).Returns(testSpaClientId);
-            containerGen.RegisterInstance<IAuth0ClientConfigurationProvider>(_mockClientConfig.Object);
 
-            _mockManagementConfig = new Mock<IAuth0ManagementConfigurationProvider>();
-            containerGen.RegisterInstance<IAuth0ManagementConfigurationProvider>(_mockManagementConfig.Object);
-
-            var container = containerGen.GenerateContainer();
-
-            _sut = container.GetService<IAuth0ManagementRequestGenerator>();
+            _mockManagementConfig = InitializeMoq<IAuth0ManagementConfigurationProvider>(containerGen);
         }
 
         #endregion
@@ -84,7 +76,7 @@ namespace Ivy.Auth0.Management.Test.Services
         [Fact]
         public async void GenerateManagementApiTokenRequest_Works_As_Expected()
         {
-            var req = _sut.GenerateApiTokenRequest();
+            var req = Sut.GenerateApiTokenRequest();
 
             Assert.Equal(HttpMethod.Post, req.Method);
 
@@ -117,7 +109,7 @@ namespace Ivy.Auth0.Management.Test.Services
         [Fact]
         public async void GenerateVerifyEmailRequest_Works_As_Expected()
         {
-            var req = _sut.GenerateVerifyEmailRequest(testToken, testAuthenticationId);
+            var req = Sut.GenerateVerifyEmailRequest(testToken, testAuthenticationId);
 
             Assert.Equal(HttpMethod.Post, req.Method);
 
@@ -154,7 +146,7 @@ namespace Ivy.Auth0.Management.Test.Services
 
             var expectedBaseString = $"https://{testDomain}/api/v2/users";
 
-            var req = _sut.GenerateListUsersRequest(testToken, testModel);
+            var req = Sut.GenerateListUsersRequest(testToken, testModel);
 
             testModel.Connection = testConnection;
             var expectedUri = _queryStringGenerator.GenerateGetUsersQueryString(expectedBaseString, testModel);
@@ -173,7 +165,7 @@ namespace Ivy.Auth0.Management.Test.Services
 
             var expectedUri = new Uri($"https://{testDomain}/api/v2/users");
 
-            var req = _sut.GenerateCreateUserRequest(testToken, testModel);
+            var req = Sut.GenerateCreateUserRequest(testToken, testModel);
 
             ValidateRequest(req, expectedUri, HttpMethod.Post);
         }
@@ -185,7 +177,7 @@ namespace Ivy.Auth0.Management.Test.Services
 
             var expectedUri = new Uri($"https://{testDomain}/api/v2/users");
 
-            var req = _sut.GenerateCreateUserRequest(testToken, testModel);
+            var req = Sut.GenerateCreateUserRequest(testToken, testModel);
 
             ValidateRequest(req, expectedUri, HttpMethod.Post);
 
@@ -209,7 +201,7 @@ namespace Ivy.Auth0.Management.Test.Services
 
             var expectedUri = new Uri($"https://{testDomain}/api/v2/users");
 
-            var req = _sut.GenerateCreateUserRequest(testToken, testModel);
+            var req = Sut.GenerateCreateUserRequest(testToken, testModel);
 
             ValidateRequest(req, expectedUri, HttpMethod.Post);
 
@@ -233,7 +225,7 @@ namespace Ivy.Auth0.Management.Test.Services
 
             var expectedUri = new Uri($"https://{testDomain}/api/v2/users");
 
-            var e = Assert.Throws<Exception>(() => _sut.GenerateCreateUserRequest(testToken, request));
+            var e = Assert.Throws<Exception>(() => Sut.GenerateCreateUserRequest(testToken, request));
 
             var expectedMsg = "Invalid phone number received! Must match regex - ^\\+[0-9]{1,15}$" +
                         $" / Phone: {request.phone_number}";
@@ -250,7 +242,7 @@ namespace Ivy.Auth0.Management.Test.Services
 
             var expectedUri = new Uri($"https://{testDomain}/api/v2/users");
 
-            var req = _sut.GenerateCreateUserRequest(testToken, testModel);
+            var req = Sut.GenerateCreateUserRequest(testToken, testModel);
 
             ValidateRequest(req, expectedUri, HttpMethod.Post);
 
@@ -275,7 +267,7 @@ namespace Ivy.Auth0.Management.Test.Services
         {
             var expectedUri = new Uri($"https://{testDomain}/api/v2/users/{testUserId}");
 
-            var req = _sut.GenerateGetUserRequest(testToken, testUserId);
+            var req = Sut.GenerateGetUserRequest(testToken, testUserId);
 
             ValidateRequest(req, expectedUri, HttpMethod.Get);
         }
@@ -291,7 +283,7 @@ namespace Ivy.Auth0.Management.Test.Services
 
             var expectedUri = new Uri($"https://{testDomain}/api/v2/users/{testUserId}");
 
-            var req = _sut.GenerateUpdateUserRequest(testToken, model);
+            var req = Sut.GenerateUpdateUserRequest(testToken, model);
 
             ValidateRequest(req, expectedUri, new HttpMethod("PATCH"));
         }
@@ -305,7 +297,7 @@ namespace Ivy.Auth0.Management.Test.Services
         {
             var expectedUri = new Uri($"https://{testDomain}/api/v2/users/{testUserId}");
 
-            var req = _sut.GenerateDeleteUserRequest(testToken, testUserId);
+            var req = Sut.GenerateDeleteUserRequest(testToken, testUserId);
 
             ValidateRequest(req, expectedUri, HttpMethod.Delete);
         }
@@ -330,6 +322,5 @@ namespace Ivy.Auth0.Management.Test.Services
         }
 
         #endregion
-
     }
 }

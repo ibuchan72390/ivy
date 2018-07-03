@@ -9,13 +9,12 @@ using Xunit;
 
 namespace Ivy.ReCaptcha.Test.Services
 {
-    public class ReCaptchaRequestContentGeneratorTests : ReCaptchaTestBase
+    public class ReCaptchaRequestContentGeneratorTests : 
+        ReCaptchaTestBase<IReCaptchaRequestContentGenerator>
     {
         #region Variables & Constants
 
-        private readonly IReCaptchaRequestContentGenerator _sut;
-
-        private readonly Mock<IReCaptchaConfigurationProvider> _mockConfig;
+        private Mock<IReCaptchaConfigurationProvider> _mockConfig;
 
         const string Secret = "Secret";
         const string Code = "Code";
@@ -24,17 +23,12 @@ namespace Ivy.ReCaptcha.Test.Services
 
         #region Setup & Teardown
         
-        public ReCaptchaRequestContentGeneratorTests()
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
-            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
+            base.InitializeContainerFn(containerGen);
 
-            base.ConfigureContainer(containerGen);
-
-            _mockConfig = new Mock<IReCaptchaConfigurationProvider>();
+            _mockConfig = InitializeMoq<IReCaptchaConfigurationProvider>(containerGen);
             _mockConfig.Setup(x => x.Secret).Returns(Secret);
-            containerGen.RegisterInstance<IReCaptchaConfigurationProvider>(_mockConfig.Object);
-
-            _sut = containerGen.GenerateContainer().GetService<IReCaptchaRequestContentGenerator>();
         }
 
         #endregion
@@ -44,7 +38,7 @@ namespace Ivy.ReCaptcha.Test.Services
         [Fact]
         public void GenerateValidationKeyPairs_Works_As_Expected_Without_RemoteIp()
         {
-            var results = _sut.GenerateValidationKeyPairs(Code);
+            var results = Sut.GenerateValidationKeyPairs(Code);
 
             Assert.Equal(2, results.Count);
 
@@ -60,7 +54,7 @@ namespace Ivy.ReCaptcha.Test.Services
         {
             const string remoteIp = "RemoteIp";
 
-            var results = _sut.GenerateValidationKeyPairs(Code, remoteIp);
+            var results = Sut.GenerateValidationKeyPairs(Code, remoteIp);
 
             Assert.Equal(3, results.Count);
 

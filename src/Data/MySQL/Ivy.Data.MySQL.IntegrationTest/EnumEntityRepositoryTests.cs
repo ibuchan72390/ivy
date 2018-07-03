@@ -12,20 +12,14 @@ using Xunit;
 
 namespace Ivy.Data.MySQL.IntegrationTest
 {
-    public class EnumEntityRepositoryTests : MySqlIntegrationTestBase
+    public class EnumEntityRepositoryTests : 
+        MySqlIntegrationTestBase<IEnumEntityRepository<TestEnumEntity, TestEnum>>
     {
-        #region Variables & Constants
-
-        private readonly IEnumEntityRepository<TestEnumEntity, TestEnum> _sut;
-
-        #endregion
-
         #region SetUp & TearDown
 
         public EnumEntityRepositoryTests()
         {
-            _sut = ServiceLocator.Instance.GetService<IEnumEntityRepository<TestEnumEntity, TestEnum>>();
-            _sut.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
+            Sut.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
         }
 
         #endregion
@@ -41,7 +35,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
             var entity = new TestEnumEntity { Name = name.ToString() }.SaveForTest();
 
-            var result = _sut.GetByName(name);
+            var result = Sut.GetByName(name);
 
             Assert.Equal(entity.Id, result.Id);
         }
@@ -51,7 +45,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
         {
             TestEnum name = TestEnum.Test1;
 
-            var result = _sut.GetByName(name);
+            var result = Sut.GetByName(name);
 
             Assert.Null(result);
         }
@@ -64,7 +58,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
             new TestEnumEntity { Name = name.ToString() }.SaveForTest();
             new TestEnumEntity { Name = name.ToString() }.SaveForTest();
 
-            var e = Assert.Throws<Exception>(() => _sut.GetByName(name));
+            var e = Assert.Throws<Exception>(() => Sut.GetByName(name));
 
             var expectedException = "Multiple objects found matching the provided Enumeration Value. " +
                 $"Table: {typeof(TestEnumEntity).Name} / Search Value: {name.ToString()}";
@@ -83,7 +77,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
             var expected = enums.Select(x => new TestEnumEntity { Name = x.ToString() }.SaveForTest()).ToList();
 
-            var results = _sut.GetByNames(enums);
+            var results = Sut.GetByNames(enums);
 
             AssertExtensions.FullEntityListExclusion(expected, results);
         }
@@ -99,7 +93,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
             var tc = tranConnGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
-            var results = _sut.GetByNames(enums, tc);
+            var results = Sut.GetByNames(enums, tc);
 
             tc.Transaction.Commit();
             tc.Dispose();
@@ -112,7 +106,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
         {
             IList<TestEnum> enums = new List<TestEnum> { TestEnum.Test1, TestEnum.Test2 };
 
-            var results = _sut.GetByNames(enums);
+            var results = Sut.GetByNames(enums);
 
             Assert.Empty(results);
         }
@@ -122,7 +116,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
         {
             IList<TestEnum> enums = new List<TestEnum> {  };
 
-            var results = _sut.GetByNames(enums);
+            var results = Sut.GetByNames(enums);
 
             Assert.Empty(results);
         }
@@ -132,7 +126,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
         {
             IList<TestEnum> enums = null;
 
-            var results = _sut.GetByNames(enums);
+            var results = Sut.GetByNames(enums);
 
             Assert.Empty(results);
         }

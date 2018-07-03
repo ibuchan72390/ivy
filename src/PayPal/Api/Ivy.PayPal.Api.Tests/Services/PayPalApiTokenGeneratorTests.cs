@@ -12,11 +12,9 @@ using Xunit;
 namespace Ivy.PayPal.Api.Tests.Services
 {
     public class PayPalApiTokenGeneratorTests :
-        PayPalApiTestBase
+        PayPalApiTestBase<IPayPalApiTokenGenerator>
     {
         #region Variables & Constants
-
-        private readonly IPayPalApiTokenGenerator _sut;
 
         private readonly IJsonSerializationService _serializer;
 
@@ -29,19 +27,15 @@ namespace Ivy.PayPal.Api.Tests.Services
 
         public PayPalApiTokenGeneratorTests()
         {
-            _serializer = ServiceLocator.Instance.GetService<IJsonSerializationService>();
+            _serializer = TestContainer.GetService<IJsonSerializationService>();
+        }
 
-            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
+        {
+            base.InitializeContainerFn(containerGen);
 
-            base.ConfigureContainer(containerGen);
-
-            _mockApiHelper = new Mock<IApiHelper>();
-            containerGen.RegisterInstance<IApiHelper>(_mockApiHelper.Object);
-
-            _mockRequestGen = new Mock<IPayPalApiTokenRequestGenerator>();
-            containerGen.RegisterInstance<IPayPalApiTokenRequestGenerator>(_mockRequestGen.Object);
-
-            _sut = containerGen.GenerateContainer().GetService<IPayPalApiTokenGenerator>();
+            _mockApiHelper = InitializeMoq<IApiHelper>(containerGen);
+            _mockRequestGen = InitializeMoq<IPayPalApiTokenRequestGenerator>(containerGen);
         }
 
         #endregion
@@ -70,7 +64,7 @@ namespace Ivy.PayPal.Api.Tests.Services
 
 
             // Act
-            var result = await _sut.GetApiTokenAsync();
+            var result = await Sut.GetApiTokenAsync();
 
 
             // Assert

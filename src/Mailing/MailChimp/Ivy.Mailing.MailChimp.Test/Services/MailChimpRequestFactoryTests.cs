@@ -17,42 +17,31 @@ using Newtonsoft.Json;
 
 namespace Ivy.Mailing.MailChimp.Test
 {
-    public class MailChimpRequestFactoryTests : MailChimpTestBase
+    public class MailChimpRequestFactoryTests : 
+        MailChimpTestBase<IMailingRequestFactory>
     {
         #region Variables & Constants
-
-        private IMailingRequestFactory _sut;
 
         private const string testDataCenter = "TESTDC";
         private const string testListId = "TESTListId";
         private const string testApiKey = "TESTApiKey";
 
-        private readonly Mock<IMailChimpContactTransformer> _mockTransformer;
+        private Mock<IMailChimpContactTransformer> _mockTransformer;
 
         #endregion
 
         #region SetUp & TearDown
 
-        public MailChimpRequestFactoryTests()
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
-            var _mockConfigProvider = new Mock<IMailChimpConfigurationProvider>();
+            base.InitializeContainerFn(containerGen);
 
+            var _mockConfigProvider = InitializeMoq<IMailChimpConfigurationProvider>(containerGen);
             _mockConfigProvider.Setup(x => x.DataCenter).Returns(testDataCenter);
             _mockConfigProvider.Setup(x => x.ListId).Returns(testListId);
             _mockConfigProvider.Setup(x => x.ApiKey).Returns(testApiKey);
 
-            _mockTransformer = new Mock<IMailChimpContactTransformer>();
-
-            var containerGenerator = ServiceLocator.Instance.GetService<IContainerGenerator>();
-
-            base.ConfigureContainer(containerGenerator);
-
-            containerGenerator.RegisterInstance<IMailChimpConfigurationProvider>(_mockConfigProvider.Object);
-            containerGenerator.RegisterInstance<IMailChimpContactTransformer>(_mockTransformer.Object);
-
-            var container = containerGenerator.GenerateContainer();
-
-            _sut = container.GetService<IMailingRequestFactory>();
+            _mockTransformer = InitializeMoq<IMailChimpContactTransformer>(containerGen);
         }
 
         #endregion
@@ -66,7 +55,7 @@ namespace Ivy.Mailing.MailChimp.Test
         {
             const string testEmail = "test@gmail.com";
 
-            var memberRequest = _sut.GenerateGetMemberRequest(testEmail);
+            var memberRequest = Sut.GenerateGetMemberRequest(testEmail);
 
             string expectedRef = $"lists/{testListId}/members/{testEmail.ToMD5Hash()}?fields=id,email_address,status";
 
@@ -94,7 +83,7 @@ namespace Ivy.Mailing.MailChimp.Test
 
             _mockTransformer.Setup(x => x.Transform(submitRequest)).Returns(resultMember);
 
-            var memberRequest = _sut.GenerateAddMemberRequest(submitRequest);
+            var memberRequest = Sut.GenerateAddMemberRequest(submitRequest);
 
             string expectedRef = $"lists/{testListId}/members";
 
@@ -130,7 +119,7 @@ namespace Ivy.Mailing.MailChimp.Test
 
             _mockTransformer.Setup(x => x.Transform(submitRequest)).Returns(resultMember);
 
-            var memberRequest = _sut.GenerateEditMemberRequest(submitRequest);
+            var memberRequest = Sut.GenerateEditMemberRequest(submitRequest);
 
             string expectedRef = $"lists/{testListId}/members/{submitRequest.Email.ToMD5Hash()}";
 

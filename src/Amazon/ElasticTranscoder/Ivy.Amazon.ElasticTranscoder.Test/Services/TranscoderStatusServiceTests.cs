@@ -14,28 +14,22 @@ using Xunit;
 
 namespace Ivy.Amazon.ElasticTranscoder.Test.Services
 {
-    public class TranscoderStatusServiceTests : ElasticTranscoderTestBase
+    public class TranscoderStatusServiceTests : 
+        ElasticTranscoderTestBase<ITranscoderStatusService>
     {
         #region Variables & Constants
 
-        private readonly ITranscoderStatusService _sut;
-
-        private readonly Mock<IAmazonElasticTranscoder> _mockTranscoder;
+        private Mock<IAmazonElasticTranscoder> _mockTranscoder;
 
         #endregion
 
         #region SetUp & TearDown
 
-        public TranscoderStatusServiceTests()
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
-            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
+            base.InitializeContainerFn(containerGen);
 
-            base.ConfigureContainer(containerGen);
-
-            _mockTranscoder = new Mock<IAmazonElasticTranscoder>();
-            containerGen.RegisterInstance<IAmazonElasticTranscoder>(_mockTranscoder.Object);
-
-            _sut = containerGen.GenerateContainer().GetService<ITranscoderStatusService>();
+            _mockTranscoder = InitializeMoq<IAmazonElasticTranscoder>(containerGen);
         }
 
         #endregion
@@ -57,7 +51,7 @@ namespace Ivy.Amazon.ElasticTranscoder.Test.Services
                 Setup(x => x.ReadJobAsync(It.Is<ReadJobRequest>(y => y.Id == jobId), default(CancellationToken))).
                 ReturnsAsync(expectedResponse);
 
-            var result = await _sut.ReadTranscoderJobAsync(jobId);
+            var result = await Sut.ReadTranscoderJobAsync(jobId);
 
             _mockTranscoder.
                 Verify(x => x.ReadJobAsync(It.Is<ReadJobRequest>(y => y.Id == jobId), default(CancellationToken)), Times.Once);
@@ -89,7 +83,7 @@ namespace Ivy.Amazon.ElasticTranscoder.Test.Services
                 Setup(x => x.ReadJobAsync(It.IsAny<ReadJobRequest>(), default(CancellationToken))).
                 ReturnsAsync(expectedResponse);
 
-            var results = await _sut.ReadTranscoderJobsAsync(jobIds);
+            var results = await Sut.ReadTranscoderJobsAsync(jobIds);
             var resultIds = results.Select(x => x.JobId);
 
             AssertExtensions.FullBasicListExclusion(jobIds, resultIds);

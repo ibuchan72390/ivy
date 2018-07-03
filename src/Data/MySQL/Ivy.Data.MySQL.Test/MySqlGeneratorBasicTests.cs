@@ -5,28 +5,13 @@ using Ivy.TestHelper.TestEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using Xunit;
 
 namespace Ivy.Data.MySQL.Test
 {
-    public class MySqlGeneratorBasicTests : MySqlTestBase
+    public class MySqlGeneratorBasicTests : 
+        MySqlTestBase<ISqlPropertyGenerator>
     {
-        #region Variables & Constants
-
-        private ISqlPropertyGenerator _propertyGenerator;
-
-        #endregion
-
-        #region Constructor
-
-        public MySqlGeneratorBasicTests()
-        {
-            _propertyGenerator = ServiceLocator.Instance.GetService<ISqlPropertyGenerator>();
-        }
-
-        #endregion
-
         #region Tests
 
         #region GenerateGetCountQuery
@@ -91,7 +76,7 @@ namespace Ivy.Data.MySQL.Test
 
             var result = _sut.GenerateGetQuery();
 
-            var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
+            var attrs = Sut.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
 
             var expectedAttrString = attrs.
                                         Select(x => $"`THIS`.{x}").
@@ -109,7 +94,7 @@ namespace Ivy.Data.MySQL.Test
 
             var result = _sut.GenerateGetQuery("DISTINCT");
 
-            var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
+            var attrs = Sut.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
 
             var expectedAttrString = attrs.
                                         Select(x => $"`THIS`.{x}").
@@ -129,7 +114,7 @@ namespace Ivy.Data.MySQL.Test
 
             var result = _sut.GenerateGetQuery(null, null, where);
 
-            var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
+            var attrs = Sut.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
 
             var expectedAttrString = attrs.
                                         Select(x => $"`THIS`.{x}").
@@ -149,7 +134,7 @@ namespace Ivy.Data.MySQL.Test
 
             var result = _sut.GenerateGetQuery(null, null, null, orderBy);
 
-            var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
+            var attrs = Sut.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
 
             var expectedAttrString = attrs.
                                         Select(x => $"`THIS`.{x}").
@@ -169,7 +154,7 @@ namespace Ivy.Data.MySQL.Test
 
             var result = _sut.GenerateGetQuery(null, null, null, null, limit);
 
-            var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
+            var attrs = Sut.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
 
             var expectedAttrString = attrs.
                                         Select(x => $"`THIS`.{x}").
@@ -191,7 +176,7 @@ namespace Ivy.Data.MySQL.Test
 
             var result = _sut.GenerateGetQuery(null, null, null, null, limit, offset);
 
-            var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
+            var attrs = Sut.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
 
             var expectedAttrString = attrs.
                                         Select(x => $"`THIS`.{x}").
@@ -223,7 +208,7 @@ namespace Ivy.Data.MySQL.Test
 
             var result = _sut.GenerateGetQuery(null, null, joinClause);
 
-            var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
+            var attrs = Sut.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
 
             var expectedAttrString = attrs.
                             Select(x => $"`THIS`.{x}").
@@ -247,7 +232,7 @@ namespace Ivy.Data.MySQL.Test
 
             var result = _sut.GenerateGetQuery(null, whereClause, joinClause, orderClause, limit, offset);
 
-            var attrs = _propertyGenerator.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
+            var attrs = Sut.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
 
             var expectedAttrString = attrs.
                 Select(x => $"`THIS`.{x}").

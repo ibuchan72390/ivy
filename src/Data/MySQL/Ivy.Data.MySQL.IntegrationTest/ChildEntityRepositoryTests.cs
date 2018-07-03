@@ -13,21 +13,15 @@ namespace Ivy.Data.MySQL.IntegrationTest
      * Since ChildEntity has a reference to CoreEntity, we'll want it to
      * properly assign the CoreEntityId wherever possible
      */
-    public class ChildEntityRepositoryTests : MySqlIntegrationTestBase, IDisposable
+    public class ChildEntityRepositoryTests : 
+        MySqlIntegrationTestBase<IEntityRepository<ChildEntity, int>>, 
+        IDisposable
     {
-        #region Variables & Constants
-
-        private IEntityRepository<ChildEntity, int> _sut;
-
-        #endregion
-
         #region Constructor
 
         public ChildEntityRepositoryTests()
         {
-            _sut = ServiceLocator.Instance.GetService<IEntityRepository<ChildEntity, int>>();
-
-            _sut.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
+            Sut.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
         }
 
         public void Dispose()
@@ -48,7 +42,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
             childEntity.CoreEntity = coreEntity;
 
-            _sut.SaveOrUpdate(childEntity);
+            Sut.SaveOrUpdate(childEntity);
 
             var tranGenerator = ServiceLocator.Instance.GetService<ITranConnGenerator>();
 

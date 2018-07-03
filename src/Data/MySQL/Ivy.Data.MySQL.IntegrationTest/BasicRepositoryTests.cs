@@ -10,21 +10,15 @@ using Xunit;
 
 namespace Ivy.Data.MySQL.IntegrationTest
 {
-    public class BasicRepositoryTests : MySqlIntegrationTestBase, IDisposable
+    public class BasicRepositoryTests : 
+        MySqlIntegrationTestBase<IBlobRepository<BlobEntity>>, 
+        IDisposable
     {
-        #region Variables & Constants
-
-        private IBlobRepository<BlobEntity> _sut;
-
-        #endregion
-
         #region Setup
 
         public BasicRepositoryTests()
         {
-            _sut = ServiceLocator.Instance.GetService<IBlobRepository<BlobEntity>>();
-
-            _sut.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
+            Sut.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
         }
 
         public void Dispose()
@@ -43,9 +37,9 @@ namespace Ivy.Data.MySQL.IntegrationTest
         {
             var entity = new BlobEntity().GenerateForTest();
 
-            _sut.Insert(entity);
+            Sut.Insert(entity);
 
-            var results = _sut.GetAll().ToList();
+            var results = Sut.GetAll().ToList();
 
             Assert.Single(results);
 
@@ -62,12 +56,12 @@ namespace Ivy.Data.MySQL.IntegrationTest
             var tranGenerator = ServiceLocator.Instance.GetService<ITranConnGenerator>();
             var tran = tranGenerator.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
-            _sut.Insert(entity, tran);
+            Sut.Insert(entity, tran);
             tran.Transaction.Rollback();
 
             tran.Dispose();
 
-            var results = _sut.GetAll().ToList();
+            var results = Sut.GetAll().ToList();
 
             Assert.Empty(results);
         }
@@ -83,9 +77,9 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
             var entities = Enumerable.Range(0, toCreate).Select(x => new BlobEntity().GenerateForTest()).ToList();
 
-            _sut.BulkInsert(entities);
+            Sut.BulkInsert(entities);
 
-            var results = _sut.GetAll().ToList();
+            var results = Sut.GetAll().ToList();
 
             Assert.Equal(toCreate, results.Count());
 
@@ -115,12 +109,12 @@ namespace Ivy.Data.MySQL.IntegrationTest
             var tranGenerator = ServiceLocator.Instance.GetService<ITranConnGenerator>();
             var tc = tranGenerator.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
-            _sut.BulkInsert(entities, tc);
+            Sut.BulkInsert(entities, tc);
             tc.Transaction.Rollback();
 
             tc.Dispose();
 
-            var results = _sut.GetAll().ToList();
+            var results = Sut.GetAll().ToList();
 
             Assert.Empty(results);
         }

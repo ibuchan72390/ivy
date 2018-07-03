@@ -11,7 +11,9 @@ using Xunit;
 
 namespace Ivy.Data.MySQL.IntegrationTest
 {
-    public class EntityReferencesTests : MySqlIntegrationTestBase, IDisposable
+    public class EntityReferencesTests : 
+        MySqlIntegrationTestBase<IEntityRepository<ChildEntity>>, 
+        IDisposable
     {
         #region SetUp & TearDown
 
@@ -32,7 +34,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
             var coreEntity = new CoreEntity().SaveForTest();
             var childEntity = new ChildEntity { CoreEntity = coreEntity }.SaveForTest();
 
-            var repo = ServiceLocator.Instance.GetService<IEntityRepository<ChildEntity>>();
+            var repo = TestContainer.GetService<IEntityRepository<ChildEntity>>();
             repo.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
 
             var result = repo.GetById(childEntity.Id);
@@ -51,7 +53,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
             var coreEntity = new CoreEntity().SaveForTest();
             var fbEntity = new FlippedBlobEntity { CoreEntity = coreEntity }.SaveForTest();
 
-            var repo = ServiceLocator.Instance.GetService<IBlobRepository<FlippedBlobEntity>>();
+            var repo = TestContainer.GetService<IBlobRepository<FlippedBlobEntity>>();
             repo.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
 
             var items = repo.GetAll();
@@ -75,7 +77,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
             var coreEntity = new CoreEntity().SaveForTest();
             var childEntity = new ChildEntity { CoreEntity = coreEntity }.SaveForTest();
 
-            var repo = ServiceLocator.Instance.GetService<IEntityRepository<ChildEntity>>();
+            var repo = TestContainer.GetService<IEntityRepository<ChildEntity>>();
             repo.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
 
             var result = repo.GetById(childEntity.Id);
@@ -95,7 +97,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
             var fsEntity = new FlippedStringEntity().SaveForTest();
             var coreEntity = new CoreEntity { FlippedStringEntity = fsEntity }.SaveForTest();
 
-            var repo = ServiceLocator.Instance.GetService<IEntityRepository<CoreEntity>>();
+            var repo = TestContainer.GetService<IEntityRepository<CoreEntity>>();
             repo.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
 
             var result = repo.GetById(coreEntity.Id);

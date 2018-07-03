@@ -12,13 +12,12 @@ using Xunit;
 
 namespace Ivy.Amazon.S3.Test.Services
 {
-    public class S3FileAccessorTests : AmazonS3TestBase
+    public class S3FileAccessorTests : 
+        AmazonS3TestBase<IS3FileAccessor>
     {
         #region Variables & Constants
 
-        private readonly IS3FileAccessor _sut;
-
-        private readonly Mock<IAmazonS3> _mockS3;
+        private Mock<IAmazonS3> _mockS3;
 
         const string bucket = "bucket";
         const string objKey = "objkey";
@@ -27,16 +26,11 @@ namespace Ivy.Amazon.S3.Test.Services
 
         #region SetUp & TearDown
 
-        public S3FileAccessorTests()
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
-            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
+            base.InitializeContainerFn(containerGen);
 
-            base.ConfigureContainer(containerGen);
-
-            _mockS3 = new Mock<IAmazonS3>();
-            containerGen.RegisterInstance<IAmazonS3>(_mockS3.Object);
-
-            _sut = containerGen.GenerateContainer().GetService<IS3FileAccessor>();
+            _mockS3 = InitializeMoq<IAmazonS3>(containerGen);
         }
 
         #endregion
@@ -54,7 +48,7 @@ namespace Ivy.Amazon.S3.Test.Services
                     .Setup(x => x.GetObjectStreamAsync(bucket, objKey, It.Is<IDictionary<string, object>>(y => y.Count == 0), default(CancellationToken)))
                     .ReturnsAsync(testStream);
 
-                var result = await _sut.GetFileStreamFromS3Async(bucket, objKey);
+                var result = await Sut.GetFileStreamFromS3Async(bucket, objKey);
 
                 Assert.Same(testStream, result);
 
@@ -75,7 +69,7 @@ namespace Ivy.Amazon.S3.Test.Services
                     .Setup(x => x.UploadObjectFromStreamAsync(bucket, objKey, testStream, It.Is<IDictionary<string, object>>(y => y.Count == 0), default(CancellationToken)))
                     .Returns(Task.FromResult(0));
 
-                await _sut.SaveFileStreamToS3Async(bucket, objKey, testStream);
+                await Sut.SaveFileStreamToS3Async(bucket, objKey, testStream);
 
                 _mockS3
                     .Verify(x => x.UploadObjectFromStreamAsync(bucket, objKey, testStream, It.Is<IDictionary<string, object>>(y => y.Count == 0), default(CancellationToken)),

@@ -12,14 +12,14 @@ using Xunit;
 
 namespace Ivy.Auth0.Management.Test.Services
 {
-    public class Auth0JsonManipulatorTests : Auth0ManagementTestBase
+    public class Auth0JsonManipulatorTests : 
+        Auth0ManagementTestBase<IAuth0JsonManipulator>
     {
         #region Variables & Constants
 
-        private readonly IAuth0JsonManipulator _sut;
         private readonly IJsonSerializationService _serializationService;
 
-        private readonly Mock<IAuth0ManagementConfigurationProvider> _mockConfig;
+        private Mock<IAuth0ManagementConfigurationProvider> _mockConfig;
 
         #endregion
 
@@ -27,17 +27,14 @@ namespace Ivy.Auth0.Management.Test.Services
 
         public Auth0JsonManipulatorTests()
         {
-            _serializationService = ServiceLocator.Instance.GetService<IJsonSerializationService>();
+            _serializationService = TestContainer.GetService<IJsonSerializationService>();
+        }
 
-            _mockConfig = new Mock<IAuth0ManagementConfigurationProvider>();
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
+        {
+            base.InitializeContainerFn(containerGen);
 
-            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
-
-            base.ConfigureContainer(containerGen);
-
-            containerGen.RegisterInstance<IAuth0ManagementConfigurationProvider>(_mockConfig.Object);
-
-            _sut = containerGen.GenerateContainer().GetService<IAuth0JsonManipulator>();
+            _mockConfig = InitializeMoq<IAuth0ManagementConfigurationProvider>(containerGen);
         }
 
         #endregion
@@ -58,7 +55,7 @@ namespace Ivy.Auth0.Management.Test.Services
             Assert.Contains("phone_verified", json);
             Assert.Contains("phone_number", json);
 
-            json = _sut.EditPhoneJson(json, phoneReq);
+            json = Sut.EditPhoneJson(json, phoneReq);
 
             Assert.DoesNotContain("phone_verified", json);
             Assert.DoesNotContain("phone_number", json);
@@ -76,7 +73,7 @@ namespace Ivy.Auth0.Management.Test.Services
             Assert.Contains("phone_verified", json);
             Assert.Contains("phone_number", json);
 
-            json = _sut.EditPhoneJson(json, phoneReq);
+            json = Sut.EditPhoneJson(json, phoneReq);
 
             Assert.DoesNotContain("phone_verified", json);
             Assert.DoesNotContain("phone_number", json);
@@ -91,7 +88,7 @@ namespace Ivy.Auth0.Management.Test.Services
 
             var json = _serializationService.Serialize(phoneReq);
 
-            var e = Assert.Throws<Exception>(() => _sut.EditPhoneJson(json, phoneReq));
+            var e = Assert.Throws<Exception>(() => Sut.EditPhoneJson(json, phoneReq));
 
             var err = "Invalid phone number received! Must match regex - ^\\+[0-9]{1,15}$" +
                       $" / Phone: {phoneReq.phone_number}";
@@ -111,7 +108,7 @@ namespace Ivy.Auth0.Management.Test.Services
             Assert.Contains("phone_verified", json);
             Assert.Contains("phone_number", json);
 
-            json = _sut.EditPhoneJson(json, phoneReq);
+            json = Sut.EditPhoneJson(json, phoneReq);
 
             Assert.Contains("phone_verified", json);
             Assert.Contains("phone_number", json);
@@ -134,7 +131,7 @@ namespace Ivy.Auth0.Management.Test.Services
 
             Assert.Contains("username", json);
 
-            json = _sut.EditUsernameJson(json, model);
+            json = Sut.EditUsernameJson(json, model);
 
             Assert.DoesNotContain("username", json);
         }
@@ -152,7 +149,7 @@ namespace Ivy.Auth0.Management.Test.Services
 
             Assert.Contains("username", json);
 
-            json = _sut.EditUsernameJson(json, model);
+            json = Sut.EditUsernameJson(json, model);
 
             Assert.DoesNotContain("username", json);
         }
@@ -170,7 +167,7 @@ namespace Ivy.Auth0.Management.Test.Services
 
             Assert.Contains("username", json);
 
-            json = _sut.EditUsernameJson(json, model);
+            json = Sut.EditUsernameJson(json, model);
 
             Assert.DoesNotContain("username", json);
         }
@@ -188,7 +185,7 @@ namespace Ivy.Auth0.Management.Test.Services
 
             Assert.Contains("username", json);
 
-            json = _sut.EditUsernameJson(json, model);
+            json = Sut.EditUsernameJson(json, model);
 
             Assert.Contains("username", json);
         }

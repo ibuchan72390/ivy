@@ -2,35 +2,29 @@
 using System.IO;
 using System;
 using Ivy.TestHelper;
-using Ivy.IoC;
 using Ivy.Caching.Test.Base;
 using Ivy.Caching.Core.TriggerFile;
 
 namespace Ivy.Caching.Test
 {
-    public class TriggerFileManagerTests : TriggerFileCachingTestBase, IDisposable
+    public class TriggerFileManagerTests : 
+        TriggerFileCachingTestBase<ITriggerFileManager>, 
+        IDisposable
     {
         #region Variables & Constants
 
         private const string cacheKey = "TESTCacheKey";
 
-        private ITriggerFileManager _sut;
-
         #endregion
 
         #region Constructor
 
-        public TriggerFileManagerTests()
-        {
-            _sut = ServiceLocator.Instance.GetService<ITriggerFileManager>();
-        }
-
         public void Dispose()
         {
-            if (_sut.TriggerFileFolder == null || !Directory.Exists(_sut.TriggerFileFolder))
+            if (Sut.TriggerFileFolder == null || !Directory.Exists(Sut.TriggerFileFolder))
                 return;
 
-            foreach (var file in Directory.GetFiles(_sut.TriggerFileFolder))
+            foreach (var file in Directory.GetFiles(Sut.TriggerFileFolder))
                 File.Delete(file);
         }
 
@@ -44,7 +38,7 @@ namespace Ivy.Caching.Test
 
         private void DeleteCacheFile<T>()
         {
-            var cacheFilePath = _sut.GetTriggerFilePath<T>(cacheKey);
+            var cacheFilePath = Sut.GetTriggerFilePath<T>(cacheKey);
             DeleteFile(cacheFilePath);
         }
 
@@ -57,7 +51,7 @@ namespace Ivy.Caching.Test
         [Fact]
         public void Trigger_File_Generator_Sets_Trigger_File_Name_If_Not_Set_Before_Generation()
         {
-            var resultFile = _sut.GenerateTriggerFile<TestClass>(cacheKey);
+            var resultFile = Sut.GenerateTriggerFile<TestClass>(cacheKey);
 
             Assert.True(File.Exists(resultFile));
 
@@ -67,9 +61,9 @@ namespace Ivy.Caching.Test
         [Fact]
         public void Attempting_To_Generate_Trigger_File_Again_Does_Nothing()
         {
-            var resultFile1 = _sut.GenerateTriggerFile<ITestInterface>(cacheKey);
+            var resultFile1 = Sut.GenerateTriggerFile<ITestInterface>(cacheKey);
 
-            var resultFile2 = _sut.GenerateTriggerFile<ITestInterface>(cacheKey);
+            var resultFile2 = Sut.GenerateTriggerFile<ITestInterface>(cacheKey);
 
             Assert.True(File.Exists(resultFile2));
 
@@ -83,9 +77,9 @@ namespace Ivy.Caching.Test
         {
             var targetFolder = "C:/Temp";
 
-            _sut.SetTriggerFileFolder(targetFolder);
+            Sut.SetTriggerFileFolder(targetFolder);
 
-            var resultFile = _sut.GenerateTriggerFile<TestClass>(cacheKey);
+            var resultFile = Sut.GenerateTriggerFile<TestClass>(cacheKey);
 
             Assert.Contains(targetFolder, resultFile);
 
@@ -106,13 +100,13 @@ namespace Ivy.Caching.Test
             var folder1 = $"{currentDir}/TestFolder1";
             var folder2 = $"{currentDir}/TestFolder2";
 
-            _sut.SetTriggerFileFolder(folder1);
+            Sut.SetTriggerFileFolder(folder1);
 
-            Assert.Equal(folder1, _sut.TriggerFileFolder);
+            Assert.Equal(folder1, Sut.TriggerFileFolder);
 
-            _sut.SetTriggerFileFolder(folder2);
+            Sut.SetTriggerFileFolder(folder2);
 
-            Assert.Equal(folder2, _sut.TriggerFileFolder);
+            Assert.Equal(folder2, Sut.TriggerFileFolder);
         }
 
         [Fact]
@@ -123,13 +117,13 @@ namespace Ivy.Caching.Test
             var folder1 = $"{currentDir}/TestFolder3";
             var folder2 = $"{currentDir}/TestFolder4";
 
-            _sut.SetTriggerFileFolder(folder1);
+            Sut.SetTriggerFileFolder(folder1);
 
-            Assert.Equal(folder1, _sut.TriggerFileFolder);
+            Assert.Equal(folder1, Sut.TriggerFileFolder);
 
-            _sut.GenerateTriggerFile<TestClass>(cacheKey);
+            Sut.GenerateTriggerFile<TestClass>(cacheKey);
 
-            var e = Assert.Throws<Exception>(() => _sut.SetTriggerFileFolder(folder2));
+            var e = Assert.Throws<Exception>(() => Sut.SetTriggerFileFolder(folder2));
 
             Assert.Equal("Unable to change folder after it has already been set!",
                 e.Message);
@@ -144,19 +138,19 @@ namespace Ivy.Caching.Test
         [Fact]
         public void ShouldRefreshCache_True_If_Never_Registered()
         {
-            Assert.True(_sut.ShouldRefreshCache<TestClass>(cacheKey));
+            Assert.True(Sut.ShouldRefreshCache<TestClass>(cacheKey));
         }
 
         [Fact]
         public void ShouldRefreshCache_False_If_File_Exists_Unchanged()
         {
-            var triggerFile = _sut.GetTriggerFilePath<TestClass>(cacheKey);
+            var triggerFile = Sut.GetTriggerFilePath<TestClass>(cacheKey);
 
             Assert.False(File.Exists(triggerFile));
 
-            _sut.GenerateTriggerFile<TestClass>(cacheKey);
+            Sut.GenerateTriggerFile<TestClass>(cacheKey);
 
-            Assert.False(_sut.ShouldRefreshCache<TestClass>(cacheKey));
+            Assert.False(Sut.ShouldRefreshCache<TestClass>(cacheKey));
 
             DeleteCacheFile<TestClass>();
         }
@@ -164,13 +158,13 @@ namespace Ivy.Caching.Test
         [Fact]
         public void ShouldRefreshCache_True_If_Registered_And_File_Doesnt_Exist()
         {
-            var triggerFile = _sut.GetTriggerFilePath<TestClass>(cacheKey);
+            var triggerFile = Sut.GetTriggerFilePath<TestClass>(cacheKey);
 
             Assert.False(File.Exists(triggerFile));
 
-            _sut.GenerateTriggerFile<TestClass>(cacheKey);
+            Sut.GenerateTriggerFile<TestClass>(cacheKey);
 
-            Assert.False(_sut.ShouldRefreshCache<TestClass>(cacheKey));
+            Assert.False(Sut.ShouldRefreshCache<TestClass>(cacheKey));
 
             Assert.True(File.Exists(triggerFile));
 
@@ -178,19 +172,19 @@ namespace Ivy.Caching.Test
 
             Assert.False(File.Exists(triggerFile));
 
-            Assert.True(_sut.ShouldRefreshCache<TestClass>(cacheKey));
+            Assert.True(Sut.ShouldRefreshCache<TestClass>(cacheKey));
         }
 
         [Fact]
         public void ShouldRefreshCache_True_If_Registered_And_File_Is_Updated()
         {
-            var triggerFile = _sut.GetTriggerFilePath<TestClass>(cacheKey);
+            var triggerFile = Sut.GetTriggerFilePath<TestClass>(cacheKey);
 
             Assert.False(File.Exists(triggerFile));
 
-            _sut.GenerateTriggerFile<TestClass>(cacheKey);
+            Sut.GenerateTriggerFile<TestClass>(cacheKey);
 
-            Assert.False(_sut.ShouldRefreshCache<TestClass>(cacheKey));
+            Assert.False(Sut.ShouldRefreshCache<TestClass>(cacheKey));
 
             Assert.True(File.Exists(triggerFile));
 
@@ -200,7 +194,7 @@ namespace Ivy.Caching.Test
 
             Assert.True(newDate > origDate);
 
-            Assert.True(_sut.ShouldRefreshCache<TestClass>(cacheKey));
+            Assert.True(Sut.ShouldRefreshCache<TestClass>(cacheKey));
 
             DeleteCacheFile<TestClass>();
         }
@@ -212,13 +206,13 @@ namespace Ivy.Caching.Test
         [Fact]
         public void TriggerCache_Sets_ShouldRefresh_To_True()
         {
-            _sut.GenerateTriggerFile<TestClass>(cacheKey);
+            Sut.GenerateTriggerFile<TestClass>(cacheKey);
 
-            Assert.False(_sut.ShouldRefreshCache<TestClass>(cacheKey));
+            Assert.False(Sut.ShouldRefreshCache<TestClass>(cacheKey));
 
-            _sut.TriggerCache<TestClass>(cacheKey);
+            Sut.TriggerCache<TestClass>(cacheKey);
 
-            Assert.True(_sut.ShouldRefreshCache<TestClass>(cacheKey));
+            Assert.True(Sut.ShouldRefreshCache<TestClass>(cacheKey));
 
             DeleteCacheFile<TestClass>();
         }

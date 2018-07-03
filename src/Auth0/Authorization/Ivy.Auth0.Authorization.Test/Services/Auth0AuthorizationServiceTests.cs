@@ -13,15 +13,13 @@ using Xunit;
 namespace Ivy.Auth0.Authorization.Test.Services
 {
     public class Auth0AuthorizationServiceTests : 
-        Auth0AuthorizationTestBase
+        Auth0AuthorizationTestBase<IAuth0AuthorizationService>
     {
         #region Variables & Constants
 
-        private readonly IAuth0AuthorizationService _sut;
-
-        private readonly Mock<IApiHelper> _mockClientHelper;
-        private readonly Mock<IAuthorizationApiTokenGenerator> _mockTokenGenerator;
-        private readonly Mock<IAuth0AuthorizationRequestGenerator> _mockRequestGen;
+        private Mock<IApiHelper> _mockClientHelper;
+        private Mock<IAuthorizationApiTokenGenerator> _mockTokenGenerator;
+        private Mock<IAuth0AuthorizationRequestGenerator> _mockRequestGen;
 
         const string TestUserId = "TESTUserId";
 
@@ -37,25 +35,14 @@ namespace Ivy.Auth0.Authorization.Test.Services
 
         #region SetUp & TearDown
 
-        public Auth0AuthorizationServiceTests()
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
-            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
+            base.InitializeContainerFn(containerGen);
 
-            base.ConfigureContainer(containerGen);
+            _mockClientHelper = InitializeMoq<IApiHelper>(containerGen);
+            _mockRequestGen = InitializeMoq<IAuth0AuthorizationRequestGenerator>(containerGen);
 
-            _mockClientHelper = new Mock<IApiHelper>();
-            containerGen.RegisterInstance<IApiHelper>(_mockClientHelper.Object);
-
-            _mockTokenGenerator = new Mock<IAuthorizationApiTokenGenerator>();
-            containerGen.RegisterInstance<IAuthorizationApiTokenGenerator>(_mockTokenGenerator.Object);
-
-            _mockRequestGen = new Mock<IAuth0AuthorizationRequestGenerator>();
-            containerGen.RegisterInstance<IAuth0AuthorizationRequestGenerator>(_mockRequestGen.Object);
-
-            var container = containerGen.GenerateContainer();
-
-            _sut = container.GetService<IAuth0AuthorizationService>();
-
+            _mockTokenGenerator = InitializeMoq<IAuthorizationApiTokenGenerator>(containerGen);
             _mockTokenGenerator.
                 Setup(x => x.GetApiTokenAsync()).
                 ReturnsAsync(apiToken);
@@ -78,7 +65,7 @@ namespace Ivy.Auth0.Authorization.Test.Services
                 Setup(x => x.SendApiDataAsync(req)).
                 ReturnsAsync(resp);
 
-            await _sut.AddUserRolesAsync(TestUserId, TestRoles);
+            await Sut.AddUserRolesAsync(TestUserId, TestRoles);
 
             _mockTokenGenerator.Verify(x => x.GetApiTokenAsync(), Times.Once);
             _mockRequestGen.Verify(x => x.GenerateAddUserRolesRequest(apiToken, TestUserId, TestRoles), Times.Once);
@@ -100,7 +87,7 @@ namespace Ivy.Auth0.Authorization.Test.Services
                 Setup(x => x.SendApiDataAsync(req)).
                 ReturnsAsync(resp);
 
-            await _sut.DeleteUserRolesAsync(TestUserId, TestRoles);
+            await Sut.DeleteUserRolesAsync(TestUserId, TestRoles);
 
             _mockTokenGenerator.Verify(x => x.GetApiTokenAsync(), Times.Once);
             _mockRequestGen.Verify(x => x.GenerateDeleteUserRolesRequest(apiToken, TestUserId, TestRoles), Times.Once);
@@ -124,7 +111,7 @@ namespace Ivy.Auth0.Authorization.Test.Services
                 Setup(x => x.GetApiDataAsync<Auth0RoleResponse>(req)).
                 ReturnsAsync(responseModel);
 
-            var results = await _sut.GetAllRolesAsync();
+            var results = await Sut.GetAllRolesAsync();
 
             Assert.Same(responseModel, results);
 
@@ -150,7 +137,7 @@ namespace Ivy.Auth0.Authorization.Test.Services
                 Setup(x => x.GetApiDataAsync<IEnumerable<Auth0Role>>(req)).
                 ReturnsAsync(responseModel);
 
-            var results = await _sut.GetUserRolesAsync(TestUserId);
+            var results = await Sut.GetUserRolesAsync(TestUserId);
 
             Assert.Same(responseModel, results);
 

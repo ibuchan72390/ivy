@@ -1,14 +1,17 @@
-﻿using Ivy.TestHelper;
+﻿using Ivy.IoC.Core;
+using Ivy.TestHelper;
 using Ivy.Transformer.IoC;
 
 namespace Ivy.Transformer.Test.Base
 {
-    public class TransformerTestBase : TestBase
+    public class TransformerTestBase<T> : TestBase<T>
+        where T: class
     {
-        protected override void InitWrapper()
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
-            base.Init(
-                containerGen => containerGen.InstallIvyTransformer());
+            base.InitializeContainerFn(containerGen);
+
+            containerGen.InstallIvyTransformer();
         }
     }
 }

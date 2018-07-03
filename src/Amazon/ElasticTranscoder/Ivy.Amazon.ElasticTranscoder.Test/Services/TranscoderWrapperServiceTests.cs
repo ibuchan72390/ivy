@@ -15,14 +15,13 @@ using Xunit;
 
 namespace Ivy.Amazon.ElasticTranscoder.Test.Services
 {
-    public class TranscoderWrapperServiceTests : ElasticTranscoderTestBase
+    public class TranscoderWrapperServiceTests : 
+        ElasticTranscoderTestBase<ITranscoderWrapperService>
     {
         #region Variables & Constants
 
-        private readonly ITranscoderWrapperService _sut;
-
-        private readonly Mock<IAmazonElasticTranscoder> _mockTranscoder;
-        private readonly Mock<ITranscoderConfigProvider> _mockConfig;
+        private Mock<IAmazonElasticTranscoder> _mockTranscoder;
+        private Mock<ITranscoderConfigProvider> _mockConfig;
 
         const string pipelineId = "PipelineId";
 
@@ -33,21 +32,13 @@ namespace Ivy.Amazon.ElasticTranscoder.Test.Services
 
         #region SetUp & TearDown
 
-        public TranscoderWrapperServiceTests()
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
-            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
+            base.InitializeContainerFn(containerGen);
 
-            base.ConfigureContainer(containerGen);
+            _mockTranscoder = InitializeMoq<IAmazonElasticTranscoder>(containerGen);
 
-            _mockTranscoder = new Mock<IAmazonElasticTranscoder>();
-            containerGen.RegisterInstance<IAmazonElasticTranscoder>(_mockTranscoder.Object);
-
-            _mockConfig = new Mock<ITranscoderConfigProvider>();
-            containerGen.RegisterInstance<ITranscoderConfigProvider>(_mockConfig.Object);
-
-            _sut = containerGen.GenerateContainer().GetService<ITranscoderWrapperService>();
-
-
+            _mockConfig = InitializeMoq<ITranscoderConfigProvider>(containerGen);
             _mockConfig.Setup(x => x.PipelineId).Returns(pipelineId);
         }
 
@@ -78,7 +69,7 @@ namespace Ivy.Amazon.ElasticTranscoder.Test.Services
                 y.Outputs.Count == 0
             ), default(CancellationToken))).ReturnsAsync(response);
 
-            var results = await _sut.BeginTranscodeAsync(startBucket, startKey, new List<TranscoderJobOutput>());
+            var results = await Sut.BeginTranscodeAsync(startBucket, startKey, new List<TranscoderJobOutput>());
 
             Assert.Empty(results);
 
@@ -113,7 +104,7 @@ namespace Ivy.Amazon.ElasticTranscoder.Test.Services
                 !y.Outputs.Select(z => z.PresetId).Except(outputPresets).Any()
             ), default(CancellationToken))).ReturnsAsync(response);
 
-            var results = await _sut.BeginTranscodeAsync(startBucket, startKey, outputs);
+            var results = await Sut.BeginTranscodeAsync(startBucket, startKey, outputs);
 
             Assert.Equal(toCreate, results.Count());
 

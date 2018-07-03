@@ -1,23 +1,19 @@
 ﻿using Ivy.TestHelper;
 using Ivy.Push.Web.IoC;
 using Ivy.Web.IoC;
+using Ivy.IoC.Core;
 
 namespace Ivy.Push.Web.Test.Base
 {
-    public class BaseWebPushTest : TestBase
+    public class BaseWebPushTest<T> : TestBase<T>
+        where T: class
     {
-        public BaseWebPushTest()
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
-            base.Init(
-                container =>
-                {
-                    container.InstallIvyWeb();
-                    container.InstallIvyWebPushNotifications();
-                },
-                svcColl =>
-                {
+            base.InitializeContainerFn(containerGen);
 
-                });
+            containerGen.InstallIvyWeb();
+            containerGen.InstallIvyWebPushNotifications();
         }
     }
 }

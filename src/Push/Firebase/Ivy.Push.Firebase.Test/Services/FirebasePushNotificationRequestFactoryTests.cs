@@ -17,15 +17,13 @@ using Xunit;
 namespace Ivy.Push.Firebase.Test.Services
 {
     public class FirebasePushNotificationRequestFactoryTests :
-        FirebasePushMessageTestBase
+        FirebasePushMessageTestBase<IFirebasePushNotificationFactory>
     {
         #region Variables & Constants
 
-        private readonly IFirebasePushNotificationFactory _sut;
-
-        private readonly Mock<IPushNotificationConfigurationProvider> _mockConfigProvider;
-        private readonly Mock<IJsonSerializationService> _mockSerializer;
-        private readonly Mock<IGoogleAccessTokenGenerator> _mockTokenGenerator;
+        private Mock<IPushNotificationConfigurationProvider> _mockConfigProvider;
+        private Mock<IJsonSerializationService> _mockSerializer;
+        private Mock<IGoogleAccessTokenGenerator> _mockTokenGenerator;
 
         private const string scheme = "Bearer";
         private const string token = "Token";
@@ -37,27 +35,19 @@ namespace Ivy.Push.Firebase.Test.Services
 
         #region SetUp & TearDown
 
-        public FirebasePushNotificationRequestFactoryTests()
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
-            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
+            base.InitializeContainerFn(containerGen);
 
-            base.ConfigureContainer(containerGen);
-            
-            _mockConfigProvider = new Mock<IPushNotificationConfigurationProvider>();
+            _mockConfigProvider = InitializeMoq<IPushNotificationConfigurationProvider>(containerGen);
             _mockConfigProvider.Setup(x => x.PushUrl).Returns(url);
-            containerGen.RegisterInstance<IPushNotificationConfigurationProvider>(_mockConfigProvider.Object);
 
-            _mockSerializer = new Mock<IJsonSerializationService>();
-            containerGen.RegisterInstance<IJsonSerializationService>(_mockSerializer.Object);
+            _mockSerializer = InitializeMoq<IJsonSerializationService>(containerGen);
 
-            _mockTokenGenerator = new Mock<IGoogleAccessTokenGenerator>();
-            containerGen.RegisterInstance<IGoogleAccessTokenGenerator>(_mockTokenGenerator.Object);
-
+            _mockTokenGenerator = InitializeMoq<IGoogleAccessTokenGenerator>(containerGen);
             _mockTokenGenerator.Setup(x => x.GetOAuthTokenAsync(It.Is<string[]>(y => y.Length == 1 &&
                                                                                      y.Contains(firebaseScope)))).
                 ReturnsAsync(token);
-
-            _sut = containerGen.GenerateContainer().GetService<IFirebasePushNotificationFactory>();
         }
 
         #endregion
@@ -65,14 +55,14 @@ namespace Ivy.Push.Firebase.Test.Services
         #region Tests
 
         #region GeneratePushMessageRequest (Device)
-        
+
         [Fact]
         public async void GeneratePushMessageRequest_Generates_Correctly_For_Device()
         {
             // Arrange
             var msg = new NotificationPushMessage();
 
-            await TestGeneratePushMessageRequestAsync(msg, async model => await _sut.GeneratePushMessageRequestAsync(model));
+            await TestGeneratePushMessageRequestAsync(msg, async model => await Sut.GeneratePushMessageRequestAsync(model));
         }
 
         #endregion

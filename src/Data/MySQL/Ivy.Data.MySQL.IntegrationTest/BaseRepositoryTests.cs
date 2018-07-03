@@ -11,20 +11,15 @@ using Xunit;
 
 namespace Ivy.Data.MySQL.IntegrationTest
 {
-    public class BaseRepositoryTests : MySqlIntegrationTestBase, IDisposable
+    public class BaseRepositoryTests : 
+        MySqlIntegrationTestBase<IBlobRepository<BlobEntity>>, 
+        IDisposable
     {
-        #region Variables & Constants
-
-        private IBlobRepository<BlobEntity> _sut;
-
-        #endregion
-
         #region Constructor
 
         public BaseRepositoryTests()
         {
-            _sut = ServiceLocator.Instance.GetService<IBlobRepository<BlobEntity>>();
-            _sut.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
+            Sut.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
         }
 
         public void Dispose()
@@ -78,7 +73,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
                 PageCount = pageCount
             };
 
-            var result = _sut.GetAll(paginationRequest);
+            var result = Sut.GetAll(paginationRequest);
 
             Assert.Equal(toSave, result.TotalCount);
 
@@ -102,7 +97,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
             var blobs = Enumerable.Range(0, itemsToMake).Select(x => new BlobEntity().SaveForTest()).ToList();
 
-            var results = _sut.GetAll();
+            var results = Sut.GetAll();
 
             Assert.Equal(itemsToMake, results.Count());
 
@@ -125,13 +120,13 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
             var blobs = Enumerable.Range(0, itemsToMake).Select(x => new BlobEntity().SaveForTest()).ToList();
 
-            var results = _sut.GetAll();
+            var results = Sut.GetAll();
 
             Assert.Equal(itemsToMake, results.Count());
 
-            _sut.DeleteAll();
+            Sut.DeleteAll();
 
-            results = _sut.GetAll();
+            results = Sut.GetAll();
 
             Assert.Empty(results);
         }
@@ -143,7 +138,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
         [Fact]
         public void GetCount_Executes_As_Expected_If_None_Exist()
         {
-            Assert.Equal(0, _sut.GetCount());
+            Assert.Equal(0, Sut.GetCount());
         }
 
         [Fact]
@@ -155,7 +150,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
                 .Select(x => new BlobEntity().SaveForTest())
                 .ToList();
 
-            Assert.Equal(toCreate, _sut.GetCount());
+            Assert.Equal(toCreate, Sut.GetCount());
         }
 
         #endregion

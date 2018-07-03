@@ -10,15 +10,14 @@ using Xunit;
 
 namespace Ivy.Push.Web.Test.Services
 {
-    public class WebPushClientServiceTests : BaseWebPushTest
+    public class WebPushClientServiceTests : 
+        BaseWebPushTest<IWebPushClientService>
     {
         #region Variables & Constants
 
-        private readonly IWebPushClientService _sut;
-
-        private readonly Mock<IWebPushConfigurationProvider> _mockConfigProvider;
-        private readonly Mock<IWebPushClientGenerator> _mockGenerator;
-        private readonly Mock<IWebPushClient> _mockClient;
+        private Mock<IWebPushConfigurationProvider> _mockConfigProvider;
+        private Mock<IWebPushClientGenerator> _mockGenerator;
+        private Mock<IWebPushClient> _mockClient;
 
         private readonly string pushSubject = "mailto:test@gmail.com";
         private readonly string vapidPrivateKey = "VapidPrivate";
@@ -29,30 +28,22 @@ namespace Ivy.Push.Web.Test.Services
 
         #region SetUp & TearDown
 
-        public WebPushClientServiceTests()
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
-            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
+            base.InitializeContainerFn(containerGen);
 
-            base.ConfigureContainer(containerGen);
-
-            _mockConfigProvider = new Mock<IWebPushConfigurationProvider>();
-            containerGen.RegisterInstance<IWebPushConfigurationProvider>(_mockConfigProvider.Object);
-
+            _mockConfigProvider = InitializeMoq<IWebPushConfigurationProvider>(containerGen);
             _mockConfigProvider.Setup(x => x.PushSubject).Returns(pushSubject);
             _mockConfigProvider.Setup(x => x.VapidPrivateKey).Returns(vapidPrivateKey);
             _mockConfigProvider.Setup(x => x.VapidPublicKey).Returns(vapidPublicKey);
             _mockConfigProvider.Setup(x => x.GcmApiKey).Returns(gcmApiKey);
 
-            _mockGenerator = new Mock<IWebPushClientGenerator>();
-            containerGen.RegisterInstance<IWebPushClientGenerator>(_mockGenerator.Object);
-
-            _mockClient = new Mock<IWebPushClient>();
-            _mockGenerator.Setup(x => x.GenerateClient()).Returns(_mockClient.Object);
-
+            _mockClient = InitializeMoq<IWebPushClient>(containerGen);
             _mockClient.Setup(x => x.SetVapidDetails(pushSubject, vapidPublicKey, vapidPrivateKey));
             _mockClient.Setup(x => x.SetGcmApiKey(gcmApiKey));
 
-            _sut = containerGen.GenerateContainer().GetService<IWebPushClientService>();
+            _mockGenerator = InitializeMoq<IWebPushClientGenerator>(containerGen);
+            _mockGenerator.Setup(x => x.GenerateClient()).Returns(_mockClient.Object);
         }
 
         #endregion
@@ -68,11 +59,11 @@ namespace Ivy.Push.Web.Test.Services
 
 
             // We should get the same client every time we call this thing
-            var created = new List<IWebPushClient> { _sut.GetClient() };
+            var created = new List<IWebPushClient> { Sut.GetClient() };
 
             for (var i = 0; i < 5; i++)
             {
-                var item = _sut.GetClient();
+                var item = Sut.GetClient();
 
                 foreach (var validationItem in created)
                 {

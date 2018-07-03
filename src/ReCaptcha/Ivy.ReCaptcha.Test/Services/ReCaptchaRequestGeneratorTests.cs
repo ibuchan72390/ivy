@@ -10,33 +10,26 @@ using Xunit;
 
 namespace Ivy.ReCaptcha.Test.Services
 {
-    public class ReCaptchaRequestGeneratorTests : ReCaptchaTestBase
+    public class ReCaptchaRequestGeneratorTests : 
+        ReCaptchaTestBase<IReCaptchaRequestGenerator>
     {
         #region Variables & Constants
 
-        private readonly IReCaptchaRequestGenerator _sut;
-
-        private readonly Mock<IReCaptchaRequestContentGenerator> _mockContentGen;
-        private readonly Mock<IReCaptchaConfigurationProvider> _mockConfig;
+        private Mock<IReCaptchaRequestContentGenerator> _mockContentGen;
+        private Mock<IReCaptchaConfigurationProvider> _mockConfig;
         
         #endregion
 
         #region Setup & Teardown
 
-        public ReCaptchaRequestGeneratorTests()
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
-            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
+            base.InitializeContainerFn(containerGen);
 
-            base.ConfigureContainer(containerGen);
+            _mockContentGen = InitializeMoq<IReCaptchaRequestContentGenerator>(containerGen);
 
-            _mockContentGen = new Mock<IReCaptchaRequestContentGenerator>();
-            containerGen.RegisterInstance<IReCaptchaRequestContentGenerator>(_mockContentGen.Object);
-
-            _mockConfig = new Mock<IReCaptchaConfigurationProvider>();
+            _mockConfig = InitializeMoq<IReCaptchaConfigurationProvider>(containerGen);
             _mockConfig.Setup(x => x.ValidationUrl).Returns("https://www.google.com/recaptcha/api/siteverify");
-            containerGen.RegisterInstance<IReCaptchaConfigurationProvider>(_mockConfig.Object);
-
-            _sut = containerGen.GenerateContainer().GetService<IReCaptchaRequestGenerator>();
         }
 
         #endregion
@@ -53,7 +46,7 @@ namespace Ivy.ReCaptcha.Test.Services
 
             _mockContentGen.Setup(x => x.GenerateValidationKeyPairs(reCaptchaCode, remoteIp)).Returns(content);
 
-            var req = _sut.GenerateValidationRequest(reCaptchaCode, remoteIp);
+            var req = Sut.GenerateValidationRequest(reCaptchaCode, remoteIp);
 
             _mockContentGen.Verify(x => x.GenerateValidationKeyPairs(reCaptchaCode, remoteIp), Times.Once);
 

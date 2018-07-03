@@ -9,37 +9,29 @@ using Xunit;
 
 namespace Ivy.Utility.Test.Helpers
 {
-    public class RandomGeneratorTests : TestBase
+    public class RandomGeneratorTests : TestBase<IRandomGenerator>
     {
         #region Variables & Cosntants
 
-        private readonly IRandomGenerator _sut;
-
-        private readonly Mock<IClock> _mockClock;
+        private Mock<IClock> _mockClock;
         private readonly DateTime _mockNow = new DateTime(2011, 10, 10);
 
         #endregion
 
         #region SetUp & TearDown
 
-        public RandomGeneratorTests()
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
-            _mockClock = new Mock<IClock>();
+            base.InitializeContainerFn(containerGen);
+
+            _mockClock = InitializeMoq<IClock>(containerGen);
             _mockClock.Setup(x => x.UtcNow).Returns(_mockNow);
-
-            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
-
-            base.ConfigureContainer(containerGen);
-
-            containerGen.RegisterInstance<IClock>(_mockClock.Object);
-
-            _sut = containerGen.GenerateContainer().GetService<IRandomGenerator>();
         }
 
         #endregion
 
         #region Tests
-        
+
         [Fact]
         public void RandomGenerator_Generates_Random_With_Clock_Now()
         {
@@ -49,9 +41,9 @@ namespace Ivy.Utility.Test.Helpers
         [Fact]
         public void RandomGenerator_Returns_The_Same_Instance_Of_Random_Every_Time()
         {
-            var rand1 = _sut.GetRandom();
-            var rand2 = _sut.GetRandom();
-            var rand3 = _sut.GetRandom();
+            var rand1 = Sut.GetRandom();
+            var rand2 = Sut.GetRandom();
+            var rand3 = Sut.GetRandom();
 
             Assert.Same(rand1, rand2);
             Assert.Same(rand2, rand3);

@@ -7,7 +7,8 @@ using Xunit;
 
 namespace Ivy.Transformer.Test.Base
 {
-    public class BaseEnumEntityTransformerTests : TransformerTestBase
+    public class BaseEnumEntityTransformerTests : 
+        TransformerTestBase<IEnumEntityTransformer<TestEnumEntity, TestEnumEntityModel>>
     {
         #region Tests
 
@@ -16,11 +17,9 @@ namespace Ivy.Transformer.Test.Base
         [Fact]
         public void BaseTransformer_Converts_EnumEntity_To_Model_As_Expected()
         {
-            var _sut = ServiceLocator.Instance.GetService<IEnumEntityTransformer<TestEnumEntity, TestEnumEntityModel>>();
-
             var entity = new TestEnumEntity { Id = 1, Name = "Name", FriendlyName = "FriendlyName", SortOrder = 1 };
 
-            var result = _sut.Transform(entity);
+            var result = Sut.Transform(entity);
 
             AssertEntityEquality(entity, result, true);
         }
@@ -28,11 +27,9 @@ namespace Ivy.Transformer.Test.Base
         [Fact]
         public void BaseTransformer_Converts_EnumEntity_To_Model_List_As_Expected()
         {
-            var _sut = ServiceLocator.Instance.GetService<IEnumEntityTransformer<TestEnumEntity, TestEnumEntityModel>>();
-
             var entities = Enumerable.Range(0, 4).Select(x => new TestEnumEntity { Id = x, Name = $"Name{x}", FriendlyName = $"FriendlyName{x}", SortOrder = x });
 
-            var results = _sut.Transform(entities);
+            var results = Sut.Transform(entities);
 
             foreach (var model in entities)
             {
@@ -54,11 +51,9 @@ namespace Ivy.Transformer.Test.Base
         [Fact]
         public void BaseTransformer_Converts_Model_To_EnumEntity_As_Expected()
         {
-            var _sut = ServiceLocator.Instance.GetService<IEnumEntityTransformer<TestEnumEntity, TestEnumEntityModel>>();
-
             var model = new TestEnumEntityModel { Id = 1, Name = "Name", FriendlyName = "FriendlyName", SortOrder = 1 };
 
-            var result = _sut.Transform(model);
+            var result = Sut.Transform(model);
 
             AssertEntityEquality(result, model, false);
         }
@@ -66,11 +61,9 @@ namespace Ivy.Transformer.Test.Base
         [Fact]
         public void BaseTransformer_Converts_Model_To_EnumEntity_List_As_Expected()
         {
-            var _sut = ServiceLocator.Instance.GetService<IEnumEntityTransformer<TestEnumEntity, TestEnumEntityModel>>();
-
             var models = Enumerable.Range(0, 4).Select(x => new TestEnumEntityModel { Id = x, Name = $"Name{x}", FriendlyName = $"FriendlyName{x}", SortOrder = x });
 
-            var results = _sut.Transform(models);
+            var results = Sut.Transform(models);
 
             foreach (var model in models)
             {

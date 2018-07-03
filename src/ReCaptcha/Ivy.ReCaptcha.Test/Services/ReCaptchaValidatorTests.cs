@@ -11,32 +11,24 @@ using Xunit;
 
 namespace Ivy.ReCaptcha.Test.Services
 {
-    public class ReCaptchaValidatorTests : ReCaptchaTestBase
+    public class ReCaptchaValidatorTests : 
+        ReCaptchaTestBase<IReCaptchaValidator>
     {
         #region Variables & Constants
 
-        private readonly IReCaptchaValidator _sut;
-
-        private readonly Mock<IReCaptchaRequestGenerator> _mockRequestGen;
-        private readonly Mock<IApiHelper> _mockApiHelper;
+        private Mock<IReCaptchaRequestGenerator> _mockRequestGen;
+        private Mock<IApiHelper> _mockApiHelper;
 
         #endregion
 
         #region Setup & Teardown
 
-        public ReCaptchaValidatorTests()
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
-            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
+            base.InitializeContainerFn(containerGen);
 
-            base.ConfigureContainer(containerGen);
-
-            _mockRequestGen = new Mock<IReCaptchaRequestGenerator>();
-            containerGen.RegisterInstance<IReCaptchaRequestGenerator>(_mockRequestGen.Object);
-
-            _mockApiHelper = new Mock<IApiHelper>();
-            containerGen.RegisterInstance<IApiHelper>(_mockApiHelper.Object);
-
-            _sut = containerGen.GenerateContainer().GetService<IReCaptchaValidator>();
+            _mockRequestGen = InitializeMoq<IReCaptchaRequestGenerator>(containerGen);
+            _mockApiHelper = InitializeMoq<IApiHelper>(containerGen);
         }
 
         #endregion
@@ -57,7 +49,7 @@ namespace Ivy.ReCaptcha.Test.Services
 
             _mockApiHelper.Setup(x => x.GetApiDataAsync<IReCaptchaResponse>(req)).ReturnsAsync(mockResult);
 
-            var result = await _sut.ValidateAsync<IReCaptchaResponse>(code, ip);
+            var result = await Sut.ValidateAsync<IReCaptchaResponse>(code, ip);
 
             Assert.Same(mockResult, result);
 

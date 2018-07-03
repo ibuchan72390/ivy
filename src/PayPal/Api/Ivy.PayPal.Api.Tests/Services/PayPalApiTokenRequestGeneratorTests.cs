@@ -12,14 +12,12 @@ using Xunit;
 namespace Ivy.PayPal.Api.Tests.Services
 {
     public class PayPalApiTokenRequestGeneratorTests :
-        PayPalApiTestBase
+        PayPalApiTestBase<IPayPalApiTokenRequestGenerator>
     {
         #region Variables & Constants
 
-        private readonly IPayPalApiTokenRequestGenerator _sut;
-
-        private readonly Mock<IPayPalApiConfigProvider> _mockConfig;
-        private readonly Mock<IPayPalUrlGenerator> _mockUrlGen;
+        private Mock<IPayPalApiConfigProvider> _mockConfig;
+        private Mock<IPayPalUrlGenerator> _mockUrlGen;
 
         const string id = "Id";
         const string secret = "Secret";
@@ -29,27 +27,17 @@ namespace Ivy.PayPal.Api.Tests.Services
 
         #region SetUp & TearDown
 
-        public PayPalApiTokenRequestGeneratorTests()
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
-            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
+            base.InitializeContainerFn(containerGen);
 
-            base.ConfigureContainer(containerGen);
-
-
-            _mockConfig = new Mock<IPayPalApiConfigProvider>();
-            containerGen.RegisterInstance<IPayPalApiConfigProvider>(_mockConfig.Object);
-
+            _mockConfig = InitializeMoq<IPayPalApiConfigProvider>(containerGen);
             _mockConfig.Setup(x => x.ClientId).Returns(id);
             _mockConfig.Setup(x => x.ClientSecret).Returns(secret);
 
-
-            _mockUrlGen = new Mock<IPayPalUrlGenerator>();
-            containerGen.RegisterInstance<IPayPalUrlGenerator>(_mockUrlGen.Object);
-
+            _mockUrlGen = InitializeMoq<IPayPalUrlGenerator>(containerGen);
             _mockUrlGen.Setup(x => x.GetPayPalUrl()).Returns(payPalUrl);
 
-
-            _sut = containerGen.GenerateContainer().GetService<IPayPalApiTokenRequestGenerator>();
         }
 
         #endregion
@@ -62,7 +50,7 @@ namespace Ivy.PayPal.Api.Tests.Services
         public void GenerateApiTokenRequest_Executes_As_Expected()
         {
             // Act
-            var result = _sut.GenerateApiTokenRequest();
+            var result = Sut.GenerateApiTokenRequest();
 
             // Assert
             Assert.Equal("https://api.sandbox.paypal.com/v1/oauth2/token", result.RequestUri.ToString());

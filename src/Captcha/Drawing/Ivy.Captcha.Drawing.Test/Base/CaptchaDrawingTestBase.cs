@@ -1,17 +1,19 @@
 ﻿using Ivy.Captcha.IoC;
 using Ivy.Captcha.Drawing.IoC;
 using Ivy.TestHelper;
+using Ivy.IoC.Core;
 
 namespace Ivy.Captcha.Drawing.Test.Base
 {
-    public class CaptchaDrawingTestBase : TestBase
+    public class CaptchaDrawingTestBase<T> : TestBase<T>
+        where T: class
     {
-        protected override void InitWrapper()
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
-            base.Init(containerGen => {
-                containerGen.InstallIvyCaptcha();
-                containerGen.InstallIvyCaptchaDrawing();
-            });
+            base.InitializeContainerFn(containerGen);
+
+            containerGen.InstallIvyCaptcha();
+            containerGen.InstallIvyCaptchaDrawing();
         }
     }
 }

@@ -7,20 +7,10 @@ using Xunit;
 
 namespace Ivy.Data.Common.Test
 {
-    public class SqlPropertyGeneratorTests : CommonDataTestBase
+    public class SqlPropertyGeneratorTests : 
+        CommonDataTestBase<ISqlPropertyGenerator>
     {
-        #region Constructor
-
-        public SqlPropertyGeneratorTests()
-        {
-            _sut = ServiceLocator.Instance.GetService<ISqlPropertyGenerator>();
-        }
-        
-        #endregion
-
         #region Variables & Constants
-
-        private ISqlPropertyGenerator _sut;
 
         IList<string> baseExpectedAttrs = new List<string> { "Id", "Name", "Integer", "Decimal", "Double", "Boolean" };
 
@@ -31,7 +21,7 @@ namespace Ivy.Data.Common.Test
         [Fact]
         public void GetSqlPropertyNames_Properly_Returns_For_Basic_Entity()
         {
-            var results = _sut.GetSqlPropertyNames<ParentEntity>();
+            var results = Sut.GetSqlPropertyNames<ParentEntity>();
 
             Assert.Empty(results.Except(baseExpectedAttrs));
             Assert.Empty(baseExpectedAttrs.Except(results));
@@ -42,7 +32,7 @@ namespace Ivy.Data.Common.Test
         //{
         //    var localExpected = baseExpectedAttrs.Concat(new List<string> { "CoreEntityId" });
 
-        //    var results = _sut.GetSqlPropertyNames<GuidEntity>();
+        //    var results = Sut.GetSqlPropertyNames<GuidEntity>();
 
         //    Assert.Empty(results.Except(localExpected));
         //    Assert.Empty(localExpected.Except(results));
@@ -55,7 +45,7 @@ namespace Ivy.Data.Common.Test
 
             var localExpected = baseExpectedAttrs.Concat(new List<string> { "ParentEntityId", "FlippedStringEntityId", "WeirdAlternateIntegerId", "WeirdAlternateStringId" });
 
-            var results = _sut.GetSqlPropertyNames<CoreEntity>();
+            var results = Sut.GetSqlPropertyNames<CoreEntity>();
 
             Assert.Empty(results.Except(localExpected));
             Assert.Empty(localExpected.Except(results));

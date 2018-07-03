@@ -11,23 +11,9 @@ using System.Net;
 
 namespace Ivy.Auth0.Management.Test.Services
 {
-    public class Auth0QueryStringUriGeneratorTests : Auth0ManagementTestBase
+    public class Auth0QueryStringUriGeneratorTests : 
+        Auth0ManagementTestBase<IAuth0QueryStringUriGenerator>
     {
-        #region Variables & Constants
-
-        private IAuth0QueryStringUriGenerator _sut;
-
-        #endregion
-
-        #region SetUp & TearDown
-
-        public Auth0QueryStringUriGeneratorTests()
-        {
-            _sut = ServiceLocator.Instance.GetService<IAuth0QueryStringUriGenerator>();
-        }
-
-        #endregion
-
         #region Tests
 
         #region Auth0QueryStringGenerator
@@ -49,7 +35,7 @@ namespace Ivy.Auth0.Management.Test.Services
             req.QueryString = null;
             req.SearchEngine = null;
 
-            var result = _sut.GenerateGetUsersQueryString(currentUri, req);
+            var result = Sut.GenerateGetUsersQueryString(currentUri, req);
 
             var resultQuery = QueryHelpers.ParseQuery(result.Query);
 
@@ -75,7 +61,7 @@ namespace Ivy.Auth0.Management.Test.Services
             req.QueryString = "QUERYSTRING";
             req.SearchEngine = Auth0ApiVersionNames.v1.ToString();
 
-            var result = _sut.GenerateGetUsersQueryString(currentUri, req);
+            var result = Sut.GenerateGetUsersQueryString(currentUri, req);
 
             var resultQuery = QueryHelpers.ParseQuery(result.Query);
 
@@ -109,7 +95,7 @@ namespace Ivy.Auth0.Management.Test.Services
             req.QueryString = "QUERYSTRING";
             req.SearchEngine = Auth0ApiVersionNames.v2.ToString();
 
-            var result = _sut.GenerateGetUsersQueryString(currentUri, req);
+            var result = Sut.GenerateGetUsersQueryString(currentUri, req);
 
             var resultQuery = QueryHelpers.ParseQuery(result.Query);
 
@@ -143,7 +129,7 @@ namespace Ivy.Auth0.Management.Test.Services
             req.IncludeFields = true;
             req.SearchEngine = Auth0ApiVersionNames.v2.ToString();
 
-            var result = _sut.GenerateGetUsersQueryString(currentUri, req);
+            var result = Sut.GenerateGetUsersQueryString(currentUri, req);
 
             var resultQuery = QueryHelpers.ParseQuery(result.Query);
 
@@ -178,7 +164,7 @@ namespace Ivy.Auth0.Management.Test.Services
             req.QueryString = "";
             req.SearchEngine = Auth0ApiVersionNames.v2.ToString();
 
-            var result = _sut.GenerateGetUsersQueryString(currentUri, req);
+            var result = Sut.GenerateGetUsersQueryString(currentUri, req);
 
             var resultQuery = QueryHelpers.ParseQuery(result.Query);
 
@@ -213,7 +199,7 @@ namespace Ivy.Auth0.Management.Test.Services
             req.QueryString = "user_id:\"auth0|58f7fa9ddb5a3927da1aa529\" OR user_id:\"auth0|59946d0d31d6c842b92e6922\"";
             req.SearchEngine = Auth0ApiVersionNames.v2.ToString();
 
-            var result = _sut.GenerateGetUsersQueryString(currentUri, req);
+            var result = Sut.GenerateGetUsersQueryString(currentUri, req);
 
             var resultQuery = QueryHelpers.ParseQuery(result.Query);
 
@@ -254,7 +240,7 @@ namespace Ivy.Auth0.Management.Test.Services
             req.IncludeFields = true;
             req.SearchEngine = Auth0ApiVersionNames.v2.ToString();
 
-            var result = _sut.GenerateGetUsersQueryString(currentUri, req);
+            var result = Sut.GenerateGetUsersQueryString(currentUri, req);
 
             var resultQuery = QueryHelpers.ParseQuery(result.Query);
 
@@ -289,7 +275,7 @@ namespace Ivy.Auth0.Management.Test.Services
             req.QueryString = "";
             req.SearchEngine = Auth0ApiVersionNames.v2.ToString();
 
-            var result = _sut.GenerateGetUsersQueryString(currentUri, req);
+            var result = Sut.GenerateGetUsersQueryString(currentUri, req);
 
             var resultQuery = QueryHelpers.ParseQuery(result.Query);
 
@@ -318,7 +304,7 @@ namespace Ivy.Auth0.Management.Test.Services
             req.QueryString = "user_id:\"auth0|58f7fa9ddb5a3927da1aa529\" OR user_id:\"auth0|59946d0d31d6c842b92e6922\"";
             req.SearchEngine = Auth0ApiVersionNames.v2.ToString();
 
-            var result = _sut.GenerateGetUsersQueryString(currentUri, req);
+            var result = Sut.GenerateGetUsersQueryString(currentUri, req);
 
             var resultQuery = QueryHelpers.ParseQuery(result.Query);
 

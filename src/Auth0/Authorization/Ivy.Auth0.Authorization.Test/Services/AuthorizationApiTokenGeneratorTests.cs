@@ -10,14 +10,13 @@ using Xunit;
 
 namespace Ivy.Auth0.Authorization.Test.Services
 {
-    public class AuthorizationApiTokenGeneratorTests : Auth0AuthorizationTestBase
+    public class AuthorizationApiTokenGeneratorTests : 
+        Auth0AuthorizationTestBase<IAuthorizationApiTokenGenerator>
     {
         #region Variables & Constants
 
-        private readonly IAuthorizationApiTokenGenerator _sut;
-
-        private readonly Mock<IApiHelper> _mockApiHelper;
-        private readonly Mock<IAuth0AuthorizationRequestGenerator> _mockRequestGen;
+        private Mock<IApiHelper> _mockApiHelper;
+        private Mock<IAuth0AuthorizationRequestGenerator> _mockRequestGen;
 
         private readonly HttpRequestMessage request;
 
@@ -32,30 +31,24 @@ namespace Ivy.Auth0.Authorization.Test.Services
 
         public AuthorizationApiTokenGeneratorTests()
         {
-            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
-
-            base.ConfigureContainer(containerGen);
-
-            _mockApiHelper = new Mock<IApiHelper>();
-            containerGen.RegisterInstance<IApiHelper>(_mockApiHelper.Object);
-
-            _mockRequestGen = new Mock<IAuth0AuthorizationRequestGenerator>();
-            containerGen.RegisterInstance<IAuth0AuthorizationRequestGenerator>(_mockRequestGen.Object);
-
-
-            var container = containerGen.GenerateContainer();
-            _sut = container.GetService<IAuthorizationApiTokenGenerator>();
-
-
             request = new HttpRequestMessage();
+
+            _mockApiHelper.
+                Setup(x => x.GetApiDataAsync<Auth0AccessTokenResponse>(request)).
+                ReturnsAsync(modelResponse);
 
             _mockRequestGen.
                 Setup(x => x.GenerateApiTokenRequest()).
                 Returns(request);
 
-            _mockApiHelper.
-                Setup(x => x.GetApiDataAsync<Auth0AccessTokenResponse>(request)).
-                ReturnsAsync(modelResponse);
+        }
+
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
+        {
+            base.InitializeContainerFn(containerGen);
+
+            _mockApiHelper = InitializeMoq<IApiHelper>(containerGen);
+            _mockRequestGen = InitializeMoq<IAuth0AuthorizationRequestGenerator>(containerGen);
         }
 
         #endregion
@@ -65,7 +58,7 @@ namespace Ivy.Auth0.Authorization.Test.Services
         [Fact]
         public async void GetApiAuthTokenAsync_Returns_As_Expected_For_Fresh_Token()
         {
-            var authToken = await _sut.GetApiTokenAsync();
+            var authToken = await Sut.GetApiTokenAsync();
 
             Assert.Equal(authToken, modelResponse.access_token);
 
@@ -83,7 +76,7 @@ namespace Ivy.Auth0.Authorization.Test.Services
 
             for (var i = 0; i < repeatCount; i++)
             {
-                var authToken = await _sut.GetApiTokenAsync();
+                var authToken = await Sut.GetApiTokenAsync();
 
                 Assert.Equal(authToken, modelResponse.access_token);
             }

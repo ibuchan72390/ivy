@@ -6,7 +6,8 @@ using Xunit;
 
 namespace Ivy.Data.MySQL.Test
 {
-    public class MySqlSpecificFailureTests : MySqlTestBase
+    public class MySqlSpecificFailureTests : 
+        MySqlTestBase<ISqlGenerator<MySqlSpecificFailureTests.DatabaseKey, int>>
     {
         #region Database Key
 
@@ -22,11 +23,9 @@ namespace Ivy.Data.MySQL.Test
         {
             var dbKey = new DatabaseKey { Key = "Test Key", ConnectionString = "Test ConnString" };
 
-            var _sut = ServiceLocator.Instance.GetService<ISqlGenerator<DatabaseKey, int>>();
-
             var parms = new Dictionary<string, object>();
 
-            var result = _sut.GenerateSaveOrUpdateQuery(dbKey, ref parms);
+            var result = Sut.GenerateSaveOrUpdateQuery(dbKey, ref parms);
 
             const string expected = "INSERT INTO databasekey (`Key`, `ConnectionString`) VALUES (@Key0, @ConnectionString0);SELECT LAST_INSERT_ID();";
 

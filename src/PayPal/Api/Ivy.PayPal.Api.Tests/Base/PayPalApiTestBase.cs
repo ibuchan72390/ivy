@@ -1,18 +1,19 @@
-﻿using Ivy.PayPal.Api.IoC;
+﻿using Ivy.IoC.Core;
+using Ivy.PayPal.Api.IoC;
 using Ivy.TestHelper;
 using Ivy.Web.IoC;
 
 namespace Ivy.PayPal.Api.Tests.Base
 {
-    public class PayPalApiTestBase : TestBase
+    public class PayPalApiTestBase<T> : TestBase<T>
+        where T: class
     {
-        protected override void InitWrapper()
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
-            base.Init(containerGen => 
-            {
-                containerGen.InstallIvyPayPalApi();
-                containerGen.InstallIvyWeb();
-            });
+            base.InitializeContainerFn(containerGen);
+
+            containerGen.InstallIvyPayPalApi();
+            containerGen.InstallIvyWeb();
         }
     }
 }

@@ -9,11 +9,10 @@ using Xunit;
 
 namespace Ivy.PayPal.Ipn.Test.Services
 {
-    public class PayPalRequestGeneratorTests : PayPalTestBase
+    public class PayPalRequestGeneratorTests : 
+        PayPalTestBase<IPayPalRequestGenerator>
     {
         #region Variables & Constants
-
-        private readonly IPayPalRequestGenerator _sut;
 
         private readonly string dataStr;
         private readonly byte[] dataStrArr;
@@ -28,8 +27,6 @@ namespace Ivy.PayPal.Ipn.Test.Services
 
             dataStr = randHelper.RandomString(1000);
             dataStrArr = Encoding.UTF8.GetBytes(dataStr);
-
-            _sut = ServiceLocator.Instance.GetService<IPayPalRequestGenerator>();
         }
 
         #endregion
@@ -39,7 +36,7 @@ namespace Ivy.PayPal.Ipn.Test.Services
         [Fact]
         public async Task GenerateValidationRequest_Works_As_Expected_For_Sandbox()
         {
-            var req = _sut.GenerateValidationRequest(dataStr, true);
+            var req = Sut.GenerateValidationRequest(dataStr, true);
 
             await AssertRequestAsync(req, true);
         }
@@ -47,14 +44,10 @@ namespace Ivy.PayPal.Ipn.Test.Services
         [Fact]
         public async Task GenerateValidationRequest_Works_As_Expected_For_Non_Sandbox()
         {
-            var req = _sut.GenerateValidationRequest(dataStr, false);
+            var req = Sut.GenerateValidationRequest(dataStr, false);
 
             await AssertRequestAsync(req, false);
         }
-
-        #region
-
-        #endregion
 
         #endregion
 

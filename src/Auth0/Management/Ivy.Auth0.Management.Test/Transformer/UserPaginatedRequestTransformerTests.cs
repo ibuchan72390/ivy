@@ -10,23 +10,9 @@ using Xunit;
 
 namespace Ivy.Auth0.Management.Test.Transformers
 {
-    public class UserPaginatedRequestTransformerTests : Auth0ManagementTestBase
+    public class UserPaginatedRequestTransformerTests : 
+        Auth0ManagementTestBase<IUserPaginatedRequestTransformer>
     {
-        #region Variables & Constants
-
-        private IUserPaginatedRequestTransformer _sut;
-
-        #endregion
-
-        #region SetUp & TearDown
-
-        public UserPaginatedRequestTransformerTests()
-        {
-            _sut = ServiceLocator.Instance.GetService<IUserPaginatedRequestTransformer>();
-        }
-
-        #endregion
-
         #region Tests
 
         #region Model -> Request
@@ -41,7 +27,7 @@ namespace Ivy.Auth0.Management.Test.Transformers
                 Search = "TEST"
             };
 
-            var model = _sut.Transform(req);
+            var model = Sut.Transform(req);
 
             Assert.Equal(req.PageNumber, model.Page);
             Assert.Equal(req.PageCount, model.PerPage);
@@ -63,7 +49,7 @@ namespace Ivy.Auth0.Management.Test.Transformers
                 users = new List<Auth0User> { user }
             };
 
-            var result = _sut.Transform(resp);
+            var result = Sut.Transform(resp);
 
             Assert.Equal(resp.total, result.TotalCount);
             Assert.Single(resp.users);

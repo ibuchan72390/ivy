@@ -17,20 +17,15 @@ namespace Ivy.Data.MySQL.IntegrationTest
     * Id values are not properly working with the string Id concept
     */
 
-    public class StringEntityRepositoryTests : MySqlIntegrationTestBase, IDisposable
+    public class StringEntityRepositoryTests : 
+        MySqlIntegrationTestBase<IEntityRepository<StringEntity, string>>, 
+        IDisposable
     {
-        #region Variables & Constants
-
-        private IEntityRepository<StringEntity, string> _sut;
-
-        #endregion
-
         #region Constructor
 
         public StringEntityRepositoryTests()
         {
-            _sut = ServiceLocator.Instance.GetService<IEntityRepository<StringEntity, string>>();
-            _sut.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
+            Sut.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
         }
 
         public void Dispose()
@@ -47,7 +42,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
         {
             var entity = new StringEntity().SaveForTest();
 
-            var result = _sut.GetById(entity.Id);
+            var result = Sut.GetById(entity.Id);
 
             Assert.True(entity.Equals(result));
         }
@@ -55,7 +50,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
         [Fact]
         public void GetById_Returns_Null_If_Doesnt_Exist()
         {
-            var result = _sut.GetById("TEST");
+            var result = Sut.GetById("TEST");
 
             Assert.Null(result);
         }
@@ -67,7 +62,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
             var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
-            _sut.GetById("TEST", tc);
+            Sut.GetById("TEST", tc);
 
             tc.Dispose();
         }
@@ -85,7 +80,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
             var entityIds = entities.Select(x => x.Id);
 
-            var results = _sut.GetByIdList(entityIds);
+            var results = Sut.GetByIdList(entityIds);
 
             foreach (var entity in entities)
             {
@@ -102,7 +97,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
             var ids = Enumerable.Range(0, idsToMake).Select(x => x.ToString());
 
-            var results = _sut.GetByIdList(ids);
+            var results = Sut.GetByIdList(ids);
 
             Assert.Empty(results);
         }
@@ -114,7 +109,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
             var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
-            _sut.GetByIdList(new List<string> { 0.ToString() }, tc);
+            Sut.GetByIdList(new List<string> { 0.ToString() }, tc);
 
             tc.Dispose();
         }
@@ -128,11 +123,11 @@ namespace Ivy.Data.MySQL.IntegrationTest
         {
             var testEntity = new StringEntity().GenerateForTest();
 
-            var result = _sut.SaveOrUpdate(testEntity);
+            var result = Sut.SaveOrUpdate(testEntity);
 
             Assert.True(result.Id != null);
 
-            var secondaryResult = _sut.GetById(result.Id);
+            var secondaryResult = Sut.GetById(result.Id);
 
             Assert.True(result.Equals(secondaryResult));
         }
@@ -146,7 +141,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
             testEntity.Integer = testEntity.Integer++;
 
-            var result = _sut.SaveOrUpdate(testEntity);
+            var result = Sut.SaveOrUpdate(testEntity);
 
             Assert.True(result.Id == testEntity.Id);
             Assert.Equal(result.Integer, testEntity.Integer);
@@ -162,7 +157,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
             var testEntity = new StringEntity().GenerateForTest();
 
-            _sut.SaveOrUpdate(testEntity, tc);
+            Sut.SaveOrUpdate(testEntity, tc);
 
             tc.Dispose();
         }
@@ -178,13 +173,13 @@ namespace Ivy.Data.MySQL.IntegrationTest
                 Select(x => new StringEntity().GenerateForTest()).
                 ToList();
 
-            var results = _sut.SaveOrUpdate(testEntities);
+            var results = Sut.SaveOrUpdate(testEntities);
 
             foreach (var result in testEntities)
             {
                 Assert.True(result.Id != null);
 
-                var secondaryResult = _sut.GetById(result.Id);
+                var secondaryResult = Sut.GetById(result.Id);
 
                 Assert.True(result.Equals(secondaryResult));
             }
@@ -193,7 +188,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
             {
                 Assert.True(result.Id != null);
 
-                var secondaryResult = _sut.GetById(result.Id);
+                var secondaryResult = Sut.GetById(result.Id);
 
                 Assert.True(result.Equals(secondaryResult));
             }
@@ -206,7 +201,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
                Select(x => new StringEntity().SaveForTest()).
                ToList();
 
-            var results = _sut.SaveOrUpdate(testEntities);
+            var results = Sut.SaveOrUpdate(testEntities);
 
             foreach (var testEntity in testEntities)
             {
@@ -219,7 +214,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
             foreach (var testEntity in testEntities)
             {
-                var secondaryResult = _sut.GetById(testEntity.Id);
+                var secondaryResult = Sut.GetById(testEntity.Id);
 
                 Assert.True(secondaryResult.Id == testEntity.Id);
                 Assert.Equal(secondaryResult.Integer, testEntity.Integer);
@@ -238,7 +233,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
                Select(x => new StringEntity().SaveForTest()).
                ToList();
 
-            _sut.SaveOrUpdate(testEntities, tc);
+            Sut.SaveOrUpdate(testEntities, tc);
 
             tc.Dispose();
         }
@@ -252,9 +247,9 @@ namespace Ivy.Data.MySQL.IntegrationTest
         {
             var testEntity = new StringEntity().SaveForTest();
 
-            _sut.Delete(testEntity);
+            Sut.Delete(testEntity);
 
-            var result = _sut.GetById(testEntity.Id);
+            var result = Sut.GetById(testEntity.Id);
 
             Assert.Null(result);
         }
@@ -268,7 +263,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
             var testEntity = new StringEntity().SaveForTest(tc);
 
-            _sut.Delete(testEntity, tc);
+            Sut.Delete(testEntity, tc);
 
             tc.Dispose();
         }
@@ -284,11 +279,11 @@ namespace Ivy.Data.MySQL.IntegrationTest
                 Select(x => new StringEntity().SaveForTest()).
                 ToList();
 
-            _sut.Delete(entities);
+            Sut.Delete(entities);
 
             var entityIds = entities.Select(x => x.Id);
 
-            var result = _sut.GetByIdList(entityIds);
+            var result = Sut.GetByIdList(entityIds);
 
             Assert.Empty(result);
         }
@@ -304,7 +299,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
                 Select(x => new StringEntity().SaveForTest()).
                 ToList();
 
-            _sut.Delete(entities, tc);
+            Sut.Delete(entities, tc);
 
             // Appears this must be an explicit commit
             tc.Transaction.Commit();
@@ -312,7 +307,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
             var entityIds = entities.Select(x => x.Id);
 
-            var result = _sut.GetByIdList(entityIds);
+            var result = Sut.GetByIdList(entityIds);
 
             Assert.Empty(result);
         }
@@ -326,9 +321,9 @@ namespace Ivy.Data.MySQL.IntegrationTest
         {
             var testEntity = new StringEntity().SaveForTest();
 
-            _sut.DeleteById(testEntity.Id);
+            Sut.DeleteById(testEntity.Id);
 
-            var result = _sut.GetById(testEntity.Id);
+            var result = Sut.GetById(testEntity.Id);
 
             Assert.Null(result);
         }
@@ -342,7 +337,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
             var testEntity = new StringEntity().SaveForTest(tc);
 
-            _sut.DeleteById(testEntity.Id, tc);
+            Sut.DeleteById(testEntity.Id, tc);
 
             tc.Dispose();
         }
@@ -360,9 +355,9 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
             var entityIds = entities.Select(x => x.Id);
 
-            _sut.DeleteByIdList(entityIds);
+            Sut.DeleteByIdList(entityIds);
 
-            var result = _sut.GetByIdList(entityIds);
+            var result = Sut.GetByIdList(entityIds);
 
             Assert.Empty(result);
         }

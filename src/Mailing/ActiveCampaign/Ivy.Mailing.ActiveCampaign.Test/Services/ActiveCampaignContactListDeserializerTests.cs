@@ -2,10 +2,12 @@
 using Ivy.Mailing.ActiveCampaign.Test.Base;
 using Ivy.IoC;
 using Xunit;
+using Ivy.Web.Core.Json;
 
 namespace Ivy.Mailing.ActiveCampaign.Test.Services
 {
-    public class ActiveCampaignContactListDeserializerTests : BaseActiveCampaignTest
+    public class ActiveCampaignContactListDeserializerTests : 
+        BaseActiveCampaignTest<IActiveCampaignContactListDeserializer>
     {
         string contactListJson = @"{
             ""0"": {
@@ -196,13 +198,6 @@ namespace Ivy.Mailing.ActiveCampaign.Test.Services
             ""result_output"": ""json""
         }";
 
-        private readonly IActiveCampaignContactListDeserializer _sut;
-
-        public ActiveCampaignContactListDeserializerTests()
-        {
-            _sut = ServiceLocator.Instance.GetService<IActiveCampaignContactListDeserializer>();
-        }
-
         /*
          * result_code, result_message, and result_output are problematic here
          * They don't directly cast to a Dictionary object and this moronic company insists on their dynamic model structure
@@ -212,7 +207,7 @@ namespace Ivy.Mailing.ActiveCampaign.Test.Services
         [Fact]
         public void ActiveCampaignContactList_Converts_From_Json_As_Expected()
         {
-            var result = _sut.Deserialize(contactListJson);
+            var result = Sut.Deserialize(contactListJson);
 
             Assert.Single(result);
 

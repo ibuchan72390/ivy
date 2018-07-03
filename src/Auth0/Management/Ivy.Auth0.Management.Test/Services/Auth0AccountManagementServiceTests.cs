@@ -1,6 +1,5 @@
 ﻿using Ivy.Auth0.Management.Core.Services;
 using Ivy.Auth0.Management.Test.Base;
-using Ivy.IoC;
 using Ivy.IoC.Core;
 using Ivy.Web.Core.Client;
 using Moq;
@@ -9,15 +8,14 @@ using Xunit;
 
 namespace Ivy.Auth0.Management.Test.Services
 {
-    public class Auth0AccountManagementServiceTests : Auth0ManagementTestBase
+    public class Auth0AccountManagementServiceTests : 
+        Auth0ManagementTestBase<IAuth0AccountManagementService>
     {
         #region Variables & Constants
 
-        private readonly IAuth0AccountManagementService _sut;
-
-        private readonly Mock<IApiHelper> _mockClientHelper;
-        private readonly Mock<IManagementApiTokenGenerator> _mockTokenGenerator;
-        private readonly Mock<IAuth0ManagementRequestGenerator> _mockRequestGen;
+        private Mock<IApiHelper> _mockClientHelper;
+        private Mock<IManagementApiTokenGenerator> _mockTokenGenerator;
+        private Mock<IAuth0ManagementRequestGenerator> _mockRequestGen;
 
         const string TestUserId = "TESTUserId";
 
@@ -28,28 +26,18 @@ namespace Ivy.Auth0.Management.Test.Services
 
         #region SetUp & TearDown
 
-        public Auth0AccountManagementServiceTests()
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
-            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
+            base.InitializeContainerFn(containerGen);
 
-            base.ConfigureContainer(containerGen);
+            _mockClientHelper = InitializeMoq<IApiHelper>(containerGen);
 
-            _mockClientHelper = new Mock<IApiHelper>();
-            containerGen.RegisterInstance<IApiHelper>(_mockClientHelper.Object);
-
-            _mockTokenGenerator = new Mock<IManagementApiTokenGenerator>();
-            containerGen.RegisterInstance<IManagementApiTokenGenerator>(_mockTokenGenerator.Object);
-
-            _mockRequestGen = new Mock<IAuth0ManagementRequestGenerator>();
-            containerGen.RegisterInstance<IAuth0ManagementRequestGenerator>(_mockRequestGen.Object);
-
-            var container = containerGen.GenerateContainer();
-
-            _sut = container.GetService<IAuth0AccountManagementService>();
-
+            _mockTokenGenerator = InitializeMoq<IManagementApiTokenGenerator>(containerGen);
             _mockTokenGenerator.
                 Setup(x => x.GetApiTokenAsync()).
                 ReturnsAsync(apiToken);
+
+            _mockRequestGen = InitializeMoq<IAuth0ManagementRequestGenerator>(containerGen);
         }
 
         #endregion
@@ -71,7 +59,7 @@ namespace Ivy.Auth0.Management.Test.Services
                 Setup(x => x.SendApiDataAsync(req)).
                 ReturnsAsync(response);
 
-            await _sut.ResendVerificationEmailAsync(TestUserId);
+            await Sut.ResendVerificationEmailAsync(TestUserId);
 
             _mockTokenGenerator.Verify(x => x.GetApiTokenAsync(), Times.Once);
             _mockRequestGen.Verify(x => x.GenerateVerifyEmailRequest(apiToken, TestUserId), Times.Once);

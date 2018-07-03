@@ -7,23 +7,9 @@ using Xunit;
 
 namespace Ivy.Web.Test.Json
 {
-    public class JsonManipulationServiceTests : WebTestBase
+    public class JsonManipulationServiceTests : 
+        WebTestBase<IJsonManipulationService>
     {
-        #region Variables & Constants
-
-        private IJsonManipulationService _sut;
-
-        #endregion
-
-        #region SetUp & TearDown
-
-        public JsonManipulationServiceTests()
-        {
-            _sut = ServiceLocator.Instance.GetService<IJsonManipulationService>();
-        }
-
-        #endregion
-
         #region Tests
 
         #region ExtractJsonAttribute
@@ -38,7 +24,7 @@ namespace Ivy.Web.Test.Json
 
             var json = JsonConvert.SerializeObject(entity);
 
-            var attr = _sut.ExtractJsonAttribute<string>(json, attrName);
+            var attr = Sut.ExtractJsonAttribute<string>(json, attrName);
 
             Assert.Equal(name, attr);
         }
@@ -53,7 +39,7 @@ namespace Ivy.Web.Test.Json
 
             var json = JsonConvert.SerializeObject(entity);
 
-            var attr = _sut.ExtractJsonAttribute<int>(json, attrName);
+            var attr = Sut.ExtractJsonAttribute<int>(json, attrName);
 
             Assert.Equal(integer, attr);
         }
@@ -74,7 +60,7 @@ namespace Ivy.Web.Test.Json
 
             var json = JsonConvert.SerializeObject(entity);
 
-            var attr = _sut.ExtractJsonAttribute<ParentEntity>(json, attrName);
+            var attr = Sut.ExtractJsonAttribute<ParentEntity>(json, attrName);
 
             Assert.Equal(parent.Id, attr.Id);
             Assert.Equal(parent.Double, attr.Double);
@@ -95,7 +81,7 @@ namespace Ivy.Web.Test.Json
 
             Assert.True(json.IndexOf("Name") > -1);
 
-            json = _sut.RemoveJsonAttribute(json, "Name");
+            json = Sut.RemoveJsonAttribute(json, "Name");
 
             Assert.True(json.IndexOf("Name") == -1);
 

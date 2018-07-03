@@ -11,32 +11,24 @@ using Xunit;
 
 namespace Ivy.PayPal.Ipn.Test.Services
 {
-    public class PayPalIpnServiceTests : PayPalTestBase
+    public class PayPalIpnServiceTests : 
+        PayPalTestBase<IPayPalIpnService>
     {
         #region Variables & Constants
 
-        private readonly IPayPalIpnService _sut;
-
-        private readonly Mock<IPayPalIpnResponseTransformer> _mockTransformer;
-        private readonly Mock<IPayPalIpnValidator> _mockValidator;
+        private Mock<IPayPalIpnResponseTransformer> _mockTransformer;
+        private Mock<IPayPalIpnValidator> _mockValidator;
 
         #endregion
 
         #region SetUp & TearDown
 
-        public PayPalIpnServiceTests()
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
-            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
+            base.InitializeContainerFn(containerGen);
 
-            base.ConfigureContainer(containerGen);
-
-            _mockTransformer = new Mock<IPayPalIpnResponseTransformer>();
-            containerGen.RegisterInstance<IPayPalIpnResponseTransformer>(_mockTransformer.Object);
-
-            _mockValidator = new Mock<IPayPalIpnValidator>();
-            containerGen.RegisterInstance<IPayPalIpnValidator>(_mockValidator.Object);
-
-            _sut = containerGen.GenerateContainer().GetService<IPayPalIpnService>();
+            _mockTransformer = InitializeMoq<IPayPalIpnResponseTransformer>(containerGen);
+            _mockValidator = InitializeMoq<IPayPalIpnValidator>(containerGen);
         }
 
         #endregion
@@ -55,7 +47,7 @@ namespace Ivy.PayPal.Ipn.Test.Services
             _mockTransformer.Setup(x => x.Transform(req.Request)).Returns(bodyStr);
             _mockValidator.Setup(x => x.GetValidationResultAsync(bodyStr, model)).ReturnsAsync("VERIFIED");
 
-            Assert.True(await _sut.VerifyIpnAsync(req.Request, model));
+            Assert.True(await Sut.VerifyIpnAsync(req.Request, model));
 
             _mockTransformer.Verify(x => x.Transform(req.Request), Times.Once);
             _mockValidator.Verify(x => x.GetValidationResultAsync(bodyStr, model), Times.Once);
@@ -71,7 +63,7 @@ namespace Ivy.PayPal.Ipn.Test.Services
             _mockTransformer.Setup(x => x.Transform(req.Request)).Returns(bodyStr);
             _mockValidator.Setup(x => x.GetValidationResultAsync(bodyStr, model)).ReturnsAsync("INVALID");
 
-            Assert.False(await _sut.VerifyIpnAsync(req.Request, model));
+            Assert.False(await Sut.VerifyIpnAsync(req.Request, model));
 
             _mockTransformer.Verify(x => x.Transform(req.Request), Times.Once);
             _mockValidator.Verify(x => x.GetValidationResultAsync(bodyStr, model), Times.Once);
@@ -88,7 +80,7 @@ namespace Ivy.PayPal.Ipn.Test.Services
             _mockTransformer.Setup(x => x.Transform(req.Request)).Returns(bodyStr);
             _mockValidator.Setup(x => x.GetValidationResultAsync(bodyStr, model)).ReturnsAsync(verificationResponse);
 
-            var e = await Assert.ThrowsAsync<Exception>(() => _sut.VerifyIpnAsync(req.Request, model));
+            var e = await Assert.ThrowsAsync<Exception>(() => Sut.VerifyIpnAsync(req.Request, model));
 
             _mockTransformer.Verify(x => x.Transform(req.Request), Times.Once);
             _mockValidator.Verify(x => x.GetValidationResultAsync(bodyStr, model), Times.Once);

@@ -1,12 +1,12 @@
 ﻿using Ivy.Data.Core.Domain;
-using Ivy.TestHelper;
+using Ivy.TestUtilities.Base;
 using Ivy.Utility.Core.Extensions;
 using Ivy.Utility.Core.Util;
 using Xunit;
 
 namespace Ivy.Utility.Test.Extensions
 {
-    public class EnumExtensionsTests : TestBase
+    public class EnumExtensionsTests : GenericTestBase
     {
         #region Test Classes
 

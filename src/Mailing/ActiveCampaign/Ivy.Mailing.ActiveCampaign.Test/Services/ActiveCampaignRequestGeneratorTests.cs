@@ -15,13 +15,12 @@ using System.Linq;
 
 namespace Ivy.Mailing.ActiveCampaign.Test.Services
 {
-    public class ActiveCampaignRequestGeneratorTests : BaseActiveCampaignTest
+    public class ActiveCampaignRequestGeneratorTests : 
+        BaseActiveCampaignTest<IMailingRequestFactory>
     {
         #region Variables & Constants
 
-        private readonly IMailingRequestFactory _sut;
-
-        private readonly Mock<IActiveCampaignConfigurationProvider> _mockConfigProvider;
+        private Mock<IActiveCampaignConfigurationProvider> _mockConfigProvider;
 
         private const string apiUrl = "http://api-url.com/";
         private const string apiKey = "test-api-key";
@@ -34,20 +33,14 @@ namespace Ivy.Mailing.ActiveCampaign.Test.Services
 
         #region SetUp & TearDown
 
-        public ActiveCampaignRequestGeneratorTests()
+        protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
-            var containerGen = ServiceLocator.Instance.GetService<IContainerGenerator>();
+            base.InitializeContainerFn(containerGen);
 
-            base.ConfigureContainer(containerGen);
-
-            _mockConfigProvider = new Mock<IActiveCampaignConfigurationProvider>();
+            _mockConfigProvider = InitializeMoq<IActiveCampaignConfigurationProvider>(containerGen);
             _mockConfigProvider.Setup(x => x.ApiUrl).Returns(apiUrl);
             _mockConfigProvider.Setup(x => x.ApiKey).Returns(apiKey);
             _mockConfigProvider.Setup(x => x.ListId).Returns(listId);
-
-            containerGen.RegisterInstance<IActiveCampaignConfigurationProvider>(_mockConfigProvider.Object);
-
-            _sut = containerGen.GenerateContainer().GetService<IMailingRequestFactory>();
         }
 
         #endregion
@@ -60,7 +53,7 @@ namespace Ivy.Mailing.ActiveCampaign.Test.Services
         public void GenerateGetMemberRequest_Generates_Request_As_Expected()
         {
             // Act
-            var result = _sut.GenerateGetMemberRequest(email);
+            var result = Sut.GenerateGetMemberRequest(email);
 
             // Assert
             Assert.Equal(HttpMethod.Get, result.Method);
@@ -128,8 +121,8 @@ namespace Ivy.Mailing.ActiveCampaign.Test.Services
         {
             // Act
             var result = isAdd ? 
-                _sut.GenerateAddMemberRequest(member) : 
-                _sut.GenerateEditMemberRequest(member);
+                Sut.GenerateAddMemberRequest(member) : 
+                Sut.GenerateEditMemberRequest(member);
 
             // Assert
             var action = isAdd ? "contact_add" : "contact_edit";

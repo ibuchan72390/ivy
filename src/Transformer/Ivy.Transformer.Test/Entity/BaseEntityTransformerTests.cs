@@ -7,18 +7,16 @@ using Xunit;
 
 namespace Ivy.Transformer.Test.Base
 {
-    public class BaseEntityTransformerTests : TransformerTestBase
+    public class BaseEntityTransformerTests : TransformerTestBase<IEntityTransformer<TestEntity, TestEntityModel>>
     {
         #region Tests
 
         [Fact]
         public void BaseTransformer_Converts_EntityWithTypedId_To_Model_As_Expected()
         {
-            var _sut = ServiceLocator.Instance.GetService<IEntityToViewModelTransformer<TestEntity, TestEntityModel>>();
-
             var entity = new TestEntity { Id = 1 };
 
-            var result = _sut.Transform(entity);
+            var result = Sut.Transform(entity);
 
             Assert.Equal(entity.Id, result.Id);
         }
@@ -26,11 +24,9 @@ namespace Ivy.Transformer.Test.Base
         [Fact]
         public void BaseTransformer_Converts_EntityWithTypedId_To_Model_List_As_Expected()
         {
-            var _sut = ServiceLocator.Instance.GetService<IEntityToViewModelListTransformer<TestEntity, TestEntityModel>>();
-
             var entities = Enumerable.Range(0, 4).Select(x => new TestEntity { Id = x });
 
-            var result = _sut.Transform(entities);
+            var result = Sut.Transform(entities);
 
             foreach (var model in entities)
             {
@@ -42,11 +38,9 @@ namespace Ivy.Transformer.Test.Base
         [Fact]
         public void BaseTransformer_Converts_EntityWithTypedId_To_Entity_As_Expected()
         {
-            var _sut = ServiceLocator.Instance.GetService<IViewModelToEntityTransformer<TestEntity, TestEntityModel>>();
-
             var model = new TestEntityModel { Id = 1 };
 
-            var result = _sut.Transform(model);
+            var result = Sut.Transform(model);
 
             Assert.Equal(model.Id, result.Id);
         }
@@ -54,11 +48,9 @@ namespace Ivy.Transformer.Test.Base
         [Fact]
         public void BaseTransformer_Converts_EntityWithTypedId_To_Entity_List_As_Expected()
         {
-            var _sut = ServiceLocator.Instance.GetService<IViewModelToEntityListTransformer<TestEntity, TestEntityModel>>();
-
             var models = Enumerable.Range(0, 4).Select(x => new TestEntityModel { Id = x });
 
-            var result = _sut.Transform(models);
+            var result = Sut.Transform(models);
 
             foreach (var model in models)
             {
