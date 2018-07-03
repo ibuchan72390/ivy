@@ -15,7 +15,7 @@ namespace Ivy.TestUtilities.Utilities
     {
         private static IRandomizationHelper _rand;
 
-        private static IRandomizationHelper Rand
+        public static IRandomizationHelper Rand
         {
             get {
 
