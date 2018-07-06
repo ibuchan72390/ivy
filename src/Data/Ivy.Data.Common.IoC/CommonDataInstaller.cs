@@ -12,15 +12,17 @@ namespace Ivy.Data.Common.IoC
         {
             containerGenerator.RegisterSingleton<IDatabaseKeyManager, DatabaseKeyManager>();
 
-            containerGenerator.RegisterSingleton<ITransactionHelper, TransactionHelper>();
+            // This absolutely has to be transient because we work in multiple database contexts
+            // This guarantees we do not share the TransactionHelper because this is very problematic
+            containerGenerator.RegisterTransient<ITransactionHelper, TransactionHelper>();
 
-            containerGenerator.RegisterSingleton<ISqlPropertyGenerator, SqlPropertyGenerator>();
-            containerGenerator.RegisterSingleton<ISqlExecutor, SqlExecutor>();
+            containerGenerator.RegisterScoped<ISqlPropertyGenerator, SqlPropertyGenerator>();
+            containerGenerator.RegisterScoped<ISqlExecutor, SqlExecutor>();
 
-            containerGenerator.RegisterSingleton(typeof(IBlobRepository<>), typeof(BlobRepository<>));
-            containerGenerator.RegisterSingleton(typeof(IEntityRepository<>), typeof(EntityRepository<>));
-            containerGenerator.RegisterSingleton(typeof(IEntityRepository<,>), typeof(EntityRepository<,>));
-            containerGenerator.RegisterSingleton(typeof(IEnumEntityRepository<,>), typeof(EnumEntityRepository<,>));
+            containerGenerator.RegisterScoped(typeof(IBlobRepository<>), typeof(BlobRepository<>));
+            containerGenerator.RegisterScoped(typeof(IEntityRepository<>), typeof(EntityRepository<>));
+            containerGenerator.RegisterScoped(typeof(IEntityRepository<,>), typeof(EntityRepository<,>));
+            containerGenerator.RegisterScoped(typeof(IEnumEntityRepository<,>), typeof(EnumEntityRepository<,>));
         }
     }
 
