@@ -7,7 +7,6 @@ using Ivy.Data.Core.Interfaces;
 using Ivy.Data.Core.Interfaces.Domain;
 using Ivy.Data.Core.Interfaces.SQL;
 using Ivy.Data.Core.Interfaces.Pagination;
-using System.Reflection;
 
 namespace Ivy.Data.Common
 {
@@ -29,6 +28,7 @@ namespace Ivy.Data.Common
         // Currently accessed directly, but we should be using the internal protected methods
         protected readonly ITransactionHelper _tranHelper;
         protected readonly ISqlGenerator<T> _sqlGenerator;
+        protected readonly ISqlExecutor _sqlExecutor;
 
         public string ConnectionString { get; private set; }
 
@@ -39,11 +39,13 @@ namespace Ivy.Data.Common
         public BaseRepository(
             IDatabaseKeyManager databaseKeyManager,
             ITransactionHelper tranHelper,
-            ISqlGenerator<T> sqlGenerator)
+            ISqlGenerator<T> sqlGenerator,
+            ISqlExecutor sqlExecutor)
         {
             _databaseKeyManager = databaseKeyManager;
             _tranHelper = tranHelper;
             _sqlGenerator = sqlGenerator;
+            _sqlExecutor = sqlExecutor;
         }
 
         #endregion
@@ -54,6 +56,7 @@ namespace Ivy.Data.Common
         {
             ConnectionString = connectionString;
             _tranHelper.InitializeByConnectionString(connectionString);
+            _sqlExecutor.InitializeByConnectionString(connectionString);
         }
 
         public void InitializeByDatabaseKey(string databaseKey)
@@ -212,14 +215,12 @@ namespace Ivy.Data.Common
 
         protected virtual IEnumerable<TReturn> InternalExecuteAlternateTypeQuery<TReturn>(string sql, ITranConn tc = null, object parms = null)
         {
-            return _tranHelper.WrapInTransaction(
-                tran => tran.Connection.Query<TReturn>(sql, parms, tran.Transaction), tc);
+            return _sqlExecutor.ExecuteTypedQuery<TReturn>(sql, parms, tc);
         }
 
         protected virtual void InternalExecuteNonQuery(string sql, ITranConn tc = null, object parms = null)
         {
-            _tranHelper.WrapInTransaction(
-                tran => tran.Connection.Execute(sql, parms, tran.Transaction), tc);
+            _sqlExecutor.ExecuteNonQuery(sql, parms, tc);
         }
 
         #endregion
@@ -237,8 +238,9 @@ namespace Ivy.Data.Common
         public BlobRepository(
             IDatabaseKeyManager databaseKeyManager, 
             ITransactionHelper tranHelper, 
-            ISqlGenerator<T> sqlGenerator) 
-            : base(databaseKeyManager, tranHelper, sqlGenerator)
+            ISqlGenerator<T> sqlGenerator,
+            ISqlExecutor sqlExecutor) 
+            : base(databaseKeyManager, tranHelper, sqlGenerator, sqlExecutor)
         {
         }
 
@@ -288,8 +290,9 @@ namespace Ivy.Data.Common
         public EntityRepository(
             IDatabaseKeyManager databaseKeyManager,
             ITransactionHelper tranHelper,
-            ISqlGenerator<T, TKey> sqlGenerator)
-            :base(databaseKeyManager, tranHelper, sqlGenerator)
+            ISqlGenerator<T, TKey> sqlGenerator,
+            ISqlExecutor sqlExecutor)
+            :base(databaseKeyManager, tranHelper, sqlGenerator, sqlExecutor)
         {
 
         }
@@ -488,8 +491,9 @@ namespace Ivy.Data.Common
         public EntityRepository(
             IDatabaseKeyManager databaseKeyManager, 
             ITransactionHelper tranHelper, 
-            ISqlGenerator<T, int> sqlGenerator) 
-            : base(databaseKeyManager, tranHelper, sqlGenerator)
+            ISqlGenerator<T, int> sqlGenerator,
+            ISqlExecutor sqlExecutor) 
+            : base(databaseKeyManager, tranHelper, sqlGenerator, sqlExecutor)
         {
         }
     }
@@ -547,8 +551,9 @@ namespace Ivy.Data.Common
         public EnumEntityRepository(
             IDatabaseKeyManager databaseKeyManager,
             ITransactionHelper tranHelper,
-            ISqlGenerator<T, int> sqlGenerator)
-            : base(databaseKeyManager, tranHelper, sqlGenerator)
+            ISqlGenerator<T, int> sqlGenerator,
+            ISqlExecutor sqlExecutor)
+            : base(databaseKeyManager, tranHelper, sqlGenerator, sqlExecutor)
         {
         }
 

@@ -350,8 +350,9 @@ namespace Ivy.Data.MySQL.IntegrationTest
         public CustomParentEntityRepository(
             IDatabaseKeyManager databaseKeyManager,
             ITransactionHelper tranHelper,
-            ISqlGenerator<ParentEntity, int> sqlGenerator)
-            : base(databaseKeyManager, tranHelper, sqlGenerator)
+            ISqlGenerator<ParentEntity, int> sqlGenerator,
+            ISqlExecutor sqlExecutor)
+            : base(databaseKeyManager, tranHelper, sqlGenerator, sqlExecutor)
         {
         }
 
