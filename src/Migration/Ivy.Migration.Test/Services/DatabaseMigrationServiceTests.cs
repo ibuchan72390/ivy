@@ -20,7 +20,7 @@ namespace Ivy.Migration.Test.Services
     {
         #region Variables & Constants
 
-        private Mock<ISqlExecutor> _mockExecutor;
+        private Mock<IMigrationSqlExecutor> _mockExecutor;
         private Mock<IMigrationSqlGenerator> _mockSqlGen;
         private Mock<IRandomizationHelper> _mockRandomHelper;
         private Mock<IFileAccessor> _mockFileAccessor;
@@ -28,15 +28,22 @@ namespace Ivy.Migration.Test.Services
         private readonly IDatabaseMigrationConfigurationProvider _config =
             new DefaultDatabaseMigrationConfigurationProvider();
 
+        private const string connString = "ConnectionString";
+
         #endregion
 
         #region SetUp & TearDown
+
+        public DatabaseMigrationServiceTests()
+        {
+            Sut.InitializeByConnectionString(connString);
+        }
 
         protected override void InitializeContainerFn(IContainerGenerator containerGen)
         {
             base.InitializeContainerFn(containerGen);
 
-            _mockExecutor = InitializeMoq<ISqlExecutor>(containerGen);
+            _mockExecutor = InitializeMoq<IMigrationSqlExecutor>(containerGen);
             _mockSqlGen = InitializeMoq<IMigrationSqlGenerator>(containerGen);
             _mockRandomHelper = InitializeMoq<IRandomizationHelper>(containerGen);
             _mockFileAccessor = InitializeMoq<IFileAccessor>(containerGen);
@@ -60,7 +67,7 @@ namespace Ivy.Migration.Test.Services
                 .Returns(sql);
 
             _mockExecutor
-                .Setup(x => x.ExecuteNonQuery(sql, null, null));
+                .Setup(x => x.ExecuteSql(sql, connString));
 
 
             Sut.CreateUser();
@@ -70,7 +77,7 @@ namespace Ivy.Migration.Test.Services
                     Times.Once);
 
             _mockExecutor
-                .Verify(x => x.ExecuteNonQuery(sql, null, null),
+                .Verify(x => x.ExecuteSql(sql, connString),
                     Times.Once);
         }
 
@@ -115,24 +122,23 @@ namespace Ivy.Migration.Test.Services
                 .Setup(x => x.GenerateCreateDatabaseSql(dbName))
                 .Returns(createDbSql);
 
-            _mockExecutor.Setup(x => x.ExecuteNonQuery(createDbSql, null, null));
+            _mockExecutor.Setup(x => x.ExecuteSql(createDbSql, connString));
 
             const string grantUserSql = "Grant User";
             _mockSqlGen
                 .Setup(x => x.GenerateGrantPrivelegesSql(_config.LoginUserName, dbName))
                 .Returns(grantUserSql);
 
-            _mockExecutor.Setup(x => x.ExecuteNonQuery(grantUserSql, null, null));
-
-            const string scriptText = "Script";
-            fileNames.Select(x => _mockFileAccessor.Setup(y => y.GetFileText(x)).Returns(scriptText)).ToList();
-
-            _mockExecutor.Setup(x => x.ExecuteNonQuery(scriptText, null, null));
+            _mockExecutor.Setup(x => x.ExecuteSql(grantUserSql, connString));
 
             const string resultConn = "ResultConnectionString";
             _mockSqlGen
                 .Setup(x => x.GenerateDbConnectionString(dbName, _config.LoginUserName, _config.LoginPassword))
                 .Returns(resultConn);
+
+            const string scriptText = "Script";
+            fileNames.Select(x => _mockFileAccessor.Setup(y => y.GetFileText(x)).Returns(scriptText)).ToList();
+            _mockExecutor.Setup(x => x.ExecuteSql(scriptText, resultConn));
 
 
             // Act
@@ -148,19 +154,19 @@ namespace Ivy.Migration.Test.Services
             _mockSqlGen
                 .Verify(x => x.GenerateCreateDatabaseSql(dbName), Times.Once);
 
-            _mockExecutor.Verify(x => x.ExecuteNonQuery(createDbSql, null, null), Times.Once);
+            _mockExecutor.Verify(x => x.ExecuteSql(createDbSql, connString), Times.Once);
 
             _mockSqlGen
                 .Verify(x => x.GenerateGrantPrivelegesSql(_config.LoginUserName, dbName), Times.Once);
 
-            _mockExecutor.Verify(x => x.ExecuteNonQuery(grantUserSql, null, null), Times.Once);
+            _mockExecutor.Verify(x => x.ExecuteSql(grantUserSql, connString), Times.Once);
 
             foreach (var file in fileNames)
             {
                 _mockFileAccessor.Verify(y => y.GetFileText(file), Times.Once);
             }
 
-            _mockExecutor.Verify(x => x.ExecuteNonQuery(scriptText, null, null), Times.Exactly(3));
+            _mockExecutor.Verify(x => x.ExecuteSql(scriptText, resultConn), Times.Exactly(3));
 
             _mockSqlGen
                 .Verify(x => x.GenerateDbConnectionString(dbName, _config.LoginUserName, _config.LoginPassword),
@@ -190,26 +196,24 @@ namespace Ivy.Migration.Test.Services
                 .Setup(x => x.GenerateCreateDatabaseSql(dbName))
                 .Returns(createDbSql);
 
-            _mockExecutor.Setup(x => x.ExecuteNonQuery(createDbSql, null, null));
+            _mockExecutor.Setup(x => x.ExecuteSql(createDbSql, connString));
 
             const string grantUserSql = "Grant User";
             _mockSqlGen
                 .Setup(x => x.GenerateGrantPrivelegesSql(_config.LoginUserName, dbName))
                 .Returns(grantUserSql);
-
-            _mockExecutor.Setup(x => x.ExecuteNonQuery(grantUserSql, null, null));
-
-            const string scriptText = "Script";
-            fileNames.Select(x => _mockFileAccessor.Setup(y => y.GetFileText(x)).Returns(scriptText)).ToList();
-
-            _mockExecutor.Setup(x => x.ExecuteNonQuery(scriptText, null, null));
-
-            var comparer = new TestComparer();
+            _mockExecutor.Setup(x => x.ExecuteSql(grantUserSql, connString));
 
             const string resultConn = "ResultConnectionString";
             _mockSqlGen
                 .Setup(x => x.GenerateDbConnectionString(dbName, _config.LoginUserName, _config.LoginPassword))
                 .Returns(resultConn);
+
+            const string scriptText = "Script";
+            fileNames.Select(x => _mockFileAccessor.Setup(y => y.GetFileText(x)).Returns(scriptText)).ToList();
+            _mockExecutor.Setup(x => x.ExecuteSql(scriptText, resultConn));
+
+            var comparer = new TestComparer();
 
 
             // Act
@@ -225,23 +229,23 @@ namespace Ivy.Migration.Test.Services
             _mockSqlGen
                 .Verify(x => x.GenerateCreateDatabaseSql(dbName), Times.Once);
 
-            _mockExecutor.Verify(x => x.ExecuteNonQuery(createDbSql, null, null), Times.Once);
+            _mockExecutor.Verify(x => x.ExecuteSql(createDbSql, connString), Times.Once);
 
             _mockSqlGen
                 .Verify(x => x.GenerateGrantPrivelegesSql(_config.LoginUserName, dbName), Times.Once);
 
-            _mockExecutor.Verify(x => x.ExecuteNonQuery(grantUserSql, null, null), Times.Once);
+            _mockExecutor.Verify(x => x.ExecuteSql(grantUserSql, connString), Times.Once);
+
+            _mockSqlGen
+                .Verify(x => x.GenerateDbConnectionString(dbName, _config.LoginUserName, _config.LoginPassword),
+                    Times.Once);
 
             foreach (var file in fileNames)
             {
                 _mockFileAccessor.Verify(y => y.GetFileText(file), Times.Once);
             }
 
-            _mockExecutor.Verify(x => x.ExecuteNonQuery(scriptText, null, null), Times.Exactly(3));
-
-            _mockSqlGen
-                .Verify(x => x.GenerateDbConnectionString(dbName, _config.LoginUserName, _config.LoginPassword),
-                    Times.Once);
+            _mockExecutor.Verify(x => x.ExecuteSql(scriptText, resultConn), Times.Exactly(3));
 
             Assert.True(comparer.Executed);
         }
@@ -261,7 +265,7 @@ namespace Ivy.Migration.Test.Services
                 .Returns(sql);
 
             _mockExecutor
-                .Setup(x => x.ExecuteNonQuery(sql, null, null));
+                .Setup(x => x.ExecuteSql(sql, connString));
 
 
             Sut.CleanDatabase(dbName);
@@ -271,7 +275,7 @@ namespace Ivy.Migration.Test.Services
                     Times.Once);
 
             _mockExecutor
-                .Verify(x => x.ExecuteNonQuery(sql, null, null),
+                .Verify(x => x.ExecuteSql(sql, connString),
                     Times.Once);
         }
 
@@ -289,7 +293,7 @@ namespace Ivy.Migration.Test.Services
                 .Returns(sql);
 
             _mockExecutor
-                .Setup(x => x.ExecuteNonQuery(sql, null, null));
+                .Setup(x => x.ExecuteSql(sql, connString));
 
 
             Sut.CleanUser();
@@ -299,7 +303,7 @@ namespace Ivy.Migration.Test.Services
                     Times.Once);
 
             _mockExecutor
-                .Verify(x => x.ExecuteNonQuery(sql, null, null),
+                .Verify(x => x.ExecuteSql(sql, connString),
                     Times.Once);
         }
 

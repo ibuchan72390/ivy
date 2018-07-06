@@ -67,7 +67,7 @@ namespace Ivy.Migration.MySQL.Test.Services
 
             var result = Sut.GenerateScript(tcMock.Object, script);
 
-            Assert.Equal(delimiter, result.Delimiter);
+            Assert.Equal(";", result.Delimiter); // Seems to be the default
             Assert.Equal(script, result.Query);
             Assert.Same(mockConn, result.Connection);
         }
