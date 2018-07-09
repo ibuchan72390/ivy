@@ -91,6 +91,12 @@ namespace Ivy.Migration.Services
             {
                 scripts.Sort(fileSort);
             }
+            else
+            {
+                // This should ensure alphabetical order
+                // Apparently this is a huge issue going Windows -> Linux
+                scripts = scripts.OrderBy(x => x).ToList();
+            }
 
             // Create our DB
             var createDbSql = _sqlGenerator.GenerateCreateDatabaseSql(dbName);
