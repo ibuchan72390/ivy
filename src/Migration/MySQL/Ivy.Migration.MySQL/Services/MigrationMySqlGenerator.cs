@@ -6,12 +6,12 @@ namespace Ivy.Migration.MySQL.Services
     {
         public string GenerateCreateDatabaseSql(string dbName)
         {
-            return $"CREATE DATABASE {dbName};";
+            return $"CREATE DATABASE IF NOT EXISTS {dbName};";
         }
 
         public string GenerateCreateUserSql(string loginUserName, string loginPassword)
         {
-            return $"CREATE USER '{loginUserName}'@'localhost' IDENTIFIED BY '{loginPassword}';";
+            return $"CREATE USER IF NOT EXISTS '{loginUserName}'@'localhost' IDENTIFIED BY '{loginPassword}';";
         }
 
         public string GenerateDbConnectionString(string dbName, string userName, string userPass)
@@ -21,12 +21,12 @@ namespace Ivy.Migration.MySQL.Services
 
         public string GenerateDeleteDatabaseSql(string dbName)
         {
-            return $"DROP DATABASE {dbName};";
+            return $"DROP DATABASE IF EXISTS {dbName};";
         }
 
         public string GenerateDeleteUserSql(string loginUserName)
         {
-            return $"DROP USER `{loginUserName}`@`localhost`;";
+            return $"DROP USER IF EXISTS `{loginUserName}`@`localhost`;";
         }
 
         public string GenerateGrantPrivelegesSql(string loginUserName, string dbName)

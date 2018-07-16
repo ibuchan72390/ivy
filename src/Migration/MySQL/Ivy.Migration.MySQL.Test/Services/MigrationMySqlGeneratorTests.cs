@@ -24,7 +24,7 @@ namespace Ivy.Migration.MySQL.Test.Services
         {
             var sql = Sut.GenerateCreateDatabaseSql(dbName);
 
-            var expected = $"CREATE DATABASE {dbName};";
+            var expected = $"CREATE DATABASE IF NOT EXISTS {dbName};";
 
             Assert.Equal(sql, expected);
         }
@@ -38,7 +38,7 @@ namespace Ivy.Migration.MySQL.Test.Services
         {
             var sql = Sut.GenerateCreateUserSql(userName, userPass);
 
-            var expected = $"CREATE USER '{userName}'@'localhost' IDENTIFIED BY '{userPass}';";
+            var expected = $"CREATE USER IF NOT EXISTS '{userName}'@'localhost' IDENTIFIED BY '{userPass}';";
 
             Assert.Equal(sql, expected);
         }
@@ -66,7 +66,7 @@ namespace Ivy.Migration.MySQL.Test.Services
         {
             var sql = Sut.GenerateDeleteDatabaseSql(dbName);
 
-            var expected = $"DROP DATABASE {dbName};";
+            var expected = $"DROP DATABASE IF EXISTS {dbName};";
 
             Assert.Equal(sql, expected);
         }
@@ -80,7 +80,7 @@ namespace Ivy.Migration.MySQL.Test.Services
         {
             var sql = Sut.GenerateDeleteUserSql(userName);
 
-            var expected = $"DROP USER `{userName}`@`localhost`;";
+            var expected = $"DROP USER IF EXISTS `{userName}`@`localhost`;";
 
             Assert.Equal(sql, expected);
         }
