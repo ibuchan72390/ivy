@@ -295,6 +295,53 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
         #endregion
 
+        #region InternalGetCount
+
+        [Fact]
+        public void InternalGetCount_With_Custom_Where_Works_As_Expected()
+        {
+            const int toMatch = 3;
+            const string name = "TEST";
+
+            var expected = Enumerable.Range(0, toMatch).
+                Select(x => new ParentEntity { Name = name + x }.SaveForTest()).
+                ToList();
+
+            var garbageData = Enumerable.Range(0, 2).
+                Select(x => new ParentEntity().SaveForTest()).
+                ToList();
+
+            var results = Sut.CountWhereNameLike(name);
+
+            Assert.Equal(toMatch, results);
+        }
+
+        [Fact]
+        public void InternalGetCount_With_Custom_Where_And_Join_Works_As_Expected()
+        {
+            const int toMatch = 3;
+            const string name = "TEST";
+
+            var expected = Enumerable.Range(0, toMatch).
+                Select(x => new ParentEntity { Name = name + x }.SaveForTest()).
+                ToList();
+
+            var coreIds = expected.
+                Select(x => new CoreEntity { ParentEntity = x }.SaveForTest()).
+                Select(x => x.Id).
+                ToList();
+
+            var garbageData = Enumerable.Range(0, 2).
+                Select(x => new ParentEntity().SaveForTest()).
+                ToList();
+
+            var results = Sut.CountWhereChildIdIn(coreIds);
+
+            Assert.Equal(toMatch, results);
+        }
+
+        #endregion
+
         #endregion
 
     }
@@ -339,6 +386,14 @@ namespace Ivy.Data.MySQL.IntegrationTest
         #region InternalDelete
 
         void DeleteByName(string name, ITranConn tc = null);
+
+        #endregion
+
+        #region InternalCount
+
+        int CountWhereNameLike(string name, ITranConn tc = null);
+
+        int CountWhereChildIdIn(IEnumerable<int> childIds, ITranConn tc = null);
 
         #endregion
     }
@@ -459,11 +514,45 @@ namespace Ivy.Data.MySQL.IntegrationTest
             const string sqlWhere = "WHERE `Name` = @name";
 
             var parms = new Dictionary<string, object>
-                {
-                    { "@name", name }
-                };
+            {
+                { "@name", name }
+            };
 
             InternalDelete(sqlWhere, parms, tc);
+        }
+
+        #endregion
+
+        #region InternalGetCount
+
+        public int CountWhereNameLike(string name, ITranConn tc = null)
+        {
+            const string sqlWhere = "WHERE `Name` LIKE CONCAT('%', @name, '%')";
+
+            var parms = new Dictionary<string, object>
+            {
+                { "@name", name }
+            };
+
+            return InternalCount(
+                whereClause: sqlWhere,
+                parms: parms,
+                tc: tc);
+        }
+
+        public int CountWhereChildIdIn(IEnumerable<int> childIds, ITranConn tc = null)
+        {
+            if (childIds.IsNullOrEmpty()) return 0;
+
+            string idInList = string.Join(",", childIds);
+
+            string sqlWhere = $"WHERE CE.Id IN ({idInList})";
+            const string sqlJoin = "JOIN `coreentity` CE ON (CE.ParentEntityId = THIS.Id)";
+
+            return InternalCount(
+                whereClause: sqlWhere,
+                joinClause: sqlJoin,
+                tc: tc);
         }
 
         #endregion

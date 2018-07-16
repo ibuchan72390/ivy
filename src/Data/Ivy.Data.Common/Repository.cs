@@ -90,9 +90,7 @@ namespace Ivy.Data.Common
 
         public virtual int GetCount(ITranConn tc = null)
         {
-            var countQuery = _sqlGenerator.GenerateGetCountQuery();
-
-            return InternalExecuteAlternateTypeQuery<int>(countQuery, tc).FirstOrDefault();
+            return InternalCount(tc: tc);
         }
 
         #endregion
@@ -145,6 +143,13 @@ namespace Ivy.Data.Common
             var sql = _sqlGenerator.GenerateDeleteQuery(whereClause);
 
             InternalExecuteNonQuery(sql, tc, parms);
+        }
+
+        protected int InternalCount(string whereClause = null, string joinClause = null, Dictionary<string, object> parms = null, ITranConn tc = null)
+        {
+            var countQuery = _sqlGenerator.GenerateGetCountQuery(whereClause, joinClause);
+
+            return InternalExecuteAlternateTypeQuery<int>(countQuery, tc, parms).SingleOrDefault();
         }
 
         // Async functionality for future expansion
