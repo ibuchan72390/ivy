@@ -42,6 +42,7 @@ namespace Ivy.Data.Common.Base.Entity
         public virtual void InitializeByDatabaseKey(string databaseKey)
         {
             Repo.InitializeByDatabaseKey(databaseKey);
+            ConnectionString = Repo.ConnectionString;
         }
 
         #endregion
