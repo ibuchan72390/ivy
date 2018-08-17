@@ -36,6 +36,7 @@ namespace Ivy.Data.Common.Base.Entity
         public virtual void InitializeByConnectionString(string connectionString)
         {
             Repo.InitializeByConnectionString(connectionString);
+            ConnectionString = connectionString;
         }
 
         public virtual void InitializeByDatabaseKey(string databaseKey)
