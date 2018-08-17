@@ -348,11 +348,11 @@ namespace Ivy.Data.MySQL.Test
 
             Dictionary<string, object> parms = new Dictionary<string, object>();
 
-            var result = _sut.GenerateInsertQuery(entity, ref parms);
+            var result = _sut.GenerateInsertQuery(entity, parms);
 
             string expected = $"INSERT INTO blobentity (`Name`, `Integer`, `Decimal`, `Double`, `Boolean`) VALUES (@Name0, @Integer0, @Decimal0, @Double0, @Boolean0);";
 
-            Assert.Equal(expected, result);
+            Assert.Equal(expected, result.Sql);
         }
 
         [Fact]
@@ -364,13 +364,13 @@ namespace Ivy.Data.MySQL.Test
 
             Dictionary<string, object> parms = new Dictionary<string, object>();
 
-            var result = _sut.GenerateInsertQuery(entity, ref parms);
+            var result = _sut.GenerateInsertQuery(entity, parms);
 
             var entityProps = entity.GetType().GetProperties().Where(x => x.Name != "References");
 
             foreach (var prop in entityProps)
             {
-                var matchingVal = parms[$"{prop.Name}0"];
+                var matchingVal = result.Parms[$"{prop.Name}0"];
                 var propVal = prop.GetValue(entity);
 
                 Assert.Equal(propVal, matchingVal);
@@ -391,11 +391,11 @@ namespace Ivy.Data.MySQL.Test
 
             Dictionary<string, object> parms = new Dictionary<string, object>();
 
-            var result = _sut.GenerateInsertQuery(entities, ref parms);
+            var result = _sut.GenerateInsertQuery(entities, parms);
 
             string expected = $"INSERT INTO blobentity (`Name`, `Integer`, `Decimal`, `Double`, `Boolean`) VALUES (@Name0, @Integer0, @Decimal0, @Double0, @Boolean0), (@Name1, @Integer1, @Decimal1, @Double1, @Boolean1), (@Name2, @Integer2, @Decimal2, @Double2, @Boolean2);";
 
-            Assert.Equal(expected, result);
+            Assert.Equal(expected, result.Sql);
         }
 
         [Fact]
@@ -409,7 +409,7 @@ namespace Ivy.Data.MySQL.Test
 
             Dictionary<string, object> parms = new Dictionary<string, object>();
 
-            var result = _sut.GenerateInsertQuery(entities, ref parms);
+            var result = _sut.GenerateInsertQuery(entities, parms);
 
             var entityProps = entities[0].GetType().GetProperties().Where(x => x.Name != "References");
 
@@ -417,7 +417,7 @@ namespace Ivy.Data.MySQL.Test
             {
                 foreach (var prop in entityProps)
                 {
-                    var matchingVal = parms[$"{prop.Name}{x}"];
+                    var matchingVal = result.Parms[$"{prop.Name}{x}"];
                     var propVal = prop.GetValue(entities[x]);
 
                     Assert.Equal(propVal, matchingVal);

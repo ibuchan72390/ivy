@@ -1,4 +1,5 @@
 ﻿using Ivy.Data.Core.Interfaces.Domain;
+using Ivy.Data.Core.Interfaces.Sql;
 using System.Collections.Generic;
 
 namespace Ivy.Data.Core.Interfaces.SQL
@@ -41,16 +42,16 @@ namespace Ivy.Data.Core.Interfaces.SQL
          */
         string GenerateInsertQuery(string sqlValue, string insertClause);
 
-        string GenerateInsertQuery(TEntity entity, ref Dictionary<string, object> parms);
+        ISqlExecutionResult GenerateInsertQuery(TEntity entity, Dictionary<string, object> parms);
 
-        string GenerateInsertQuery(IEnumerable<TEntity> entity, ref Dictionary<string, object> parms);
+        ISqlExecutionResult GenerateInsertQuery(IEnumerable<TEntity> entity, Dictionary<string, object> parms);
 
         /*
          * UPDATE TEntity {sqlSet} WHERE {sqlWhere}
          */
         string GenerateUpdateQuery(string sqlSet, string sqlWhere = null);
 
-        string GenerateUpdateQuery(TEntity entity, ref Dictionary<string, object> parms, string sqlWhere = null);
+        ISqlExecutionResult GenerateUpdateQuery(TEntity entity, Dictionary<string, object> parms, string sqlWhere = null);
     }
 
     public interface ISqlGenerator<TEntity, TKey> : ISqlGenerator<TEntity>
@@ -58,14 +59,14 @@ namespace Ivy.Data.Core.Interfaces.SQL
     {
         // These will probably need to take params by reference somehow
 
-        string GenerateDeleteQuery(IEnumerable<TKey> idsToDelete, ref Dictionary<string, object> parms);
+        ISqlExecutionResult GenerateDeleteQuery(IEnumerable<TKey> idsToDelete, Dictionary<string, object> parms);
 
-        string GenerateDeleteQuery(TKey idToDelete, ref Dictionary<string, object> parms);
+        ISqlExecutionResult GenerateDeleteQuery(TKey idToDelete, Dictionary<string, object> parms);
 
-        string GenerateGetQuery(IEnumerable<TKey> idsToDelete, ref Dictionary<string, object> parms);
+        ISqlExecutionResult GenerateGetQuery(IEnumerable<TKey> idsToDelete, Dictionary<string, object> parms);
 
-        string GenerateGetQuery(TKey idToGet, ref Dictionary<string, object> parms);
+        ISqlExecutionResult GenerateGetQuery(TKey idToGet, Dictionary<string, object> parms);
 
-        string GenerateSaveOrUpdateQuery(TEntity entity, ref Dictionary<string, object> parms);
+        ISqlExecutionResult GenerateSaveOrUpdateQuery(TEntity entity, Dictionary<string, object> parms);
     }
 }

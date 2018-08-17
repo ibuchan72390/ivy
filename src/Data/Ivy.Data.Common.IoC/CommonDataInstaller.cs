@@ -14,7 +14,7 @@ namespace Ivy.Data.Common.IoC
 
             // This absolutely has to be transient because we work in multiple database contexts
             // This guarantees we do not share the TransactionHelper because this is very problematic
-            containerGenerator.RegisterTransient<ITransactionHelper, TransactionHelper>();
+            containerGenerator.RegisterScoped<ITransactionHelper, TransactionHelper>();
 
             containerGenerator.RegisterScoped<ISqlPropertyGenerator, SqlPropertyGenerator>();
             containerGenerator.RegisterScoped<ISqlExecutor, SqlExecutor>();

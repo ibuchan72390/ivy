@@ -1,6 +1,5 @@
 ﻿using Ivy.Data.Core.Domain;
 using Ivy.Data.Core.Interfaces.SQL;
-using Ivy.IoC;
 using System.Collections.Generic;
 using Xunit;
 
@@ -25,11 +24,11 @@ namespace Ivy.Data.MySQL.Test
 
             var parms = new Dictionary<string, object>();
 
-            var result = Sut.GenerateSaveOrUpdateQuery(dbKey, ref parms);
+            var result = Sut.GenerateSaveOrUpdateQuery(dbKey, parms);
 
             const string expected = "INSERT INTO databasekey (`Key`, `ConnectionString`) VALUES (@Key0, @ConnectionString0);SELECT LAST_INSERT_ID();";
 
-            Assert.Equal(expected, result);
+            Assert.Equal(expected, result.Sql);
         }
 
         #endregion

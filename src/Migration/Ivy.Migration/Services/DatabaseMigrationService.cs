@@ -18,6 +18,7 @@ namespace Ivy.Migration.Services
         private readonly IMigrationSqlExecutor _sqlExecutor;
         private readonly IMigrationSqlGenerator _sqlGenerator;
         private readonly IDatabaseMigrationConfigurationProvider _config;
+        private readonly IDatabaseKeyManager _dbKeyMgr;
         private readonly IFileAccessor _fileAccessor;
 
         private readonly ITransactionHelper _tranHelper;
@@ -34,6 +35,7 @@ namespace Ivy.Migration.Services
             IMigrationSqlExecutor sqlExecutor,
             IMigrationSqlGenerator sqlGenerator,
             IDatabaseMigrationConfigurationProvider config,
+            IDatabaseKeyManager dbKeyMgr,
             IFileAccessor fileAccessor,
             ITransactionHelper tranHelper,
             IRandomizationHelper rand)
@@ -41,6 +43,7 @@ namespace Ivy.Migration.Services
             _sqlExecutor = sqlExecutor;
             _sqlGenerator = sqlGenerator;
             _config = config;
+            _dbKeyMgr = dbKeyMgr;
             _fileAccessor = fileAccessor;
 
             _tranHelper = tranHelper;
@@ -55,7 +58,7 @@ namespace Ivy.Migration.Services
 
         public void InitializeByDatabaseKey(string databaseKey)
         {
-            _tranHelper.InitializeByDatabaseKey(databaseKey);
+            InitializedConnectionString = _dbKeyMgr.GetConnectionString(databaseKey);
         }
 
         #endregion

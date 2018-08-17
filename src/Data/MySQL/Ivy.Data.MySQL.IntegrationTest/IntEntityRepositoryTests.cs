@@ -221,14 +221,12 @@ namespace Ivy.Data.MySQL.IntegrationTest
         public void Delete_Can_Commit_With_TranHelper()
         {
             var tranHelper = ServiceLocator.Instance.GetService<ITransactionHelper>();
-            tranHelper.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
-
             ParentEntity testEntity = new ParentEntity().SaveForTest();
 
             tranHelper.WrapInTransaction(tran => 
             {
                 Sut.Delete(testEntity, tran);
-            });
+            }, MySqlTestValues.TestDbConnectionString);
 
             var result = Sut.GetById(testEntity.Id);
 
@@ -239,7 +237,6 @@ namespace Ivy.Data.MySQL.IntegrationTest
         public void Delete_Can_Commit_With_TranHelper_And_Tran()
         {
             var tranHelper = ServiceLocator.Instance.GetService<ITransactionHelper>();
-            tranHelper.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
 
             var tranGen = ServiceLocator.Instance.GetService<ITranConnGenerator>();
             var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
@@ -249,7 +246,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
             tranHelper.WrapInTransaction(tran =>
             {
                 Sut.Delete(testEntity, tran);
-            }, tc);
+            }, MySqlTestValues.TestDbConnectionString, tc);
 
             // Must manually commit and dispose here
             tc.Transaction.Commit();
@@ -283,7 +280,6 @@ namespace Ivy.Data.MySQL.IntegrationTest
         public void Delete_Can_Rollback_With_TranHelper_And_Tran()
         {
             var tranHelper = ServiceLocator.Instance.GetService<ITransactionHelper>();
-            tranHelper.InitializeByConnectionString(MySqlTestValues.TestDbConnectionString);
 
             var tranGen = ServiceLocator.Instance.GetService<ITranConnGenerator>();
             var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
@@ -293,7 +289,8 @@ namespace Ivy.Data.MySQL.IntegrationTest
             tranHelper.WrapInTransaction(tran =>
             {
                 Sut.Delete(testEntity, tran);
-            }, tc);
+
+            }, MySqlTestValues.TestDbConnectionString, tc);
 
             tc.Transaction.Rollback();
 

@@ -33,14 +33,12 @@ namespace Ivy.Migration.MySQL.Services
 
         public void ExecuteSql(string scriptText, string connectionString)
         {
-            _tranHelper.InitializeByConnectionString(connectionString);
-
             _tranHelper.WrapInTransaction(tran => {
 
                 var script = _scriptBuilder.GenerateScript(tran, scriptText);
 
                 _scriptExecutor.Execute(script);
-            });
+            }, connectionString);
         }
 
         #endregion

@@ -22,13 +22,13 @@ namespace Ivy.Data.MySQL.Test
 
             const int idVal = 1;
             var parms = new Dictionary<string, object>();
-            var result = _sut.GenerateDeleteQuery(idVal, ref parms);
+            var result = _sut.GenerateDeleteQuery(idVal, parms);
 
             string expected = $"DELETE FROM childentity WHERE `Id` = @entityId;";
 
-            Assert.Equal(expected, result);
-            Assert.True(parms.Count == 1);
-            Assert.Equal(idVal, parms["@entityId"]);
+            Assert.Equal(expected, result.Sql);
+            Assert.True(result.Parms.Count == 1);
+            Assert.Equal(idVal, result.Parms["@entityId"]);
         }
 
         [Fact]
@@ -46,13 +46,13 @@ namespace Ivy.Data.MySQL.Test
 
             string expected = $"DELETE FROM childentity WHERE `Id` IN ({idInList});";
 
-            var result = _sut.GenerateDeleteQuery(idVals, ref parms);
+            var result = _sut.GenerateDeleteQuery(idVals, parms);
 
-            Assert.Equal(expected, result);
+            Assert.Equal(expected, result.Sql);
 
-            Assert.Equal(count, parms.Count);
+            Assert.Equal(count, result.Parms.Count);
 
-            foreach (var parm in parms)
+            foreach (var parm in result.Parms)
             {
                 var val = (int)parm.Value;
 
@@ -73,7 +73,7 @@ namespace Ivy.Data.MySQL.Test
 
             const int idVal = 1;
             var parms = new Dictionary<string, object>();
-            var result = _sut.GenerateGetQuery(idVal, ref parms);
+            var result = _sut.GenerateGetQuery(idVal, parms);
 
             var attrs = Sut.GetSqlPropertyNames<ChildEntity>().Select(FormatSqlAttr);
 
@@ -83,9 +83,9 @@ namespace Ivy.Data.MySQL.Test
 
             string expected = $"SELECT {expectedAttrString} FROM childentity `THIS` WHERE `Id` = @entityId;";
 
-            Assert.Equal(expected, result);
-            Assert.True(parms.Count == 1);
-            Assert.Equal(idVal, parms["@entityId"]);
+            Assert.Equal(expected, result.Sql);
+            Assert.True(result.Parms.Count == 1);
+            Assert.Equal(idVal, result.Parms["@entityId"]);
         }
 
         #endregion
@@ -101,7 +101,7 @@ namespace Ivy.Data.MySQL.Test
 
             var ids = Enumerable.Range(0, count).ToList();
             var parms = new Dictionary<string, object>();
-            var result = _sut.GenerateGetQuery(ids, ref parms);
+            var result = _sut.GenerateGetQuery(ids, parms);
 
             var idParams = ids.Select(x => $"@id{x}");
             var idInList = string.Join(",", idParams);
@@ -114,11 +114,11 @@ namespace Ivy.Data.MySQL.Test
 
             string expected = $"SELECT {expectedAttrString} FROM childentity `THIS` WHERE `Id` IN ({idInList});";
 
-            Assert.Equal(expected, result);
+            Assert.Equal(expected, result.Sql);
 
-            Assert.Equal(count, parms.Count);
+            Assert.Equal(count, result.Parms.Count);
 
-            foreach (var parm in parms)
+            foreach (var parm in result.Parms)
             {
                 var val = (int)parm.Value;
 
@@ -140,7 +140,7 @@ namespace Ivy.Data.MySQL.Test
             var childEntity = new ChildEntity().GenerateForTest();
 
             var parms = new Dictionary<string, object>();
-            var result = _sut.GenerateSaveOrUpdateQuery(childEntity, ref parms);
+            var result = _sut.GenerateSaveOrUpdateQuery(childEntity, parms);
 
             var attrs = Sut.GetSqlPropertyNames<ChildEntity>().Where(x => x != "Id");
 
@@ -150,8 +150,8 @@ namespace Ivy.Data.MySQL.Test
 
             var expected = $"INSERT INTO childentity ({expectedAttrString}) VALUES ({expectedParamString});SELECT LAST_INSERT_ID();";
 
-            Assert.Equal(expected, result);
-            Assert.True(parms.Count == attrs.Count()); // param for each attr, not just id
+            Assert.Equal(expected, result.Sql);
+            Assert.True(result.Parms.Count == attrs.Count()); // param for each attr, not just id
         }
 
         [Fact]
@@ -162,7 +162,7 @@ namespace Ivy.Data.MySQL.Test
             var childEntity = new ChildEntity { Id = 1 }.GenerateForTest();
 
             var parms = new Dictionary<string, object>();
-            var result = _sut.GenerateSaveOrUpdateQuery(childEntity, ref parms);
+            var result = _sut.GenerateSaveOrUpdateQuery(childEntity, parms);
 
             var allAttrs = Sut.GetSqlPropertyNames<ChildEntity>();
             var attrs = allAttrs.Where(x => x != "Id");
@@ -172,8 +172,8 @@ namespace Ivy.Data.MySQL.Test
 
             var expected = $"UPDATE childentity SET {expectedParamString} WHERE `Id` = @entityId;";
 
-            Assert.Equal(expected, result);
-            Assert.True(parms.Count == allAttrs.Count()); // param for each attr, not just id
+            Assert.Equal(expected, result.Sql);
+            Assert.True(result.Parms.Count == allAttrs.Count()); // param for each attr, not just id
         }
 
         #endregion

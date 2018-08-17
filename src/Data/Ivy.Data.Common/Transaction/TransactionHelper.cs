@@ -8,47 +8,29 @@ namespace Ivy.Data.Common.Transaction
     {
         #region Variables & Constants
 
-        public string ConnectionString { get; private set; }
-
         private readonly ITranConnGenerator _tcGenerator;
-        private readonly IDatabaseKeyManager _dbKeyManager;
 
         #endregion
 
         #region Constructor
 
         public TransactionHelper(
-            ITranConnGenerator tcGenerator,
-            IDatabaseKeyManager dbKeyManager)
+            ITranConnGenerator tcGenerator)
         {
             _tcGenerator = tcGenerator;
-            _dbKeyManager = dbKeyManager;
         }
 
         #endregion
 
-        #region Initialization
+        #region Public Methods
 
-        public void InitializeByConnectionString(string connectionString)
+        public void WrapInTransaction(Action<ITranConn> tranConnFn, string connectionString, ITranConn tc = null)
         {
-            ConnectionString = connectionString;
-        }
+            bool myTran = tc == null;
 
-        public void InitializeByDatabaseKey(string databaseKey)
-        {
-            ConnectionString = _dbKeyManager.GetConnectionString(databaseKey);
-        }
-
-        #endregion
-
-        public void WrapInTransaction(Action<ITranConn> tranConnFn, ITranConn tc = null)
-        {
-            bool myTran = false;
-
-            if (tc == null)
+            if (myTran)
             {
-                tc = _tcGenerator.GenerateTranConn(ConnectionString);
-                myTran = true;
+                tc = _tcGenerator.GenerateTranConn(connectionString);
             }
 
             try
@@ -78,14 +60,13 @@ namespace Ivy.Data.Common.Transaction
             }
         }
 
-        public T WrapInTransaction<T>(Func<ITranConn, T> tranConnFn, ITranConn tc = null)
+        public T WrapInTransaction<T>(Func<ITranConn, T> tranConnFn, string connectionString, ITranConn tc = null)
         {
-            bool myTran = false;
+            bool myTran = tc == null;
 
-            if (tc == null)
+            if (myTran)
             {
-                tc = _tcGenerator.GenerateTranConn(ConnectionString);
-                myTran = true;
+                tc = _tcGenerator.GenerateTranConn(connectionString);
             }
 
             T result;
@@ -119,14 +100,13 @@ namespace Ivy.Data.Common.Transaction
             return result;
         }
 
-        public async Task WrapInTransactionAsync(Func<ITranConn, Task> tranConnFn, ITranConn tc = null)
+        public async Task WrapInTransactionAsync(Func<ITranConn, Task> tranConnFn, string connectionString, ITranConn tc = null)
         {
-            bool myTran = false;
+            bool myTran = tc == null;
 
-            if (tc == null)
+            if (myTran)
             {
-                tc = _tcGenerator.GenerateTranConn(ConnectionString);
-                myTran = true;
+                tc = _tcGenerator.GenerateTranConn(connectionString);
             }
 
             try
@@ -156,14 +136,13 @@ namespace Ivy.Data.Common.Transaction
             }
         }
 
-        public async Task<T> WrapInTransactionAsync<T>(Func<ITranConn, Task<T>> tranConnFn, ITranConn tc = null)
+        public async Task<T> WrapInTransactionAsync<T>(Func<ITranConn, Task<T>> tranConnFn, string connectionString, ITranConn tc = null)
         {
-            bool myTran = false;
+            bool myTran = tc == null;
 
-            if (tc == null)
+            if (myTran)
             {
-                tc = _tcGenerator.GenerateTranConn(ConnectionString);
-                myTran = true;
+                tc = _tcGenerator.GenerateTranConn(connectionString);
             }
 
             T result;
@@ -196,5 +175,140 @@ namespace Ivy.Data.Common.Transaction
 
             return result;
         }
+
+        #endregion
+
+        #region Helper Methods
+
+        /*
+         * If we make a transaction from a connection string, then myTran == true
+         * If we're simply passing a transaction that we received, then myTran == false
+         */
+
+        private void InternalWrapInTransaction(Action<ITranConn> tranConnFn, ITranConn tc, bool myTran)
+        {
+            try
+            {
+                tranConnFn(tc);
+
+                if (myTran)
+                {
+                    tc.Transaction.Commit();
+                }
+            }
+            catch (Exception)
+            {
+                if (myTran)
+                {
+                    tc.Transaction.Rollback();
+                }
+
+                throw;
+            }
+            finally
+            {
+                if (myTran)
+                {
+                    tc.Dispose();
+                }
+            }
+        }
+
+        private T InternalWrapInTransaction<T>(Func<ITranConn, T> tranConnFn, ITranConn tc, bool myTran)
+        {
+            T result;
+
+            try
+            {
+                result = tranConnFn(tc);
+
+                if (myTran)
+                {
+                    tc.Transaction.Commit();
+                }
+            }
+            catch (Exception)
+            {
+                if (myTran)
+                {
+                    tc.Transaction.Rollback();
+                }
+
+                throw;
+            }
+            finally
+            {
+                if (myTran)
+                {
+                    tc.Dispose();
+                }
+            }
+
+            return result;
+        }
+
+        private async Task InternalWrapInTransactionAsync(Func<ITranConn, Task> tranConnFn, ITranConn tc, bool myTran)
+        {
+            try
+            {
+                await tranConnFn(tc);
+
+                if (myTran)
+                {
+                    tc.Transaction.Commit();
+                }
+            }
+            catch (Exception)
+            {
+                if (myTran)
+                {
+                    tc.Transaction.Rollback();
+                }
+
+                throw;
+            }
+            finally
+            {
+                if (myTran)
+                {
+                    tc.Dispose();
+                }
+            }
+        }
+
+        private async Task<T> InternalWrapInTransactionAsync<T>(Func<ITranConn, Task<T>> tranConnFn, ITranConn tc, bool myTran)
+        {
+            T result;
+
+            try
+            {
+                result = await tranConnFn(tc);
+
+                if (myTran)
+                {
+                    tc.Transaction.Commit();
+                }
+            }
+            catch (Exception)
+            {
+                if (myTran)
+                {
+                    tc.Transaction.Rollback();
+                }
+
+                throw;
+            }
+            finally
+            {
+                if (myTran)
+                {
+                    tc.Dispose();
+                }
+            }
+
+            return result;
+        }
+
+        #endregion
     }
 }

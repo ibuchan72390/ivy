@@ -25,30 +25,20 @@ namespace Ivy.Data.Common.Sql
             _tranHelper = tranHelper;
         }
 
-        public void InitializeByConnectionString(string connectionString)
-        {
-            _tranHelper.InitializeByConnectionString(connectionString);
-        }
-
-        public void InitializeByDatabaseKey(string databaseKey)
-        {
-            _tranHelper.InitializeByDatabaseKey(databaseKey);
-        }
-
         #endregion
 
         #region Public Methods
 
-        public void ExecuteNonQuery(string sql, object parms = null, ITranConn tc = null)
+        public void ExecuteNonQuery(string sql, string connectionString, ITranConn tc = null, object parms = null)
         {
             _tranHelper.WrapInTransaction(
-                tran => tran.Connection.Execute(sql, parms, tran.Transaction), tc);
+                tran => tran.Connection.Execute(sql, parms, tran.Transaction), connectionString, tc);
         }
 
-        public IEnumerable<T> ExecuteTypedQuery<T>(string sql, object parms = null, ITranConn tc = null)
+        public IEnumerable<T> ExecuteTypedQuery<T>(string sql, string connectionString, ITranConn tc = null, object parms = null)
         {
             return _tranHelper.WrapInTransaction(
-                tran => tran.Connection.Query<T>(sql, parms, tran.Transaction), tc);
+                tran => tran.Connection.Query<T>(sql, parms, tran.Transaction), connectionString, tc);
         }
 
         #endregion

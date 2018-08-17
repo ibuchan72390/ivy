@@ -3,7 +3,6 @@ using Ivy.IoC;
 using Ivy.TestHelper;
 using Ivy.TestHelper.TestEntities;
 using Ivy.TestHelper.TestValues;
-using Ivy.Utility.Core.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

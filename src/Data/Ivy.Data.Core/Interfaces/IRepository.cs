@@ -14,7 +14,8 @@ namespace Ivy.Data.Core.Interfaces
         IDeleteAll<TObject>, 
         IGetAll<TObject>, 
         IPaginatedGetAll<TObject>,
-        IGetCount
+        IGetCount,
+        IConnectionString
 
         where TObject : class
     {

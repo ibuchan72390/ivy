@@ -55,8 +55,6 @@ namespace Ivy.Data.Common
         public void InitializeByConnectionString(string connectionString)
         {
             ConnectionString = connectionString;
-            _tranHelper.InitializeByConnectionString(connectionString);
-            _sqlExecutor.InitializeByConnectionString(connectionString);
         }
 
         public void InitializeByDatabaseKey(string databaseKey)
@@ -80,7 +78,7 @@ namespace Ivy.Data.Common
         {
             var query = _sqlGenerator.GenerateGetQuery();
 
-            return InternalExecuteQuery(query);
+            return InternalExecuteQuery(query, tc);
         }
 
         public virtual IPaginationResponse<T> GetAll(IPaginationRequest request, ITranConn tc = null)
@@ -125,7 +123,7 @@ namespace Ivy.Data.Common
 
             // Count Get
             // need to pass where and join for proper understanding of filtered result set
-            var countQuery = _sqlGenerator.GenerateGetCountQuery(whereClause, joinClause); 
+            var countQuery = _sqlGenerator.GenerateGetCountQuery(whereClause, joinClause);
             response.TotalCount = InternalExecuteAlternateTypeQuery<int>(countQuery, tc, parms).FirstOrDefault();
 
             return response;
@@ -152,7 +150,7 @@ namespace Ivy.Data.Common
             return InternalExecuteAlternateTypeQuery<int>(countQuery, tc, parms).SingleOrDefault();
         }
 
-        // Async functionality for future expansion
+        // Async functionality for future expansion - Need these for ALL of the above
         //protected Task<IEnumerable<TReturn>> InternalExecuteQueryAsync<TReturn>(string sql, ITranConn tc = null, object parms = null)
         //{
         //    return _tranHelper.WrapInTransaction(
@@ -174,58 +172,60 @@ namespace Ivy.Data.Common
         // I'd almost like to make it the tranConnGenerator piece
         protected virtual IEnumerable<T> InternalExecuteQuery(string sql, ITranConn tc = null, object parms = null)
         {
-            //return _tranHelper.WrapInTransaction(
-            //    tran => tran.Connection.Query<T>(sql, parms, tran.Transaction));
-
-            return _tranHelper.WrapInTransaction(
-                tran =>
-                {
-                    using (var reader = tran.Connection.ExecuteReader(sql, parms, tran.Transaction))
-                    {
-                        IList<int> fkIndices = new List<int>();
-
-                        for (var i = 0; i < reader.FieldCount; i++)
-                        {
-                            var colName = reader.GetName(i);
-
-                            // Either Id column or an Id reference
-                            if (colName.Substring(colName.Length - 2, 2) == "Id" && colName.Length > 2)
-                            {
-                                fkIndices.Add(i);
-                            }
-                        }
-
-                        var parser = reader.GetRowParser<T>();
-
-                        IList<T> results = new List<T>();
-
-                        while (reader.Read())
-                        {
-                            var referenceList = fkIndices.ToDictionary(x => reader.GetName(x), x => reader.GetValue(x));
-
-                            T result = parser(reader);
-
-                            result.References = referenceList;
-
-                            results.Add(result);
-                        }
-
-                        reader.Close();
-
-                        return results;
-                    }
-
-                }, tc);
+            return _tranHelper.WrapInTransaction<IEnumerable<T>>(
+                    tran => HandleExecuteQuery(tran, sql, parms), ConnectionString, tc);
         }
 
         protected virtual IEnumerable<TReturn> InternalExecuteAlternateTypeQuery<TReturn>(string sql, ITranConn tc = null, object parms = null)
         {
-            return _sqlExecutor.ExecuteTypedQuery<TReturn>(sql, parms, tc);
+            return _sqlExecutor.ExecuteTypedQuery<TReturn>(sql, ConnectionString, tc, parms);
         }
 
         protected virtual void InternalExecuteNonQuery(string sql, ITranConn tc = null, object parms = null)
         {
-            _sqlExecutor.ExecuteNonQuery(sql, parms, tc);
+            _sqlExecutor.ExecuteNonQuery(sql, ConnectionString, tc, parms);
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private IEnumerable<T> HandleExecuteQuery(ITranConn tran, string sql, object parms)
+        {
+            using (var reader = tran.Connection.ExecuteReader(sql, parms, tran.Transaction))
+            {
+                IList<int> fkIndices = new List<int>();
+
+                for (var i = 0; i < reader.FieldCount; i++)
+                {
+                    var colName = reader.GetName(i);
+
+                    // Either Id column or an Id reference
+                    if (colName.Substring(colName.Length - 2, 2) == "Id" && colName.Length > 2)
+                    {
+                        fkIndices.Add(i);
+                    }
+                }
+
+                var parser = reader.GetRowParser<T>();
+
+                IList<T> results = new List<T>();
+
+                while (reader.Read())
+                {
+                    var referenceList = fkIndices.ToDictionary(x => reader.GetName(x), x => reader.GetValue(x));
+
+                    T result = parser(reader);
+
+                    result.References = referenceList;
+
+                    results.Add(result);
+                }
+
+                reader.Close();
+
+                return results;
+            }
         }
 
         #endregion
@@ -257,18 +257,18 @@ namespace Ivy.Data.Common
         {
             Dictionary<string, object> parms = new Dictionary<string, object>();
 
-            var query = _sqlGenerator.GenerateInsertQuery(entity, ref parms);
+            var query = _sqlGenerator.GenerateInsertQuery(entity, parms);
 
-            InternalExecuteNonQuery(query, tc, parms);
+            InternalExecuteNonQuery(query.Sql, tc, query.Parms);
         }
 
         public virtual void BulkInsert(IEnumerable<T> entities, ITranConn tc = null)
         {
             Dictionary<string, object> parms = new Dictionary<string, object>();
 
-            var query = _sqlGenerator.GenerateInsertQuery(entities, ref parms);
+            var query = _sqlGenerator.GenerateInsertQuery(entities, parms);
 
-            InternalExecuteNonQuery(query, tc, parms);
+            InternalExecuteNonQuery(query.Sql, tc, query.Parms);
         }
 
         #endregion
@@ -310,18 +310,18 @@ namespace Ivy.Data.Common
         {
             Dictionary<string, object> parms = new Dictionary<string, object>();
 
-            var query = localSqlGenerator.GenerateDeleteQuery(entity.Id, ref parms);
+            var query = localSqlGenerator.GenerateDeleteQuery(entity.Id, parms);
 
-            InternalExecuteNonQuery(query, tc, parms);
+            InternalExecuteNonQuery(query.Sql, tc, query.Parms);
         }
 
         public virtual void DeleteById(TKey id, ITranConn tc = null)
         {
             Dictionary<string, object> parms = new Dictionary<string, object>();
 
-            var query = localSqlGenerator.GenerateDeleteQuery(id, ref parms);
+            var query = localSqlGenerator.GenerateDeleteQuery(id, parms);
 
-            InternalExecuteNonQuery(query, tc, parms);
+            InternalExecuteNonQuery(query.Sql, tc, query.Parms);
         }
 
         public virtual void Delete(IEnumerable<T> entities, ITranConn tc = null)
@@ -339,18 +339,18 @@ namespace Ivy.Data.Common
 
             Dictionary<string, object> parms = new Dictionary<string, object>();
 
-            var query = localSqlGenerator.GenerateDeleteQuery(ids, ref parms);
+            var query = localSqlGenerator.GenerateDeleteQuery(ids, parms);
 
-            InternalExecuteNonQuery(query, tc, parms);
+            InternalExecuteNonQuery(query.Sql, tc, query.Parms);
         }
 
         public virtual T GetById(TKey id, ITranConn tc = null)
         {
             Dictionary<string, object> parms = new Dictionary<string, object>();
 
-            var query = localSqlGenerator.GenerateGetQuery(id, ref parms);
+            var query = localSqlGenerator.GenerateGetQuery(id, parms);
 
-            return InternalExecuteQuery(query, tc, parms).SingleOrDefault();
+            return InternalExecuteQuery(query.Sql, tc, query.Parms).SingleOrDefault();
         }
 
         public virtual IEnumerable<T> GetByIdList(IEnumerable<TKey> ids, ITranConn tc = null)
@@ -359,9 +359,9 @@ namespace Ivy.Data.Common
 
             Dictionary<string, object> parms = new Dictionary<string, object>();
 
-            var query = localSqlGenerator.GenerateGetQuery(ids, ref parms);
+            var query = localSqlGenerator.GenerateGetQuery(ids, parms);
 
-            return InternalExecuteQuery(query, tc, parms);
+            return InternalExecuteQuery(query.Sql, tc, query.Parms);
         }
 
         public virtual T SaveOrUpdate(T entity, ITranConn tc = null)
@@ -372,10 +372,10 @@ namespace Ivy.Data.Common
 
             Dictionary<string, object> parms = new Dictionary<string, object>();
 
-            var query = localSqlGenerator.GenerateSaveOrUpdateQuery(entity, ref parms);
+            var query = localSqlGenerator.GenerateSaveOrUpdateQuery(entity, parms);
 
             // results should contain our new Id value if this is an insert
-            var results = InternalExecuteAlternateTypeQuery<TKey>(query, tc, parms);
+            var results = InternalExecuteAlternateTypeQuery<TKey>(query.Sql, tc, query.Parms);
 
             if (results.Any())
             {
@@ -393,7 +393,7 @@ namespace Ivy.Data.Common
                 {
                     SaveOrUpdate(entity, tran);
                 }
-            }, tc);
+            }, ConnectionString, tc);
 
             return entities;
         }
@@ -406,85 +406,85 @@ namespace Ivy.Data.Common
         // I'd almost like to make it the tranConnGenerator piece
         protected override IEnumerable<T> InternalExecuteQuery(string sql, ITranConn tc = null, object parms = null)
         {
-            return _tranHelper.WrapInTransaction(
-                tran =>
+            return _tranHelper.WrapInTransaction(tran => InternalHandleQueryTransaction(tran, sql, parms), ConnectionString, tc);
+        }
+
+        private IEnumerable<T> InternalHandleQueryTransaction(ITranConn tran, string sql, object parms)
+        {
+            using (var reader = tran.Connection.ExecuteReader(sql, parms, tran.Transaction))
+            {
+                IList<int> fkIndices = new List<int>();
+                int idIndex = -1;
+
+                var props = typeof(T).GetProperties();
+
+                for (var i = 0; i < reader.FieldCount; i++)
                 {
-                    using (var reader = tran.Connection.ExecuteReader(sql, parms, tran.Transaction))
+                    var colName = reader.GetName(i);
+
+                    // Either Id column or an Id reference
+                    // Is there some way we can check that this is an object entity reference???
+                    if (colName.Substring(colName.Length - 2, 2) == "Id")
                     {
-                        IList<int> fkIndices = new List<int>();
-                        int idIndex = -1;
-
-                        var props = typeof(T).GetProperties();
-
-                        for (var i = 0; i < reader.FieldCount; i++)
+                        if (colName.Length > 2)
                         {
-                            var colName = reader.GetName(i);
+                            /*
+                             * May want to find some way to cache these values to ensure performance
+                             */
 
-                            // Either Id column or an Id reference
-                            // Is there some way we can check that this is an object entity reference???
-                            if (colName.Substring(colName.Length - 2, 2) == "Id")
+                            var targetPropName = colName.Substring(0, colName.Length - 2);
+
+                            // Some attribute names will end in Id even though they aren't truly FK objects
+                            // In order to counteract this, we need to find the prop and verify it's an FK
+                            // If no prop exists when we drop the "Id" from the attr name, it's not an FK
+                            var targetProp = props.FirstOrDefault(x => x.Name == targetPropName);
+
+                            if (targetProp != null)
                             {
-                                if (colName.Length > 2)
+                                var declaringInterfaces = targetProp.DeclaringType.GetInterfaces();
+
+                                // Need to use name based matching here in order to circumnavigate the generic context
+                                // If we don't, the actual TType affects the matching
+                                var entityInterface = declaringInterfaces.FirstOrDefault(x => x.Name == typeof(IEntityWithTypedId<>).Name);
+
+                                if (entityInterface != null)
                                 {
-                                    /*
-                                     * May want to find some way to cache these values to ensure performance
-                                     */
-
-                                    var targetPropName = colName.Substring(0, colName.Length - 2);
-
-                                    // Some attribute names will end in Id even though they aren't truly FK objects
-                                    // In order to counteract this, we need to find the prop and verify it's an FK
-                                    // If no prop exists when we drop the "Id" from the attr name, it's not an FK
-                                    var targetProp = props.FirstOrDefault(x => x.Name == targetPropName);
-
-                                    if (targetProp != null)
-                                    {
-                                        var declaringInterfaces = targetProp.DeclaringType.GetInterfaces();
-
-                                        // Need to use name based matching here in order to circumnavigate the generic context
-                                        // If we don't, the actual TType affects the matching
-                                        var entityInterface = declaringInterfaces.FirstOrDefault(x => x.Name == typeof(IEntityWithTypedId<>).Name);
-
-                                        if (entityInterface != null)
-                                        {
-                                            fkIndices.Add(i);
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    idIndex = i;
+                                    fkIndices.Add(i);
                                 }
                             }
                         }
-
-                        if (idIndex == -1)
+                        else
                         {
-                            throw new Exception("Unable to determine the Id column for reference generation!");
+                            idIndex = i;
                         }
-
-                        var parser = reader.GetRowParser<T>();
-
-                        IList<T> results = new List<T>();
-
-                        while (reader.Read())
-                        {
-                            var referenceList = fkIndices.ToDictionary(x => reader.GetName(x), x => reader.GetValue(x));
-                            //resultsRefsDict.Add((TKey)reader.GetValue(idIndex), referenceList);
-
-                            T result = parser(reader);
-
-                            result.References = referenceList;
-
-                            results.Add(result);
-                        }
-
-                        reader.Close();
-
-                        return results;
                     }
+                }
 
-                }, tc);
+                if (idIndex == -1)
+                {
+                    throw new Exception("Unable to determine the Id column for reference generation!");
+                }
+
+                var parser = reader.GetRowParser<T>();
+
+                IList<T> results = new List<T>();
+
+                while (reader.Read())
+                {
+                    var referenceList = fkIndices.ToDictionary(x => reader.GetName(x), x => reader.GetValue(x));
+                    //resultsRefsDict.Add((TKey)reader.GetValue(idIndex), referenceList);
+
+                    T result = parser(reader);
+
+                    result.References = referenceList;
+
+                    results.Add(result);
+                }
+
+                reader.Close();
+
+                return results;
+            }
         }
 
         #endregion

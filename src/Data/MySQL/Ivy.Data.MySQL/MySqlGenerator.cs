@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using Ivy.Data.Common.Sql;
 using System.Text;
 using System.Linq;
-using System.Reflection;
 using Ivy.Data.Core.Interfaces.SQL;
 using Ivy.Data.Core.Interfaces.Domain;
+using Ivy.Data.Core.Interfaces.Sql;
+using Ivy.Data.Core.Domain;
 
 namespace Ivy.Data.MySQL
 {
@@ -107,12 +108,12 @@ namespace Ivy.Data.MySQL
             return $"{sql};";
         }
 
-        public string GenerateInsertQuery(TEntity entity, ref Dictionary<string, object> parms)
+        public ISqlExecutionResult GenerateInsertQuery(TEntity entity, Dictionary<string, object> parms)
         {
-            return GenerateInsertQuery(new List<TEntity> { entity }, ref parms);
+            return GenerateInsertQuery(new List<TEntity> { entity }, parms);
         }
 
-        public string GenerateUpdateQuery(TEntity entity, ref Dictionary<string, object> parms, string sqlWhere = null)
+        public ISqlExecutionResult GenerateUpdateQuery(TEntity entity, Dictionary<string, object> parms, string sqlWhere = null)
         {
             var sb = new StringBuilder();
 
@@ -139,10 +140,12 @@ namespace Ivy.Data.MySQL
                 GenerateEntityAttributeParams(entity, currentPropName, currentParamKey, ref parms);
             }
 
-            return GenerateUpdateQuery(sb.ToString(), sqlWhere);
+            var sql = GenerateUpdateQuery(sb.ToString(), sqlWhere);
+
+            return new SqlExecutionResult(sql, parms);
         }
 
-        public string GenerateInsertQuery(IEnumerable<TEntity> entities, ref Dictionary<string, object> parms)
+        public ISqlExecutionResult GenerateInsertQuery(IEnumerable<TEntity> entities, Dictionary<string, object> parms)
         {
             return BaseGenerateInsertReplaceQuery(entities, ref parms, true, false);
         }
@@ -247,7 +250,7 @@ namespace Ivy.Data.MySQL
             parms.Add(currentParamKey, targetPropValue);
         }
 
-        protected string BaseGenerateInsertReplaceQuery(IEnumerable<TEntity> entities, ref Dictionary<string, object> parms, bool isInsert, bool includeSelectAlias)
+        protected ISqlExecutionResult BaseGenerateInsertReplaceQuery(IEnumerable<TEntity> entities, ref Dictionary<string, object> parms, bool isInsert, bool includeSelectAlias)
         {
             var sb = new StringBuilder();
 
@@ -297,10 +300,12 @@ namespace Ivy.Data.MySQL
 
             var query = GenerateInsertQuery(sqlValueString, sb.ToString());
 
-            if (isInsert)
-                return query;
-            else
-                return query.Replace("INSERT", "REPLACE");
+            if (!isInsert)
+            { 
+                query = query.Replace("INSERT", "REPLACE");
+            }
+
+            return new SqlExecutionResult(query, parms);
         }
 
         protected string GetTableName()
@@ -363,16 +368,18 @@ namespace Ivy.Data.MySQL
 
         #region Public Methods
 
-        public string GenerateDeleteQuery(IEnumerable<TKey> idsToDelete, ref Dictionary<string, object> parms)
+        public ISqlExecutionResult GenerateDeleteQuery(IEnumerable<TKey> idsToDelete, Dictionary<string, object> parms)
         {
             if (idsToDelete == null) throw new Exception("Unable to delete a key collection that is null!");
 
             var sqlWhere = GenerateWhereIdInList(idsToDelete, ref parms);
 
-            return base.GenerateDeleteQuery(sqlWhere);
+            var sql = base.GenerateDeleteQuery(sqlWhere);
+
+            return new SqlExecutionResult(sql, parms);
         }
 
-        public string GenerateDeleteQuery(TKey idToDelete, ref Dictionary<string, object> parms)
+        public ISqlExecutionResult GenerateDeleteQuery(TKey idToDelete, Dictionary<string, object> parms)
         {
             if (idToDelete == null) throw new Exception("Unable to delete a key that is null!");
 
@@ -380,19 +387,23 @@ namespace Ivy.Data.MySQL
             //parms.Add("@entityId", idToDelete.ToString());
             AddIdToParmsDict(idToDelete, idParamKey, ref parms);
 
-            return base.GenerateDeleteQuery(whereIdEqualsParam);
+            var sql = base.GenerateDeleteQuery(whereIdEqualsParam);
+
+            return new SqlExecutionResult(sql, parms);
         }
 
-        public string GenerateGetQuery(IEnumerable<TKey> idsToGet, ref Dictionary<string, object> parms)
+        public ISqlExecutionResult GenerateGetQuery(IEnumerable<TKey> idsToGet, Dictionary<string, object> parms)
         {
             if (idsToGet == null) throw new Exception("Unable to get a key collection that is null!");
 
             var sqlWhere = GenerateWhereIdInList(idsToGet, ref parms);
 
-            return base.GenerateGetQuery(sqlWhere: sqlWhere);
+            var sql = base.GenerateGetQuery(sqlWhere: sqlWhere);
+
+            return new SqlExecutionResult(sql, parms);
         }
 
-        public string GenerateGetQuery(TKey idToGet, ref Dictionary<string, object> parms)
+        public ISqlExecutionResult GenerateGetQuery(TKey idToGet, Dictionary<string, object> parms)
         {
             if (idToGet == null) throw new Exception("Unable to get a key that is null!");
 
@@ -400,10 +411,12 @@ namespace Ivy.Data.MySQL
             //parms.Add("@entityId", idToGet.ToString());
             AddIdToParmsDict(idToGet, idParamKey, ref parms);
 
-            return base.GenerateGetQuery(null, whereIdEqualsParam);
+            var sql = base.GenerateGetQuery(null, whereIdEqualsParam);
+
+            return new SqlExecutionResult(sql, parms);
         }
 
-        public string GenerateSaveOrUpdateQuery(TEntity entity, ref Dictionary<string, object> parms)
+        public ISqlExecutionResult GenerateSaveOrUpdateQuery(TEntity entity, Dictionary<string, object> parms)
         {
             // Determine if we're dealing with update or delete
             bool isUpdate = false;
@@ -418,7 +431,7 @@ namespace Ivy.Data.MySQL
                 {
                     // Update specific query logic
                     parms.Add("@entityId", entity.Id);
-                    return GenerateUpdateQuery(entity, ref parms, whereIdEqualsParam);
+                    return GenerateUpdateQuery(entity, parms, whereIdEqualsParam);
                 }
                 else
                 {
@@ -429,7 +442,11 @@ namespace Ivy.Data.MySQL
                      */
 
                     // Insert specific query logic
-                    return GenerateInsertQuery(entity, ref parms) + "SELECT LAST_INSERT_ID();";
+                    var result = GenerateInsertQuery(entity, parms);
+
+                    result.Sql += "SELECT LAST_INSERT_ID();";
+
+                    return result;
                 }
             }
             else

@@ -24,6 +24,7 @@ namespace Ivy.Migration.Test.Services
         private Mock<IMigrationSqlGenerator> _mockSqlGen;
         private Mock<IRandomizationHelper> _mockRandomHelper;
         private Mock<IFileAccessor> _mockFileAccessor;
+        private Mock<IDatabaseKeyManager> _mockKeyManager;
 
         private readonly IDatabaseMigrationConfigurationProvider _config =
             new DefaultDatabaseMigrationConfigurationProvider();
@@ -47,6 +48,7 @@ namespace Ivy.Migration.Test.Services
             _mockSqlGen = InitializeMoq<IMigrationSqlGenerator>(containerGen);
             _mockRandomHelper = InitializeMoq<IRandomizationHelper>(containerGen);
             _mockFileAccessor = InitializeMoq<IFileAccessor>(containerGen);
+            _mockKeyManager = InitializeMoq<IDatabaseKeyManager>(containerGen);
 
             containerGen.RegisterSingleton<ITransactionHelper, TestTransactionHelper>();
         }
@@ -331,22 +333,22 @@ namespace Ivy.Migration.Test.Services
             throw new NotImplementedException();
         }
 
-        public void WrapInTransaction(Action<ITranConn> tranConnFn, ITranConn tc = null)
+        public void WrapInTransaction(Action<ITranConn> tranConnFn, string connectionString, ITranConn tc = null)
         {
             tranConnFn(tc);
         }
 
-        public T WrapInTransaction<T>(Func<ITranConn, T> tranConnFn, ITranConn tc = null)
+        public T WrapInTransaction<T>(Func<ITranConn, T> tranConnFn, string connectionString, ITranConn tc = null)
         {
             return tranConnFn(tc);
         }
 
-        public async Task WrapInTransactionAsync(Func<ITranConn, Task> tranConnFn, ITranConn tc = null)
+        public async Task WrapInTransactionAsync(Func<ITranConn, Task> tranConnFn, string connectionString, ITranConn tc = null)
         {
             await tranConnFn(tc);
         }
 
-        public async Task<T> WrapInTransactionAsync<T>(Func<ITranConn, Task<T>> tranConnFn, ITranConn tc = null)
+        public async Task<T> WrapInTransactionAsync<T>(Func<ITranConn, Task<T>> tranConnFn, string connectionString, ITranConn tc = null)
         {
             return await tranConnFn(tc);
         }

@@ -38,7 +38,7 @@ namespace Ivy.Data.MySQL.Test
 
             string idVal = _randomizationHelper.RandomString();
             var parms = new Dictionary<string, object>();
-            var result = _sut.GenerateDeleteQuery(idVal, ref parms);
+            var result = _sut.GenerateDeleteQuery(idVal, parms);
 
             var attrs = Sut.GetSqlPropertyNames<StringEntity>().Select(FormatSqlAttr);
 
@@ -46,9 +46,9 @@ namespace Ivy.Data.MySQL.Test
 
             string expected = $"DELETE FROM stringentity WHERE `Id` = @entityId;";
 
-            Assert.Equal(expected, result);
-            Assert.True(parms.Count == 1);
-            Assert.Equal(idVal, parms["@entityId"]);
+            Assert.Equal(expected, result.Sql);
+            Assert.True(result.Parms.Count == 1);
+            Assert.Equal(idVal, result.Parms["@entityId"]);
         }
 
         #endregion
@@ -62,7 +62,7 @@ namespace Ivy.Data.MySQL.Test
 
             string idVal = _randomizationHelper.RandomString();
             var parms = new Dictionary<string, object>();
-            var result = _sut.GenerateGetQuery(idVal, ref parms);
+            var result = _sut.GenerateGetQuery(idVal, parms);
 
             var attrs = Sut.GetSqlPropertyNames<StringEntity>().Select(FormatSqlAttr);
 
@@ -72,9 +72,9 @@ namespace Ivy.Data.MySQL.Test
 
             string expected = $"SELECT {expectedAttrString} FROM stringentity `THIS` WHERE `Id` = @entityId;";
 
-            Assert.Equal(expected, result);
-            Assert.True(parms.Count == 1);
-            Assert.Equal(idVal, parms["@entityId"]);
+            Assert.Equal(expected, result.Sql);
+            Assert.True(result.Parms.Count == 1);
+            Assert.Equal(idVal, result.Parms["@entityId"]);
         }
 
         #endregion
@@ -89,7 +89,7 @@ namespace Ivy.Data.MySQL.Test
             var StringIdEntity = new StringEntity().GenerateForTest();
 
             var parms = new Dictionary<string, object>();
-            var result = _sut.GenerateSaveOrUpdateQuery(StringIdEntity, ref parms);
+            var result = _sut.GenerateSaveOrUpdateQuery(StringIdEntity, parms);
 
             var attrs = Sut.GetSqlPropertyNames<StringEntity>();
 
@@ -99,8 +99,8 @@ namespace Ivy.Data.MySQL.Test
 
             var expected = $"REPLACE INTO stringentity ({expectedAttrString}) VALUES ({expectedParamString});";
 
-            Assert.Equal(expected, result);
-            Assert.True(parms.Count == attrs.Count()); // param for each attr, not just id
+            Assert.Equal(expected, result.Sql);
+            Assert.True(result.Parms.Count == attrs.Count()); // param for each attr, not just id
         }
 
         #endregion
