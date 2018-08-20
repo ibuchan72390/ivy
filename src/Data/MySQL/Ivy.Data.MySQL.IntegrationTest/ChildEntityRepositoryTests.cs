@@ -65,6 +65,38 @@ namespace Ivy.Data.MySQL.IntegrationTest
             }
         }
 
+        [Fact]
+        public async void ChildEntity_SaveAsync_Properly_Assigns_CoreEntityId_Value()
+        {
+            var childEntity = new ChildEntity().GenerateForTest();
+
+            var coreEntity = new CoreEntity().SaveForTest();
+
+            childEntity.CoreEntity = coreEntity;
+
+            await Sut.SaveOrUpdateAsync(childEntity);
+
+            var tranGenerator = ServiceLocator.Instance.GetService<ITranConnGenerator>();
+
+            // Make sure to wrap in "using", failure to dispose transaction is dangerous
+            using (var tran = tranGenerator.GenerateTranConn(MySqlTestValues.TestDbConnectionString))
+            {
+                var cmd = tran.Connection.CreateCommand();
+                cmd.CommandText = $"SELECT CoreEntityId FROM ChildEntity WHERE Id = {childEntity.Id}";
+
+                using (var results = cmd.ExecuteReader())
+                {
+                    while (results.Read())
+                    {
+                        var resultId = results.GetValue(0);
+                        Assert.Equal(coreEntity.Id, resultId);
+                    }
+
+                    results.Close();
+                }
+            }
+        }
+
         #endregion
     }
 }

@@ -7,6 +7,9 @@ using Ivy.Data.Core.Interfaces;
 using Ivy.Data.Core.Interfaces.Domain;
 using Ivy.Data.Core.Interfaces.SQL;
 using Ivy.Data.Core.Interfaces.Pagination;
+using System.Threading.Tasks;
+using System.Data;
+using Ivy.Data.Core.Interfaces.Sql;
 
 namespace Ivy.Data.Common
 {
@@ -74,6 +77,13 @@ namespace Ivy.Data.Common
             InternalExecuteNonQuery(query, tc);
         }
 
+        public virtual async Task DeleteAllAsync(ITranConn tc = null)
+        {
+            var query = _sqlGenerator.GenerateDeleteQuery();
+
+            await InternalExecuteNonQueryAsync(query, tc);
+        }
+
         public virtual IEnumerable<T> GetAll(ITranConn tc = null)
         {
             var query = _sqlGenerator.GenerateGetQuery();
@@ -81,9 +91,21 @@ namespace Ivy.Data.Common
             return InternalExecuteQuery(query, tc);
         }
 
+        public virtual async Task<IEnumerable<T>> GetAllAsync(ITranConn tc = null)
+        {
+            var query = _sqlGenerator.GenerateGetQuery();
+
+            return await InternalExecuteQueryAsync(query, tc);
+        }
+
         public virtual IPaginationResponse<T> GetAll(IPaginationRequest request, ITranConn tc = null)
         {
             return InternalSelectPaginated(pagingRequest: request, tc: tc);
+        }
+
+        public virtual async Task<IPaginationResponse<T>> GetAllAsync(IPaginationRequest request, ITranConn tc = null)
+        {
+            return await InternalSelectPaginatedAsync(pagingRequest: request, tc: tc);
         }
 
         public virtual int GetCount(ITranConn tc = null)
@@ -91,10 +113,18 @@ namespace Ivy.Data.Common
             return InternalCount(tc: tc);
         }
 
+        public virtual async Task<int> GetCountAsync(ITranConn tc = null)
+        {
+            return await InternalCountAsync(tc: tc);
+        }
+
         #endregion
 
         #region Helper Methods
 
+        /*
+         * Synchronous Support
+         */
         protected IEnumerable<TBasic> GetBasicTypeList<TBasic>(string sql, Dictionary<string, object> parms, ITranConn tc = null)
         {
             return InternalExecuteAlternateTypeQuery<TBasic>(sql, tc, parms);
@@ -108,8 +138,6 @@ namespace Ivy.Data.Common
             return InternalExecuteQuery(query, tc, parms);
         }
 
-        /*
-         */
         protected IPaginationResponse<T> InternalSelectPaginated(string selectPrefix = null, string joinClause = null, string whereClause = null,
             string orderByClause = null, IPaginationRequest pagingRequest = null, Dictionary<string, object> parms = null, ITranConn tc = null)
         {
@@ -150,18 +178,66 @@ namespace Ivy.Data.Common
             return InternalExecuteAlternateTypeQuery<int>(countQuery, tc, parms).SingleOrDefault();
         }
 
-        // Async functionality for future expansion - Need these for ALL of the above
-        //protected Task<IEnumerable<TReturn>> InternalExecuteQueryAsync<TReturn>(string sql, ITranConn tc = null, object parms = null)
-        //{
-        //    return _tranHelper.WrapInTransaction(
-        //        async tran => await tran.Connection.QueryAsync<TReturn>(sql, parms, tran.Transaction), tc);
-        //}
 
-        //protected Task InternalExecuteNonQueryAsync(string sql, ITranConn tc = null, object parms = null)
-        //{
-        //    return _tranHelper.WrapInTransaction(
-        //        async tran => await tran.Connection.ExecuteAsync(sql, parms, tran.Transaction), tc);
-        //}
+
+        /*
+        * Asynchronous Support
+        */
+        protected async Task<IEnumerable<TBasic>> GetBasicTypeListAsync<TBasic>(string sql, Dictionary<string, object> parms, ITranConn tc = null)
+        {
+            return await InternalExecuteAlternateTypeQueryAsync<TBasic>(sql, tc, parms);
+        }
+
+        protected async Task<IEnumerable<T>> InternalSelectAsync(string selectPrefix = null, string joinClause = null, string whereClause = null,
+            string orderByClause = null, int? limit = null, int? offset = null, Dictionary<string, object> parms = null, ITranConn tc = null)
+        {
+            var query = _sqlGenerator.GenerateGetQuery(selectPrefix, whereClause, joinClause, orderByClause, limit, offset);
+
+            return await InternalExecuteQueryAsync(query, tc, parms);
+        }
+
+        protected async Task<IPaginationResponse<T>> InternalSelectPaginatedAsync(string selectPrefix = null, string joinClause = null, string whereClause = null,
+            string orderByClause = null, IPaginationRequest pagingRequest = null, Dictionary<string, object> parms = null, ITranConn tc = null)
+        {
+            var offset = (pagingRequest.PageNumber - 1) * pagingRequest.PageCount;
+
+            var response = new PaginationResponse<T>();
+
+            // Data Get
+            var dataQuery = _sqlGenerator.GenerateGetQuery(selectPrefix, whereClause, joinClause, orderByClause, pagingRequest.PageCount, offset);
+            response.Data = await InternalExecuteQueryAsync(dataQuery, tc, parms);
+
+            // Count Get
+            // need to pass where and join for proper understanding of filtered result set
+            var countQuery = _sqlGenerator.GenerateGetCountQuery(whereClause, joinClause);
+            var countResults = await InternalExecuteAlternateTypeQueryAsync<int>(countQuery, tc, parms);
+            response.TotalCount = countResults.FirstOrDefault();
+
+            return response;
+        }
+
+        protected async Task InternalUpdateAsync(string setClause, string whereClause = null, Dictionary<string, object> parms = null, ITranConn tc = null)
+        {
+            var sql = _sqlGenerator.GenerateUpdateQuery(setClause, whereClause);
+
+            await InternalExecuteNonQueryAsync(sql, tc, parms);
+        }
+
+        protected async Task InternalDeleteAsync(string whereClause = null, Dictionary<string, object> parms = null, ITranConn tc = null)
+        {
+            var sql = _sqlGenerator.GenerateDeleteQuery(whereClause);
+
+            await InternalExecuteNonQueryAsync(sql, tc, parms);
+        }
+
+        protected async Task<int> InternalCountAsync(string whereClause = null, string joinClause = null, Dictionary<string, object> parms = null, ITranConn tc = null)
+        {
+            var countQuery = _sqlGenerator.GenerateGetCountQuery(whereClause, joinClause);
+
+            var countResults = await InternalExecuteAlternateTypeQueryAsync<int>(countQuery, tc, parms);
+            
+            return countResults.SingleOrDefault();
+        }
 
         #endregion
 
@@ -170,6 +246,11 @@ namespace Ivy.Data.Common
 
         // There's got to be a way to extract all this transaction stuff into another method
         // I'd almost like to make it the tranConnGenerator piece
+
+
+        /*
+         * Synchronous Support
+         */
         protected virtual IEnumerable<T> InternalExecuteQuery(string sql, ITranConn tc = null, object parms = null)
         {
             return _tranHelper.WrapInTransaction<IEnumerable<T>>(
@@ -186,46 +267,79 @@ namespace Ivy.Data.Common
             _sqlExecutor.ExecuteNonQuery(sql, ConnectionString, tc, parms);
         }
 
+
+        /*
+         * Asynchronous Support
+         */
+        protected virtual async Task<IEnumerable<T>> InternalExecuteQueryAsync(string sql, ITranConn tc = null, object parms = null)
+        {
+            return await _tranHelper.WrapInTransactionAsync<IEnumerable<T>>(
+                    async tran => await HandleExecuteQueryAsync(tran, sql, parms), ConnectionString, tc);
+        }
+
+        protected virtual async Task<IEnumerable<TReturn>> InternalExecuteAlternateTypeQueryAsync<TReturn>(string sql, ITranConn tc = null, object parms = null)
+        {
+            return await _sqlExecutor.ExecuteTypedQueryAsync<TReturn>(sql, ConnectionString, tc, parms);
+        }
+
+        protected virtual async Task InternalExecuteNonQueryAsync(string sql, ITranConn tc = null, object parms = null)
+        {
+            await _sqlExecutor.ExecuteNonQueryAsync(sql, ConnectionString, tc, parms);
+        }
+
         #endregion
 
         #region Private Methods
 
         private IEnumerable<T> HandleExecuteQuery(ITranConn tran, string sql, object parms)
         {
-            using (var reader = tran.Connection.ExecuteReader(sql, parms, tran.Transaction))
+            using (IDataReader reader = tran.Connection.ExecuteReader(sql, parms, tran.Transaction))
             {
-                IList<int> fkIndices = new List<int>();
-
-                for (var i = 0; i < reader.FieldCount; i++)
-                {
-                    var colName = reader.GetName(i);
-
-                    // Either Id column or an Id reference
-                    if (colName.Substring(colName.Length - 2, 2) == "Id" && colName.Length > 2)
-                    {
-                        fkIndices.Add(i);
-                    }
-                }
-
-                var parser = reader.GetRowParser<T>();
-
-                IList<T> results = new List<T>();
-
-                while (reader.Read())
-                {
-                    var referenceList = fkIndices.ToDictionary(x => reader.GetName(x), x => reader.GetValue(x));
-
-                    T result = parser(reader);
-
-                    result.References = referenceList;
-
-                    results.Add(result);
-                }
-
-                reader.Close();
-
-                return results;
+                return ProcessIDataReader(reader);
             }
+        }
+
+        private async Task<IEnumerable<T>> HandleExecuteQueryAsync(ITranConn tran, string sql, object parms)
+        {
+            using (IDataReader reader = await tran.Connection.ExecuteReaderAsync(sql, parms, tran.Transaction).ConfigureAwait(true))
+            {
+                return ProcessIDataReader(reader);
+            }
+        }
+
+        private IEnumerable<T> ProcessIDataReader(IDataReader reader)
+        {
+            IList<int> fkIndices = new List<int>();
+
+            for (var i = 0; i < reader.FieldCount; i++)
+            {
+                var colName = reader.GetName(i);
+
+                // Either Id column or an Id reference
+                if (colName.Substring(colName.Length - 2, 2) == "Id" && colName.Length > 2)
+                {
+                    fkIndices.Add(i);
+                }
+            }
+
+            var parser = reader.GetRowParser<T>();
+
+            IList<T> results = new List<T>();
+
+            while (reader.Read())
+            {
+                var referenceList = fkIndices.ToDictionary(x => reader.GetName(x), x => reader.GetValue(x));
+
+                T result = parser(reader);
+
+                result.References = referenceList;
+
+                results.Add(result);
+            }
+
+            reader.Close();
+
+            return results;
         }
 
         #endregion
@@ -236,15 +350,15 @@ namespace Ivy.Data.Common
     #region Blob
 
     public class BlobRepository<T> : BaseRepository<T>, IBlobRepository<T>
-        where T: class, IEntityWithReferences
+        where T : class, IEntityWithReferences
     {
         #region Constructor
 
         public BlobRepository(
-            IDatabaseKeyManager databaseKeyManager, 
-            ITransactionHelper tranHelper, 
+            IDatabaseKeyManager databaseKeyManager,
+            ITransactionHelper tranHelper,
             ISqlGenerator<T> sqlGenerator,
-            ISqlExecutor sqlExecutor) 
+            ISqlExecutor sqlExecutor)
             : base(databaseKeyManager, tranHelper, sqlGenerator, sqlExecutor)
         {
         }
@@ -255,20 +369,48 @@ namespace Ivy.Data.Common
 
         public virtual void Insert(T entity, ITranConn tc = null)
         {
-            Dictionary<string, object> parms = new Dictionary<string, object>();
-
-            var query = _sqlGenerator.GenerateInsertQuery(entity, parms);
+            var query = GenerateInsertQuery(entity);
 
             InternalExecuteNonQuery(query.Sql, tc, query.Parms);
         }
 
+        public async Task InsertAsync(T entity, ITranConn tc = null)
+        {
+            var query = GenerateInsertQuery(entity);
+
+            await InternalExecuteNonQueryAsync(query.Sql, tc, query.Parms);
+        }
+
         public virtual void BulkInsert(IEnumerable<T> entities, ITranConn tc = null)
+        {
+            var query = GenerateBulkInsertQuery(entities);
+
+            InternalExecuteNonQuery(query.Sql, tc, query.Parms);
+        }
+
+        public async Task BulkInsertAsync(IEnumerable<T> entities, ITranConn tc = null)
+        {
+            var query = GenerateBulkInsertQuery(entities);
+
+            await InternalExecuteNonQueryAsync(query.Sql, tc, query.Parms);
+        }
+
+        #endregion
+
+        #region Private Helper Methods
+
+        private ISqlExecutionResult GenerateInsertQuery(T entity)
         {
             Dictionary<string, object> parms = new Dictionary<string, object>();
 
-            var query = _sqlGenerator.GenerateInsertQuery(entities, parms);
+            return _sqlGenerator.GenerateInsertQuery(entity, parms);
+        }
 
-            InternalExecuteNonQuery(query.Sql, tc, query.Parms);
+        private ISqlExecutionResult GenerateBulkInsertQuery(IEnumerable<T> entities)
+        {
+            Dictionary<string, object> parms = new Dictionary<string, object>();
+
+            return _sqlGenerator.GenerateInsertQuery(entities, parms);
         }
 
         #endregion
@@ -308,20 +450,30 @@ namespace Ivy.Data.Common
 
         public virtual void Delete(T entity, ITranConn tc = null)
         {
-            Dictionary<string, object> parms = new Dictionary<string, object>();
-
-            var query = localSqlGenerator.GenerateDeleteQuery(entity.Id, parms);
+            var query = localSqlGenerator.GenerateDeleteQuery(entity.Id, new Dictionary<string, object>());
 
             InternalExecuteNonQuery(query.Sql, tc, query.Parms);
         }
 
+        public async Task DeleteAsync(T entity, ITranConn tc = null)
+        {
+            var query = localSqlGenerator.GenerateDeleteQuery(entity.Id, new Dictionary<string, object>());
+
+            await InternalExecuteNonQueryAsync(query.Sql, tc, query.Parms);
+        }
+
         public virtual void DeleteById(TKey id, ITranConn tc = null)
         {
-            Dictionary<string, object> parms = new Dictionary<string, object>();
-
-            var query = localSqlGenerator.GenerateDeleteQuery(id, parms);
+            var query = localSqlGenerator.GenerateDeleteQuery(id, new Dictionary<string, object>());
 
             InternalExecuteNonQuery(query.Sql, tc, query.Parms);
+        }
+
+        public async Task DeleteByIdAsync(TKey id, ITranConn tc = null)
+        {
+            var query = localSqlGenerator.GenerateDeleteQuery(id, new Dictionary<string, object>());
+
+            await InternalExecuteNonQueryAsync(query.Sql, tc, query.Parms);
         }
 
         public virtual void Delete(IEnumerable<T> entities, ITranConn tc = null)
@@ -333,35 +485,65 @@ namespace Ivy.Data.Common
             DeleteByIdList(idList, tc);
         }
 
+        public async Task DeleteAsync(IEnumerable<T> entities, ITranConn tc = null)
+        {
+            if (entities == null || !entities.Any()) return;
+
+            var idList = entities.Select(x => x.Id);
+
+            await DeleteByIdListAsync(idList, tc);
+        }
+
         public virtual void DeleteByIdList(IEnumerable<TKey> ids, ITranConn tc = null)
         {
             if (ids == null || !ids.Any()) return;
 
-            Dictionary<string, object> parms = new Dictionary<string, object>();
-
-            var query = localSqlGenerator.GenerateDeleteQuery(ids, parms);
+            var query = localSqlGenerator.GenerateDeleteQuery(ids, new Dictionary<string, object>());
 
             InternalExecuteNonQuery(query.Sql, tc, query.Parms);
         }
 
+        public async Task DeleteByIdListAsync(IEnumerable<TKey> ids, ITranConn tc = null)
+        {
+            if (ids == null || !ids.Any()) return;
+
+            var query = localSqlGenerator.GenerateDeleteQuery(ids, new Dictionary<string, object>());
+
+            await InternalExecuteNonQueryAsync(query.Sql, tc, query.Parms);
+        }
+
         public virtual T GetById(TKey id, ITranConn tc = null)
         {
-            Dictionary<string, object> parms = new Dictionary<string, object>();
-
-            var query = localSqlGenerator.GenerateGetQuery(id, parms);
+            var query = localSqlGenerator.GenerateGetQuery(id, new Dictionary<string, object>());
 
             return InternalExecuteQuery(query.Sql, tc, query.Parms).SingleOrDefault();
+        }
+
+        public async Task<T> GetByIdAsync(TKey id, ITranConn tc = null)
+        {
+            var query = localSqlGenerator.GenerateGetQuery(id, new Dictionary<string, object>());
+
+            var results = await InternalExecuteQueryAsync(query.Sql, tc, query.Parms);
+            
+            return results.SingleOrDefault();
         }
 
         public virtual IEnumerable<T> GetByIdList(IEnumerable<TKey> ids, ITranConn tc = null)
         {
             if (ids == null || !ids.Any()) return new List<T>();
 
-            Dictionary<string, object> parms = new Dictionary<string, object>();
-
-            var query = localSqlGenerator.GenerateGetQuery(ids, parms);
+            var query = localSqlGenerator.GenerateGetQuery(ids, new Dictionary<string, object>());
 
             return InternalExecuteQuery(query.Sql, tc, query.Parms);
+        }
+
+        public async Task<IEnumerable<T>> GetByIdListAsync(IEnumerable<TKey> ids, ITranConn tc = null)
+        {
+            if (ids == null || !ids.Any()) return new List<T>();
+
+            var query = localSqlGenerator.GenerateGetQuery(ids, new Dictionary<string, object>());
+
+            return await InternalExecuteQueryAsync(query.Sql, tc, query.Parms);
         }
 
         public virtual T SaveOrUpdate(T entity, ITranConn tc = null)
@@ -370,12 +552,25 @@ namespace Ivy.Data.Common
              * Refs will not get populated on saves, only on gets
              */
 
-            Dictionary<string, object> parms = new Dictionary<string, object>();
-
-            var query = localSqlGenerator.GenerateSaveOrUpdateQuery(entity, parms);
+            var query = localSqlGenerator.GenerateSaveOrUpdateQuery(entity, new Dictionary<string, object>());
 
             // results should contain our new Id value if this is an insert
             var results = InternalExecuteAlternateTypeQuery<TKey>(query.Sql, tc, query.Parms);
+
+            if (results.Any())
+            {
+                entity.Id = results.First();
+            }
+
+            return entity;
+        }
+
+        public async Task<T> SaveOrUpdateAsync(T entity, ITranConn tc = null)
+        {
+            var query = localSqlGenerator.GenerateSaveOrUpdateQuery(entity, new Dictionary<string, object>());
+
+            // results should contain our new Id value if this is an insert
+            var results = await InternalExecuteAlternateTypeQueryAsync<TKey>(query.Sql, tc, query.Parms);
 
             if (results.Any())
             {
@@ -392,6 +587,19 @@ namespace Ivy.Data.Common
                 foreach (var entity in entities)
                 {
                     SaveOrUpdate(entity, tran);
+                }
+            }, ConnectionString, tc);
+
+            return entities;
+        }
+
+        public async Task<IEnumerable<T>> SaveOrUpdateAsync(IEnumerable<T> entities, ITranConn tc = null)
+        {
+            await _tranHelper.WrapInTransactionAsync(async tran =>
+            {
+                foreach (var entity in entities)
+                {
+                    await SaveOrUpdateAsync(entity, tran);
                 }
             }, ConnectionString, tc);
 
@@ -551,6 +759,12 @@ namespace Ivy.Data.Common
         where T : class, IEnumEntity<TEnum>
         where TEnum : struct, IComparable, IFormattable, IConvertible
     {
+        #region Variables & Constants
+
+        private const string whereEnumName = "WHERE `THIS`.`Name` = @enumVal";
+
+        #endregion
+
         #region Constructor
 
         public EnumEntityRepository(
@@ -568,19 +782,16 @@ namespace Ivy.Data.Common
 
         public virtual T GetByName(TEnum enumVal, ITranConn tc = null)
         {
-            const string sqlWhere = "WHERE `THIS`.`Name` = @enumVal";
+            IEnumerable<T> results = InternalSelect(null, null, whereEnumName, null, null, null, GetEnumNameDict(enumVal), tc);
 
-            var parms = new Dictionary<string, object> { { "@enumVal", enumVal.ToString() } };
+            return ValidateGetByNameResult(enumVal, results);
+        }
 
-            IEnumerable<T> results = InternalSelect(null, null, sqlWhere, null, null, null, parms, tc);
+        public async Task<T> GetByNameAsync(TEnum enumVal, ITranConn tc = null)
+        {
+            IEnumerable<T> results = await InternalSelectAsync(null, null, whereEnumName, null, null, null, GetEnumNameDict(enumVal), tc);
 
-            if (results.Count() > 1)
-            {
-                throw new Exception("Multiple objects found matching the provided Enumeration Value. " +
-                    $"Table: {typeof(T).Name} / Search Value: {enumVal.ToString()}");
-            }
-
-            return results.FirstOrDefault();
+            return ValidateGetByNameResult(enumVal, results);
         }
 
         public virtual IEnumerable<T> GetByNames(IEnumerable<TEnum> enumVals, ITranConn tc = null)
@@ -590,12 +801,49 @@ namespace Ivy.Data.Common
                 return new List<T>();
             }
 
+            string sqlWhere = GenerateGetByNamesWhere(enumVals);
+
+            return InternalSelect(whereClause: sqlWhere, tc: tc);
+        }
+
+        public async Task<IEnumerable<T>> GetByNamesAsync(IEnumerable<TEnum> enumVals, ITranConn tc = null)
+        {
+            if (enumVals == null || !enumVals.Any())
+            {
+                return new List<T>();
+            }
+
+            string sqlWhere = GenerateGetByNamesWhere(enumVals);
+
+            return await InternalSelectAsync(whereClause: sqlWhere, tc: tc);
+        }
+
+        #endregion
+
+        #region Helper Methods
+
+        private Dictionary<string, object> GetEnumNameDict(TEnum enumVal)
+        {
+            return new Dictionary<string, object> { { "@enumVal", enumVal.ToString() } };
+        }
+
+        private T ValidateGetByNameResult(TEnum enumVal, IEnumerable<T> results)
+        {
+            if (results.Count() > 1)
+            {
+                throw new Exception("Multiple objects found matching the provided Enumeration Value. " +
+                    $"Table: {typeof(T).Name} / Search Value: {enumVal.ToString()}");
+            }
+
+            return results.FirstOrDefault();
+        }
+
+        private string GenerateGetByNamesWhere(IEnumerable<TEnum> enumVals)
+        {
             string idInList = enumVals.Select(x => $"'{x.ToString()}'").
                 Aggregate((total, current) => $"{total}, {current}");
 
-            string sqlWhere = $"WHERE `THIS`.`Name` IN ({idInList})";
-
-            return InternalSelect(whereClause: sqlWhere, tc: tc);
+            return $"WHERE `THIS`.`Name` IN ({idInList})";
         }
 
         #endregion

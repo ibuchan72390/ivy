@@ -4,6 +4,7 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Ivy.Data.Common.Test.Repository
@@ -48,6 +49,28 @@ namespace Ivy.Data.Common.Test.Repository
 
         #endregion
 
+        #region DeleteAsync
+
+        [Fact]
+        public async void DeleteAsync_Executes_As_Expected()
+        {
+            _mockEntitySqlGen.
+                Setup(x => x.GenerateDeleteQuery(entity.Id, It.IsAny<Dictionary<string, object>>())).
+                Returns(execResult);
+
+            _mockSqlExec.Setup(x => x.ExecuteNonQueryAsync(execResult.Sql, ConnectionString, tc.Object, execResult.Parms)).Returns(Task.FromResult(0));
+
+            await Sut.DeleteAsync(entity, tc.Object);
+
+            _mockEntitySqlGen.
+                Setup(x => x.GenerateDeleteQuery(entity.Id, It.IsAny<Dictionary<string, object>>())).
+                Returns(execResult);
+
+            _mockSqlExec.Setup(x => x.ExecuteNonQueryAsync(execResult.Sql, ConnectionString, tc.Object, execResult.Parms));
+        }
+
+        #endregion
+
         #region DeleteById
 
         [Fact]
@@ -66,6 +89,28 @@ namespace Ivy.Data.Common.Test.Repository
                 Returns(execResult);
 
             _mockSqlExec.Setup(x => x.ExecuteNonQuery(execResult.Sql, ConnectionString, tc.Object, execResult.Parms));
+        }
+
+        #endregion
+
+        #region DeleteByIdAsync
+
+        [Fact]
+        public async void DeleteByIdAsync_Executes_As_Expected()
+        {
+            _mockEntitySqlGen.
+                Setup(x => x.GenerateDeleteQuery(entity.Id, It.IsAny<Dictionary<string, object>>())).
+                Returns(execResult);
+
+            _mockSqlExec.Setup(x => x.ExecuteNonQueryAsync(execResult.Sql, ConnectionString, tc.Object, execResult.Parms)).Returns(Task.FromResult(0));
+
+            await Sut.DeleteByIdAsync(entity.Id, tc.Object);
+
+            _mockEntitySqlGen.
+                Setup(x => x.GenerateDeleteQuery(entity.Id, It.IsAny<Dictionary<string, object>>())).
+                Returns(execResult);
+
+            _mockSqlExec.Setup(x => x.ExecuteNonQueryAsync(execResult.Sql, ConnectionString, tc.Object, execResult.Parms));
         }
 
         #endregion
@@ -106,6 +151,42 @@ namespace Ivy.Data.Common.Test.Repository
 
         #endregion
 
+        #region DeleteAsync (Many)
+
+        [Fact]
+        public async void DeleteAsync_Many_Executes_As_Expected_For_Null_Entities()
+        {
+            IEnumerable<TestEnumEntity> entities = null;
+
+            await Sut.DeleteAsync(entities);
+        }
+
+        [Fact]
+        public async void DeleteAsync_Many_Executes_As_Expected_For_Empty_Entities()
+        {
+            IEnumerable<TestEnumEntity> entities = new List<TestEnumEntity>();
+
+            await Sut.DeleteAsync(entities);
+        }
+
+        [Fact]
+        public async void DeleteAsync_Many_Executes_As_Expected()
+        {
+            _mockEntitySqlGen.
+                Setup(x => x.GenerateDeleteQuery(entityIds, It.IsAny<Dictionary<string, object>>())).
+                Returns(execResult);
+
+            _mockSqlExec.Setup(x => x.ExecuteNonQueryAsync(execResult.Sql, ConnectionString, tc.Object, execResult.Parms)).Returns(Task.FromResult(0));
+
+            await Sut.DeleteAsync(entities, tc.Object);
+
+            _mockEntitySqlGen.Verify(x => x.GenerateDeleteQuery(entityIds, It.IsAny<Dictionary<string, object>>()), Times.Once);
+
+            _mockSqlExec.Verify(x => x.ExecuteNonQueryAsync(execResult.Sql, ConnectionString, tc.Object, execResult.Parms), Times.Once);
+        }
+
+        #endregion
+
         #region DeleteByIdList
 
         [Fact]
@@ -142,6 +223,42 @@ namespace Ivy.Data.Common.Test.Repository
 
         #endregion
 
+        #region DeleteByIdListAsync
+
+        [Fact]
+        public async void DeleteByIdListAsync_Executes_As_Expected_For_Null_Entities()
+        {
+            IEnumerable<int> entities = null;
+
+            await Sut.DeleteByIdListAsync(entities);
+        }
+
+        [Fact]
+        public async void DeleteByIdListAsync_Executes_As_Expected_For_Empty_Entities()
+        {
+            IEnumerable<int> entities = new List<int>();
+
+            await Sut.DeleteByIdListAsync(entities);
+        }
+
+        [Fact]
+        public async void DeleteByIdListAsync_Executes_As_Expected()
+        {
+            _mockEntitySqlGen.
+                Setup(x => x.GenerateDeleteQuery(entityIds, It.IsAny<Dictionary<string, object>>())).
+                Returns(execResult);
+
+            _mockSqlExec.Setup(x => x.ExecuteNonQueryAsync(execResult.Sql, ConnectionString, tc.Object, execResult.Parms)).Returns(Task.FromResult(0));
+
+            await Sut.DeleteByIdListAsync(entityIds, tc.Object);
+
+            _mockEntitySqlGen.Verify(x => x.GenerateDeleteQuery(entityIds, It.IsAny<Dictionary<string, object>>()), Times.Once);
+
+            _mockSqlExec.Verify(x => x.ExecuteNonQueryAsync(execResult.Sql, ConnectionString, tc.Object, execResult.Parms), Times.Once);
+        }
+
+        #endregion
+
         #region GetById
 
         [Fact]
@@ -170,6 +287,34 @@ namespace Ivy.Data.Common.Test.Repository
 
         #endregion
 
+        #region GetByIdAsync
+
+        [Fact]
+        public async void GetByIdAsync_Executes_As_Expected()
+        {
+            var results = new List<TestEnumEntity> { entity };
+
+            _mockEntitySqlGen.
+                Setup(x => x.GenerateGetQuery(entity.Id, It.IsAny<Dictionary<string, object>>())).
+                Returns(execResult);
+
+            _mockTranHelper.
+                Setup(x => x.WrapInTransactionAsync(It.IsAny<Func<ITranConn, Task<IEnumerable<TestEnumEntity>>>>(), ConnectionString, tc.Object)).
+                ReturnsAsync(results);
+
+            var result = await Sut.GetByIdAsync(entity.Id, tc.Object);
+
+            Assert.Same(result, entity);
+
+            _mockEntitySqlGen.
+                Verify(x => x.GenerateGetQuery(entity.Id, It.IsAny<Dictionary<string, object>>()), Times.Once);
+
+            _mockTranHelper.
+                Verify(x => x.WrapInTransactionAsync(It.IsAny<Func<ITranConn, Task<IEnumerable<TestEnumEntity>>>>(), ConnectionString, tc.Object), Times.Once);
+        }
+
+        #endregion
+
         #region GetByIdList
 
         [Fact]
@@ -192,6 +337,32 @@ namespace Ivy.Data.Common.Test.Repository
 
             _mockTranHelper.
                 Verify(x => x.WrapInTransaction(It.IsAny<Func<ITranConn, IEnumerable<TestEnumEntity>>>(), ConnectionString, tc.Object), Times.Once);
+        }
+
+        #endregion
+
+        #region GetByIdListAsync
+
+        [Fact]
+        public async void GetByIdListAsync_Executes_As_Expected()
+        {
+            _mockEntitySqlGen.
+                Setup(x => x.GenerateGetQuery(entityIds, It.IsAny<Dictionary<string, object>>())).
+                Returns(execResult);
+
+            _mockTranHelper.
+                Setup(x => x.WrapInTransactionAsync(It.IsAny<Func<ITranConn, Task<IEnumerable<TestEnumEntity>>>>(), ConnectionString, tc.Object)).
+                ReturnsAsync(entities);
+
+            var result = await Sut.GetByIdListAsync(entityIds, tc.Object);
+
+            Assert.Same(result, entities);
+
+            _mockEntitySqlGen.
+                Verify(x => x.GenerateGetQuery(entityIds, It.IsAny<Dictionary<string, object>>()), Times.Once);
+
+            _mockTranHelper.
+                Verify(x => x.WrapInTransactionAsync(It.IsAny<Func<ITranConn, Task<IEnumerable<TestEnumEntity>>>>(), ConnectionString, tc.Object), Times.Once);
         }
 
         #endregion
@@ -238,6 +409,52 @@ namespace Ivy.Data.Common.Test.Repository
                 Verify(x => x.GenerateSaveOrUpdateQuery(entity, It.IsAny<Dictionary<string, object>>()), Times.Once);
 
             _mockSqlExec.Verify(x => x.ExecuteTypedQuery<int>(execResult.Sql, ConnectionString, tc.Object, execResult.Parms), Times.Once);
+        }
+
+        #endregion
+
+        #region SaveOrUpdateAsync
+
+        [Fact]
+        public async void SaveOrUpdateAsync_Executes_As_Expected_And_New_Id()
+        {
+            const int newId = 987;
+
+            _mockEntitySqlGen.
+                Setup(x => x.GenerateSaveOrUpdateQuery(entity, It.IsAny<Dictionary<string, object>>())).
+                Returns(execResult);
+
+            _mockSqlExec.Setup(x => x.ExecuteTypedQueryAsync<int>(execResult.Sql, ConnectionString, tc.Object, execResult.Parms)).
+                ReturnsAsync(new List<int> { newId });
+
+            await Sut.SaveOrUpdateAsync(entity, tc.Object);
+
+            Assert.Equal(newId, entity.Id);
+
+            _mockEntitySqlGen.
+                Verify(x => x.GenerateSaveOrUpdateQuery(entity, It.IsAny<Dictionary<string, object>>()), Times.Once);
+
+            _mockSqlExec.Verify(x => x.ExecuteTypedQueryAsync<int>(execResult.Sql, ConnectionString, tc.Object, execResult.Parms), Times.Once);
+        }
+
+        [Fact]
+        public async void SaveOrUpdateAsync_Executes_As_Expected_And_No_New_Id()
+        {
+            _mockEntitySqlGen.
+                Setup(x => x.GenerateSaveOrUpdateQuery(entity, It.IsAny<Dictionary<string, object>>())).
+                Returns(execResult);
+
+            _mockSqlExec.Setup(x => x.ExecuteTypedQueryAsync<int>(execResult.Sql, ConnectionString, tc.Object, execResult.Parms)).
+                ReturnsAsync(new List<int> { });
+
+            await Sut.SaveOrUpdateAsync(entity, tc.Object);
+
+            Assert.Equal(entityId, entity.Id);
+
+            _mockEntitySqlGen.
+                Verify(x => x.GenerateSaveOrUpdateQuery(entity, It.IsAny<Dictionary<string, object>>()), Times.Once);
+
+            _mockSqlExec.Verify(x => x.ExecuteTypedQueryAsync<int>(execResult.Sql, ConnectionString, tc.Object, execResult.Parms), Times.Once);
         }
 
         #endregion

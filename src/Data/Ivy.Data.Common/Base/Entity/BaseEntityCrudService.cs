@@ -3,6 +3,7 @@ using Ivy.Data.Core.Interfaces.Base.Entity;
 using Ivy.Data.Core.Interfaces.Domain;
 using System.Collections.Generic;
 using Ivy.Data.Core.Interfaces.Pagination;
+using System.Threading.Tasks;
 
 namespace Ivy.Data.Common.Base.Entity
 {
@@ -24,6 +25,10 @@ namespace Ivy.Data.Common.Base.Entity
 
         #region Public Methods
 
+        #region Delete
+
+        #region Synchronous
+
         public virtual void Delete(TEntity entity, ITranConn tc = null)
         {
             Repo.Delete(entity, tc);
@@ -36,7 +41,7 @@ namespace Ivy.Data.Common.Base.Entity
 
         public virtual void DeleteAll(ITranConn tc = null)
         {
-            Repo.DeleteAll(tc);
+            Repo.DeleteAll();
         }
 
         public virtual void DeleteById(TKey id, ITranConn tc = null)
@@ -48,6 +53,43 @@ namespace Ivy.Data.Common.Base.Entity
         {
             Repo.DeleteByIdList(ids, tc);
         }
+
+        #endregion
+
+        #region Asynchronous
+
+        public virtual async Task DeleteAsync(TEntity entity, ITranConn tc = null)
+        {
+            await Repo.DeleteAsync(entity, tc);
+        }
+
+        public virtual async Task DeleteAsync(IEnumerable<TEntity> entities, ITranConn tc = null)
+        {
+            await Repo.DeleteAsync(entities, tc);
+        }
+
+        public virtual async Task DeleteAllAsync(ITranConn tc = null)
+        {
+            await Repo.DeleteAllAsync();
+        }
+
+        public virtual async Task DeleteByIdAsync(TKey id, ITranConn tc = null)
+        {
+            await Repo.DeleteByIdAsync(id, tc);
+        }
+
+        public virtual async Task DeleteByIdListAsync(IEnumerable<TKey> ids, ITranConn tc = null)
+        {
+            await Repo.DeleteByIdListAsync(ids, tc);
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Get
+
+        #region Synchronous
 
         public virtual IEnumerable<TEntity> GetAll(ITranConn tc = null)
         {
@@ -69,15 +111,65 @@ namespace Ivy.Data.Common.Base.Entity
             return Repo.GetByIdList(ids, tc);
         }
 
+        #endregion
+
+        #region Asynchronous
+
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(ITranConn tc = null)
+        {
+            return await Repo.GetAllAsync(tc);
+        }
+
+        public virtual async Task<IPaginationResponse<TEntity>> GetAllAsync(IPaginationRequest request, ITranConn tc = null)
+        {
+            return await Repo.GetAllAsync(request, tc);
+        }
+
+        public virtual async Task<TEntity> GetByIdAsync(TKey id, ITranConn tc = null)
+        {
+            return await Repo.GetByIdAsync(id, tc);
+        }
+
+        public virtual async Task<IEnumerable<TEntity>> GetByIdListAsync(IEnumerable<TKey> ids, ITranConn tc = null)
+        {
+            return await Repo.GetByIdListAsync(ids, tc);
+        }
+
+        #endregion
+
+        #endregion SaveOrUpdate
+
+        #region SaveOrUpdate
+
+        #region Synchronous
+
         public virtual TEntity SaveOrUpdate(TEntity entity, ITranConn tc = null)
         {
             return Repo.SaveOrUpdate(entity, tc);
         }
 
-        public IEnumerable<TEntity> SaveOrUpdate(IEnumerable<TEntity> entities, ITranConn tc = null)
+        public virtual IEnumerable<TEntity> SaveOrUpdate(IEnumerable<TEntity> entities, ITranConn tc = null)
         {
             return Repo.SaveOrUpdate(entities, tc);
         }
+
+        #endregion
+
+        #region Asynchronous
+
+        public virtual async Task<TEntity> SaveOrUpdateAsync(TEntity entity, ITranConn tc = null)
+        {
+            return await Repo.SaveOrUpdateAsync(entity, tc);
+        }
+
+        public virtual async Task<IEnumerable<TEntity>> SaveOrUpdateAsync(IEnumerable<TEntity> entities, ITranConn tc = null)
+        {
+            return await Repo.SaveOrUpdateAsync(entities, tc);
+        }
+
+        #endregion
+
+        #endregion
 
         #endregion
     }

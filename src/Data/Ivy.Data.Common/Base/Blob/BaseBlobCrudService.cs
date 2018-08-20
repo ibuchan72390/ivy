@@ -2,7 +2,7 @@
 using Ivy.Data.Core.Interfaces.Base.Blob;
 using System.Collections.Generic;
 using Ivy.Data.Core.Interfaces.Pagination;
-using System;
+using System.Threading.Tasks;
 
 namespace Ivy.Data.Common.Base.Blob
 {
@@ -24,15 +24,45 @@ namespace Ivy.Data.Common.Base.Blob
 
         #region Public Methods
 
+        #region Insert
+
+        public virtual void Insert(TEntity entity, ITranConn tc = null)
+        {
+            Repo.Insert(entity, tc);
+        }
+
+        public virtual async Task InsertAsync(TEntity entity, ITranConn tc = null)
+        {
+            await Repo.InsertAsync(entity, tc);
+        }
+
         public virtual void BulkInsert(IEnumerable<TEntity> entities, ITranConn tc = null)
         {
             Repo.BulkInsert(entities, tc);
         }
 
+        public virtual async Task BulkInsertAsync(IEnumerable<TEntity> entities, ITranConn tc = null)
+        {
+            await Repo.BulkInsertAsync(entities, tc);
+        }
+
+        #endregion
+
+        #region Delete
+
         public virtual void DeleteAll(ITranConn tc = null)
         {
             Repo.DeleteAll(tc);
         }
+
+        public virtual async Task DeleteAllAsync(ITranConn tc = null)
+        {
+            await Repo.DeleteAllAsync(tc);
+        }
+
+        #endregion
+
+        #region Get
 
         public virtual IEnumerable<TEntity> GetAll(ITranConn tc = null)
         {
@@ -44,10 +74,17 @@ namespace Ivy.Data.Common.Base.Blob
             return Repo.GetAll(request, tc);
         }
 
-        public virtual void Insert(TEntity entity, ITranConn tc = null)
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(ITranConn tc = null)
         {
-            Repo.Insert(entity, tc);
+            return await Repo.GetAllAsync(tc);
         }
+
+        public virtual async Task<IPaginationResponse<TEntity>> GetAllAsync(IPaginationRequest request, ITranConn tc = null)
+        {
+            return await Repo.GetAllAsync(request, tc);
+        }
+
+        #endregion
 
         #endregion
     }

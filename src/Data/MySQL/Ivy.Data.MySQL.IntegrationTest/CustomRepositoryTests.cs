@@ -19,6 +19,7 @@ using Ivy.TestUtilities;
 using Ivy.Data.Core.Interfaces.Pagination;
 using Ivy.Data.Common.Pagination;
 using Ivy.TestUtilities.Utilities;
+using System.Threading.Tasks;
 
 namespace Ivy.Data.MySQL.IntegrationTest
 {
@@ -88,6 +89,51 @@ namespace Ivy.Data.MySQL.IntegrationTest
         public void GetAllIds_Returns_As_Expected_When_No_Result()
         {
             var results = Sut.GetAllIds();
+
+            Assert.Empty(results);
+        }
+
+        #endregion
+
+        #region GetBasicTypeListAsync
+
+        [Fact]
+        public async void GetNameByIdAsync_Returns_As_Expected()
+        {
+            var targetEntity = new ParentEntity().SaveForTest();
+
+            var result = await Sut.GetNameByIdAsync(targetEntity.Id);
+
+            Assert.Equal(targetEntity.Name, result);
+        }
+
+        [Fact]
+        public async void GetNameByIdAsync_Returns_As_Expected_When_No_Result()
+        {
+            var result = await Sut.GetNameByIdAsync(-1);
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public async void GetAllIdsAsync_Returns_As_Expected()
+        {
+            const int toMake = 5;
+
+            var entities = Enumerable.Range(0, toMake).
+                Select(x => new ParentEntity().SaveForTest()).
+                ToList();
+
+            var entityIds = entities.Select(x => x.Id);
+
+            var results = await Sut.GetAllIdsAsync();
+
+            AssertExtensions.FullBasicListExclusion(entityIds, results);
+        }
+
+        [Fact]
+        public async void GetAllIdsAsync_Returns_As_Expected_When_No_Result()
+        {
+            var results = await Sut.GetAllIdsAsync();
 
             Assert.Empty(results);
         }
@@ -167,6 +213,79 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
         #endregion
 
+        #region InternalSelectAsync
+
+        [Fact]
+        public async void CustomOrderByAsync_Works_As_Expected()
+        {
+            var targetCount = 5;
+
+            var entities = Enumerable.Range(0, targetCount).
+                Select(x => new ParentEntity().SaveForTest()).
+                ToList();
+
+            var results = (await Sut.GetAllByIdDescAsync()).ToList();
+
+            int? currentId = null;
+            foreach (var result in results)
+            {
+                if (currentId.HasValue)
+                {
+                    Assert.True(result.Id < currentId.Value);
+                }
+
+                currentId = result.Id;
+            }
+        }
+
+        [Fact]
+        public async void CustomWhereClauseAsync_Query_Works_As_Expected()
+        {
+            var targetEntity = new ParentEntity().SaveForTest();
+
+            var results = await Sut.GetByNameAsync(targetEntity.Name);
+
+            Assert.Single(results);
+        }
+
+        [Fact]
+        public async void SelectPrefixAsync_Query_Works_As_Expected()
+        {
+            var allParentEntities = Enumerable.Range(0, 10).Select(x => new ParentEntity().SaveForTest()).ToList();
+
+            var expectedParentEntities = allParentEntities.Take(5);
+
+            var results = await Sut.GetTop5Async();
+
+            Assert.Equal(5, results.Count());
+
+            var resultIds = results.Select(x => x.Id);
+            var expectedIds = expectedParentEntities.Select(x => x.Id);
+
+            Assert.Empty(resultIds.Except(expectedIds));
+            Assert.Empty(expectedIds.Except(resultIds));
+        }
+
+        [Fact]
+        public async void SqlJoinAsync_Query_Works_As_Expected()
+        {
+            var entity = new ParentEntity().SaveForTest();
+
+            var coreEntity = new CoreEntity { ParentEntity = entity }.SaveForTest();
+
+            Enumerable.Range(0, 3).Select(x => new CoreEntity { ParentEntity = entity }.SaveForTest()).ToList();
+
+            var results = await Sut.GetByCoreEntityIdAsync(coreEntity.Id);
+
+            Assert.Single(results);
+
+            var result = results.First();
+
+            Assert.Equal(entity.Id, result.Id);
+        }
+
+        #endregion
+
         #region InternalPaginatedSelect
 
         [Fact]
@@ -235,6 +354,74 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
         #endregion
 
+        #region InternalPaginatedSelectAsync
+
+        [Fact]
+        public async void FindByNameAsync_Works_As_Expected_With_Pagination()
+        {
+            const string nameLike = "TEST";
+            const int viableEntities = 4;
+
+            var expectedEntities = Enumerable.Range(0, viableEntities).
+                Select(x => new ParentEntity { Name = $"{nameLike}{x}" }.SaveForTest()).
+                ToList();
+
+            var alternateEntities = Enumerable.Range(0, 4).
+                Select(x => new ParentEntity().SaveForTest()).
+                ToList();
+
+            var req = new PaginationRequest();
+            req.Search = nameLike;
+            req.PageCount = 10;
+            req.PageNumber = 1;
+
+            var results = await Sut.SearchByNameAsync(req);
+
+            // This is a bad assumption...
+            //Assert.Equal(viableEntities * 2, results.TotalCount);
+            // We want to know the total with the filter applied
+            // This way, we properly understand client-side pagination.
+            // Otherwise, total page count will never change
+
+            Assert.Equal(viableEntities, results.TotalCount);
+            Assert.Equal(viableEntities, results.Data.Count());
+            AssertExtensions.FullEntityListExclusion(expectedEntities, results.Data);
+        }
+
+        [Fact]
+        public async void FindByNameAsync_Works_As_Expected_With_Limited_Pagination()
+        {
+            const string nameLike = "TEST";
+            const int viableEntities = 4;
+            const int pageCount = 2;
+
+            var expectedEntities = Enumerable.Range(0, viableEntities).
+                Select(x => new ParentEntity { Name = $"{nameLike}{x}" }.SaveForTest()).
+                ToList();
+
+            var expected = expectedEntities.Take(2);
+
+            var alternateEntities = Enumerable.Range(0, 4).
+                Select(x => new ParentEntity().SaveForTest()).
+                ToList();
+
+            var req = new PaginationRequest();
+            req.Search = nameLike;
+            req.PageCount = pageCount;
+            req.PageNumber = 1;
+
+            var results = await Sut.SearchByNameAsync(req);
+
+            // See above as to why this is a bad assumption
+            //Assert.Equal(viableEntities * 2, results.TotalCount);
+
+            Assert.Equal(viableEntities, results.TotalCount);
+            Assert.Equal(pageCount, results.Data.Count());
+            AssertExtensions.FullEntityListExclusion(expected, results.Data);
+        }
+
+        #endregion
+
         #region InternalUpdate
 
         [Fact]
@@ -279,6 +466,50 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
         #endregion
 
+        #region InternalUpdateAsync
+
+        [Fact]
+        public async void Custom_Update_Async_Works_As_Expected()
+        {
+            const string newName = "My Sample Name";
+
+            var entities = Enumerable.Range(0, 3).Select(x => new ParentEntity().SaveForTest()).ToList();
+
+            await Sut.UpdateAllNamesAsync(newName);
+
+            var results = Sut.GetAll();
+
+            results.Each(x => Assert.Equal(newName, x.Name));
+        }
+
+        [Fact]
+        public async void Custom_Update_Async_With_Where_Clause_Works_As_Expected()
+        {
+            const string newName = "My Sample Name";
+
+            var entities = Enumerable.Range(0, 3).Select(x => new ParentEntity().SaveForTest()).ToList();
+
+            var updateEntity = entities.First();
+
+            await Sut.UpdateNameByIdAsync(updateEntity.Id, newName);
+
+            var results = Sut.GetAll();
+
+            foreach (var result in results)
+            {
+                if (result.Id == updateEntity.Id)
+                {
+                    Assert.Equal(newName, result.Name);
+                }
+                else
+                {
+                    Assert.NotEqual(newName, result.Name);
+                }
+            }
+        }
+
+        #endregion
+
         #region InternalDelete
 
         [Fact]
@@ -289,6 +520,22 @@ namespace Ivy.Data.MySQL.IntegrationTest
             Assert.NotNull(Sut.GetById(entity.Id));
 
             Sut.DeleteByName(entity.Name);
+
+            Assert.Null(Sut.GetById(entity.Id));
+        }
+
+        #endregion
+
+        #region InternalDeleteAsync
+
+        [Fact]
+        public async void DeleteAsync_With_Custom_Where_Works_As_Expected()
+        {
+            var entity = new ParentEntity().SaveForTest();
+
+            Assert.NotNull(Sut.GetById(entity.Id));
+
+            await Sut.DeleteByNameAsync(entity.Name);
 
             Assert.Null(Sut.GetById(entity.Id));
         }
@@ -342,6 +589,53 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
         #endregion
 
+        #region InternalGetCountAsync
+
+        [Fact]
+        public async void InternalGetCountAsync_With_Custom_Where_Works_As_Expected()
+        {
+            const int toMatch = 3;
+            const string name = "TEST";
+
+            var expected = Enumerable.Range(0, toMatch).
+                Select(x => new ParentEntity { Name = name + x }.SaveForTest()).
+                ToList();
+
+            var garbageData = Enumerable.Range(0, 2).
+                Select(x => new ParentEntity().SaveForTest()).
+                ToList();
+
+            var results = await Sut.CountWhereNameLikeAsync(name);
+
+            Assert.Equal(toMatch, results);
+        }
+
+        [Fact]
+        public async void InternalGetCountAsync_With_Custom_Where_And_Join_Works_As_Expected()
+        {
+            const int toMatch = 3;
+            const string name = "TEST";
+
+            var expected = Enumerable.Range(0, toMatch).
+                Select(x => new ParentEntity { Name = name + x }.SaveForTest()).
+                ToList();
+
+            var coreIds = expected.
+                Select(x => new CoreEntity { ParentEntity = x }.SaveForTest()).
+                Select(x => x.Id).
+                ToList();
+
+            var garbageData = Enumerable.Range(0, 2).
+                Select(x => new ParentEntity().SaveForTest()).
+                ToList();
+
+            var results = await Sut.CountWhereChildIdInAsync(coreIds);
+
+            Assert.Equal(toMatch, results);
+        }
+
+        #endregion
+
         #endregion
 
     }
@@ -349,6 +643,8 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
     public interface ICustomParentEntityRepository : IEntityRepository<ParentEntity>
     {
+        #region Synchronous
+
         #region GetBasicTypeList
 
         string GetNameById(int id, ITranConn tc = null);
@@ -396,6 +692,60 @@ namespace Ivy.Data.MySQL.IntegrationTest
         int CountWhereChildIdIn(IEnumerable<int> childIds, ITranConn tc = null);
 
         #endregion
+
+        #endregion
+
+        #region Asynchronous
+
+        #region GetBasicTypeListAsync
+
+        Task<string> GetNameByIdAsync(int id, ITranConn tc = null);
+
+        Task<IEnumerable<int>> GetAllIdsAsync(ITranConn tc = null);
+
+        #endregion
+
+        #region InternalSelectAsync
+
+        Task<IEnumerable<ParentEntity>> GetAllByIdDescAsync(ITranConn tc = null);
+
+        Task<IEnumerable<ParentEntity>> GetByCoreEntityIdAsync(int coreEntityId, ITranConn tc = null);
+
+        Task<IEnumerable<ParentEntity>> GetByNameAsync(string name, ITranConn tc = null);
+
+        Task<IEnumerable<ParentEntity>> GetTop5Async(ITranConn tc = null);
+
+        #endregion
+
+        #region PaginatedSelectAsync
+
+        Task<IPaginationResponse<ParentEntity>> SearchByNameAsync(IPaginationRequest request, ITranConn tc = null);
+
+        #endregion
+
+        #region InternalUpdateAsync
+
+        Task UpdateNameByIdAsync(int id, string newName, ITranConn tc = null);
+
+        Task UpdateAllNamesAsync(string newName, ITranConn tc = null);
+
+        #endregion
+
+        #region InternalDeleteAsync
+
+        Task DeleteByNameAsync(string name, ITranConn tc = null);
+
+        #endregion
+
+        #region InternalCountAsync
+
+        Task<int> CountWhereNameLikeAsync(string name, ITranConn tc = null);
+
+        Task<int> CountWhereChildIdInAsync(IEnumerable<int> childIds, ITranConn tc = null);
+
+        #endregion
+
+        #endregion
     }
 
     public class CustomParentEntityRepository :
@@ -410,6 +760,8 @@ namespace Ivy.Data.MySQL.IntegrationTest
             : base(databaseKeyManager, tranHelper, sqlGenerator, sqlExecutor)
         {
         }
+
+        #region Synchronous
 
         #region GetBasicTypeList
 
@@ -554,6 +906,160 @@ namespace Ivy.Data.MySQL.IntegrationTest
                 joinClause: sqlJoin,
                 tc: tc);
         }
+
+        #endregion
+
+        #endregion
+
+        #region Asynchronous
+
+        #region GetBasicTypeListAsync
+
+        public async Task<string> GetNameByIdAsync(int id, ITranConn tc = null)
+        {
+            const string sql = "SELECT `Name` FROM `parententity` WHERE `Id` = @id";
+
+            var parms = new Dictionary<string, object>
+                {
+                    { "@id", id }
+                };
+
+            var results = await GetBasicTypeListAsync<string>(sql, parms, tc);
+            
+            return results.FirstOrDefault();
+        }
+
+        public async Task<IEnumerable<int>> GetAllIdsAsync(ITranConn tc = null)
+        {
+            const string sql = "SELECT `Id` FROM `parententity`";
+
+            return await GetBasicTypeListAsync<int>(sql, null, tc);
+        }
+
+        #endregion
+
+        #region InteralSelectAsync
+
+        public async Task<IEnumerable<ParentEntity>> GetAllByIdDescAsync(ITranConn tc = null)
+        {
+            const string sqlOrder = "ORDER BY `Id` DESC";
+
+            return await InternalSelectAsync(orderByClause: sqlOrder, tc: tc);
+        }
+
+        public async Task<IEnumerable<ParentEntity>> GetByCoreEntityIdAsync(int coreEntityId, ITranConn tc = null)
+        {
+            const string sqlJoin = "JOIN CoreEntity CORE ON (THIS.Id = CORE.ParentEntityId)";
+            const string sqlWhere = "WHERE CORE.Id = @coreEntityId";
+
+            var parms = new Dictionary<string, object>();
+            parms.Add("@coreEntityId", coreEntityId);
+
+            return await InternalSelectAsync(null, sqlJoin, sqlWhere, null, null, null, parms, tc);
+        }
+
+        public async Task<IEnumerable<ParentEntity>> GetByNameAsync(string name, ITranConn tc = null)
+        {
+            const string sqlWhere = "WHERE THIS.Name = @entityName";
+
+            var parms = new Dictionary<string, object>();
+            parms.Add("@entityName", name);
+
+            return await InternalSelectAsync(null, null, sqlWhere, null, null, null, parms, tc);
+        }
+
+        public async Task<IEnumerable<ParentEntity>> GetTop5Async(ITranConn tc = null)
+        {
+            return await InternalSelectAsync(limit: 5);
+        }
+
+        #endregion
+
+        #region PaginatedSelectAsync
+
+        public async Task<IPaginationResponse<ParentEntity>> SearchByNameAsync(IPaginationRequest request, ITranConn tc = null)
+        {
+            const string sqlWhere = "WHERE THIS.Name LIKE CONCAT('%', @search, '%')";
+
+            var parms = new Dictionary<string, object> { { "@search", request.Search } };
+
+            return await InternalSelectPaginatedAsync(null, null, sqlWhere, null, request, parms, tc);
+        }
+
+        #endregion
+
+        #region InternalUpdateAsync
+
+        public async Task UpdateAllNamesAsync(string newName, ITranConn tc = null)
+        {
+            const string setClause = "SET `Name` = @newName";
+
+            var parms = new Dictionary<string, object> { { "@newName", newName } };
+
+            await InternalUpdateAsync(setClause, null, parms, tc);
+        }
+
+        public async Task UpdateNameByIdAsync(int id, string newName, ITranConn tc = null)
+        {
+            const string setClause = "SET `Name` = @newName";
+            const string sqlWhere = "WHERE `Id` = @id";
+
+            var parms = new Dictionary<string, object> { { "@newName", newName }, { "@id", id } };
+
+            await InternalUpdateAsync(setClause, sqlWhere, parms, tc);
+        }
+
+        #endregion
+
+        #region InternalDeleteAsync
+
+        public async Task DeleteByNameAsync(string name, ITranConn tc = null)
+        {
+            const string sqlWhere = "WHERE `Name` = @name";
+
+            var parms = new Dictionary<string, object>
+            {
+                { "@name", name }
+            };
+
+            await InternalDeleteAsync(sqlWhere, parms, tc);
+        }
+
+        #endregion
+
+        #region InternalGetCountAsync
+
+        public async Task<int> CountWhereNameLikeAsync(string name, ITranConn tc = null)
+        {
+            const string sqlWhere = "WHERE `Name` LIKE CONCAT('%', @name, '%')";
+
+            var parms = new Dictionary<string, object>
+            {
+                { "@name", name }
+            };
+
+            return await InternalCountAsync(
+                whereClause: sqlWhere,
+                parms: parms,
+                tc: tc);
+        }
+
+        public async Task<int> CountWhereChildIdInAsync(IEnumerable<int> childIds, ITranConn tc = null)
+        {
+            if (childIds.IsNullOrEmpty()) return 0;
+
+            string idInList = string.Join(",", childIds);
+
+            string sqlWhere = $"WHERE CE.Id IN ({idInList})";
+            const string sqlJoin = "JOIN `coreentity` CE ON (CE.ParentEntityId = THIS.Id)";
+
+            return await InternalCountAsync(
+                whereClause: sqlWhere,
+                joinClause: sqlJoin,
+                tc: tc);
+        }
+
+        #endregion
 
         #endregion
     }

@@ -2,6 +2,7 @@
 using Ivy.TestHelper.TestEntities;
 using Moq;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 /*
@@ -34,6 +35,26 @@ namespace Ivy.Data.Common.Test.Repository
 
         #endregion
 
+        #region InsertAsync
+
+        [Fact]
+        public async void InsertAsync_Executes_As_Expected()
+        {
+            var entity = new TestEnumEntity();
+
+            _mockSqlGen.Setup(x => x.GenerateInsertQuery(entity, parms)).Returns(execResult);
+
+            _mockSqlExec.Setup(x => x.ExecuteNonQueryAsync(sql, ConnectionString, tc.Object, execResult.Parms)).Returns(Task.FromResult(0));
+
+            await Sut.InsertAsync(entity, tc.Object);
+
+            _mockSqlGen.Verify(x => x.GenerateInsertQuery(entity, parms), Times.Once);
+
+            _mockSqlExec.Verify(x => x.ExecuteNonQueryAsync(sql, ConnectionString, tc.Object, execResult.Parms), Times.Once);
+        }
+
+        #endregion
+
         #region BulkInsert
 
         [Fact]
@@ -50,6 +71,26 @@ namespace Ivy.Data.Common.Test.Repository
             _mockSqlGen.Verify(x => x.GenerateInsertQuery(entities, parms), Times.Once);
 
             _mockSqlExec.Verify(x => x.ExecuteNonQuery(sql, ConnectionString, tc.Object, execResult.Parms), Times.Once);
+        }
+
+        #endregion
+
+        #region BulkInsertAsync
+
+        [Fact]
+        public async void BulkInsertAsync_Executes_As_Expected_With_TranConn()
+        {
+            var entities = Enumerable.Range(0, 4).Select(x => new TestEnumEntity()).ToList();
+
+            _mockSqlGen.Setup(x => x.GenerateInsertQuery(entities, parms)).Returns(execResult);
+
+            _mockSqlExec.Setup(x => x.ExecuteNonQueryAsync(sql, ConnectionString, tc.Object, execResult.Parms)).Returns(Task.FromResult(0));
+
+            await Sut.BulkInsertAsync(entities, tc.Object);
+
+            _mockSqlGen.Verify(x => x.GenerateInsertQuery(entities, parms), Times.Once);
+
+            _mockSqlExec.Verify(x => x.ExecuteNonQueryAsync(sql, ConnectionString, tc.Object, execResult.Parms), Times.Once);
         }
 
         #endregion
