@@ -23,7 +23,7 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
             var sql = sqlGen.GenerateGetQuery();
 
-            using (var reader = await tc.Connection.ExecuteReaderAsync(sql, null, tc.Transaction).ConfigureAwait(true))
+            using (var reader = await tc.Connection.ExecuteReaderAsync(sql, null))
             {
                 Assert.True(reader.FieldCount > 0);
             }

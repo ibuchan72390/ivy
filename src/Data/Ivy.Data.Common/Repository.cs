@@ -301,7 +301,7 @@ namespace Ivy.Data.Common
 
         private async Task<IEnumerable<T>> HandleExecuteQueryAsync(ITranConn tran, string sql, object parms)
         {
-            using (IDataReader reader = await tran.Connection.ExecuteReaderAsync(sql, parms, tran.Transaction).ConfigureAwait(true))
+            using (IDataReader reader = await tran.Connection.ExecuteReaderAsync(sql, parms, tran.Transaction))
             {
                 return ProcessIDataReader(reader);
             }
