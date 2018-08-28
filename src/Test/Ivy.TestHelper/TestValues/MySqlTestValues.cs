@@ -2,6 +2,6 @@
 {
     public static class MySqlTestValues
     {
-        public const string TestDbConnectionString = "Data Source=localhost;Initial Catalog=framework_test;Uid=root;Pwd=Password00!;SslMode=none;";
+        public const string TestDbConnectionString = "Data Source=localhost;Initial Catalog=framework_test;Uid=root;Pwd=Password00!;SslMode=none;IgnoreCommandTransaction=true;";
     }
 }

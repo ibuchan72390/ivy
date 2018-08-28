@@ -10,12 +10,6 @@ using Xunit;
 
 namespace Ivy.Data.MySQL.IntegrationTest
 {
-    /*
-    * This functionality does NOT work at the current moment!!!
-    * 
-    * Id values are not properly working with the string Id concept
-    */
-
     public class StringEntityRepositoryTests : 
         MySqlIntegrationTestBase<IEntityRepository<StringEntity, string>>, 
         IDisposable
@@ -62,6 +56,40 @@ namespace Ivy.Data.MySQL.IntegrationTest
             var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
 
             Sut.GetById("TEST", tc);
+
+            tc.Dispose();
+        }
+
+        #endregion
+
+        #region GetByIdAsync
+
+        [Fact]
+        public async void GetByIdAsync_Works_As_Expected()
+        {
+            var entity = new StringEntity().SaveForTest();
+
+            var result = await Sut.GetByIdAsync(entity.Id);
+
+            Assert.True(entity.Equals(result));
+        }
+
+        [Fact]
+        public async void GetByIdAsync_Returns_Null_If_Doesnt_Exist()
+        {
+            var result = await Sut.GetByIdAsync("TEST");
+
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public async void GetByIdAsync_Can_Take_TranConn()
+        {
+            var tranGen = ServiceLocator.Instance.GetService<ITranConnGenerator>();
+
+            var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
+
+            await Sut.GetByIdAsync("TEST", tc);
 
             tc.Dispose();
         }
@@ -115,6 +143,53 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
         #endregion
 
+        #region GetByIdListAsync
+
+        [Fact]
+        public async void GetByIdListAsync_Returns_As_Expected()
+        {
+            const int entitiesToMake = 4;
+
+            var entities = Enumerable.Range(0, entitiesToMake).Select(x => new StringEntity().SaveForTest()).ToList();
+
+            var entityIds = entities.Select(x => x.Id);
+
+            var results = await Sut.GetByIdListAsync(entityIds);
+
+            foreach (var entity in entities)
+            {
+                var result = results.FirstOrDefault(x => x.Id == entity.Id);
+
+                Assert.NotNull(result);
+            }
+        }
+
+        [Fact]
+        public async void GetByIdListAsync_Returns_Null_If_None_Exist()
+        {
+            const int idsToMake = 4;
+
+            var ids = Enumerable.Range(0, idsToMake).Select(x => x.ToString());
+
+            var results = await Sut.GetByIdListAsync(ids);
+
+            Assert.Empty(results);
+        }
+
+        [Fact]
+        public async void GetByIdListAsync_Can_Take_TranConn()
+        {
+            var tranGen = ServiceLocator.Instance.GetService<ITranConnGenerator>();
+
+            var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
+
+            await Sut.GetByIdListAsync(new List<string> { 0.ToString() }, tc);
+
+            tc.Dispose();
+        }
+
+        #endregion
+
         #region SaveOrUpdate (Entity)
 
         [Fact]
@@ -157,6 +232,54 @@ namespace Ivy.Data.MySQL.IntegrationTest
             var testEntity = new StringEntity().GenerateForTest();
 
             Sut.SaveOrUpdate(testEntity, tc);
+
+            tc.Dispose();
+        }
+
+        #endregion
+
+        #region SaveOrUpdateAsync (Entity)
+
+        [Fact]
+        public async void SaveOrUpdateAsync_Entity_Identifies_New_Save_Correctly()
+        {
+            var testEntity = new StringEntity().GenerateForTest();
+
+            var result = await Sut.SaveOrUpdateAsync(testEntity);
+
+            Assert.True(result.Id != null);
+
+            var secondaryResult = Sut.GetById(result.Id);
+
+            Assert.True(result.Equals(secondaryResult));
+        }
+
+        [Fact]
+        public async void SaveOrUpdateAsync_Entity_Identifies_Existing_Update_Correctly()
+        {
+            var testEntity = new StringEntity().SaveForTest();
+
+            Assert.True(testEntity.Id != null);
+
+            testEntity.Integer = testEntity.Integer++;
+
+            var result = await Sut.SaveOrUpdateAsync(testEntity);
+
+            Assert.True(result.Id == testEntity.Id);
+            Assert.Equal(result.Integer, testEntity.Integer);
+            Assert.True(result.Equals(testEntity));
+        }
+
+        [Fact]
+        public async void SaveOrUpdateAsync_Entity_Can_Take_TranConn()
+        {
+            var tranGen = ServiceLocator.Instance.GetService<ITranConnGenerator>();
+
+            var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
+
+            var testEntity = new StringEntity().GenerateForTest();
+
+            await Sut.SaveOrUpdateAsync(testEntity, tc);
 
             tc.Dispose();
         }
@@ -239,6 +362,82 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
         #endregion
 
+        #region SaveOrUpdateAsync (Entities)
+
+        [Fact]
+        public async void SaveOrUpdateAsync_Entities_Identifies_New_Save_Correctly()
+        {
+            var testEntities = Enumerable.Range(0, 3).
+                Select(x => new StringEntity().GenerateForTest()).
+                ToList();
+
+            var results = await Sut.SaveOrUpdateAsync(testEntities);
+
+            foreach (var result in testEntities)
+            {
+                Assert.True(result.Id != null);
+
+                var secondaryResult = Sut.GetById(result.Id);
+
+                Assert.True(result.Equals(secondaryResult));
+            }
+
+            foreach (var result in results)
+            {
+                Assert.True(result.Id != null);
+
+                var secondaryResult = Sut.GetById(result.Id);
+
+                Assert.True(result.Equals(secondaryResult));
+            }
+        }
+
+        [Fact]
+        public async void SaveOrUpdateAsync_Entities_Identifies_Existing_Update_Correctly()
+        {
+            var testEntities = Enumerable.Range(0, 3).
+               Select(x => new StringEntity().SaveForTest()).
+               ToList();
+
+            var results = await Sut.SaveOrUpdateAsync(testEntities);
+
+            foreach (var testEntity in testEntities)
+            {
+                var result = results.First(x => x.Id == testEntity.Id);
+
+                Assert.True(result.Id == testEntity.Id);
+                Assert.Equal(result.Integer, testEntity.Integer);
+                Assert.True(result.Equals(testEntity));
+            }
+
+            foreach (var testEntity in testEntities)
+            {
+                var secondaryResult = Sut.GetById(testEntity.Id);
+
+                Assert.True(secondaryResult.Id == testEntity.Id);
+                Assert.Equal(secondaryResult.Integer, testEntity.Integer);
+                Assert.True(secondaryResult.Equals(testEntity));
+            }
+        }
+
+        [Fact]
+        public async void SaveOrUpdateAsync_Entities_Can_Take_TranConn()
+        {
+            var tranGen = ServiceLocator.Instance.GetService<ITranConnGenerator>();
+
+            var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
+
+            var testEntities = Enumerable.Range(0, 3).
+               Select(x => new StringEntity().SaveForTest()).
+               ToList();
+
+            await Sut.SaveOrUpdateAsync(testEntities, tc);
+
+            tc.Dispose();
+        }
+
+        #endregion
+
         #region Delete (Entity)
 
         [Fact]
@@ -263,6 +462,36 @@ namespace Ivy.Data.MySQL.IntegrationTest
             var testEntity = new StringEntity().SaveForTest(tc);
 
             Sut.Delete(testEntity, tc);
+
+            tc.Dispose();
+        }
+
+        #endregion
+
+        #region DeleteAsync (Entity)
+
+        [Fact]
+        public async void DeleteAsync_Removes_Record_As_Expected()
+        {
+            var testEntity = new StringEntity().SaveForTest();
+
+            await Sut.DeleteAsync(testEntity);
+
+            var result = Sut.GetById(testEntity.Id);
+
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public async void DeleteAsync_Can_Take_TranConn()
+        {
+            var tranGen = ServiceLocator.Instance.GetService<ITranConnGenerator>();
+
+            var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
+
+            var testEntity = new StringEntity().SaveForTest(tc);
+
+            await Sut.DeleteAsync(testEntity, tc);
 
             tc.Dispose();
         }
@@ -313,6 +542,50 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
         #endregion
 
+        #region DeleteAsync (Entities)
+
+        [Fact]
+        public async void DeleteAsync_Entities_Removes_Record_As_Expected()
+        {
+            var entities = Enumerable.Range(0, 3).
+                Select(x => new StringEntity().SaveForTest()).
+                ToList();
+
+            await Sut.DeleteAsync(entities);
+
+            var entityIds = entities.Select(x => x.Id);
+
+            var result = Sut.GetByIdList(entityIds);
+
+            Assert.Empty(result);
+        }
+
+        [Fact]
+        public async void DeleteAsync_Entities_Can_Commit_With_TranConn()
+        {
+            var tranGen = ServiceLocator.Instance.GetService<ITranConnGenerator>();
+
+            var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
+
+            var entities = Enumerable.Range(0, 3).
+                Select(x => new StringEntity().SaveForTest()).
+                ToList();
+
+            await Sut.DeleteAsync(entities, tc);
+
+            // Appears this must be an explicit commit
+            tc.Transaction.Commit();
+            tc.Dispose();
+
+            var entityIds = entities.Select(x => x.Id);
+
+            var result = Sut.GetByIdList(entityIds);
+
+            Assert.Empty(result);
+        }
+
+        #endregion
+
         #region DeleteById
 
         [Fact]
@@ -343,6 +616,36 @@ namespace Ivy.Data.MySQL.IntegrationTest
 
         #endregion
 
+        #region DeleteByIdAsync
+
+        [Fact]
+        public async void DeleteByIdAsync_Removes_Records_As_Expected()
+        {
+            var testEntity = new StringEntity().SaveForTest();
+
+            await Sut.DeleteByIdAsync(testEntity.Id);
+
+            var result = Sut.GetById(testEntity.Id);
+
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public async void DeleteByIdAsync_Can_Take_TranConn()
+        {
+            var tranGen = ServiceLocator.Instance.GetService<ITranConnGenerator>();
+
+            var tc = tranGen.GenerateTranConn(MySqlTestValues.TestDbConnectionString);
+
+            var testEntity = new StringEntity().SaveForTest(tc);
+
+            await Sut.DeleteByIdAsync(testEntity.Id, tc);
+
+            tc.Dispose();
+        }
+
+        #endregion
+
         #region DeleteByIdList
 
         [Fact]
@@ -355,6 +658,26 @@ namespace Ivy.Data.MySQL.IntegrationTest
             var entityIds = entities.Select(x => x.Id);
 
             Sut.DeleteByIdList(entityIds);
+
+            var result = Sut.GetByIdList(entityIds);
+
+            Assert.Empty(result);
+        }
+
+        #endregion
+
+        #region DeleteByIdListAsync
+
+        [Fact]
+        public async void DeleteByIdListAsync_Entities_Removes_Record_As_Expected()
+        {
+            var entities = Enumerable.Range(0, 3).
+                Select(x => new StringEntity().SaveForTest()).
+                ToList();
+
+            var entityIds = entities.Select(x => x.Id);
+
+            await Sut.DeleteByIdListAsync(entityIds);
 
             var result = Sut.GetByIdList(entityIds);
 
