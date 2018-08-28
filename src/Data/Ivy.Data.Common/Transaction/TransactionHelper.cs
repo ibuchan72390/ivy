@@ -106,7 +106,7 @@ namespace Ivy.Data.Common.Transaction
 
             if (myTran)
             {
-                tc = _tcGenerator.GenerateTranConn(connectionString);
+                tc = await _tcGenerator.GenerateTranConnAsync(connectionString);
             }
 
             try
@@ -142,7 +142,7 @@ namespace Ivy.Data.Common.Transaction
 
             if (myTran)
             {
-                tc = _tcGenerator.GenerateTranConn(connectionString);
+                tc = await _tcGenerator.GenerateTranConnAsync(connectionString);
             }
 
             T result;

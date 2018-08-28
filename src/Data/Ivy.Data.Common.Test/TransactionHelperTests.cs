@@ -86,6 +86,9 @@ namespace Ivy.Data.Common.Test
             _mockTranGen.Setup(x => x.GenerateTranConn(ConnectionString, IsolationLevel.ReadUncommitted)).
                 Returns(_mockTc);
 
+            _mockTranGen.Setup(x => x.GenerateTranConnAsync(ConnectionString, IsolationLevel.ReadUncommitted)).
+                ReturnsAsync(_mockTc);
+
             actionHits = 0;
             funcHits = 0;
         }
@@ -101,6 +104,8 @@ namespace Ivy.Data.Common.Test
 
             Assert.Equal(1, actionHits);
 
+            _mockTranGen.Verify(x => x.GenerateTranConn(ConnectionString, IsolationLevel.ReadUncommitted), Times.Never);
+
             _mockTran.Verify(x => x.Commit(), Times.Never);
             _mockTran.Verify(x => x.Dispose(), Times.Never);
         }
@@ -111,6 +116,8 @@ namespace Ivy.Data.Common.Test
             Assert.Throws<Exception>(() => Sut.WrapInTransaction(tcActionErr, ConnectionString, _mockTc));
 
             Assert.Equal(1, actionHits);
+
+            _mockTranGen.Verify(x => x.GenerateTranConn(ConnectionString, IsolationLevel.ReadUncommitted), Times.Never);
 
             _mockTran.Verify(x => x.Commit(), Times.Never);
             _mockTran.Verify(x => x.Rollback(), Times.Never);
@@ -124,6 +131,8 @@ namespace Ivy.Data.Common.Test
 
             Assert.Same(entity, result);
 
+            _mockTranGen.Verify(x => x.GenerateTranConn(ConnectionString, IsolationLevel.ReadUncommitted), Times.Never);
+
             _mockTran.Verify(x => x.Commit(), Times.Never);
             _mockTran.Verify(x => x.Dispose(), Times.Never);
         }
@@ -132,6 +141,8 @@ namespace Ivy.Data.Common.Test
         public void WrapInTransaction_Return_Errors_As_Expected_With_TranConn()
         {
             Assert.Throws<Exception>(() => Sut.WrapInTransaction<ParentEntity>(tcFuncErr, ConnectionString, _mockTc));
+
+            _mockTranGen.Verify(x => x.GenerateTranConn(ConnectionString, IsolationLevel.ReadUncommitted), Times.Never);
 
             _mockTran.Verify(x => x.Commit(), Times.Never);
             _mockTran.Verify(x => x.Rollback(), Times.Never);
@@ -145,6 +156,8 @@ namespace Ivy.Data.Common.Test
 
             Assert.Equal(1, actionHits);
 
+            _mockTranGen.Verify(x => x.GenerateTranConn(ConnectionString, IsolationLevel.ReadUncommitted), Times.Once);
+
             _mockTran.Verify(x => x.Commit(), Times.Once);
             _mockTran.Verify(x => x.Dispose(), Times.Once);
         }
@@ -155,6 +168,8 @@ namespace Ivy.Data.Common.Test
             Assert.Throws<Exception>(() => Sut.WrapInTransaction(tcActionErr, ConnectionString));
 
             Assert.Equal(1, actionHits);
+
+            _mockTranGen.Verify(x => x.GenerateTranConn(ConnectionString, IsolationLevel.ReadUncommitted), Times.Once);
 
             _mockTran.Verify(x => x.Commit(), Times.Never);
             _mockTran.Verify(x => x.Rollback(), Times.Once);
@@ -168,6 +183,8 @@ namespace Ivy.Data.Common.Test
 
             Assert.Same(entity, result);
 
+            _mockTranGen.Verify(x => x.GenerateTranConn(ConnectionString, IsolationLevel.ReadUncommitted), Times.Once);
+
             _mockTran.Verify(x => x.Commit(), Times.Once);
             _mockTran.Verify(x => x.Dispose(), Times.Once);
         }
@@ -176,6 +193,8 @@ namespace Ivy.Data.Common.Test
         public void WrapInTransaction_Return_Errors_As_Expected_With_ConnectionString()
         {
             Assert.Throws<Exception>(() => Sut.WrapInTransaction<ParentEntity>(tcFuncErr, ConnectionString));
+
+            _mockTranGen.Verify(x => x.GenerateTranConn(ConnectionString, IsolationLevel.ReadUncommitted), Times.Once);
 
             _mockTran.Verify(x => x.Commit(), Times.Never);
             _mockTran.Verify(x => x.Rollback(), Times.Once);
@@ -189,6 +208,8 @@ namespace Ivy.Data.Common.Test
 
             Assert.Equal(1, actionHits);
 
+            _mockTranGen.Verify(x => x.GenerateTranConnAsync(ConnectionString, IsolationLevel.ReadUncommitted), Times.Never);
+
             _mockTran.Verify(x => x.Commit(), Times.Never);
             _mockTran.Verify(x => x.Dispose(), Times.Never);
         }
@@ -199,6 +220,8 @@ namespace Ivy.Data.Common.Test
             await Assert.ThrowsAsync<Exception>(() => Sut.WrapInTransactionAsync(tcAsyncActionErr, ConnectionString, _mockTc));
 
             Assert.Equal(1, actionHits);
+
+            _mockTranGen.Verify(x => x.GenerateTranConnAsync(ConnectionString, IsolationLevel.ReadUncommitted), Times.Never);
 
             _mockTran.Verify(x => x.Commit(), Times.Never);
             _mockTran.Verify(x => x.Rollback(), Times.Never);
@@ -212,6 +235,8 @@ namespace Ivy.Data.Common.Test
 
             Assert.Same(entity, result);
 
+            _mockTranGen.Verify(x => x.GenerateTranConnAsync(ConnectionString, IsolationLevel.ReadUncommitted), Times.Never);
+
             _mockTran.Verify(x => x.Commit(), Times.Never);
             _mockTran.Verify(x => x.Dispose(), Times.Never);
         }
@@ -220,6 +245,8 @@ namespace Ivy.Data.Common.Test
         public async void WrapInTransactionAsync_Return_Errors_As_Expected_With_TranConn()
         {
             await Assert.ThrowsAsync<Exception>(async () => await Sut.WrapInTransactionAsync<ParentEntity>(tcAsyncFuncErr, ConnectionString, _mockTc));
+
+            _mockTranGen.Verify(x => x.GenerateTranConnAsync(ConnectionString, IsolationLevel.ReadUncommitted), Times.Never);
 
             _mockTran.Verify(x => x.Commit(), Times.Never);
             _mockTran.Verify(x => x.Rollback(), Times.Never);
@@ -233,6 +260,8 @@ namespace Ivy.Data.Common.Test
 
             Assert.Equal(1, actionHits);
 
+            _mockTranGen.Verify(x => x.GenerateTranConnAsync(ConnectionString, IsolationLevel.ReadUncommitted), Times.Once);
+
             _mockTran.Verify(x => x.Commit(), Times.Once);
             _mockTran.Verify(x => x.Dispose(), Times.Once);
         }
@@ -243,6 +272,8 @@ namespace Ivy.Data.Common.Test
             await Assert.ThrowsAsync<Exception>(() => Sut.WrapInTransactionAsync(tcAsyncActionErr, ConnectionString));
 
             Assert.Equal(1, actionHits);
+
+            _mockTranGen.Verify(x => x.GenerateTranConnAsync(ConnectionString, IsolationLevel.ReadUncommitted), Times.Once);
 
             _mockTran.Verify(x => x.Commit(), Times.Never);
             _mockTran.Verify(x => x.Rollback(), Times.Once);
@@ -256,6 +287,8 @@ namespace Ivy.Data.Common.Test
 
             Assert.Same(entity, result);
 
+            _mockTranGen.Verify(x => x.GenerateTranConnAsync(ConnectionString, IsolationLevel.ReadUncommitted), Times.Once);
+
             _mockTran.Verify(x => x.Commit(), Times.Once);
             _mockTran.Verify(x => x.Dispose(), Times.Once);
         }
@@ -264,6 +297,8 @@ namespace Ivy.Data.Common.Test
         public async void WrapInTransactionAsync_Return_Errors_As_Expected_With_ConnectionString()
         {
             await Assert.ThrowsAsync<Exception>(() => Sut.WrapInTransactionAsync<ParentEntity>(tcAsyncFuncErr, ConnectionString));
+
+            _mockTranGen.Verify(x => x.GenerateTranConnAsync(ConnectionString, IsolationLevel.ReadUncommitted), Times.Once);
 
             _mockTran.Verify(x => x.Commit(), Times.Never);
             _mockTran.Verify(x => x.Rollback(), Times.Once);
