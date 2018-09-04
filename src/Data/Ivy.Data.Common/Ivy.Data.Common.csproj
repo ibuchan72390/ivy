@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>3.0.0</Version>
+    <Version>3.0.1</Version>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <AssemblyName>Ivy.Data.Common</AssemblyName>
     <PackageId>Ivy.Data.Common</PackageId>
@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dapper" Version="1.50.6-alpha-00190" />
+    <PackageReference Include="Dapper" Version="1.50.5" />
     <PackageReference Include="Dapper.FluentMap" Version="2.0.0-beta1" />
   </ItemGroup>
 
