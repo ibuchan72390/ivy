@@ -1,11 +1,9 @@
 ﻿using Ivy.Data.Common.IoC;
-using Ivy.Data.Core.Interfaces;
 using Ivy.IoC.Core;
 using Ivy.Migration.Core.Interfaces.Services;
-using Ivy.Migration.MySQL.Core.Providers;
 using Ivy.Migration.MySQL.Core.Services;
-using Ivy.Migration.MySQL.Providers;
 using Ivy.Migration.MySQL.Test.Base;
+using Ivy.TestHelper.TestValues;
 using Moq;
 using MySql.Data.MySqlClient;
 using System.Data;
@@ -21,9 +19,6 @@ namespace Ivy.Migration.MySQL.Test.Services
         private Mock<IMySqlScriptBuilder> _mockScriptBuilder;
         private Mock<IMySqlScriptExecutor> _mockScriptExecutor;
 
-        private Mock<ITranConnGenerator> _mockTranConnGen;
-        private Mock<ITranConn> _mockTranConn;
-
         #endregion
 
         #region SetUp & TearDown
@@ -36,13 +31,6 @@ namespace Ivy.Migration.MySQL.Test.Services
 
             _mockScriptBuilder = InitializeMoq<IMySqlScriptBuilder>(containerGen);
             _mockScriptExecutor = InitializeMoq<IMySqlScriptExecutor>(containerGen);
-
-            _mockTranConnGen = InitializeMoq<ITranConnGenerator>(containerGen);
-            _mockTranConn = InitializeMoq<ITranConn>(containerGen);
-
-            _mockTranConnGen
-                .Setup(x => x.GenerateTranConn(It.IsAny<string>(), IsolationLevel.ReadUncommitted))
-                .Returns(_mockTranConn.Object);
         }
 
         #endregion
@@ -53,22 +41,16 @@ namespace Ivy.Migration.MySQL.Test.Services
         public void ExecuteSql_Executes_As_Expected()
         {
             // Arrange
-            const string connString = "ConnectionString";
+            const string connString = MySqlTestValues.TestDataDbConnectionString;
             const string script = "Script";
 
             var conn = new Mock<IDbConnection>();
-            var tran = new Mock<IDbTransaction>();
-
-            _mockTranConn.Setup(x => x.Connection).Returns(conn.Object);
-            _mockTranConn.Setup(x => x.Transaction).Returns(tran.Object);
-            _mockTranConn.Setup(x => x.Dispose());
-
-            tran.Setup(x => x.Commit());
 
             var mockScript = new MySqlScript();
 
             _mockScriptBuilder
-                .Setup(x => x.GenerateScript(_mockTranConn.Object, script))
+                //.Setup(x => x.GenerateScript(It.Is<MySqlConnection>(y => y.State == ConnectionState.Open), script))
+                .Setup(x => x.GenerateScript(It.IsAny<MySqlConnection>(), script))
                 .Returns(mockScript);
 
             _mockScriptExecutor.Setup(x => x.Execute(mockScript));
@@ -80,14 +62,11 @@ namespace Ivy.Migration.MySQL.Test.Services
 
             // Assert
             _mockScriptBuilder
-                .Verify(x => x.GenerateScript(_mockTranConn.Object, script),
+                //.Verify(x => x.GenerateScript(It.Is<MySqlConnection>(y => y.State == ConnectionState.Open), script),
+                .Verify(x => x.GenerateScript(It.IsAny<MySqlConnection>(), script),
                     Times.Once);
 
             _mockScriptExecutor.Verify(x => x.Execute(mockScript), Times.Once);
-
-            tran.Verify(x => x.Commit(), Times.Once);
-
-            _mockTranConn.Verify(x => x.Dispose(), Times.Once);
         }
 
         #endregion

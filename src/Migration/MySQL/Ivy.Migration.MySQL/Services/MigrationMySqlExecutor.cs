@@ -1,14 +1,12 @@
-﻿using Ivy.Data.Core.Interfaces;
-using Ivy.Migration.Core.Interfaces.Services;
+﻿using Ivy.Migration.Core.Interfaces.Services;
 using Ivy.Migration.MySQL.Core.Services;
+using MySql.Data.MySqlClient;
 
 namespace Ivy.Migration.MySQL.Services
 {
     public class MigrationMySqlExecutor : IMigrationSqlExecutor
     {
         #region Variables & Constants
-
-        private readonly ITransactionHelper _tranHelper;
 
         private readonly IMySqlScriptBuilder _scriptBuilder;
         private readonly IMySqlScriptExecutor _scriptExecutor;
@@ -18,11 +16,9 @@ namespace Ivy.Migration.MySQL.Services
         #region Constructor
 
         public MigrationMySqlExecutor(
-            ITransactionHelper tranHelper,
             IMySqlScriptBuilder scriptBuilder,
             IMySqlScriptExecutor scriptExecutor)
         {
-            _tranHelper = tranHelper;
             _scriptBuilder = scriptBuilder;
             _scriptExecutor = scriptExecutor;
         }
@@ -33,12 +29,16 @@ namespace Ivy.Migration.MySQL.Services
 
         public void ExecuteSql(string scriptText, string connectionString)
         {
-            _tranHelper.WrapInTransaction(tran => {
+            using (var conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
 
-                var script = _scriptBuilder.GenerateScript(tran, scriptText);
+                var script = _scriptBuilder.GenerateScript(conn, scriptText);
 
                 _scriptExecutor.Execute(script);
-            }, connectionString);
+
+                conn.Close();
+            }
         }
 
         #endregion

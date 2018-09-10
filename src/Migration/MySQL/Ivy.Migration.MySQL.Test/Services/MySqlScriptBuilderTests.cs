@@ -43,10 +43,10 @@ namespace Ivy.Migration.MySQL.Test.Services
             _mockConfig.Setup(x => x.Delimiter).Returns(delimiter);
 
             var tcMock = new Mock<ITranConn>();
-            IDbConnection mockConn = new MySqlConnection();
+            MySqlConnection mockConn = new MySqlConnection();
             tcMock.Setup(x => x.Connection).Returns(mockConn);
 
-            var result = Sut.GenerateScript(tcMock.Object, script);
+            var result = Sut.GenerateScript(mockConn, script);
 
             Assert.Equal(delimiter, result.Delimiter);
             Assert.Equal(script, result.Query);
@@ -62,10 +62,10 @@ namespace Ivy.Migration.MySQL.Test.Services
             _mockConfig.Setup(x => x.Delimiter).Returns(delimiter);
 
             var tcMock = new Mock<ITranConn>();
-            IDbConnection mockConn = new MySqlConnection();
+            MySqlConnection mockConn = new MySqlConnection();
             tcMock.Setup(x => x.Connection).Returns(mockConn);
 
-            var result = Sut.GenerateScript(tcMock.Object, script);
+            var result = Sut.GenerateScript(mockConn, script);
 
             Assert.Equal(";", result.Delimiter); // Seems to be the default
             Assert.Equal(script, result.Query);

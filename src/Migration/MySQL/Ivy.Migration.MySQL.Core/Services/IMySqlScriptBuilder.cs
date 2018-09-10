@@ -1,10 +1,9 @@
-﻿using Ivy.Data.Core.Interfaces;
-using MySql.Data.MySqlClient;
+﻿using MySql.Data.MySqlClient;
 
 namespace Ivy.Migration.MySQL.Core.Services
 {
     public interface IMySqlScriptBuilder
     {
-        MySqlScript GenerateScript(ITranConn tc, string scriptText);
+        MySqlScript GenerateScript(MySqlConnection conn, string scriptText);
     }
 }

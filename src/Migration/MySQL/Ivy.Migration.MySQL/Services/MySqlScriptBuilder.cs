@@ -27,11 +27,9 @@ namespace Ivy.Migration.MySQL.Services
 
         #region Public Methods
 
-        public MySqlScript GenerateScript(ITranConn tc, string scriptText)
+        public MySqlScript GenerateScript(MySqlConnection conn, string scriptText)
         {
-            var mySqlConn = (MySqlConnection)tc.Connection;
-
-            var script = new MySqlScript(mySqlConn, scriptText);
+            var script = new MySqlScript(conn, scriptText);
 
             if (!_config.Delimiter.IsNullOrEmpty())
             {
