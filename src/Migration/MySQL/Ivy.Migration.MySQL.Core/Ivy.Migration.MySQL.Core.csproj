@@ -2,15 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <Version>3.0.0</Version>
+    <Version>3.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="MySql.Data" Version="8.0.12" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Data\Ivy.Data.Core\Ivy.Data.Core.csproj" />
   </ItemGroup>
 
 </Project>

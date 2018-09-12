@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>3.0.3</Version>
+    <Version>3.0.4</Version>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <AssemblyName>Ivy.Data.MySQL.IoC</AssemblyName>
     <PackageId>Ivy.Data.MySQL.IoC</PackageId>
