@@ -30,4 +30,13 @@
 	<DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Ivy.IoC.Core">
+      <HintPath>..\..\..\IoC\Ivy.IoC.Core\bin\Debug\netcoreapp2.0\Ivy.IoC.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Ivy.Web.Core">
+      <HintPath>..\..\..\Web\Ivy.Web.Core\bin\Debug\netcoreapp2.0\Ivy.Web.Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
