@@ -7,7 +7,7 @@
             IncludeTotals = true;
             Sort = "email:1";
             IncludeFields = true;
-            SearchEngine = "v2";
+            SearchEngine = "v3";
         }
 
         public int PerPage { get; set; }
