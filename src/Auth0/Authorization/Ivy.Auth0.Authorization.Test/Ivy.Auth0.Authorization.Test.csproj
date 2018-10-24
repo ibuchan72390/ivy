@@ -14,6 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\IoC\Ivy.IoC.Core\Ivy.IoC.Core.csproj" />
     <ProjectReference Include="..\Ivy.Auth0.Authorization.Core\Ivy.Auth0.Authorization.Core.csproj" />
     <ProjectReference Include="..\Ivy.Auth0.Authorization.IoC\Ivy.Auth0.Authorization.IoC.csproj" />
     <ProjectReference Include="..\..\..\Test\Ivy.TestHelper\Ivy.TestHelper.csproj" />
@@ -27,16 +28,7 @@
     <PackageReference Include="Moq" Version="4.8.1" />
     <PackageReference Include="xunit" Version="2.3.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
-	<DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Ivy.IoC.Core">
-      <HintPath>..\..\..\IoC\Ivy.IoC.Core\bin\Debug\netcoreapp2.0\Ivy.IoC.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Ivy.Web.Core">
-      <HintPath>..\..\..\Web\Ivy.Web.Core\bin\Debug\netcoreapp2.0\Ivy.Web.Core.dll</HintPath>
-    </Reference>
+	  <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
   </ItemGroup>
 
 </Project>
