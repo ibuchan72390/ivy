@@ -2,12 +2,12 @@
 using Ivy.Auth0.Management.Core.Models.Requests;
 using Ivy.Auth0.Management.Core.Services;
 using Ivy.Auth0.Management.Test.Base;
-using Ivy.IoC;
 using Microsoft.Extensions.Primitives;
 using System.Collections.Generic;
 using Xunit;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Net;
+using System;
 
 namespace Ivy.Auth0.Management.Test.Services
 {
@@ -291,6 +291,246 @@ namespace Ivy.Auth0.Management.Test.Services
 
             var expected = $"identities.connection:\"{req.Connection}\"";
             AssertDictEquality(resultQuery, "q", expected, false);
+        }
+
+        [Fact]
+        public void Auth0QueryStringGenerator_Generates_Get_User_List_With_v3_And_Query_String()
+        {
+            var currentUri = "https://google.com";
+
+            var req = new Auth0ListUsersRequest();
+            req.Page = 1;
+            req.IncludeTotals = false;
+
+            req.PerPage = 25;
+            req.Sort = "SORT";
+            req.Connection = "CONNECTION";
+            req.Fields = "FIELDS";
+            req.IncludeFields = true;
+            req.QueryString = "QUERYSTRING";
+            req.SearchEngine = Auth0ApiVersionNames.v3.ToString();
+
+            var result = Sut.GenerateGetUsersQueryString(currentUri, req);
+
+            var resultQuery = QueryHelpers.ParseQuery(result.Query);
+
+            Assert.Equal(8, resultQuery.Count);
+            AssertDictEquality(resultQuery, "page", 0);
+            AssertDictEquality(resultQuery, "include_totals", req.IncludeTotals);
+
+            AssertDictEquality(resultQuery, "per_page", req.PerPage);
+            AssertDictEquality(resultQuery, "sort", req.Sort);
+            AssertDictEquality(resultQuery, "fields", req.Fields);
+            AssertDictEquality(resultQuery, "include_fields", req.IncludeFields);
+            AssertDictEquality(resultQuery, "search_engine", req.SearchEngine);
+
+            var expected = $"({req.QueryString}) AND identities.connection:\"{req.Connection}\"";
+            AssertDictEquality(resultQuery, "q", expected, false);
+        }
+
+        [Fact]
+        public void Auth0QueryStringGenerator_Generates_Get_User_List_With_v3_And_No_Query_String()
+        {
+            var currentUri = "https://google.com";
+
+            var req = new Auth0ListUsersRequest();
+            req.Page = 5;
+            req.IncludeTotals = false;
+
+            req.PerPage = 25;
+            req.Sort = "SORT";
+            req.Connection = "CONNECTION";
+            req.Fields = "FIELDS";
+            req.IncludeFields = true;
+            req.SearchEngine = Auth0ApiVersionNames.v3.ToString();
+
+            var result = Sut.GenerateGetUsersQueryString(currentUri, req);
+
+            var resultQuery = QueryHelpers.ParseQuery(result.Query);
+
+            Assert.Equal(8, resultQuery.Count);
+            AssertDictEquality(resultQuery, "page", req.Page - 1);
+            AssertDictEquality(resultQuery, "include_totals", req.IncludeTotals);
+
+            AssertDictEquality(resultQuery, "per_page", req.PerPage);
+            AssertDictEquality(resultQuery, "sort", req.Sort);
+            AssertDictEquality(resultQuery, "fields", req.Fields);
+            AssertDictEquality(resultQuery, "include_fields", req.IncludeFields);
+            AssertDictEquality(resultQuery, "search_engine", req.SearchEngine);
+
+            var expected = $"identities.connection:\"{req.Connection}\"";
+            AssertDictEquality(resultQuery, "q", expected, false);
+        }
+
+        [Fact]
+        public void Auth0QueryStringGenerator_Generates_Get_User_List_With_v3_And_Empty_Query_String()
+        {
+            var currentUri = "https://google.com";
+
+            var req = new Auth0ListUsersRequest();
+            req.Page = 10;
+            req.IncludeTotals = false;
+
+            req.PerPage = 25;
+            req.Sort = "SORT";
+            req.Connection = "CONNECTION";
+            req.Fields = "FIELDS";
+            req.IncludeFields = true;
+            req.QueryString = "";
+            req.SearchEngine = Auth0ApiVersionNames.v3.ToString();
+
+            var result = Sut.GenerateGetUsersQueryString(currentUri, req);
+
+            var resultQuery = QueryHelpers.ParseQuery(result.Query);
+
+            Assert.Equal(8, resultQuery.Count);
+            AssertDictEquality(resultQuery, "page", req.Page - 1);
+            AssertDictEquality(resultQuery, "include_totals", req.IncludeTotals);
+
+            AssertDictEquality(resultQuery, "per_page", req.PerPage);
+            AssertDictEquality(resultQuery, "sort", req.Sort);
+            AssertDictEquality(resultQuery, "fields", req.Fields);
+            AssertDictEquality(resultQuery, "include_fields", req.IncludeFields);
+            AssertDictEquality(resultQuery, "search_engine", req.SearchEngine);
+
+            var expected = $"identities.connection:\"{req.Connection}\"";
+            AssertDictEquality(resultQuery, "q", expected, false);
+        }
+
+
+        [Fact]
+        public void Auth0QueryStringGenerator_Generates_Get_User_List_With_v3_And_Complex_Query_String()
+        {
+            var currentUri = "https://iamglobaleducation.auth0.com/api/v3/users";
+
+            var req = new Auth0ListUsersRequest();
+            req.Page = 1;
+            req.IncludeTotals = false;
+
+            req.PerPage = 25;
+            req.Sort = "email:1";
+            req.Connection = "Development";
+            req.IncludeFields = true;
+            req.QueryString = "user_id:\"auth0|58f7fa9ddb5a3927da1aa529\" OR user_id:\"auth0|59946d0d31d6c842b92e6922\"";
+            req.SearchEngine = Auth0ApiVersionNames.v3.ToString();
+
+            var result = Sut.GenerateGetUsersQueryString(currentUri, req);
+
+            var resultQuery = QueryHelpers.ParseQuery(result.Query);
+
+            Assert.Equal(7, resultQuery.Count);
+            AssertDictEquality(resultQuery, "page", 0);
+            AssertDictEquality(resultQuery, "include_totals", req.IncludeTotals);
+
+            AssertDictEquality(resultQuery, "per_page", req.PerPage);
+            AssertDictEquality(resultQuery, "sort", req.Sort);
+            AssertDictEquality(resultQuery, "include_fields", req.IncludeFields);
+            AssertDictEquality(resultQuery, "search_engine", req.SearchEngine);
+
+            //var expected = "(user_id%3A%22auth0%7C58f7fa9ddb5a3927da1aa529%22%20OR%20user_id%3A%22auth0%7C59946d0d31d6c842b92e6922%22)%20AND%20identities.connection%3A%22Development%22";
+            var expected = $"({req.QueryString}) AND identities.connection:\"{req.Connection}\"";
+            AssertDictEquality(resultQuery, "q", expected, false);
+
+            // This query string seems to work...but we're not properly matching it, let's see what's not matching up here
+            const string expectedQuery = "(user_id%3A%22auth0%7C58f7fa9ddb5a3927da1aa529%22%20OR%20user_id%3A%22auth0%7C59946d0d31d6c842b92e6922%22)%20AND%20identities.connection%3A%22Development%22";
+
+            var queryVal = resultQuery["q"];
+            Assert.Equal(expectedQuery, GetAuth0QueryString(queryVal.ToString()));
+            Assert.Equal(expectedQuery, GetAuth0QueryString(expected));
+        }
+
+        [Fact]
+        public void Auth0QueryStringGenerator_Generates_Get_User_List_With_v3_And_Complex_No_Query_String()
+        {
+            var currentUri = "https://google.com";
+
+            var req = new Auth0ListUsersRequest();
+            req.Page = 5;
+            req.IncludeTotals = false;
+
+            req.PerPage = 25;
+            req.Sort = "SORT";
+            req.Connection = "CONNECTION";
+            req.Fields = "FIELDS";
+            req.IncludeFields = true;
+            req.SearchEngine = Auth0ApiVersionNames.v3.ToString();
+
+            var result = Sut.GenerateGetUsersQueryString(currentUri, req);
+
+            var resultQuery = QueryHelpers.ParseQuery(result.Query);
+
+            Assert.Equal(8, resultQuery.Count);
+            AssertDictEquality(resultQuery, "page", req.Page - 1);
+            AssertDictEquality(resultQuery, "include_totals", req.IncludeTotals);
+
+            AssertDictEquality(resultQuery, "per_page", req.PerPage);
+            AssertDictEquality(resultQuery, "sort", req.Sort);
+            AssertDictEquality(resultQuery, "fields", req.Fields);
+            AssertDictEquality(resultQuery, "include_fields", req.IncludeFields);
+            AssertDictEquality(resultQuery, "search_engine", req.SearchEngine);
+
+            var expected = $"identities.connection:\"{req.Connection}\"";
+            AssertDictEquality(resultQuery, "q", expected, false);
+        }
+
+        [Fact]
+        public void Auth0QueryStringGenerator_Generates_Get_User_List_With_v3_And_Complex_Empty_Query_String()
+        {
+            var currentUri = "https://google.com";
+
+            var req = new Auth0ListUsersRequest();
+            req.Page = 10;
+            req.IncludeTotals = false;
+
+            req.PerPage = 25;
+            req.Sort = "SORT";
+            req.Connection = "CONNECTION";
+            req.Fields = "FIELDS";
+            req.IncludeFields = true;
+            req.QueryString = "";
+            req.SearchEngine = Auth0ApiVersionNames.v3.ToString();
+
+            var result = Sut.GenerateGetUsersQueryString(currentUri, req);
+
+            var resultQuery = QueryHelpers.ParseQuery(result.Query);
+
+            Assert.Equal(8, resultQuery.Count);
+            AssertDictEquality(resultQuery, "page", req.Page - 1);
+            AssertDictEquality(resultQuery, "include_totals", req.IncludeTotals);
+
+            AssertDictEquality(resultQuery, "per_page", req.PerPage);
+            AssertDictEquality(resultQuery, "sort", req.Sort);
+            AssertDictEquality(resultQuery, "fields", req.Fields);
+            AssertDictEquality(resultQuery, "include_fields", req.IncludeFields);
+            AssertDictEquality(resultQuery, "search_engine", req.SearchEngine);
+
+            var expected = $"identities.connection:\"{req.Connection}\"";
+            AssertDictEquality(resultQuery, "q", expected, false);
+        }
+
+        [Fact]
+        public void Auth0QueryStringGenerator_Errors_On_Unidentified_SearchEngine_Version()
+        {
+            var currentUri = "https://google.com";
+
+            var req = new Auth0ListUsersRequest();
+            req.Page = 10;
+            req.IncludeTotals = false;
+
+            req.PerPage = 25;
+            req.Sort = "SORT";
+            req.Connection = "CONNECTION";
+            req.Fields = "FIELDS";
+            req.IncludeFields = true;
+            req.QueryString = "";
+            req.SearchEngine = "FALSE VERSION";
+
+            var e = Assert.Throws<Exception>(() => Sut.GenerateGetUsersQueryString(currentUri, req));
+
+            var err = "Unaware of how to handle the ConnectionQueryString for the provided Auth0ApiVersionName.  " +
+                $"Received: {req.SearchEngine}";
+
+            Assert.Equal(err, e.Message);
         }
 
         [Fact]

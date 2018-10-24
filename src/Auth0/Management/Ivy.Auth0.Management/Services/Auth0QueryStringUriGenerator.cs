@@ -72,7 +72,8 @@ namespace Ivy.Auth0.Management.Services
         {
             if (req.Connection != null)
             {
-                if (req.SearchEngine == Auth0ApiVersionNames.v2.ToString())
+                if (req.SearchEngine == Auth0ApiVersionNames.v2.ToString() || 
+                    req.SearchEngine == Auth0ApiVersionNames.v3.ToString())
                 {
                     var str = $"identities.connection:\"{req.Connection}\"";
 
@@ -88,6 +89,11 @@ namespace Ivy.Auth0.Management.Services
                 else if (req.SearchEngine == Auth0ApiVersionNames.v1.ToString())
                 {
                     AppendIfNot(ref dict, "connection", req.Connection, null);
+                }
+                else
+                {
+                    throw new Exception("Unaware of how to handle the ConnectionQueryString for the provided Auth0ApiVersionName.  " + 
+                        $"Received: {req.SearchEngine}");
                 }
             }
 
