@@ -587,6 +587,20 @@ namespace Ivy.Data.MySQL.IntegrationTest
             Assert.Equal(toMatch, results);
         }
 
+        [Fact]
+        public void InternalGetCount_With_Left_Join_Properly_Applies_Distinct()
+        {
+            var pe = new ParentEntity().SaveForTest();
+
+            var ces = Enumerable.Range(0, 3).
+                Select(x => new CoreEntity { ParentEntity = pe }.SaveForTest()).
+                ToList();
+
+            var result = Sut.CountWithLeftJoin();
+
+            Assert.Equal(1, result);
+        }
+
         #endregion
 
         #region InternalGetCountAsync
@@ -690,6 +704,8 @@ namespace Ivy.Data.MySQL.IntegrationTest
         int CountWhereNameLike(string name, ITranConn tc = null);
 
         int CountWhereChildIdIn(IEnumerable<int> childIds, ITranConn tc = null);
+
+        int CountWithLeftJoin(ITranConn tc = null);
 
         #endregion
 
@@ -905,6 +921,13 @@ namespace Ivy.Data.MySQL.IntegrationTest
                 whereClause: sqlWhere,
                 joinClause: sqlJoin,
                 tc: tc);
+        }
+
+        public int CountWithLeftJoin(ITranConn tc = null)
+        {
+            const string sqlJoin = "LEFT JOIN `coreentity` CE ON (CE.ParentEntityId = THIS.Id)";
+
+            return InternalCount(joinClause: sqlJoin, tc: tc);
         }
 
         #endregion

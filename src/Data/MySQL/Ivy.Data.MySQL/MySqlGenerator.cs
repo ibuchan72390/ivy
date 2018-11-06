@@ -16,6 +16,11 @@ namespace Ivy.Data.MySQL
 
         private string _tableName = null;
 
+        protected virtual string GetCountClause()
+        {
+            return "*";
+        }
+
         #endregion
 
         #region Constructor
@@ -31,7 +36,7 @@ namespace Ivy.Data.MySQL
 
         public string GenerateGetCountQuery(string sqlWhere = null, string sqlJoin = null)
         {
-            var sql = $"SELECT COUNT(*) FROM {GetTableName()} {SelectAlias}";
+            var sql = $"SELECT COUNT({GetCountClause()}) FROM {GetTableName()} {SelectAlias}";
 
             sql = AppendJoinWhereOrderByIfNecessary(sql, sqlJoin, sqlWhere, null);
 
@@ -353,6 +358,11 @@ namespace Ivy.Data.MySQL
 
         private const string idParamKey = "@entityId";
         private readonly string whereIdEqualsParam = $"WHERE `Id` = " + idParamKey;
+
+        protected override string GetCountClause()
+        {
+            return "DISTINCT(`THIS`.Id)";
+        }
 
         #endregion
 

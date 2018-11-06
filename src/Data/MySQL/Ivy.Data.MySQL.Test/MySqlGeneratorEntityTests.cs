@@ -13,6 +13,59 @@ namespace Ivy.Data.MySQL.Test
     {
         #region Tests
 
+        #region GenerateGetCountQuery
+
+        [Fact]
+        public void GenerateGetCountQuery_Returns_As_Expected()
+        {
+            ISqlGenerator<ChildEntity, int> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<ChildEntity, int>>();
+
+            var result = _sut.GenerateGetCountQuery();
+
+            Assert.Equal($"SELECT COUNT(DISTINCT(`THIS`.Id)) FROM childentity `THIS`;", result);
+        }
+
+        [Fact]
+        public void GenerateGetCountQuery_Returns_As_Expected_With_SqlJoin()
+        {
+            ISqlGenerator<ChildEntity, int> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<ChildEntity, int>>();
+
+            const string sqlJoin = "JOIN CoreEntity CE ON (`THIS`.`CoreEntityId` = `CE`.`Id`)";
+
+            var result = _sut.GenerateGetCountQuery(null, sqlJoin);
+
+            Assert.Equal($"SELECT COUNT(DISTINCT(`THIS`.Id)) FROM childentity `THIS` {sqlJoin};", result);
+        }
+
+        [Fact]
+        public void GenerateGetCountQuery_Returns_As_Expected_With_SqlWhere()
+        {
+            ISqlGenerator<ChildEntity, int> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<ChildEntity, int>>();
+
+            const string sqlWhere = "WHERE `THIS`.`CoreEntityId` = @coreEntityId";
+
+            var result = _sut.GenerateGetCountQuery(sqlWhere);
+
+            Assert.Equal($"SELECT COUNT(DISTINCT(`THIS`.Id)) FROM childentity `THIS` {sqlWhere};", result);
+        }
+
+        [Fact]
+        public void GenerateGetCountQuery_Returns_As_Expected_With_SqlJoin_And_SqlWhere()
+        {
+            ISqlGenerator<ChildEntity, int> _sut = ServiceLocator.Instance.GetService<ISqlGenerator<ChildEntity, int>>();
+
+            const string sqlJoin = "JOIN CoreEntity CE ON (`THIS`.`CoreEntityId` = `CE`.`Id`)";
+            const string sqlWhere = "WHERE `THIS`.`CoreEntityId` = @coreEntityId";
+
+            var result = _sut.GenerateGetCountQuery(sqlWhere, sqlJoin);
+
+            var expected = $"SELECT COUNT(DISTINCT(`THIS`.Id)) FROM childentity `THIS` {sqlJoin} {sqlWhere};";
+
+            Assert.Equal(expected, result);
+        }
+
+        #endregion
+
         #region GenerateDeleteQuery
 
         [Fact]
