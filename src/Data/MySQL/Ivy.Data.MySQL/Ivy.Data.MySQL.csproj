@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>3.2.0</Version>
+    <Version>3.2.1</Version>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <AssemblyName>Ivy.Data.MySQL</AssemblyName>
     <PackageId>Ivy.Data.MySQL</PackageId>
@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MySqlConnector" Version="0.44.1" />
+    <PackageReference Include="MySqlConnector" Version="0.47.1" />
   </ItemGroup>
 
 </Project>
